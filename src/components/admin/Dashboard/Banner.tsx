@@ -10,6 +10,7 @@ const HandleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     setChangeBanner(file ? URL.createObjectURL(file) : '');
 };
+
     return (
         <div className="relative h-70 min-w-[480px] rounded-[20px] overflow-hidden mt-3">
 

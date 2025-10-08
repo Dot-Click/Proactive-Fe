@@ -7,27 +7,27 @@ import { Calendar } from "@/components/ui/calendar"
 
 const DashboardPage = () => {
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <div className="flex gap-2">
         <Banner />
         <Tripcategories />
-      <div>
-        <Calendar
-          mode="range"
-          className="rounded-[25px] mt-2 shadow-sm"
-        />
-      </div>
+        <div>
+          <Calendar
+            mode="range"
+            className="rounded-[25px] mt-1 bg-white p-3"
+          />
+        </div>
       </div>
 
       <div>
         <AdminStates />
-        <div className="flex gap-2">
-        <Chart />
-        <Recentactivity />
-        </div>
       </div>
+        <div className="flex gap-2">
+          <Chart />
+          <Recentactivity />
+        </div>
 
-    </>
+    </div>
   )
 }
 

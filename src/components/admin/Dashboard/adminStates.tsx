@@ -29,14 +29,15 @@ const stats = [
     {
         id: 4,
         name: 'Close Trips',
-        value: '$85',
+        value: '85',
         icon: CloseTrips,
         change: '-12%'
     }
 ]
+
 const AdminStates = () => {
     return (
-        <div className="p-4 bg-white rounded-[25px] shadow-md mt-1">
+        <div className="px-6 py-4 bg-white rounded-[25px] shadow-md mt-1">
             <h1 className="text-[#221E33] mb-4">Key States</h1>
             <div className="grid grid-col-1 md:grid-cols-4 mt-2 gap-6">
                 {

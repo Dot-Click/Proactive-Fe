@@ -44,7 +44,7 @@ export function SidebarNav({collapsed, setCollapsed}: {collapsed: boolean, setCo
   // const [collapsed, setCollapsed] = useState(false);
   return (
     <>
-      <Sidebar className={`${collapsed ? "w-20" : "w-60"} transition-all duration-300`}>
+      <Sidebar className={`${collapsed ? "w-20" : "w-62"} transition-all duration-300`}>
         <SidebarHeader className="bg-[#FFFFFF]">
           <div
             className={`relative px-4 py-8 flex items-center justify-between`}
@@ -84,9 +84,9 @@ export function SidebarNav({collapsed, setCollapsed}: {collapsed: boolean, setCo
                     <SidebarMenuButton
                       onClick={() => setActiveItem(label)}
                       asChild
-                      className={`px-6 py-6 flex items-center w-full text-[#A19EAE] rounded-none ${activeItem === label && "bg-black text-[white] font-semibold hover:bg-black hover:text-[white]"}`}
+                      className={`px-6 py-5 flex items-center w-full text-[#A19EAE] rounded-none ${activeItem === label && "bg-black text-[white] font-semibold hover:bg-black hover:text-[white]"}`}
                     >
-                      <Link to={href} className="flex items-center gap-4 w-full">
+                      <Link to={href} className="flex items-center gap-3 w-full">
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>

@@ -21,7 +21,7 @@ const RecentactivityProps = [
 ]
 const Recentactivity = () => {
   return (
-    <div className="px-4 py-6 bg-white rounded-[25px] shadow-md mt-3">
+    <div className="px-4 py-6 bg-white rounded-[25px] shadow-md mt-1">
       <h1 className="bg-gradient-to-r from-[#221E33] to-[rgb(86,80,112)] mb-4 text-[20px] text-transparent bg-clip-text font-medium">Recent Activity</h1>
       <div className="flex flex-col gap-3">
       {

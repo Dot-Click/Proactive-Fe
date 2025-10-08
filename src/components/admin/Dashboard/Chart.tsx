@@ -32,7 +32,7 @@ const chartConfig = {
 export function Chart() {
     return (
         <>
-            <div className="bg-white rounded-[25px] px-4 py-6 shadow-md mt-3">
+            <div className="bg-white rounded-[25px] px-4 py-6 shadow-md mt-1">
                 <div className="flex justify-between items-center">
                     <h1 className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-medium text-[18px]">Earnings Overview</h1>
                     <h1 className="text-[#221E33] font-bold text-[28px]">€ 1060.00</h1>

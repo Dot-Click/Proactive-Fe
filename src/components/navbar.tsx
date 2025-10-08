@@ -32,11 +32,10 @@ const SubHeading = [
 const Navbar = ({ collapsed }: NavbarProps) => {
   const location = useLocation();
   const NavHeading = location.pathname.split("/")[2]?.split("-").join(" ");
-  // console.log(NavHeading);
 
   return (
     <header
-      className={`fixed top-6 right-0 flex justify-between items-center px-6 transition-all duration-300 z-[9999] ${collapsed ? "left-20" : "left-60"
+      className={`fixed top-6 -right-8 flex justify-between items-center px-8 transition-all duration-300 ${collapsed ? "left-20" : "left-60"
         }`}
     >
       {/* Left side */}
