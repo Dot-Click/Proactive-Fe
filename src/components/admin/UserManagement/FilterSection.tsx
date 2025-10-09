@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import ReusableTable from "@/Table/ReusableTable"
-import { ArrowDownUp, Funnel, Search } from "lucide-react"
 import { type ColumnDef } from "@tanstack/react-table";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import Modal from "./Modal";
+import TableHeader from "@/Table/TableHeader";
 
 type User = {
   id: string;
@@ -90,7 +90,7 @@ const userData: ColumnDef<User>[] = [
             <Button className="hover:bg-[#000000] cursor-pointer rounded-full
                     px-8 py-6 font-semibold">View Detail</Button>
           </DialogTrigger>
-          <Modal/>
+          <Modal />
         </Dialog>
       )
     }
@@ -101,46 +101,13 @@ const userData: ColumnDef<User>[] = [
 const FilterSection = () => {
   return (
     <>
-      <div className="bg-white px-4 py-8 rounded-lg shadow-sm mt-6">
-
-        <div className="relative">
-          <Search size={24} color="#666373" className="absolute ml-3 text-gray-400 top-1/2 -translate-y-1/2" />
-          <input type="search" placeholder="Search Place"
-            className="placeholder:text-[#666373] w-[600px] pl-10 pr-3 px-3 py-3 border border-[#EFEFEF] bg-[#FAFAFE] outline-none rounded-[10px]" />
-        </div>
-
-        <div className="flex justify-between items-center mt-8">
-          <div className="flex items-center gap-4">
-            <span className="text-[#666373] text-[18px]">Showing</span>
-            <Select>
-              <SelectTrigger className="w-[70px] bg-[#E8E8E8] font-medium text-[16px] rounded-[8px] h-9">
-                <SelectValue placeholder="05" className="" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="20">20</SelectItem>
-                  <SelectItem value="30">30</SelectItem>
-                  <SelectItem value="40">40</SelectItem>
-                  <SelectItem value="50">50</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex gap-4">
-            <Button className="bg-[#FAFAFA] text-black border border-[#EFEFEF] hover:bg-[#FAFAFA] cursor-pointer font-medium w-30 py-5 rounded-[15px]">
-              <ArrowDownUp />
-              Sort by
-            </Button>
-            <Button className="bg-[#FAFAFA] text-black border border-[#EFEFEF] hover:bg-[#FAFAFA] cursor-pointer font-medium w-30 py-5 rounded-[15px]">
-              <Funnel fill="#000000" />
-              Filter
-            </Button>
-          </div>
-        </div>
-
-      </div>
-
+      <TableHeader
+        showSearch
+        showFilter
+        showSort
+        searchPlaceholder = "Search Users"
+        showAddButton={false}
+      />
       <div className="bg-white rounded-[25px] mt-3">
         <ReusableTable data={data} columns={userData} />
       </div>

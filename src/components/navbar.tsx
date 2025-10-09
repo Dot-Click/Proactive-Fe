@@ -26,9 +26,16 @@ const SubHeading = [
   {
     name: "/dashboard/user-management",
     subHeading: 'All registered users and their details at a glance.'
-  }
+  },
+  {
+    name: "/dashboard/coordinator-management",
+    subHeading: 'Monitor performance and assigned responsibilities'
+  },
+ {
+    name: "/dashboard/addnew-coordinator",
+    subHeading: 'Fill in the details to onboard a new coordinator to the platform.'
+  },
 ]
-
 const Navbar = ({ collapsed }: NavbarProps) => {
   const location = useLocation();
   const NavHeading = location.pathname.split("/")[2]?.split("-").join(" ");
@@ -46,7 +53,7 @@ const Navbar = ({ collapsed }: NavbarProps) => {
             if (item.name === location.pathname) {
               return <span key={item.name} className="text-[#666373] text-[14px]">{item.subHeading}</span>
             }
-        })}
+          })}
       </div>
 
       {/* Right side */}

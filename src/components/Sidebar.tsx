@@ -31,7 +31,7 @@ import { useState } from "react";
 const NavItems = [
   { label: "Dashboard", href: "/dashboard", Icon: Dashboard },
   { label: "User Management", href: "/dashboard/user-management", Icon: UserManagement },
-  { label: "Coordinator Management", href: "/", Icon: Coordinator },
+  { label: "Coordinator Management", href: "/dashboard/coordinator-management", Icon: Coordinator },
   { label: "Trip Opportunities", href: "/", Icon: Trip },
   { label: "Chat Management", href: "/", Icon: Chat },
   { label: "Payment & Membership", href: "/", Icon: Payment },
