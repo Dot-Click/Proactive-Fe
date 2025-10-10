@@ -1,31 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import arrowBack from "../../../assets/sidebaricon/arrow.png";
-import imgupload from "../../../assets/sidebaricon/imgupload.png";
+import arrowBack from "../../../assets/sidebaricon/arrowback.png";
+// import imgupload from "../../../assets/sidebaricon/imgupload.png";
+import Template from "../../../assets/sidebaricon/Template.png";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Form, useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import PhoneInput from "react-phone-input-2";
+// import {
+//   Form,
+//   FormControl,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormMessage,
+// } from "@/components/ui/form";
+// import { Input } from "@/components/ui/input";
+// import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
-import { Check } from "lucide-react";
+// import { Badge } from "@/components/ui/badge";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
+// import { useState } from "react";
+import { Progress } from "@/components/ui/progress";
+// import { Check } from "lucide-react";
 
 const formSchema = z
   .object({
@@ -72,7 +74,7 @@ const formSchema = z
     path: ["confirmPassword"],
   });
 
-const AddnewCoordinator = () => {
+const Addtrip = () => {
   type FormSchemaType = z.infer<typeof formSchema>;
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema) as any,
@@ -93,12 +95,6 @@ const AddnewCoordinator = () => {
   });
 
   const navigate = useNavigate();
-  const [profile, setProfile] = useState("");
-
-  const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    setProfile(file ? URL.createObjectURL(file) : "");
-  };
 
   const onSubmit = (val: z.infer<typeof formSchema>) => {
     console.log(val);
@@ -106,62 +102,47 @@ const AddnewCoordinator = () => {
 
   return (
     <div>
-      <Button
-        onClick={() => navigate("/dashboard/coordinator-management")}
-        className="flex bg-white text-[#606066] font-semibold h-11 w-28 rounded-full mt-6 hover:bg-white cursor-pointer"
-      >
-        <img src={arrowBack} alt="arrowBack" />
-        Back
-      </Button>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* ========== Section 1: Coordinator Information ========== */}
           <div className="bg-white mt-3 rounded-[25px]">
-            <div className="bg-[#FAFAFA] px-7 py-5 rounded-tl-[20px] rounded-tr-[20px]">
-              <h1 className="text-[#221E33] font-semibold text-[22px]">
-                Coordinator Information
-              </h1>
-            </div>
 
-            <div className="px-10 py-6">
-              <span className="text-[#242E2F] font-semibold text-[16px]">
-                Upload Profile
-              </span>
-
-              <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px] mt-4 w-[220px] md:w-[200px]">
-                <input
-                  type="file"
-                  id="coordinatorProfile"
-                  className="hidden"
-                  onChange={HandleuploadProfile}
-                />
-
-                <label
-                  htmlFor="coordinatorProfile"
-                  className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
-                >
-                  <div
-                    className={`${profile ? "py-0" : "py-6"} flex flex-col items-center`}
-                  >
-                    {profile ? (
-                      <img src={profile} alt="profile" />
-                    ) : (
-                      <>
-                        <img src={imgupload} alt="upload" width={80} />
-                        <span className="mt-6 text-[#242E2F] text-[14px] text-center">
-                          Image must be <br /> 500px by 500px
-                        </span>
-                      </>
-                    )}
+            <div className="bg-[#FAFAFA] px-4 py-4 rounded-tl-[20px] rounded-tr-[20px]">
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-2 items-center">
+                  <Button onClick={() => navigate("/dashboard/trip-management")} className="text-[#000000] font-bold bg-[#FAFAFA] hover:bg-[#ece7e7] cursor-pointer">
+                    <img src={arrowBack} alt="arrowBack" className="h-4" />
+                    Back
+                  </Button>
+                </div>
+                <div className="px-4 flex justify-between items-center">
+                  <span className="text-[#221E33] font-semibold text-[18px]">Add New Trip</span>
+                  <div className="flex items-center border border-[#000000] gap-2 px-5 py-3 rounded-[12px]">
+                    <img src={Template} alt="Template" className="h-4" />
+                    <span className="text-[#221E33] font-medium">Use Template</span>
                   </div>
-                </label>
+                </div>
               </div>
             </div>
 
-            <div className="px-10">
+            <div className="px-8 py-6">
+              <div className="flex flex-col gap-2">
+                <span className="font-semibold">Step 1 of 6</span>
+                <Progress value={10}/>
+              <div className="flex justify-between mt-2">
+                <span className="text-[12px] font-semibold text-[#221E33]">Basic Information</span>
+                <span className="text-[12px] font-semibold text-[#221E33]">Trip Details</span>
+                <span className="text-[12px] font-semibold text-[#221E33]">What's Included</span>
+                <span className="text-[12px] font-semibold text-[#221E33]">Coordinators</span>
+                <span className="text-[12px] font-semibold text-[#221E33]">Media & Price</span>
+                <span className="text-[12px] font-semibold text-[#221E33]">Review & Save</span>
+              </div>
+              </div>
+            </div>
+
+            {/* <div className="px-10">
               <div className="grid md:grid-cols-2 gap-4 pb-6">
-                {/* Full Name */}
                 <FormField
                   control={form.control}
                   name="username"
@@ -182,7 +163,6 @@ const AddnewCoordinator = () => {
                   )}
                 />
 
-                {/* Email */}
                 <FormField
                   control={form.control}
                   name="email"
@@ -203,7 +183,6 @@ const AddnewCoordinator = () => {
                   )}
                 />
 
-                {/* Phone */}
                 <FormField
                   control={form.control}
                   name="phone"
@@ -242,7 +221,7 @@ const AddnewCoordinator = () => {
                   )}
                 />
 
-                {/* Bio */}
+                
                 <FormField
                   control={form.control}
                   name="Bio"
@@ -263,11 +242,11 @@ const AddnewCoordinator = () => {
                   )}
                 />
               </div>
-            </div>
+            </div> */}
+
           </div>
 
-          {/* ========== Section 2: Professional Details ========== */}
-          <div className="bg-white mt-3 rounded-[25px]">
+          {/* <div className="bg-white mt-3 rounded-[25px]">
             <div className="bg-[#FAFAFA] px-7 py-5 rounded-tl-[20px] rounded-tr-[20px]">
               <h1 className="text-[#221E33] font-semibold text-[22px]">
                 Professional Details
@@ -275,7 +254,6 @@ const AddnewCoordinator = () => {
             </div>
 
             <div className="px-10 py-6 flex flex-col gap-5">
-              {/* Specialties */}
               <FormField
                 control={form.control}
                 name="Specialties"
@@ -327,7 +305,6 @@ const AddnewCoordinator = () => {
                 }}
               />
 
-              {/* Languages */}
               <FormField
                 control={form.control}
                 name="Languages"
@@ -379,7 +356,6 @@ const AddnewCoordinator = () => {
             </div>
 
             <div className="px-10 grid md:grid-cols-2 gap-4 pb-6">
-              {/* Certificate */}
               <FormField
                 control={form.control}
                 name="certificate"
@@ -407,7 +383,6 @@ const AddnewCoordinator = () => {
                 )}
               />
 
-              {/* Experience */}
               <FormField
                 control={form.control}
                 name="experience"
@@ -431,7 +406,6 @@ const AddnewCoordinator = () => {
             </div>
           </div>
 
-          {/* ========== Section 3: Role & Permissions ========== */}
 
           <div className="bg-white mt-3 rounded-[25px]">
 
@@ -442,7 +416,6 @@ const AddnewCoordinator = () => {
             </div>
 
             <div className="px-8 py-6 grid md:grid-cols-2 gap-4 pb-6">
-              {/* Coordinator Type */}
               <FormField
                 control={form.control}
                 name="coordinator"
@@ -470,7 +443,6 @@ const AddnewCoordinator = () => {
                 )}
               />
 
-              {/* Access Level */}
               <FormField
                 control={form.control}
                 name="level"
@@ -500,7 +472,6 @@ const AddnewCoordinator = () => {
             </div>
           </div>
 
-          {/* ========== Section 4: Set Credentials ========== */}
           <div className="bg-white mt-3 rounded-[25px]">
             <div className="bg-[#FAFAFA] px-7 py-5 rounded-tl-[20px] rounded-tr-[20px]">
               <h1 className="text-[#221E33] font-semibold text-[22px]">
@@ -509,7 +480,6 @@ const AddnewCoordinator = () => {
             </div>
 
             <div className="px-8 py-6 grid md:grid-cols-2 gap-4 pb-6">
-              {/* Password */}
               <FormField
                 control={form.control}
                 name="Password"
@@ -531,7 +501,6 @@ const AddnewCoordinator = () => {
                 )}
               />
 
-              {/* Confirm Password */}
               <FormField
                 control={form.control}
                 name="confirmPassword"
@@ -563,7 +532,7 @@ const AddnewCoordinator = () => {
               </Button>
             </div>
           </div>
-
+ */}
 
         </form>
       </Form>
@@ -571,4 +540,4 @@ const AddnewCoordinator = () => {
   );
 };
 
-export default AddnewCoordinator;
+export default Addtrip;

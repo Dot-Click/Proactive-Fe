@@ -32,7 +32,7 @@ const NavItems = [
   { label: "Dashboard", href: "/dashboard", Icon: Dashboard },
   { label: "User Management", href: "/dashboard/user-management", Icon: UserManagement },
   { label: "Coordinator Management", href: "/dashboard/coordinator-management", Icon: Coordinator },
-  { label: "Trip Opportunities", href: "/", Icon: Trip },
+  { label: "Trip Opportunities", href: "/dashboard/trip-management", Icon: Trip },
   { label: "Chat Management", href: "/", Icon: Chat },
   { label: "Payment & Membership", href: "/", Icon: Payment },
   { label: "Settings", href: "/", Icon: Settings },

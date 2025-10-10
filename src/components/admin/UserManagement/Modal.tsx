@@ -91,16 +91,16 @@ const Modal = () => {
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-[#666373]">Trip Category</span>
-                                        <Badge className="px-3 py-2 rounded-[6px] bg-[#C4FFF0] text-[#156250] font-medium text-[14px]">Wild Weekend</Badge>
+                                    <Badge className="px-3 py-2 rounded-[6px] bg-[#C4FFF0] text-[#156250] font-medium text-[14px]">Wild Weekend</Badge>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="flex md:flex-row flex-col gap-2 justify-between items-center mt-8">
-                    <Button className="rounded-full bg-[#E0DDDD] hover:bg-[#c7c1c1] cursor-pointer text-[#606066] h-12 px-10 font-bold">Go Back</Button>
-                    <DialogFooter>
-                        <div className="flex gap-4">
+                    <Button className="w-full md:w-auto rounded-full bg-[#E0DDDD] hover:bg-[#c7c1c1] cursor-pointer text-[#606066] h-12 px-10 font-bold">Go Back</Button>
+                    <DialogFooter className="w-full md:w-auto">
+                        <div className="flex md:flex-row flex-col gap-4">
                             <Button className="font-bold rounded-full bg-[#000000] cursor-pointer h-12 px-10">Send Email</Button>
                             <Button variant={'outline'} className="cursor-pointer font-bold rounded-full h-12 px-10 border border-[#9C0000] text-[#9C0000]">Block User</Button>
                         </div>

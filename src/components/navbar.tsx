@@ -31,9 +31,21 @@ const SubHeading = [
     name: "/dashboard/coordinator-management",
     subHeading: 'Monitor performance and assigned responsibilities'
   },
- {
-    name: "/dashboard/addnew-coordinator",
+  {
+    name: "/dashboard/add-new-coordinator",
     subHeading: 'Fill in the details to onboard a new coordinator to the platform.'
+  },
+  {
+    name: "/dashboard/edit-coordinator/:id",
+    subHeading: 'Edit the details to update this coordinator’s profile'
+  },
+  {
+    name: "/dashboard/trip-management",
+    subHeading: 'Monitor, approve, and manage all trips created by coordinators.'
+  },
+  {
+    name: "/dashboard/add-new-trip",
+    subHeading: 'Manage all trips: add, edit, and update their status.'
   },
 ]
 const Navbar = ({ collapsed }: NavbarProps) => {

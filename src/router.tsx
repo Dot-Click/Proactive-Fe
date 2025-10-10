@@ -4,6 +4,9 @@ import DashboardPage from "./pages/admin/Dashboard.page";
 import UserManagementPage from "./pages/admin/UserManagement.page";
 import CoordinatorPage from "./pages/admin/Coordinator.page";
 import AddnewcoordinatorPage from "./pages/admin/Addnewcoordinator.page";
+import EditCoordinatorPage from "./pages/admin/Editcoordinator.page";
+import TripOppurtunitiesPage from "./pages/admin/Tripoppurtunities.page";
+import AddtripPage from "./pages/admin/Addtrip.page";
 
 
 
@@ -15,7 +18,10 @@ function App() {
         <Route index element={<DashboardPage/>}/>
         <Route path="/dashboard/user-management" element={<UserManagementPage/>}/>
         <Route path="/dashboard/coordinator-management" element={<CoordinatorPage/>}/>
-        <Route path="/dashboard/addnew-coordinator" element={<AddnewcoordinatorPage/>}/>
+        <Route path="/dashboard/add-new-coordinator" element={<AddnewcoordinatorPage/>}/>
+        <Route path="/dashboard/edit-coordinator/:id" element={<EditCoordinatorPage/>}/>
+        <Route path="/dashboard/trip-management" element={<TripOppurtunitiesPage/>}/>
+        <Route path="/dashboard/add-new-trip" element={<AddtripPage/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

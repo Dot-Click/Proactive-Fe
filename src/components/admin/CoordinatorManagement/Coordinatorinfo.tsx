@@ -1,8 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import TableHeader from "@/Table/TableHeader"
 import { Star } from "lucide-react"
+import Coordinatordetailmodal from "./Coordinatordetailmodal"
 
 
 const CoordinatorData = [
@@ -96,7 +98,7 @@ const Coordinatorinfo = () => {
                 addButtonLabel="Add Coordinator"
                 searchPlaceholder="Search Coordinators"
                 showAddButton={true}
-                url='/dashboard/addnew-coordinator'
+                url='/dashboard/add-new-coordinator'
             />
 
             <div className="grid md:grid-cols-3 gap-2 mt-3">
@@ -172,7 +174,12 @@ const Coordinatorinfo = () => {
                             </div>
 
                             <div className="mt-6 flex justify-between gap-2">
-                                <Button className="rounded-full h-12 px-10 cursor-pointer font-semibold">View Detail</Button>
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <Button className="rounded-full h-12 px-10 cursor-pointer font-semibold">View Detail</Button>
+                                    </DialogTrigger>
+                                    <Coordinatordetailmodal />
+                                </Dialog>
                                 <Button variant={'outline'} className="rounded-full h-12 px-12 border border-[#9C0000] text-[#9C0000] font-semibold cursor-pointer hover:text-[#9C0000]">Block</Button>
                             </div>
 
