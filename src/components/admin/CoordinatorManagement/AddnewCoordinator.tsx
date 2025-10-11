@@ -157,6 +157,7 @@ const AddnewCoordinator = () => {
                   </div>
                 </label>
               </div>
+              
             </div>
 
             <div className="px-10">

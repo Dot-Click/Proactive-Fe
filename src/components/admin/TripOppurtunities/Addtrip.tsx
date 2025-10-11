@@ -4,7 +4,7 @@ import arrowBack from "../../../assets/sidebaricon/arrowback.png";
 // import imgupload from "../../../assets/sidebaricon/imgupload.png";
 import Template from "../../../assets/sidebaricon/Template.png";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 // import {
 //   Form,
@@ -27,516 +27,1498 @@ import "react-phone-input-2/lib/style.css";
 // } from "@/components/ui/select";
 // import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+import { Upload } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 // import { Check } from "lucide-react";
 
 const formSchema = z
   .object({
-    username: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+    Triptype: z.string().min(1, {
+      message: "Select Trip Type",
     }),
-    email: z.string().email({ message: "Invalid email address" }),
-    phone: z
-      .string()
-      .min(1, { message: "Phone number is required" })
-      .refine((val) => /^[0-9]{10,15}$/.test(val), {
-        message: "Enter a valid phone number",
-      }),
-    Bio: z.string().min(2, {
-      message: "Bio must be at least 2 characters.",
+    TripTitle: z.string().min(1, {
+      message: "TripTitle is required",
     }),
-    Specialties: z.array(z.string()).min(1, {
-      message: "Select at least one speciality",
+    Description: z.string().min(1, {
+      message: "Description is required",
     }),
-    Languages: z.array(z.string()).min(1, {
-      message: "Select at least one language",
+    coverImage: z.any().optional(),
+    Location: z.string().min(1, {
+      message: "Select at least one Location",
     }),
-    certificate: z.string().min(1, {
-      message: "Select at least one certificate",
+    mapCoordinates: z.string().optional(),
+    StartDate: z.coerce.number().min(1, {
+      message: "Select Start Date",
     }),
-    experience: z.coerce.number().min(1, {
-      message: "Experience is required",
+    EndDate: z.coerce.number().min(1, {
+      message: "Select End Date",
     }),
-    coordinator: z.string().min(1, {
-      message: "Select Coordinator type",
-    }),
-    level: z.string().min(1, {
-      message: "Select Permission",
-    }),
-    Password: z.string().min(6, {
-      message: "Password must be at least 6 characters",
-    }),
-    confirmPassword: z.string().min(6, {
-      message: "Confirm Password must be at least 6 characters",
-    }),
+    Duration: z.string().optional()
   })
-  .refine((data) => data.Password === data.confirmPassword, {
-    message: "Passwords must match",
-    path: ["confirmPassword"],
-  });
-
 const Addtrip = () => {
   type FormSchemaType = z.infer<typeof formSchema>;
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema) as any,
     defaultValues: {
-      username: "",
-      email: "",
-      phone: "",
-      Bio: "",
-      Specialties: [],
-      Languages: [],
-      certificate: "",
-      experience: 0,
-      coordinator: "",
-      level: "",
-      Password: "",
-      confirmPassword: "",
+      Triptype: "",
+      TripTitle: "",
+      Description: "",
+      coverImage: null,
+      Location: "",
+      mapCoordinates: '',
+      StartDate: 0,
+      EndDate: 0,
+      Duration: '',
     },
   });
-
+  const [openStart, setOpenStart] = useState(false);
+  const [openEnd, setOpenEnd] = useState(false);
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined)
+  const [endDate, setendDate] = useState<Date | undefined>(undefined)
   const navigate = useNavigate();
+  const [profile, setProfile] = useState("");
+  const [step, setStep] = useState(1)
+  const totalStep = 6
+
+  const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    setProfile(file ? URL.createObjectURL(file) : "");
+  };
 
   const onSubmit = (val: z.infer<typeof formSchema>) => {
     console.log(val);
   };
 
+  const next = () => {
+    if (step < totalStep) setStep(step + 1)
+  }
+
+  const previous = () => {
+    if (step > 1) setStep(step - 1)
+  }
+
   return (
     <div>
+      <div className="bg-[#FAFAFA] px-4 py-4 rounded-tl-[20px] rounded-tr-[20px] mt-6">
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-2 items-center">
+            <Button onClick={() => navigate("/dashboard/trip-management")} className="text-[#000000] font-bold bg-[#FAFAFA] hover:bg-[#ece7e7] cursor-pointer">
+              <img src={arrowBack} alt="arrowBack" className="h-4" />
+              Back
+            </Button>
+          </div>
+          <div className="px-4 flex justify-between items-center">
+            <span className="text-[#221E33] font-semibold text-[18px]">Add New Trip</span>
+            <div className="flex items-center border border-[#000000] gap-2 px-5 py-3 rounded-[12px]">
+              <img src={Template} alt="Template" className="h-4" />
+              <span className="text-[#221E33] font-medium">Use Template</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== Section 1: stepper ========== */}
+      <div className="bg-white">
+        <div className="px-8 py-6">
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold">Step 1 of 6</span>
+            <Progress value={(step / totalStep) * 100} />
+            <div className="flex justify-between mt-2">
+              <span className="text-[12px] font-semibold text-[#221E33]">Basic Information</span>
+              <span className="text-[12px] font-semibold text-[#221E33]">Trip Details</span>
+              <span className="text-[12px] font-semibold text-[#221E33]">What's Included</span>
+              <span className="text-[12px] font-semibold text-[#221E33]">Coordinators</span>
+              <span className="text-[12px] font-semibold text-[#221E33]">Media & Price</span>
+              <span className="text-[12px] font-semibold text-[#221E33]">Review & Save</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          {/* ========== Section 1: Coordinator Information ========== */}
-          <div className="bg-white mt-3 rounded-[25px]">
-
-            <div className="bg-[#FAFAFA] px-4 py-4 rounded-tl-[20px] rounded-tr-[20px]">
-              <div className="flex flex-col gap-4">
-                <div className="flex gap-2 items-center">
-                  <Button onClick={() => navigate("/dashboard/trip-management")} className="text-[#000000] font-bold bg-[#FAFAFA] hover:bg-[#ece7e7] cursor-pointer">
-                    <img src={arrowBack} alt="arrowBack" className="h-4" />
-                    Back
-                  </Button>
-                </div>
-                <div className="px-4 flex justify-between items-center">
-                  <span className="text-[#221E33] font-semibold text-[18px]">Add New Trip</span>
-                  <div className="flex items-center border border-[#000000] gap-2 px-5 py-3 rounded-[12px]">
-                    <img src={Template} alt="Template" className="h-4" />
-                    <span className="text-[#221E33] font-medium">Use Template</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          {/* ========== Section 2: Basic Information ========== */}
+          <div className="bg-white rounded-bl-[25px] rounded-br-[25px]">
             <div className="px-8 py-6">
               <div className="flex flex-col gap-2">
-                <span className="font-semibold">Step 1 of 6</span>
-                <Progress value={10}/>
-              <div className="flex justify-between mt-2">
-                <span className="text-[12px] font-semibold text-[#221E33]">Basic Information</span>
-                <span className="text-[12px] font-semibold text-[#221E33]">Trip Details</span>
-                <span className="text-[12px] font-semibold text-[#221E33]">What's Included</span>
-                <span className="text-[12px] font-semibold text-[#221E33]">Coordinators</span>
-                <span className="text-[12px] font-semibold text-[#221E33]">Media & Price</span>
-                <span className="text-[12px] font-semibold text-[#221E33]">Review & Save</span>
+                {
+                  step === 1 &&
+                  <>
+                    <span className="font-semibold text-[20px]">Basic Information</span>
+                    <div className="mt-10">
+                      <div className="grid md:grid-cols-2 gap-4 pb-6">
+                        <FormField
+                          control={form.control}
+                          name="Triptype"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Type
+                              </FormLabel>
+                              <FormControl>
+                                <Select
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
+                                    <SelectValue placeholder="Select Category" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Photography">Wild Trip</SelectItem>
+                                    <SelectItem value="Travel">Wild weekend</SelectItem>
+                                    <SelectItem value="Travel">Other</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="TripTitle"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Title
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Trip Title"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+
+                        <FormField
+                          control={form.control}
+                          name="Description"
+                          render={({ field }) => (
+                            <FormItem className="md:col-span-2 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Description
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Describr your trip......"
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] h-26 placeholder:text-[#221E33]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="coverImage"
+                          render={() => (
+                            <FormItem className="md:col-span-2 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Cover Image
+                              </FormLabel>
+                              <FormControl>
+                                <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px]">
+                                  <input
+                                    type="file"
+                                    id="coordinatorProfile"
+                                    className="hidden"
+                                    onChange={HandleuploadProfile}
+                                  />
+
+                                  <label
+                                    htmlFor="coordinatorProfile"
+                                    className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
+                                  >
+                                    <div
+                                      className={`${profile ? "py-0" : "py-14"} flex flex-col items-center`}
+                                    >
+                                      {profile ? (
+                                        <img src={profile} alt="profile" />
+                                      ) : (
+                                        <>
+                                          <Upload strokeWidth={1} size={60} />
+                                          <span className="mt-6 text-[#242E2F] text-[16px] text-center font-semibold">
+                                            Upload cover image
+                                          </span>
+                                          <span>PNG,JPG,GIF up to 10MB</span>
+                                        </>
+                                      )}
+                                    </div>
+                                  </label>
+                                </div>
+
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="Location"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold mt-6">
+                                Location
+                              </FormLabel>
+                              <FormControl>
+                                <Select
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
+                                    <SelectValue placeholder="e.g, Barcelona,Spain" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Wild Trip">Wild Trip</SelectItem>
+                                    <SelectItem value="Wild weekend">Wild weekend</SelectItem>
+                                    <SelectItem value="Other">Other</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="mapCoordinates"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold mt-6">
+                                Map Coordinates (Optional)
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Select on map"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="grid md:grid-cols-3 gap-4 pb-6 mt-4">
+                        <FormField
+                          control={form.control}
+                          name="StartDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Start Date
+                              </FormLabel>
+                              <FormControl>
+                                <Popover open={openStart} onOpenChange={setOpenStart}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      id="date"
+                                      className="justify-between font-normal bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                    >
+                                      {startDate ? startDate.toLocaleDateString() : "mm/dd/yy"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto overflow-hidden p-4" align="end">
+                                    <Calendar
+                                      mode="single"
+                                      selected={startDate}
+                                      {...field}
+                                      onSelect={(date) => {
+                                        setStartDate(date)
+                                        setOpenStart(false)
+                                      }}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="EndDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                End Date
+                              </FormLabel>
+                              <FormControl>
+                                <Popover open={openEnd} onOpenChange={setOpenEnd}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      id="date"
+                                      className="justify-between font-normal bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                    >
+                                      {endDate ? endDate.toLocaleDateString() : "mm/dd/yy"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto overflow-hidden p-4" align="end">
+                                    <Calendar
+                                      mode="single"
+                                      selected={endDate}
+                                      {...field}
+                                      onSelect={(date) => {
+                                        setendDate(date)
+                                        setOpenEnd(false)
+                                      }}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="Duration"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Duration
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Auto-calculated"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                    </div>
+                  </>
+                }
+
+                {
+                  step === 2 &&
+                  <>
+                    <span className="font-semibold text-[20px]">Trip Details</span>
+                    <div className="mt-10">
+                      <div className="grid md:grid-cols-2 gap-4 pb-6">
+                        <FormField
+                          control={form.control}
+                          name="Description"
+                          render={({ field }) => (
+                            <FormItem className="md:col-span-2">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Long Description
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Describr your trip......"
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] h-26 placeholder:text-[#221E33] px-4 py-3"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* <div className="grid grid-cols-3 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-[#242E2F] font-semibold">
+                                  Trip Title
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter Email"
+                                    {...field}
+                                    className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+
+                          <FormField
+                            control={form.control}
+                            name="phone"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-[#242E2F] font-semibold">
+                                  Trip Description
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter Email"
+                                    {...field}
+                                    className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="phone"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-[#242E2F] font-semibold">
+                                  Trip Description
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter Email"
+                                    {...field}
+                                    className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div> */}
+
+
+
+                        
+                      </div>
+                      <div className="grid md:grid-cols-3 gap-4 pb-6 mt-4">
+                        <FormField
+                          control={form.control}
+                          name="StartDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Start Date
+                              </FormLabel>
+                              <FormControl>
+                                <Popover open={openStart} onOpenChange={setOpenStart}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      id="date"
+                                      className="justify-between font-normal bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                    >
+                                      {startDate ? startDate.toLocaleDateString() : "mm/dd/yy"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto overflow-hidden p-4" align="end">
+                                    <Calendar
+                                      mode="single"
+                                      selected={startDate}
+                                      {...field}
+                                      onSelect={(date) => {
+                                        setStartDate(date)
+                                        setOpenStart(false)
+                                      }}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="EndDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                End Date
+                              </FormLabel>
+                              <FormControl>
+                                <Popover open={openEnd} onOpenChange={setOpenEnd}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      id="date"
+                                      className="justify-between font-normal bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                    >
+                                      {endDate ? endDate.toLocaleDateString() : "mm/dd/yy"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto overflow-hidden p-4" align="end">
+                                    <Calendar
+                                      mode="single"
+                                      selected={endDate}
+                                      {...field}
+                                      onSelect={(date) => {
+                                        setendDate(date)
+                                        setOpenEnd(false)
+                                      }}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="Duration"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Duration
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Auto-calculated"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={() => (
+                            <FormItem className="md:col-span-3 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Cover Image
+                              </FormLabel>
+                              <FormControl>
+                                <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px]">
+                                  <input
+                                    type="file"
+                                    id="coordinatorProfile"
+                                    className="hidden"
+                                    onChange={HandleuploadProfile}
+                                  />
+
+                                  <label
+                                    htmlFor="coordinatorProfile"
+                                    className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
+                                  >
+                                    <div
+                                      className={`${profile ? "py-0" : "py-14"} flex flex-col items-center`}
+                                    >
+                                      {profile ? (
+                                        <img src={profile} alt="profile" />
+                                      ) : (
+                                        <>
+                                          <Upload strokeWidth={1} size={60} />
+                                          <span className="mt-6 text-[#242E2F] text-[16px] text-center font-semibold">
+                                            Upload cover image
+                                          </span>
+                                          <span>PNG,JPG,GIF up to 10MB</span>
+                                        </>
+                                      )}
+                                    </div>
+                                  </label>
+                                </div>
+
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                    </div>
+                  </>
+                }
+
+                {
+                  step === 3 &&
+                  <>
+                    <span className="font-semibold text-[20px]">What</span>
+                    <div className="mt-10">
+                      <div className="grid md:grid-cols-2 gap-4 pb-6">
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Type
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Title
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Email"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem className="md:col-span-2 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Description
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Describr your trip......"
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] h-26 placeholder:text-[#221E33]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={() => (
+                            <FormItem className="md:col-span-2 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Cover Image
+                              </FormLabel>
+                              <FormControl>
+                                <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px]">
+                                  <input
+                                    type="file"
+                                    id="coordinatorProfile"
+                                    className="hidden"
+                                    onChange={HandleuploadProfile}
+                                  />
+
+                                  <label
+                                    htmlFor="coordinatorProfile"
+                                    className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
+                                  >
+                                    <div
+                                      className={`${profile ? "py-0" : "py-14"} flex flex-col items-center`}
+                                    >
+                                      {profile ? (
+                                        <img src={profile} alt="profile" />
+                                      ) : (
+                                        <>
+                                          <Upload strokeWidth={1} size={60} />
+                                          <span className="mt-6 text-[#242E2F] text-[16px] text-center font-semibold">
+                                            Upload cover image
+                                          </span>
+                                          <span>PNG,JPG,GIF up to 10MB</span>
+                                        </>
+                                      )}
+                                    </div>
+                                  </label>
+                                </div>
+
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold mt-6">
+                                Location
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold mt-6">
+                                Map Coordinates (Optional)
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid md:grid-cols-3 gap-4 pb-6 mt-4">
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Date
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                End Date
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Duration
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </>
+                }
+
+                {
+                  step === 4 &&
+                  <>
+                    <span className="font-semibold text-[20px]">Coordinators</span>
+                    <div className="mt-10">
+                      <div className="grid md:grid-cols-2 gap-4 pb-6">
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Type
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Title
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Email"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem className="md:col-span-2 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Description
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Describr your trip......"
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] h-26 placeholder:text-[#221E33]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={() => (
+                            <FormItem className="md:col-span-2 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Cover Image
+                              </FormLabel>
+                              <FormControl>
+                                <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px]">
+                                  <input
+                                    type="file"
+                                    id="coordinatorProfile"
+                                    className="hidden"
+                                    onChange={HandleuploadProfile}
+                                  />
+
+                                  <label
+                                    htmlFor="coordinatorProfile"
+                                    className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
+                                  >
+                                    <div
+                                      className={`${profile ? "py-0" : "py-14"} flex flex-col items-center`}
+                                    >
+                                      {profile ? (
+                                        <img src={profile} alt="profile" />
+                                      ) : (
+                                        <>
+                                          <Upload strokeWidth={1} size={60} />
+                                          <span className="mt-6 text-[#242E2F] text-[16px] text-center font-semibold">
+                                            Upload cover image
+                                          </span>
+                                          <span>PNG,JPG,GIF up to 10MB</span>
+                                        </>
+                                      )}
+                                    </div>
+                                  </label>
+                                </div>
+
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold mt-6">
+                                Location
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold mt-6">
+                                Map Coordinates (Optional)
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid md:grid-cols-3 gap-4 pb-6 mt-4">
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Date
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                End Date
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Duration
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </>
+                }
+
+                {
+                  step === 5 &&
+                  <>
+                    <span className="font-semibold text-[20px]">Media</span>
+                    <div className="mt-10">
+                      <div className="grid md:grid-cols-2 gap-4 pb-6">
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Type
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Title
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Email"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem className="md:col-span-2 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Description
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Describr your trip......"
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] h-26 placeholder:text-[#221E33]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={() => (
+                            <FormItem className="md:col-span-2 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Cover Image
+                              </FormLabel>
+                              <FormControl>
+                                <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px]">
+                                  <input
+                                    type="file"
+                                    id="coordinatorProfile"
+                                    className="hidden"
+                                    onChange={HandleuploadProfile}
+                                  />
+
+                                  <label
+                                    htmlFor="coordinatorProfile"
+                                    className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
+                                  >
+                                    <div
+                                      className={`${profile ? "py-0" : "py-14"} flex flex-col items-center`}
+                                    >
+                                      {profile ? (
+                                        <img src={profile} alt="profile" />
+                                      ) : (
+                                        <>
+                                          <Upload strokeWidth={1} size={60} />
+                                          <span className="mt-6 text-[#242E2F] text-[16px] text-center font-semibold">
+                                            Upload cover image
+                                          </span>
+                                          <span>PNG,JPG,GIF up to 10MB</span>
+                                        </>
+                                      )}
+                                    </div>
+                                  </label>
+                                </div>
+
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold mt-6">
+                                Location
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold mt-6">
+                                Map Coordinates (Optional)
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid md:grid-cols-3 gap-4 pb-6 mt-4">
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Date
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                End Date
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Duration
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </>
+                }
+
+                {
+                  step === 6 &&
+                  <>
+                    <span className="font-semibold text-[20px]">Review</span>
+                    <div className="mt-10">
+                      <div className="grid md:grid-cols-2 gap-4 pb-6">
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Type
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Title
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Email"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* Phone */}
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem className="md:col-span-2 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Trip Description
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Describr your trip......"
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] h-26 placeholder:text-[#221E33]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={() => (
+                            <FormItem className="md:col-span-2 mt-6">
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Cover Image
+                              </FormLabel>
+                              <FormControl>
+                                <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px]">
+                                  <input
+                                    type="file"
+                                    id="coordinatorProfile"
+                                    className="hidden"
+                                    onChange={HandleuploadProfile}
+                                  />
+
+                                  <label
+                                    htmlFor="coordinatorProfile"
+                                    className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
+                                  >
+                                    <div
+                                      className={`${profile ? "py-0" : "py-14"} flex flex-col items-center`}
+                                    >
+                                      {profile ? (
+                                        <img src={profile} alt="profile" />
+                                      ) : (
+                                        <>
+                                          <Upload strokeWidth={1} size={60} />
+                                          <span className="mt-6 text-[#242E2F] text-[16px] text-center font-semibold">
+                                            Upload cover image
+                                          </span>
+                                          <span>PNG,JPG,GIF up to 10MB</span>
+                                        </>
+                                      )}
+                                    </div>
+                                  </label>
+                                </div>
+
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold mt-6">
+                                Location
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold mt-6">
+                                Map Coordinates (Optional)
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid md:grid-cols-3 gap-4 pb-6 mt-4">
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Date
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                End Date
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="username"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[#242E2F] font-semibold">
+                                Duration
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter Full Name"
+                                  {...field}
+                                  className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </>
+                }
+
+                <div className="flex justify-end py-6 gap-4">
+                  {
+                    step > 1 &&
+                    <Button type="button" onClick={previous} variant={'outline'} className="cursor-pointer rounded-full px-8 py-5">Previous</Button>
+                  }
+                  <Button
+                    type="button"
+                    onClick={step === totalStep ? form.handleSubmit(onSubmit) : next}
+                    className="cursor-pointer rounded-full px-12 py-5">
+                    {step === totalStep ? "Publish" : "Next"}
+                  </Button>
+                </div>
+
               </div>
-              </div>
-            </div>
-
-            {/* <div className="px-10">
-              <div className="grid md:grid-cols-2 gap-4 pb-6">
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[#242E2F] font-semibold">
-                        Full Name
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter Full Name"
-                          {...field}
-                          className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[#242E2F] font-semibold">
-                        Email Address
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter Email"
-                          {...field}
-                          className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[#242E2F] font-semibold">
-                        Phone Number
-                      </FormLabel>
-                      <FormControl>
-                        <PhoneInput
-                          country={"us"}
-                          specialLabel=""
-                          placeholder="Phone Number"
-                          inputStyle={{
-                            width: "100%",
-                            height: "52px",
-                            backgroundColor: "#FAFAFE",
-                            border: "1px solid #EFEFEF",
-                            borderRadius: "10px",
-                            paddingLeft: "60px",
-                            fontSize: "15px",
-                            color: "#242E2F",
-                          }}
-                          buttonStyle={{
-                            backgroundColor: "#FAFAFE",
-                            borderRight: "1px solid #EFEFEF",
-                            border: "1px solid #EFEFEF",
-                            borderRadius: "10px 0 0 10px",
-                            width: "55px",
-                          }}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                
-                <FormField
-                  control={form.control}
-                  name="Bio"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[#242E2F] font-semibold">
-                        Bio
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter Bio"
-                          {...field}
-                          className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div> */}
-
-          </div>
-
-          {/* <div className="bg-white mt-3 rounded-[25px]">
-            <div className="bg-[#FAFAFA] px-7 py-5 rounded-tl-[20px] rounded-tr-[20px]">
-              <h1 className="text-[#221E33] font-semibold text-[22px]">
-                Professional Details
-              </h1>
-            </div>
-
-            <div className="px-10 py-6 flex flex-col gap-5">
-              <FormField
-                control={form.control}
-                name="Specialties"
-                render={({ field }) => {
-                  const selected = field.value || [];
-                  const toggle = (item: string) =>
-                    selected.includes(item)
-                      ? field.onChange(selected.filter((s) => s !== item))
-                      : field.onChange([...selected, item]);
-
-                  const options = [
-                    "Adventure Travel",
-                    "Cultural Tours",
-                    "Outdoor Activities",
-                    "Photography",
-                    "Wildlife & Nature",
-                    "Historical Sites",
-                    "Mountain Trekking",
-                    "Urban Exploration",
-                    "Beach & Coastal",
-                  ];
-
-                  return (
-                    <FormItem>
-                      <FormLabel className="text-[#242E2F] font-semibold mb-3">
-                        Specialties
-                      </FormLabel>
-                      <FormControl>
-                        <div className="flex gap-3 flex-wrap">
-                          {options.map((item) => (
-                            <Badge
-                              key={item}
-                              onClick={() => toggle(item)}
-                              className={`cursor-pointer rounded-[6px] px-3 py-2 ${selected.includes(item)
-                                ? "bg-[#0DAC87] text-white"
-                                : "border border-[#666373] text-[#666373] bg-transparent"
-                                }`}
-                            >
-                              {
-                                selected.includes(item) ? <span className="flex items-center gap-1"><Check size={14} /> {item}</span> : item
-                              }
-                            </Badge>
-                          ))}
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
-                control={form.control}
-                name="Languages"
-                render={({ field }) => {
-                  const selected = field.value || [];
-                  const toggle = (lang: string) =>
-                    selected.includes(lang)
-                      ? field.onChange(selected.filter((l) => l !== lang))
-                      : field.onChange([...selected, lang]);
-
-                  const langs = [
-                    "English",
-                    "French",
-                    "Spanish",
-                    "German",
-                    "Italian",
-                    "Dutch",
-                    "Russian",
-                  ];
-
-                  return (
-                    <FormItem>
-                      <FormLabel className="text-[#242E2F] font-semibold mb-3">
-                        Languages
-                      </FormLabel>
-                      <FormControl>
-                        <div className="flex gap-3 flex-wrap">
-                          {langs.map((lang) => (
-                            <Badge
-                              key={lang}
-                              onClick={() => toggle(lang)}
-                              className={`cursor-pointer rounded-[6px] px-6 py-2 ${selected.includes(lang)
-                                ? "bg-[#0DAC87] text-white"
-                                : "border border-[#666373] text-[#666373] bg-transparent"
-                                }`}
-                            >
-                              {
-                                selected.includes(lang) ? <span className="flex items-center gap-1"><Check size={14} /> {lang}</span> : lang
-                              }
-                            </Badge>
-                          ))}
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
-
-            <div className="px-10 grid md:grid-cols-2 gap-4 pb-6">
-              <FormField
-                control={form.control}
-                name="certificate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#242E2F] font-semibold">
-                      Certification Level
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                          <SelectValue placeholder="Select Certificate" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Photography">Photography</SelectItem>
-                          <SelectItem value="Travel">Travel</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="experience"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#242E2F] font-semibold">
-                      Years of Experience
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="00"
-                        {...field}
-                        className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
           </div>
-
-
-          <div className="bg-white mt-3 rounded-[25px]">
-
-            <div className="bg-[#FAFAFA] px-7 py-5 rounded-tl-[20px] rounded-tr-[20px]">
-              <h1 className="text-[#221E33] font-semibold text-[22px]">
-                Role & Permissions
-              </h1>
-            </div>
-
-            <div className="px-8 py-6 grid md:grid-cols-2 gap-4 pb-6">
-              <FormField
-                control={form.control}
-                name="coordinator"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#242E2F] font-semibold">
-                      Coordinator Type
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                          <SelectValue placeholder="Select Type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Photography">Photography</SelectItem>
-                          <SelectItem value="Travel">Travel</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="level"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#242E2F] font-semibold">
-                      Access Level
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                          <SelectValue placeholder="Set Permissions" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Photography">Photography</SelectItem>
-                          <SelectItem value="Travel">Travel</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          <div className="bg-white mt-3 rounded-[25px]">
-            <div className="bg-[#FAFAFA] px-7 py-5 rounded-tl-[20px] rounded-tr-[20px]">
-              <h1 className="text-[#221E33] font-semibold text-[22px]">
-                Set Credential
-              </h1>
-            </div>
-
-            <div className="px-8 py-6 grid md:grid-cols-2 gap-4 pb-6">
-              <FormField
-                control={form.control}
-                name="Password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#242E2F] font-semibold">
-                      Password
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter Password"
-                        {...field}
-                        className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#242E2F] font-semibold">
-                      Confirm Password
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter Password"
-                        {...field}
-                        className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex justify-end mt-20 px-8 pb-6">
-              <Button
-                type="submit"
-                className="rounded-full px-8 py-6 font-medium cursor-pointer"
-              >
-                Save Coordinator
-              </Button>
-            </div>
-          </div>
- */}
 
         </form>
       </Form>
-    </div>
+    </div >
   );
 };
 
