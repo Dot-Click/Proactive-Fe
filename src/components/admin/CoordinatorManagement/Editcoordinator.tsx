@@ -398,8 +398,9 @@ const Editcoordinator = () => {
                                                     <SelectValue placeholder="Select Certificate" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="Photography">Photography</SelectItem>
-                                                    <SelectItem value="Travel">Travel</SelectItem>
+                                                    <SelectItem value="Basic">Basic</SelectItem>
+                                                    <SelectItem value="Intermediate">Intermediate</SelectItem>
+                                                    <SelectItem value="Expert">Expert</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
@@ -461,8 +462,14 @@ const Editcoordinator = () => {
                                                     <SelectValue placeholder="Select Type" />
                                                 </SelectTrigger>
                                                 <SelectContent>
+                                                    <SelectItem value="Logistics">Logistics</SelectItem>
+                                                    <SelectItem value="Accommodation">Accommodation</SelectItem>
+                                                    <SelectItem value="Transport">Transport</SelectItem>
+                                                    <SelectItem value="Tour Guide">Tour Guide</SelectItem>
+                                                    <SelectItem value="Event Management">Event Management</SelectItem>
                                                     <SelectItem value="Photography">Photography</SelectItem>
-                                                    <SelectItem value="Travel">Travel</SelectItem>
+                                                    <SelectItem value="Communication">Communication</SelectItem>
+                                                    <SelectItem value="Finance">Finance</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
@@ -489,8 +496,10 @@ const Editcoordinator = () => {
                                                     <SelectValue placeholder="Set Permissions" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="Photography">Photography</SelectItem>
-                                                    <SelectItem value="Travel">Travel</SelectItem>
+                                                    <SelectItem value="Admin">Admin</SelectItem>
+                                                    <SelectItem value="Editor">Editor</SelectItem>
+                                                    <SelectItem value="Viewer">Viewer</SelectItem>
+                                                    <SelectItem value="Restricted">Restricted</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>

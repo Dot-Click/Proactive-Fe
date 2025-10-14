@@ -103,9 +103,18 @@ const General = () => {
                         <SelectValue placeholder="Select Time Zone" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Photography">Wild Trip</SelectItem>
-                        <SelectItem value="Travel">Wild weekend</SelectItem>
-                        <SelectItem value="Travel">Other</SelectItem>
+                        <SelectItem value="UTC-8">Pacific Time (UTC-8)</SelectItem>
+                        <SelectItem value="UTC-5">Eastern Time (UTC-5)</SelectItem>
+                        <SelectItem value="UTC+0">Greenwich Mean Time (UTC+0)</SelectItem>
+                        <SelectItem value="UTC+1">Central European Time (UTC+1)</SelectItem>
+                        <SelectItem value="UTC+3">Arabian Standard Time (UTC+3)</SelectItem>
+                        <SelectItem value="UTC+4">Gulf Standard Time (UTC+4)</SelectItem>
+                        <SelectItem value="UTC+5">Pakistan Standard Time (UTC+5)</SelectItem>
+                        <SelectItem value="UTC+5:30">India Standard Time (UTC+5:30)</SelectItem>
+                        <SelectItem value="UTC+7">Indochina Time (UTC+7)</SelectItem>
+                        <SelectItem value="UTC+8">China Standard Time (UTC+8)</SelectItem>
+                        <SelectItem value="UTC+9">Japan Standard Time (UTC+9)</SelectItem>
+                        <SelectItem value="UTC+10">Australian Eastern Time (UTC+10)</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -149,9 +158,17 @@ const General = () => {
                         <SelectValue placeholder="Default Language" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Photography">Wild Trip</SelectItem>
-                        <SelectItem value="Travel">Wild weekend</SelectItem>
-                        <SelectItem value="Travel">Other</SelectItem>
+                        <SelectItem value="English">English</SelectItem>
+                        <SelectItem value="Urdu">Urdu</SelectItem>
+                        <SelectItem value="Arabic">Arabic</SelectItem>
+                        <SelectItem value="Turkish">Turkish</SelectItem>
+                        <SelectItem value="French">French</SelectItem>
+                        <SelectItem value="Spanish">Spanish</SelectItem>
+                        <SelectItem value="German">German</SelectItem>
+                        <SelectItem value="Chinese">Chinese (Mandarin)</SelectItem>
+                        <SelectItem value="Japanese">Japanese</SelectItem>
+                        <SelectItem value="Indonesian">Indonesian</SelectItem>
+                        <SelectItem value="Malay">Malay</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -176,9 +193,19 @@ const General = () => {
                         <SelectValue placeholder="Currency" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Photography">Wild Trip</SelectItem>
-                        <SelectItem value="Travel">Wild weekend</SelectItem>
-                        <SelectItem value="Travel">Other</SelectItem>
+                        <SelectItem value="PKR">PKR - Pakistani Rupee</SelectItem>
+                        <SelectItem value="USD">USD - US Dollar</SelectItem>
+                        <SelectItem value="EUR">EUR - Euro</SelectItem>
+                        <SelectItem value="GBP">GBP - British Pound</SelectItem>
+                        <SelectItem value="AED">AED - UAE Dirham</SelectItem>
+                        <SelectItem value="SAR">SAR - Saudi Riyal</SelectItem>
+                        <SelectItem value="TRY">TRY - Turkish Lira</SelectItem>
+                        <SelectItem value="THB">THB - Thai Baht</SelectItem>
+                        <SelectItem value="IDR">IDR - Indonesian Rupiah</SelectItem>
+                        <SelectItem value="MYR">MYR - Malaysian Ringgit</SelectItem>
+                        <SelectItem value="CNY">CNY - Chinese Yuan</SelectItem>
+                        <SelectItem value="JPY">JPY - Japanese Yen</SelectItem>
+                        <SelectItem value="AUD">AUD - Australian Dollar</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>

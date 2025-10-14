@@ -129,7 +129,7 @@ const AddnewCoordinator = () => {
                 Upload Profile
               </span>
 
-              <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px] mt-4 w-[220px] md:w-[200px]">
+              {/* <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px] mt-4 w-[220px] h-[220px] md:w-[200px] md:h-[200px] overflow-hidden">
                 <input
                   type="file"
                   id="coordinatorProfile"
@@ -139,16 +139,51 @@ const AddnewCoordinator = () => {
 
                 <label
                   htmlFor="coordinatorProfile"
-                  className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
+                  className="block w-full h-full cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
                 >
                   <div
-                    className={`${profile ? "py-0" : "py-6"} flex flex-col items-center`}
+                    className={`${profile ? "py-0" : "py-6"} flex flex-col items-center justify-center w-full h-full`}
                   >
                     {profile ? (
-                      <img src={profile} alt="profile" />
+                      <img
+                        src={profile}
+                        alt="profile"
+                        className="w-full h-full object-cover rounded-[10px]"
+                      />
                     ) : (
                       <>
-                        <img src={imgupload} alt="upload" width={80} />
+                        <img src={imgupload} alt="upload" width={80} className="" />
+                        <span className="mt-6 text-[#242E2F] text-[14px] text-center">
+                          Image must be <br /> 500px by 500px
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </label>
+              </div> */}
+
+              <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px] mt-4 w-[220px] h-[220px] md:w-[200px] md:h-[200px] overflow-hidden">
+                <input
+                  type="file"
+                  id="coordinatorProfile"
+                  className="hidden"
+                  onChange={HandleuploadProfile}
+                />
+
+                <label
+                  htmlFor="coordinatorProfile"
+                  className="block w-full h-full cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
+                >
+                  <div className="flex flex-col items-center justify-center w-full h-full">
+                    {profile ? (
+                      <img
+                        src={profile}
+                        alt="profile"
+                        className="w-full h-full object-cover object-center rounded-[10px]"
+                      />
+                    ) : (
+                      <>
+                        <img src={imgupload} alt="upload" width={80} className="" />
                         <span className="mt-6 text-[#242E2F] text-[14px] text-center">
                           Image must be <br /> 500px by 500px
                         </span>
@@ -157,7 +192,7 @@ const AddnewCoordinator = () => {
                   </div>
                 </label>
               </div>
-              
+
             </div>
 
             <div className="px-10">
@@ -398,8 +433,9 @@ const AddnewCoordinator = () => {
                           <SelectValue placeholder="Select Certificate" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Photography">Photography</SelectItem>
-                          <SelectItem value="Travel">Travel</SelectItem>
+                          <SelectItem value="Basic">Basic</SelectItem>
+                          <SelectItem value="Intermediate">Intermediate</SelectItem>
+                          <SelectItem value="Expert">Expert</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -461,8 +497,14 @@ const AddnewCoordinator = () => {
                           <SelectValue placeholder="Select Type" />
                         </SelectTrigger>
                         <SelectContent>
+                          <SelectItem value="Logistics">Logistics</SelectItem>
+                          <SelectItem value="Accommodation">Accommodation</SelectItem>
+                          <SelectItem value="Transport">Transport</SelectItem>
+                          <SelectItem value="Tour Guide">Tour Guide</SelectItem>
+                          <SelectItem value="Event Management">Event Management</SelectItem>
                           <SelectItem value="Photography">Photography</SelectItem>
-                          <SelectItem value="Travel">Travel</SelectItem>
+                          <SelectItem value="Communication">Communication</SelectItem>
+                          <SelectItem value="Finance">Finance</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -489,8 +531,10 @@ const AddnewCoordinator = () => {
                           <SelectValue placeholder="Set Permissions" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Photography">Photography</SelectItem>
-                          <SelectItem value="Travel">Travel</SelectItem>
+                          <SelectItem value="Admin">Admin</SelectItem>
+                          <SelectItem value="Editor">Editor</SelectItem>
+                          <SelectItem value="Viewer">Viewer</SelectItem>
+                          <SelectItem value="Restricted">Restricted</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

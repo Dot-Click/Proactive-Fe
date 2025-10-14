@@ -72,7 +72,7 @@ const Trips = () => {
                             <span className="text-[#727272] text-[12px]">Manual approval required</span>
                         </div>
                         <Switch className="bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2]" />
-                        </div>
+                    </div>
 
                     <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
                         <div className="flex flex-col">
@@ -116,9 +116,10 @@ const Trips = () => {
                                                     <SelectValue placeholder="Select Approval" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="Photography">Wild Trip</SelectItem>
-                                                    <SelectItem value="Travel">Wild weekend</SelectItem>
-                                                    <SelectItem value="Travel">Other</SelectItem>
+                                                    <SelectItem value="Auto Approval">Auto Approval</SelectItem>
+                                                    <SelectItem value="Manual Approval">Manual Approval</SelectItem>
+                                                    <SelectItem value="Admin Approval Required">Admin Approval Required</SelectItem>
+                                                    <SelectItem value="Pending Review">Pending Review</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
@@ -143,9 +144,15 @@ const Trips = () => {
                                                     <SelectValue placeholder="Select Max Participants" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="Photography">Wild Trip</SelectItem>
-                                                    <SelectItem value="Travel">Wild weekend</SelectItem>
-                                                    <SelectItem value="Travel">Other</SelectItem>
+                                                    <SelectItem value="5">Up to 5 Participants</SelectItem>
+                                                    <SelectItem value="10">Up to 10 Participants</SelectItem>
+                                                    <SelectItem value="15">Up to 15 Participants</SelectItem>
+                                                    <SelectItem value="20">Up to 20 Participants</SelectItem>
+                                                    <SelectItem value="25">Up to 25 Participants</SelectItem>
+                                                    <SelectItem value="30">Up to 30 Participants</SelectItem>
+                                                    <SelectItem value="40">Up to 40 Participants</SelectItem>
+                                                    <SelectItem value="50">Up to 50 Participants</SelectItem>
+                                                    <SelectItem value="Unlimited">Unlimited</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
@@ -170,9 +177,12 @@ const Trips = () => {
                                                     <SelectValue placeholder="Select Min Parcipants" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="Photography">Wild Trip</SelectItem>
-                                                    <SelectItem value="Travel">Wild weekend</SelectItem>
-                                                    <SelectItem value="Travel">Other</SelectItem>
+                                                    <SelectItem value="1">1 Participant</SelectItem>
+                                                    <SelectItem value="2">2 Participants</SelectItem>
+                                                    <SelectItem value="5">5 Participants</SelectItem>
+                                                    <SelectItem value="10">10 Participants</SelectItem>
+                                                    <SelectItem value="15">15 Participants</SelectItem>
+                                                    <SelectItem value="20">20 Participants</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
@@ -182,7 +192,7 @@ const Trips = () => {
                             />
                         </div>
                         <div className="flex justify-end md:mt-36 px-6 py-6">
-                        <Button className="rounded-full px-14 py-6 cursor-pointer">Save Changes</Button>
+                            <Button className="rounded-full px-14 py-6 cursor-pointer">Save Changes</Button>
                         </div>
                     </form>
                 </Form>

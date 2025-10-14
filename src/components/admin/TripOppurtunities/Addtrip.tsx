@@ -190,9 +190,15 @@ const Addtrip = () => {
                                     <SelectValue placeholder="Select Category" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="Photography">Wild Trip</SelectItem>
-                                    <SelectItem value="Travel">Wild weekend</SelectItem>
-                                    <SelectItem value="Travel">Other</SelectItem>
+                                    <SelectItem value="Adventure">Adventure</SelectItem>
+                                    <SelectItem value="Leisure">Leisure</SelectItem>
+                                    <SelectItem value="Business">Business</SelectItem>
+                                    <SelectItem value="Cultural">Cultural</SelectItem>
+                                    <SelectItem value="Religious">Religious</SelectItem>
+                                    <SelectItem value="Educational">Educational</SelectItem>
+                                    <SelectItem value="Group Tour">Group Tour</SelectItem>
+                                    <SelectItem value="Solo Travel">Solo Travel</SelectItem>
+                                    <SelectItem value="Family Trip">Family Trip</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </FormControl>
@@ -302,9 +308,14 @@ const Addtrip = () => {
                                     <SelectValue placeholder="e.g, Barcelona,Spain" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="Wild Trip">Wild Trip</SelectItem>
-                                    <SelectItem value="Wild weekend">Wild weekend</SelectItem>
-                                    <SelectItem value="Other">Other</SelectItem>
+                                    <SelectItem value="Hunza Valley">Hunza Valley</SelectItem>
+                                    <SelectItem value="Skardu">Skardu</SelectItem>
+                                    <SelectItem value="Fairy Meadows">Fairy Meadows</SelectItem>
+                                    <SelectItem value="Swat Valley">Swat Valley</SelectItem>
+                                    <SelectItem value="Naran Kaghan">Naran Kaghan</SelectItem>
+                                    <SelectItem value="Islamabad">Islamabad</SelectItem>
+                                    <SelectItem value="Karachi">Karachi</SelectItem>
+                                    <SelectItem value="Lahore">Lahore</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </FormControl>
