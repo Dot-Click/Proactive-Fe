@@ -71,15 +71,15 @@ const Trips = () => {
                             <span className="text-[#221E33] font-bold">Wild Weekend</span>
                             <span className="text-[#727272] text-[12px]">Manual approval required</span>
                         </div>
-                        <Switch />
-                    </div>
+                        <Switch className="bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2]" />
+                        </div>
 
                     <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
                         <div className="flex flex-col">
                             <span className="text-[#221E33] font-bold">Wild Trip</span>
                             <span className="text-[#727272] text-[12px]">Auto-approval enabled</span>
                         </div>
-                        <Switch />
+                        <Switch className="bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2]" />
                     </div>
                     <div className="mt-2">
                         <Button className="rounded-full px-14 py-6 cursor-pointer">Add Category</Button>

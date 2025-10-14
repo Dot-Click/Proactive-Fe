@@ -70,7 +70,7 @@ const Security = () => {
                             <span className="text-[#221E33] font-bold">Require Two-Factor Authentication</span>
                             <span className="text-[#727272] text-[12px]">Mandatory 2FA for all admin users</span>
                         </div>
-                        <Switch />
+                        <Switch className="bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2]" />
                     </div>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
