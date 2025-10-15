@@ -19,7 +19,7 @@ const AdminLayout = () => {
         <SidebarNav collapsed={collapsed} setCollapsed={setCollapsed} />
         <Navbar collapsed={collapsed} />
         <main
-          className={`w-full min-w-0 px-4 transition-all duration-300 mt-14 md:mt-16 ${collapsed ? "md:-ml-40" : ""}`}
+          className={`w-full min-w-0 px-4 transition-all duration-300 mt-14 md:mt-22 lg:mt-16 ${collapsed ? "md:-ml-40" : ""}`}
         >
           <Outlet />
         </main>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import BannerImg from "@/assets/sidebaricon/bannerImg.png"
 import bannericon from "@/assets/sidebaricon/bannericon.png"
-import overlay from "@/assets/sidebaricon/overlay.png"
 
 const Banner = () => {
 const [changeBanner, setChangeBanner] = useState('');
@@ -12,14 +11,14 @@ const HandleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
     return (
-        <div className="relative h-70 md:min-w-[480px] rounded-[20px] overflow-hidden mt-3">
+        <div className="relative w-full h-70 md:min-w-[480px] rounded-[20px] overflow-hidden mt-3">
 
             <div
                 className="absolute inset-0 bg-center"
-                style={{ backgroundImage: `url(${changeBanner || BannerImg})`, backgroundRepeat: 'no-repeat'}}
+                style={{ backgroundImage: `url(${changeBanner || BannerImg})` }}
             ></div>
 
-            <div style={{ backgroundImage: `url(${overlay})` }} className="absolute inset-0 opacity-70"></div>
+            <div className="absolute inset-0 opacity-80 bg-radial-[at_40%_40%] from-[#0DAC87] to-[#054637]/100"></div>
 
             <div className="relative z-10 flex items-center justify-center h-full">
                 <input type="file" name="banner" id="bannerimg" className="hidden"  onChange={HandleFileUpload}/>

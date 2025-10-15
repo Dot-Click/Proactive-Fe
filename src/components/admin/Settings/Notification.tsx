@@ -71,14 +71,14 @@ const Notification = () => {
                             <span className="text-[#221E33] font-bold">Email Notifications</span>
                             <span className="text-[#727272] text-[12px]">Send notifications via email</span>
                         </div>
-                        <Switch className="bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2]" />
+                        <Switch className="w-12" />
                     </div>
                     <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
                         <div className="flex flex-col">
                             <span className="text-[#221E33] font-bold">SMS Notifications</span>
                             <span className="text-[#727272] text-[12px]">Send notifications via SMS</span>
                         </div>
-                        <Switch className="bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2]" />
+                        <Switch className="w-12" />
                     </div>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>

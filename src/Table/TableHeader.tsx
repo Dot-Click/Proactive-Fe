@@ -74,8 +74,8 @@ const TableHeader: React.FC<TableToolbarProps> = ({
                 <div className="flex items-center gap-4">
                     <span className="text-[#666373] text-[18px]">Showing</span>
                     <Select>
-                        <SelectTrigger className="w-[70px] bg-[#E8E8E8] font-medium text-[16px] rounded-[8px] h-9">
-                            <SelectValue placeholder="05" className="" />
+                        <SelectTrigger size="sm" className="w-[68px] px-2.5 bg-[#E8E8E8] font-medium text-[19px] rounded-[8px]">
+                            <SelectValue placeholder="05" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>

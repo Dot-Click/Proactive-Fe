@@ -12,11 +12,15 @@ type User = {
   Amount: string;
   Date: string;
   Status: string;
+  Paymentmethod: string
 };
 
 const data: User[] = [
-  { User: 'Sarah L.', trip: 'Wild Weekend Barcelona', Amount: '€299', Date: '2024-11-20', Status: 'Paid' },
-  { User: 'Sarah L.', trip: 'Wild Weekend Barcelona', Amount: '€299', Date: '2024-11-20', Status: 'Paid' },
+  { User: 'Sarah L.', trip: 'Wild Weekend Barcelona', Amount: '€299', Date: '2024-11-20', Status: 'Paid', Paymentmethod: 'Credit card' },
+  { User: 'Sarah L.', trip: 'Wild Weekend Barcelona', Amount: '€299', Date: '2024-11-20', Status: 'Paid', Paymentmethod: 'Debit card' },
+  { User: 'Sarah L.', trip: 'Wild Weekend Barcelona', Amount: '€299', Date: '2024-11-20', Status: 'Paid', Paymentmethod: 'PayPal' },
+  { User: 'Sarah L.', trip: 'Wild Weekend Barcelona', Amount: '€299', Date: '2024-11-20', Status: 'Paid', Paymentmethod: 'Google Pay' },
+  { User: 'Sarah L.', trip: 'Wild Weekend Barcelona', Amount: '€299', Date: '2024-11-20', Status: 'Paid', Paymentmethod: 'Apple Pay' },
 ]
 
 const userData: ColumnDef<User>[] = [
@@ -150,7 +154,7 @@ const userData: ColumnDef<User>[] = [
           <div className="flex justify-center gap-2 cursor-pointer">
             <img src={credit} alt="credit" />
             <span className="font-semibold text-[14px] text-[#666373]">
-              {row.original.Date}
+              {row.original.Paymentmethod}
             </span>
           </div>
         </div>

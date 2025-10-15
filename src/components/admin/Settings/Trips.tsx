@@ -71,7 +71,7 @@ const Trips = () => {
                             <span className="text-[#221E33] font-bold">Wild Weekend</span>
                             <span className="text-[#727272] text-[12px]">Manual approval required</span>
                         </div>
-                        <Switch className="bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2]" />
+                        <Switch className="w-12" />
                     </div>
 
                     <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
@@ -79,7 +79,7 @@ const Trips = () => {
                             <span className="text-[#221E33] font-bold">Wild Trip</span>
                             <span className="text-[#727272] text-[12px]">Auto-approval enabled</span>
                         </div>
-                        <Switch className="bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2]" />
+                        <Switch className="w-12" />
                     </div>
                     <div className="mt-2">
                         <Button className="rounded-full px-14 py-6 cursor-pointer">Add Category</Button>
@@ -141,7 +141,7 @@ const Trips = () => {
                                                 defaultValue={field.value}
                                             >
                                                 <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                                                    <SelectValue placeholder="Select Max Participants" />
+                                                    <SelectValue placeholder="Up to 50 Participants" />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value="5">Up to 5 Participants</SelectItem>
@@ -174,7 +174,7 @@ const Trips = () => {
                                                 defaultValue={field.value}
                                             >
                                                 <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                                                    <SelectValue placeholder="Select Min Parcipants" />
+                                                    <SelectValue placeholder="5 Parcipants" />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value="1">1 Participant</SelectItem>
@@ -197,6 +197,7 @@ const Trips = () => {
                     </form>
                 </Form>
             </div>
+            
         </div>
     )
 }

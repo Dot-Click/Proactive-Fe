@@ -11,7 +11,7 @@ function Switch({
     <SwitchPrimitive.Root
       data-slot="switch"
       className={cn(
-        "peer data-[state=checked]:bg-white data-[state=unchecked]:bg-white focus-visible:border-ring focus-visible:ring-ring/50 inline-flex h-6 w-10 shrink-0 items-center rounded-full border border-gray-300 shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+        " data-[state=checked]:bg-black data-[state=unchecked]:bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2] focus-visible:border-ring focus-visible:ring-ring/50 inline-flex h-6 w-10 py-3 shrink-0 items-center rounded-full border border-gray-300 shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
@@ -19,7 +19,7 @@ function Switch({
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
         className={cn(
-          "bg-black pointer-events-none block size-5 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
+          "bg-black pointer-events-none block size-5 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(112%-1px)] data-[state=unchecked]:translate-x-1 data-[state=checked]:bg-white"
         )}
       />
     </SwitchPrimitive.Root>

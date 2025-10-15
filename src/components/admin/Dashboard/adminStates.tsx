@@ -39,7 +39,7 @@ const AdminStates = () => {
     return (
         <div className="px-6 py-4 bg-white rounded-[25px] shadow-md mt-1">
             <h1 className="text-[#221E33] mb-4">Key States</h1>
-            <div className="grid grid-col-1 md:grid-cols-4 mt-2 gap-6">
+            <div className="grid grid-col-1 lg:grid-cols-4 md:grid-cols-2 mt-2 gap-6">
                 {
                     stats.map((stat) => (
                         <div>
@@ -47,7 +47,7 @@ const AdminStates = () => {
                                 <div className="flex flex-col">
                                     <p className="text-sm ">{stat.name}</p>
                                     <p className="text-[30px] font-bold bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text">{stat.value}</p>
-                                    <Badge className={`text-sm mt-2 rounded-full px-3 py-1 ${stat.change.startsWith('+') ? 'text-[#1DBA4C] bg-[#00FF4D]/20 border border-[#1DBA4C]' : 'text-[#BA1D1D] border border-[#BA1D1D] bg-[#FF0000]/20'}`}>{stat.change}</Badge>
+                                    <Badge className={`text-sm mt-2 rounded-full px-3 py-1 ${stat.change.startsWith('+') ? 'text-[#1DBA4C] bg-[#00FF4D]/10 border border-[#1DBA4C]' : 'text-[#BA1D1D] border border-[#BA1D1D] bg-[#FF0000]/10'}`}>{stat.change}</Badge>
                                 </div>
                                 <div className="bg-black p-2 rounded-full h-full">
                                     <img src={stat.icon} alt={stat.name} className="w-4 h-4" />

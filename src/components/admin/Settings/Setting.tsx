@@ -12,7 +12,7 @@ const Setting = () => {
   return (
     <>
       <div className="bg-white border border-[#D9D9D9] px-4 py-2 rounded-full w-fit mt-4">
-        <div className="flex gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           {tabs.map((tab) => (
             <div
               key={tab}

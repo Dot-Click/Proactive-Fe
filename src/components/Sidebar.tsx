@@ -50,7 +50,7 @@ export function SidebarNav({ collapsed, setCollapsed }: { collapsed: boolean, se
   
   return (
     <>
-      <Sidebar className={`${collapsed ? "w-20" : "w-62"} transition-all duration-300`}>
+      <Sidebar className={`${collapsed ? "w-20" : "w-62"} transition-all duration-300 h-full`}>
         <SidebarHeader className="bg-[#FFFFFF]">
           <div
             className={`relative px-4 py-8 flex items-center justify-between`}

@@ -62,15 +62,15 @@ const Security = () => {
                     </h1>
                 </div>
 
-                <div className="border-b border-[#EDEDED]" />
+                {/* <div className="border-b border-[#EDEDED]" /> */}
 
-                <div className="px-5 py-4 flex flex-col gap-5">
+                <div className="px-5 py-4 flex flex-col gap-5 md:w-[84vh]">
                     <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
                         <div className="flex flex-col">
                             <span className="text-[#221E33] font-bold">Require Two-Factor Authentication</span>
                             <span className="text-[#727272] text-[12px]">Mandatory 2FA for all admin users</span>
                         </div>
-                        <Switch className="bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2]" />
+                        <Switch className="w-12" />
                     </div>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -133,13 +133,16 @@ const Security = () => {
                                     )}
                                 />
                             </div>
-                            <div className="flex justify-end md:mt-32"> 
-                                <Button className="rounded-full px-12 py-5 cursor-pointer">Save Changes</Button>
-                            </div>
                         </form>
                     </Form>
                 </div>
-
+                <div className="flex justify-end md:mt-32 mt-6 px-5 py-4">
+                    <Button
+                        onClick={form.handleSubmit(onSubmit)}
+                        className="rounded-full px-12 py-5 cursor-pointer ">
+                        Save Changes
+                    </Button>
+                </div>
             </div>
 
         </div>

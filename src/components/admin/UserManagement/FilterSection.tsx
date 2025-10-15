@@ -121,7 +121,7 @@ const userData: ColumnDef<User>[] = [
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
-      <div className="pl-8">
+      <div className="pl-5">
         <h1>Status</h1>
       </div>
     ),

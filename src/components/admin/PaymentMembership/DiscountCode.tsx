@@ -117,7 +117,7 @@ const userData: ColumnDef<User>[] = [
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
-            <div className="pl-16">
+            <div className="pl-22">
                 <h1>Status</h1>
             </div>
         ),
@@ -140,10 +140,10 @@ const userData: ColumnDef<User>[] = [
         cell: ({row}) => {
             return (
                 <div className="flex gap-2">
-                    <Button className={`${row.original.Action === "Activate" ? "bg-[#0DAC87] cursor-pointer px-8 h-10 rounded-full text-[#FFFFFF] font-bold" : "cursor-pointer px-10 h-10 rounded-full text-[#FFFFFF] font-bold"}`}>
+                    <Button className={`${row.original.Action === "Activate" ? "bg-[#0DAC87] hover:bg-[#09aa84] cursor-pointer px-8 h-10 rounded-full text-[#FFFFFF] font-bold" : "cursor-pointer px-10 h-10 rounded-full text-[#FFFFFF] font-bold"}`}>
                         {row.original.Action}
                     </Button>
-                    <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] font-bold">Delete</Button>
+                    <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] hover:text-[#9C0000] font-bold">Delete</Button>
                 </div>
             )
         }

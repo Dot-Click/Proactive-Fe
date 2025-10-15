@@ -171,7 +171,7 @@ const ChatManagement = () => {
           </div>
           <div className="bg-[#FAFAFA] px-6 py-4 rounded-full flex gap-2 items-center">
             <span className="bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold">Chat Widget</span>
-            <Switch className="bg-gradient-to-b from-[#FFFFFF] to-[#E2E2E2]" />
+            <Switch className="w-12" />
           </div>
         </div>
         <div className="bg-[#221E33]/5 mt-4 px-4 py-3 rounded-[10px] flex gap-2 items-center md:w-210">

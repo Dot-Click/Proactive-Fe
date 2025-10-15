@@ -6,26 +6,27 @@ import Tripcategories from "@/components/admin/Dashboard/Tripcategories"
 import { Calendar } from "@/components/ui/calendar"
 
 const DashboardPage = () => {
+  const date = new Date(2026, 1, 1)
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex md:flex-row flex-col gap-2">
+      <div className="flex lg:flex-row md:flex-col gap-2 min-h-[40vh]">
         <Banner />
         <Tripcategories />
-        <div>
+        <div className="flex justify-center mt-2 bg-white lg:px-2 lg:py-2 rounded-[25px]">
           <Calendar
             mode="range"
-            className="rounded-[25px] mt-1 bg-white p-3 w-auto"
+            defaultMonth={date}
           />
         </div>
       </div>
 
-      <div>
+      <div className="w-full">
         <AdminStates />
       </div>
-        <div className="flex md:flex-row flex-col gap-2">
-          <Chart />
-          <Recentactivity />
-        </div>
+      <div className="flex lg:flex-row flex-col gap-2 w-full">
+        <Chart />
+        <Recentactivity />
+      </div>
 
     </div>
   )

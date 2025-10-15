@@ -27,7 +27,7 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        "group/calendar  [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
+        "group/calendar [--cell-size:2.5rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className
@@ -46,21 +46,21 @@ function Calendar({
         ),
         month: cn("flex flex-col w-full gap-4", defaultClassNames.month),
         nav: cn(
-          "flex items-center gap-1 w-full absolute top-0 inset-x-0 justify-between px-8",
+          "flex items-center gap-1 w-full absolute top-3 inset-x-0 justify-between px-12",
           defaultClassNames.nav
         ),
         button_previous: cn(
           buttonVariants({ variant: buttonVariant }),
-          "size-(--cell-size) aria-disabled:opacity-50 p-0 select-none bg-black text-white size-7",
+          "size-7 aria-disabled:opacity-50 p-0 select-none bg-[#0F0D1F] text-white",
           defaultClassNames.button_previous
         ),
         button_next: cn(
           buttonVariants({ variant: buttonVariant }),
-          "size-(--cell-size) aria-disabled:opacity-50 p-0 select-none bg-black text-white size-7",
+          "size-7 aria-disabled:opacity-50 p-0 select-none bg-[#0F0D1F] text-white",
           defaultClassNames.button_next
         ),
         month_caption: cn(
-          "flex items-center justify-center h-(--cell-size) w-full px-(--cell-size) font-medium text-lg",
+          "flex items-center mt-1 justify-center h-(--cell-size) w-full px-(--cell-size) font-semibold text-[20px] text-[#221E33]",
           defaultClassNames.month_caption
         ),
         dropdowns: cn(
@@ -85,8 +85,8 @@ function Calendar({
         table: "w-full border-collapse",
         weekdays: cn("flex", defaultClassNames.weekdays),
         weekday: cn(
-          "text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none",
-          defaultClassNames.weekday
+          "text-[#A3A1AC] rounded-md flex-1 gap-1 font-medium text-[11px] select-none",
+          // defaultClassNames.weekday
         ),
         week: cn("flex w-full mt-2", defaultClassNames.week),
         week_number_header: cn(
@@ -187,7 +187,7 @@ function CalendarDayButton({
     <Button
       ref={ref}
       variant="ghost"
-      size="icon"
+      size="sm"
       data-day={day.date.toLocaleDateString()}
       data-selected-single={
         modifiers.selected &&

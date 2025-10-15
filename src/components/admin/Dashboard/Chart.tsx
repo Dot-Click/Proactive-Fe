@@ -8,18 +8,18 @@ import {
 import arrowup from "../../../assets/sidebaricon/arrowup.png"
 
 const chartData = [
-    { month: "January", desktop: 80 },
-    { month: "February", desktop: 50, },
-    { month: "March", desktop: 100, },
-    { month: "April", desktop: 120, },
-    { month: "May", desktop: 150, },
-    { month: "June", desktop: 180, },
+    { month: "January", desktop: 130 },
+    { month: "February", desktop: 200, },
+    { month: "March", desktop: 150, },
+    { month: "April", desktop: 80, },
+    { month: "May", desktop: 230, },
+    { month: "June", desktop: 120, },
     { month: "July", desktop: 200, },
-    { month: "August", desktop: 230, },
-    { month: "September", desktop: 250, },
-    { month: "October", desktop: 280, },
-    { month: "November", desktop: 300, },
-    { month: "December", desktop: 320, },
+    { month: "August", desktop: 150, },
+    { month: "September", desktop: 230, },
+    { month: "October", desktop: 200, },
+    { month: "November", desktop: 70, },
+    { month: "December", desktop: 90, },
 ]
 
 const chartConfig = {
@@ -46,7 +46,7 @@ export function Chart() {
                         <span className="text-[#666373]">From Last Month</span>
                     </div>
                 </div>
-                <ChartContainer config={chartConfig} className="md:min-h-[200px] md:w-[720px]">
+                <ChartContainer config={chartConfig} className="lg:min-h-[200px] lg:w-[730px]">
                     <BarChart
                         accessibilityLayer
                         data={chartData}
@@ -75,8 +75,8 @@ export function Chart() {
                         <YAxis
                             tickLine={false}
                             axisLine={false}
-                            domain={[0, 300]} // 👈 Y-axis min=0, max=250
-                            ticks={[0, 50, 100, 150, 200, 250, 300]} // 👈 manual tick steps
+                            domain={[0, 300]}
+                            ticks={[0, 50, 100, 150, 200, 250, 300]}
                             tick={{
                                 fill: "#999999",
                                 fontSize: 12,
@@ -90,7 +90,7 @@ export function Chart() {
                             dataKey="desktop"
                             fill="url(#barGradient)"
                             radius={[6, 6, 0, 0]}
-                            barSize={40}
+                            barSize={34}
                             className="bgradient-to-b from-[#221E33] to-[#565070]"
                         />
                     </BarChart>

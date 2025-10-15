@@ -7,18 +7,18 @@ const Tripcategories = () => {
       <div className="flex justify-center items-center mt-5">
         <img src={tripStats} alt="tripStats" className="h-40" />
       </div>
-      <div className="mt-4 flex justify-center gap-3 flex-nowrap mb-1">
-        <div className="flex gap-2 items-center">
+      <div className="mt-4 flex md:justify-center justify-around gap-3 flex-nowrap mb-1">
+        <div className="flex gap-1 items-center">
           <div className="w-4 h-4 border border-[#0C038B] rounded-full bg-[#0C038B]/10" />
-          <p className="text-[#666373] font-quickSand text-[14px] text-nowrap">Wild Trip</p>
+          <p className="text-[#666373] font-quickSand text-[12px] text-nowrap">Wild Trip</p>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-1 items-center">
           <div className="w-4 h-4 border border-[#038B6B] rounded-full bg-[#038B6B]/10" />
-          <p className="text-[#666373] font-quickSand text-[14px] text-nowrap">Wild Weekend</p>
+          <p className="text-[#666373] font-quickSand text-[12px] text-nowrap">Wild Weekend</p>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-1 items-center">
           <div className="w-4 h-4 border border-[#814500] rounded-full bg-[#814500]/10" />
-          <p className="text-[#666373] font-quickSand text-[14px]">Other</p>
+          <p className="text-[#666373] font-quickSand text-[12px]">Other</p>
         </div>
       </div>
     </div>
