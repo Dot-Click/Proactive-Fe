@@ -1,14 +1,21 @@
-import React from 'react'
-import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable, type ColumnDef } from '@tanstack/react-table'
+import React, { useCallback, useRef, useState } from 'react'
+import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, getPaginationRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState, type VisibilityState } from '@tanstack/react-table'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { cn } from '@/lib/utils';
 
 type TableProps<TData> = {
     columns: ColumnDef<TData, any>[];
     data: TData[];
+    onExposeColumns?: (payload: { items: Array<{ id: string; label?: string; checked: boolean; disabled?: boolean }>; toggle: (id: string, value: boolean) => void }) => void;
 }
 
-const ReusableTable = <TData,>({ columns, data }: TableProps<TData>) => {
+const ReusableTable = <TData,>({ columns, data, onExposeColumns }: TableProps<TData>) => {
+
+    // Table state (functionality without changing visual styles)
+    const [sorting, setSorting] = useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+    const [rowSelection, setRowSelection] = useState({})
 
     const table = useReactTable({
         data,
@@ -16,15 +23,46 @@ const ReusableTable = <TData,>({ columns, data }: TableProps<TData>) => {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        // state: {
-        //     sorting,
-        //     columnFilters,
-        // },
-        // onSortingChange: setSorting,
-        // onColumnFiltersChange: setColumnFilters,
+        getPaginationRowModel: getPaginationRowModel(),
+        state: {
+            sorting,
+            columnFilters,
+            columnVisibility,
+            rowSelection,
+        },
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
     })
 
+    // Expose dynamic columns list and toggle function to parent (for header menu)
+    const lastExposeKeyRef = useRef<string | null>(null)
+    const toggle = useCallback((id: string, value: boolean) => {
+        table.getColumn(id)?.toggleVisibility(value)
+    }, [table])
+
+    React.useEffect(() => {
+        if (!onExposeColumns) return
+        const items = table
+            .getAllColumns()
+            .filter((c) => c.getCanHide())
+            .map((c) => ({
+                id: c.id,
+                label: (typeof c.columnDef.header === 'string' ? c.columnDef.header : undefined) as string | undefined,
+                checked: c.getIsVisible(),
+                disabled: false,
+            }))
+
+        const exposeKey = JSON.stringify(items.map(i => ({ id: i.id, checked: i.checked })))
+        if (lastExposeKeyRef.current === exposeKey) return
+        lastExposeKeyRef.current = exposeKey
+        onExposeColumns({ items, toggle })
+        // Only run when visibility changes to avoid loops
+    }, [onExposeColumns, columnVisibility, toggle, table])
+
     return (
+        <>
         <div className='bg-white rounded-[25px]'>
             <div className="w-full overflow-x-auto">
                 <Table className="border-separate border-spacing-y-0 border-spacing-x-0 w-full min-w-[900px]">
@@ -37,11 +75,13 @@ const ReusableTable = <TData,>({ columns, data }: TableProps<TData>) => {
                                 {headerGroup.headers.map((header, index) => (
                                     <TableHead
                                         key={header.id}
+                                        onClick={() => header.column.getCanSort() && header.column.toggleSorting(header.column.getIsSorted() === 'asc')}
                                         className={cn(
                                             "px-6 py-6 text-left text-[16px] font-semibold text-[#221E33] whitespace-nowrap",
                                             index === 0 && "rounded-tl-[25px]",
                                             index === headerGroup.headers.length - 1 && "rounded-tr-[25px]"
                                         )}
+                                        aria-sort={header.column.getIsSorted() ? (header.column.getIsSorted() === 'asc' ? 'ascending' : 'descending') : undefined}
                                     >
                                         {flexRender(header.column.columnDef.header, header.getContext())}
                                     </TableHead>
@@ -75,6 +115,7 @@ const ReusableTable = <TData,>({ columns, data }: TableProps<TData>) => {
                 </Table>
             </div>
         </div>
+        </>
     );
 
 }

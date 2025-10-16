@@ -160,10 +160,10 @@ const navigate = useNavigate()
                 <div className="flex md:flex-row flex-col gap-2 justify-between items-center mt-8">
                     <Button className="w-full md:w-auto rounded-full bg-[#E0DDDD] hover:bg-[#c7c1c1] cursor-pointer text-[#606066] h-12 px-10 font-bold">Go Back</Button>
                     <DialogFooter className="w-full md:w-auto">
-                        <div className="flex md:flex-row flex-col gap-4">
-                            <Button onClick={()=> navigate("/dashboard/edit-coordinator/:id")} className="font-bold rounded-full bg-[#0DAC87] hover:bg-[#09a07d] cursor-pointer h-12 px-10">Edit Profile</Button>
-                            <Button className="font-bold rounded-full bg-[#000000] cursor-pointer h-12 px-10">Send Email</Button>
-                            <Button variant={'outline'} className="cursor-pointer font-bold rounded-full h-12 px-10 border border-[#9C0000] text-[#9C0000]">Block User</Button>
+                        <div className="flex md:flex-row flex-col gap-4 w-full md:w-auto">
+                            <Button onClick={()=> navigate("/dashboard/edit-coordinator/:id")} className="w-full md:w-auto font-bold rounded-full bg-[#0DAC87] hover:bg-[#09a07d] cursor-pointer h-12 px-10">Edit Profile</Button>
+                            <Button className="w-full md:w-auto font-bold rounded-full bg-[#000000] cursor-pointer h-12 px-10">Send Email</Button>
+                            <Button variant={'outline'} className="w-full md:w-auto cursor-pointer font-bold rounded-full h-12 px-10 border border-[#9C0000] text-[#9C0000] hover:text-[#9C0000]">Block User</Button>
                         </div>
                     </DialogFooter>
                 </div>

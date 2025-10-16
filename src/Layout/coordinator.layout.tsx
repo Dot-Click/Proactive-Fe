@@ -13,7 +13,7 @@ import Payment from "@/assets/sidebaricon/payment-membership.png";
 import Settings from "@/assets/sidebaricon/settings.png";
 
 const AdminItems = [
-  { label: "Dashboard", href: "/dashboard", Icon: Dashboard },
+  { label: "Dashboard", href: "/coordinator-dashboard", Icon: Dashboard },
   { label: "User Management", href: "/dashboard/user-management", Icon: UserManagement },
   { label: "Coordinator Management", href: "/dashboard/coordinator-management", Icon: Coordinator },
   { label: "Trip Opportunities", href: "/dashboard/trip-management", Icon: Trip },
@@ -23,7 +23,7 @@ const AdminItems = [
 ]
 
 
-const AdminLayout = () => {
+const CoordinatorLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const isMobile = useIsMobile();
 
@@ -48,4 +48,4 @@ const AdminLayout = () => {
   )
 }
 
-export default AdminLayout
+export default CoordinatorLayout

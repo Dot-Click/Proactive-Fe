@@ -5,6 +5,7 @@ import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
 import { Download } from "lucide-react"
 import credit from "@/assets/sidebaricon/credit.png"
+import { useState } from "react";
 
 type User = {
   User: string;
@@ -54,7 +55,7 @@ const userData: ColumnDef<User>[] = [
     }
   },
   {
-    accessorKey: 'Coordinator',
+    accessorKey: 'Trip',
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -78,7 +79,7 @@ const userData: ColumnDef<User>[] = [
     }
   },
   {
-    accessorKey: 'Category',
+    accessorKey: 'Amount',
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -88,7 +89,7 @@ const userData: ColumnDef<User>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex flex-col justify-center cursor-pointer pl-2">
+        <div className="flex flex-col justify-center cursor-pointer pl-1">
           <span className="font-semibold text-[14px] text-[#666373] text-center">
             {row.original.Amount}
           </span>
@@ -96,7 +97,7 @@ const userData: ColumnDef<User>[] = [
       )
     }
   },
-  {
+  { 
     accessorKey: 'Status',
     enableColumnFilter: true,
     enableSorting: true,
@@ -115,8 +116,8 @@ const userData: ColumnDef<User>[] = [
       )
     }
   },
-  {
-    accessorKey: 'Coordinator',
+  {   
+    accessorKey: 'Date',
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -140,7 +141,7 @@ const userData: ColumnDef<User>[] = [
     }
   },
   {
-    accessorKey: 'Coordinator',
+    accessorKey: 'Paymentmethod',
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -164,20 +165,24 @@ const userData: ColumnDef<User>[] = [
 ]
 
 const PaymentStatus = () => {
+const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
   return (
     <div>
       <TableHeader
         showSearch
-        showFilter
+        showFilter={false}
         showSort
         searchPlaceholder="Search Status"
         showAddButton={true}
         addButtonLabel="Export"
         addButtonIcon={<Download />}
         url=""
+        showColumns
+        columnsMenuItems={columnsMenu?.items ?? []}
+        onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
       />
       <div className="bg-white rounded-[25px] mt-3">
-        <ReusableTable data={data} columns={userData} />
+        <ReusableTable data={data} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
       </div>
 
     </div>

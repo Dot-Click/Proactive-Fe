@@ -2,7 +2,7 @@ import tripStats from "../../../assets/sidebaricon/tripStats.png"
 
 const Tripcategories = () => {
   return (
-    <div className="px-4 py-5 rounded-[25px] bg-white mt-2 shadow-sm min-w-[280px] h-full">
+    <div className="px-4 py-5 rounded-[25px] bg-white mt-1 shadow-sm min-w-[280px] h-full">
       <h1 className="font-medium text-[16px]">Trip Categories</h1>
       <div className="flex justify-center items-center mt-5">
         <img src={tripStats} alt="tripStats" className="h-40" />

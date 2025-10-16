@@ -102,7 +102,7 @@ const Modal = () => {
                     <DialogFooter className="w-full md:w-auto">
                         <div className="flex md:flex-row flex-col gap-4">
                             <Button className="font-bold rounded-full bg-[#000000] cursor-pointer h-12 px-10">Send Email</Button>
-                            <Button variant={'outline'} className="cursor-pointer font-bold rounded-full h-12 px-10 border border-[#9C0000] text-[#9C0000]">Block User</Button>
+                            <Button variant={'outline'} className="cursor-pointer font-bold rounded-full h-12 px-10 border border-[#9C0000] text-[#9C0000] hover:text-[#9C0000]">Block User</Button>
                         </div>
                     </DialogFooter>
                 </div>

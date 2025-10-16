@@ -141,17 +141,17 @@ const Trips = () => {
                                                 defaultValue={field.value}
                                             >
                                                 <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                                                    <SelectValue placeholder="Up to 50 Participants" />
+                                                    <SelectValue placeholder="60" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="5">Up to 5 Participants</SelectItem>
-                                                    <SelectItem value="10">Up to 10 Participants</SelectItem>
-                                                    <SelectItem value="15">Up to 15 Participants</SelectItem>
-                                                    <SelectItem value="20">Up to 20 Participants</SelectItem>
-                                                    <SelectItem value="25">Up to 25 Participants</SelectItem>
-                                                    <SelectItem value="30">Up to 30 Participants</SelectItem>
-                                                    <SelectItem value="40">Up to 40 Participants</SelectItem>
-                                                    <SelectItem value="50">Up to 50 Participants</SelectItem>
+                                                    <SelectItem value="5">5 Participants</SelectItem>
+                                                    <SelectItem value="10">10 Participants</SelectItem>
+                                                    <SelectItem value="15">15 Participants</SelectItem>
+                                                    <SelectItem value="20">20 Participants</SelectItem>
+                                                    <SelectItem value="25">25 Participants</SelectItem>
+                                                    <SelectItem value="30">30 Participants</SelectItem>
+                                                    <SelectItem value="40">40 Participants</SelectItem>
+                                                    <SelectItem value="50">50 Participants</SelectItem>
                                                     <SelectItem value="Unlimited">Unlimited</SelectItem>
                                                 </SelectContent>
                                             </Select>
@@ -174,7 +174,7 @@ const Trips = () => {
                                                 defaultValue={field.value}
                                             >
                                                 <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                                                    <SelectValue placeholder="5 Parcipants" />
+                                                    <SelectValue placeholder="05" />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value="1">1 Participant</SelectItem>

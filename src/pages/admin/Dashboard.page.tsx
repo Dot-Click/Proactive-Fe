@@ -9,13 +9,14 @@ const DashboardPage = () => {
   const date = new Date(2026, 1, 1)
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex lg:flex-row md:flex-col gap-2 min-h-[40vh]">
+      <div className="flex lg:flex-row flex-col gap-2 min-h-[40vh]">
         <Banner />
         <Tripcategories />
-        <div className="flex justify-center mt-2 bg-white lg:px-2 lg:py-2 rounded-[25px]">
+        <div className="flex items-center justify-center mt-1 bg-white rounded-[25px] lg:w-[300px] w-full">
           <Calendar
             mode="range"
             defaultMonth={date}
+            className="lg:w-[280px] px-6"
           />
         </div>
       </div>
@@ -24,8 +25,12 @@ const DashboardPage = () => {
         <AdminStates />
       </div>
       <div className="flex lg:flex-row flex-col gap-2 w-full">
-        <Chart />
-        <Recentactivity />
+        <div className="lg:flex-[2.5] lg:min-w-0">
+          <Chart />
+        </div>
+        <div className="lg:flex-[1] lg:min-w-[320px]">
+          <Recentactivity />
+        </div>
       </div>
 
     </div>

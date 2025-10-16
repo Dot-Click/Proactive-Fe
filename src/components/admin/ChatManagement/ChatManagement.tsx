@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import MessageModal from "./MessageModal"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
+import { useState } from "react"
 
 type User = {
   User: string;
@@ -77,7 +78,7 @@ const userData: ColumnDef<User>[] = [
     }
   },
   {
-    accessorKey: 'Category',
+    accessorKey: 'Trip',
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -99,7 +100,7 @@ const userData: ColumnDef<User>[] = [
     }
   },
   {
-    accessorKey: 'Dates',
+    accessorKey: 'LastMessage',
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -161,15 +162,16 @@ const userData: ColumnDef<User>[] = [
 ]
 
 const ChatManagement = () => {
+const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
   return (
     <>
       <div className="bg-[#FFFFFF] mt-3 rounded-[25px] px-5 py-5">
-        <div className="flex justify-between items-center ">
+        <div className="flex flex-col md:flex-row justify-between items-center ">
           <div className="flex flex-col gap-1">
-            <span className="bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold">Chat Widget Control</span>
+            <span className="text-center md:text-start bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold">Chat Widget Control</span>
             <span className="text-[#A19EAE]">Enable or disable the floating chat widget on all trip pages</span>
           </div>
-          <div className="bg-[#FAFAFA] px-6 py-4 rounded-full flex gap-2 items-center">
+          <div className="bg-[#FAFAFA] px-6 py-4 rounded-full flex justify-between gap-2 mt-4 md:mt-0 items-center md:w-auto w-full">
             <span className="bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold">Chat Widget</span>
             <Switch className="w-12" />
           </div>
@@ -181,16 +183,19 @@ const ChatManagement = () => {
       </div>
       <TableHeader
         showSearch
-        showFilter
+        showFilter={false}
         showSort
         searchPlaceholder="Search Message"
         showAddButton={true}
         addButtonLabel="Export"
         addButtonIcon={<Download />}
         url=""
+        showColumns
+        columnsMenuItems={columnsMenu?.items ?? []}
+        onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
       />
       <div className="bg-white rounded-[25px] mt-3">
-        <ReusableTable data={data} columns={userData} />
+        <ReusableTable data={data} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
       </div>
 
     </>

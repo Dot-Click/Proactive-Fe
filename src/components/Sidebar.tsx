@@ -18,33 +18,21 @@ import {
 import Proactivelogo from "@/assets/proactive-logo.png";
 import Favicon from "@/assets/sidebaricon/favicon.png";
 import SidebarIcon from "@/assets/sidebaricon/sidebarIcon.png";
-import Dashboard from "@/assets/sidebaricon/dashboard.png";
-import UserManagement from "@/assets/sidebaricon/user-management.png";
-import Coordinator from "@/assets/sidebaricon/coordinator-management.png";
-import Trip from "@/assets/sidebaricon/trip-oppurtunities.png";
-import Chat from "@/assets/sidebaricon/chat-management.png";
-import Payment from "@/assets/sidebaricon/payment-membership.png";
-import Settings from "@/assets/sidebaricon/settings.png";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const NavItems = [
-  { label: "Dashboard", href: "/dashboard", Icon: Dashboard },
-  { label: "User Management", href: "/dashboard/user-management", Icon: UserManagement },
-  { label: "Coordinator Management", href: "/dashboard/coordinator-management", Icon: Coordinator },
-  { label: "Trip Opportunities", href: "/dashboard/trip-management", Icon: Trip },
-  { label: "Chat Management", href: "/dashboard/chat-management", Icon: Chat },
-  { label: "Payment & Membership", href: "/dashboard/payment-membership", Icon: Payment },
-  { label: "Settings", href: "/dashboard/settings", Icon: Settings },
-]
 
 
-export function SidebarNav({ collapsed, setCollapsed }: { collapsed: boolean, setCollapsed: React.Dispatch<React.SetStateAction<boolean>> }) {
+export function SidebarNav({ collapsed, setCollapsed, items }: { 
+  collapsed: boolean, 
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>; 
+  items: {label: string, href: string, Icon: string}[]
+}) {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState("");
 
   useEffect(() => {
-    const current = NavItems.find(item => item.href === location.pathname);
+    const current = items.find(item => item.href === location.pathname);
     if (current) setActiveItem(current.label);
   }, [location.pathname]);
   
@@ -85,7 +73,7 @@ export function SidebarNav({ collapsed, setCollapsed }: { collapsed: boolean, se
             <SidebarGroupLabel className="text-[#666373] text-[14px] px-6 mb-2">
               Menu
             </SidebarGroupLabel>
-            {NavItems.map(({ label, href, Icon }) => (
+            {items.map(({ label, href, Icon }) => (
               <SidebarGroupContent key={label}>
                 <SidebarMenu>
                   <SidebarMenuItem key={label}>
@@ -112,7 +100,6 @@ export function SidebarNav({ collapsed, setCollapsed }: { collapsed: boolean, se
                             )}
                           </Tooltip>
                         </TooltipProvider>
-                        {/* {!collapsed && <span>{label}</span>} */}
                         {!collapsed && <span>{label}</span>}
                       </Link>
                     </SidebarMenuButton>

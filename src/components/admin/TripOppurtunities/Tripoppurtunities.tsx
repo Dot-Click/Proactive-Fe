@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import ReusableTable from "@/Table/ReusableTable";
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
+import { useState } from "react";
 
 type User = {
   tripName: string;
@@ -146,19 +147,23 @@ const userData: ColumnDef<User>[] = [
 ]
 
 const Tripoppurtunities = () => {
+const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
   return (
     <div>
       <TableHeader
         showSearch
-        showFilter
+        showFilter={false}
         showSort
         searchPlaceholder="Search Trips"
         showAddButton={true}
         addButtonLabel="Add New Trip"
         url='/dashboard/add-new-trip'
+        showColumns
+        columnsMenuItems={columnsMenu?.items ?? []}
+        onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
       />
       <div className="bg-white rounded-[25px] mt-3">
-        <ReusableTable data={data} columns={userData} />
+        <ReusableTable data={data} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
       </div>
 
     </div>

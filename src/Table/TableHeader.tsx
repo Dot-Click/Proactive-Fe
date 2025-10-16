@@ -2,11 +2,13 @@ import { ArrowDownUp, Funnel, Search } from "lucide-react"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface TableToolbarProps {
     showSearch?: boolean;
     showFilter?: boolean;
     showSort?: boolean;
+    showColumns?: boolean;
     showAddButton?: boolean;
     addButtonLabel?: string;
     addButtonIcon?: React.ReactNode,
@@ -19,17 +21,23 @@ interface TableToolbarProps {
     onLimitChange?: (value: number) => void;
     onAddClick?: () => void;
     url?: string
+    // Optional: dynamic columns menu (for TanStack visibility toggles)
+    columnsMenuItems?: Array<{ id: string; label?: string; checked: boolean; disabled?: boolean }>
+    onColumnMenuToggle?: (id: string, value: boolean) => void
 }
 
 const TableHeader: React.FC<TableToolbarProps> = ({
     showSearch = true,
     showFilter = true,
     showSort = true,
+    showColumns = false,
     showAddButton = false,
     addButtonLabel = "Add New",
     addButtonIcon,
     searchPlaceholder = "Search...",
     url,
+    columnsMenuItems,
+    onColumnMenuToggle,
     // limitOptions = [5, 10, 20, 30, 50],
     // defaultLimit = 5,
     // onSearch,
@@ -74,7 +82,10 @@ const TableHeader: React.FC<TableToolbarProps> = ({
                 <div className="flex items-center gap-4">
                     <span className="text-[#666373] text-[18px]">Showing</span>
                     <Select>
-                        <SelectTrigger size="sm" className="w-[68px] px-2.5 bg-[#E8E8E8] font-medium text-[19px] rounded-[8px]">
+                        <SelectTrigger
+                            size="sm"
+                            className="w-[66px] px-2 py-1 bg-[#E8E8E8] font-medium text-[17px] rounded-[8px] h-auto"
+                        >
                             <SelectValue placeholder="05" />
                         </SelectTrigger>
                         <SelectContent>
@@ -103,10 +114,34 @@ const TableHeader: React.FC<TableToolbarProps> = ({
                             Filter
                         </Button>
                     }
+                    {showColumns && columnsMenuItems && columnsMenuItems.length > 0 && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="bg-[#FAFAFA] text-black border border-[#EFEFEF] hover:bg-[#FAFAFA] cursor-pointer font-medium w-30 py-5 rounded-[15px]">
+                                <Funnel fill="#000000" />
+                                    Filter
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                {columnsMenuItems.map((col) => (
+                                    <DropdownMenuCheckboxItem
+                                        key={col.id}
+                                        className="capitalize"
+                                        checked={col.checked}
+                                        disabled={col.disabled}
+                                        onCheckedChange={(v) => onColumnMenuToggle?.(col.id, !!v)}
+                                    >
+                                        {col.label || col.id}
+                                    </DropdownMenuCheckboxItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
                 </div>
             </div>
         </div>
     )
 }
-
 export default TableHeader

@@ -32,25 +32,25 @@ const chartConfig = {
 export function Chart() {
     return (
         <>
-            <div className="bg-white rounded-[25px] px-4 py-6 shadow-md mt-1">
-                <div className="flex justify-between items-center">
-                    <h1 className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-medium md:text-[18px]">Earnings Overview</h1>
-                    <h1 className="text-[#221E33] font-bold md:text-[28px]">€ 1060.00</h1>
-                </div>
-                <div className="flex justify-end gap-3">
-                    <span className="flex items-center gap-1 text-[#009A2B] text-[12px] md:text-[16px]">
-                        <img src={arrowup} alt="arrowup" />
-                        10.5%
-                    </span>
-                    <div>
-                        <span className="text-[#666373]">From Last Month</span>
+            <div className="bg-white rounded-[25px] px-6 py-4 shadow-sm border border-[#E9ECF5] mt-1">
+                <div className="flex justify-between items-start py-2">
+                    <h1 className="bg-gradient-to-r from-[#221E33] mt-2 to-[#565070] text-transparent bg-clip-text font-medium md:text-[18px]">Earnings Overview</h1>
+                    <div className="flex flex-col items-end">
+                        <h2 className="text-[#221E33] font-bold md:text-[24px]">€ 1060,00</h2>
+                        <div className="flex items-center gap-2">
+                            <span className="flex items-center gap-1 text-[#009A2B] text-[12px] md:text-[14px]">
+                                <img src={arrowup} alt="arrowup" />
+                                10.5%
+                            </span>
+                            <span className="text-[#A3A1AC] text-[12px]">From Last Month</span>
+                        </div>
                     </div>
                 </div>
-                <ChartContainer config={chartConfig} className="lg:min-h-[200px] lg:w-[730px]">
+                <ChartContainer config={chartConfig} className="lg:h-[280px] h-[240px] w-full">
                     <BarChart
                         accessibilityLayer
                         data={chartData}
-                        margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
+                        margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
                     >
 
                         <defs>

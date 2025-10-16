@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { useLocation } from "react-router-dom"
 import { useIsMobile } from "../hooks/use-mobile"
+import DrawerBar from "./Drawer"
 
 interface NavbarProps {
   collapsed: boolean;
@@ -52,6 +53,10 @@ const SubHeading = [
     name: "/dashboard/settings",
     subHeading: 'Welcome back, Admin'
   },
+  {
+    name: "/coordinator-dashboard",
+    subHeading: 'Monitor, approve, and manage all trips created by coordinators.'
+  },
 ]
 const Navbar = ({ collapsed }: NavbarProps) => {
   const location = useLocation();
@@ -70,8 +75,11 @@ const Navbar = ({ collapsed }: NavbarProps) => {
       className={`absolute z-10 ${containerPositionClass} flex lg:flex-row flex-col justify-between items-center px-4 md:px-8 transition-all duration-300`}
     >
       {/* Left side */}
-      <div className="flex flex-col min-w-0">
-        <h1 className="text-lg md:text-2xl font-semibold capitalize truncate max-w-[60vw] md:max-w-none mb-2 md:mb-0">{NavHeading ? NavHeading : 'Dashboard'}</h1>
+      <div className="flex flex-col  min-w-0">
+        <div className="flex md:items-start items-center justify-between gap-2 md:gap-4">
+          <h1 className="text-lg md:text-2xl font-semibold capitalize truncate max-w-[60vw] md:max-w-none mb-2 md:mb-0">{NavHeading ? NavHeading : 'Dashboard'}</h1>
+          <DrawerBar />
+        </div>
         {
           SubHeading.map((item) => {
             if (item.name === location.pathname) {
@@ -81,7 +89,7 @@ const Navbar = ({ collapsed }: NavbarProps) => {
       </div>
 
       {/* Right side */}
-      <div className="flex lg:items-center gap-2 md:gap-4">
+      <div className="flex md:items-center items-center gap-2 md:gap-4">
         {/* Country icon */}
         <div className="hidden md:flex bg-[#FFFFFF] rounded-full w-10 h-10 md:w-14 md:h-14 items-center justify-center mt-2 cursor-pointer">
           <img src={Country} alt="Country" />
@@ -147,6 +155,7 @@ const Navbar = ({ collapsed }: NavbarProps) => {
           </DropdownMenu>
         </div>
       </div >
+
     </header >
   );
 };

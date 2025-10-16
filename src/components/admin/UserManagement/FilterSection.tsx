@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import ReusableTable from "@/Table/ReusableTable"
 import { type ColumnDef } from "@tanstack/react-table";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import Modal from "./Modal";
 import TableHeader from "@/Table/TableHeader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
 
 type User = {
   id: string;
@@ -108,7 +109,7 @@ const userData: ColumnDef<User>[] = [
         <div className="">
           <Button
             className="bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full
-          px-5 py-6 font-semibold"
+          px-4 py-5 font-semibold"
           >
             {row.original.Membership}
           </Button>
@@ -127,23 +128,21 @@ const userData: ColumnDef<User>[] = [
     ),
     cell: () => {
       return (
-        <div className="">
+        <div>
           <Select>
-            <SelectTrigger className="text-[#077B21] font-bold w-[120px] rounded-full px-4 py-5 bg-[#35FF62]/10 border border-[#077B21]">
+            <SelectTrigger className="text-[#077B21] font-bold w-[100px] rounded-full text-[13px] px-4 py-4 bg-[#35FF62]/10 border border-[#077B21] gap-1">
               <SelectValue placeholder="Select" className="text-[#077B21] cursor-pointer" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Status</SelectLabel>
-                <SelectItem value="Active">Active</SelectItem>
-                <SelectItem value="DeActive">DeActive</SelectItem>
+                <SelectItem value="Active" className="font-bold">Active</SelectItem>
+                <SelectItem value="DeActive" className="font-bold">DeActive</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
       )
     }
-
   },
   {
     accessorKey: 'Actions',
@@ -170,17 +169,21 @@ const userData: ColumnDef<User>[] = [
 ]
 
 const FilterSection = () => {
+  const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
   return (
     <>
       <TableHeader
-        showSearch
-        showFilter
-        showSort
-        searchPlaceholder="Search Users"
-        showAddButton={false}
+        showColumns
+        columnsMenuItems={columnsMenu?.items ?? []}
+        onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
+        showFilter={false}
       />
       <div className="bg-white rounded-[25px] mt-3 overflow-x-auto">
-        <ReusableTable data={data} columns={userData} />
+        <ReusableTable
+          columns={userData}
+          data={data}
+          onExposeColumns={(payload) => setColumnsMenu(payload)}
+        />
       </div>
     </>
   )

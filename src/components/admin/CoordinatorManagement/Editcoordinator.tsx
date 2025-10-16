@@ -130,7 +130,7 @@ const Editcoordinator = () => {
                                 Upload Profile
                             </span>
 
-                            <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px] mt-4 w-[220px] md:w-[200px]">
+                            <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px] mt-4 w-[220px] h-[220px] md:w-[200px] md:h-[200px] overflow-hidden">
                                 <input
                                     type="file"
                                     id="coordinatorProfile"
@@ -140,13 +140,17 @@ const Editcoordinator = () => {
 
                                 <label
                                     htmlFor="coordinatorProfile"
-                                    className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
+                                    className="block w-full h-full cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
                                 >
                                     <div
-                                        className={`${profile ? "py-0" : "py-6"} flex flex-col items-center`}
+                                        className={`${profile ? "py-0" : "py-6"} flex flex-col items-center justify-center w-full h-full`}
                                     >
                                         {profile ? (
-                                            <img src={profile} alt="profile" />
+                                            <img
+                                                src={profile}
+                                                alt="profile"
+                                                className="w-full h-full object-cover object-center rounded-[10px]"
+                                            />
                                         ) : (
                                             <>
                                                 <img src={imgupload} alt="upload" width={80} />
