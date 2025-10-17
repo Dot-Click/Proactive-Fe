@@ -4,6 +4,7 @@ import ReusableTable from "@/Table/ReusableTable"
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
 import { Download } from "lucide-react"
+import { useState } from "react";
 
 type User = {
     Code: string;
@@ -21,7 +22,7 @@ const data: User[] = [
 
 const userData: ColumnDef<User>[] = [
     {
-        accessorKey: 'User',
+        accessorKey: 'Code',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -45,7 +46,7 @@ const userData: ColumnDef<User>[] = [
         }
     },
     {
-        accessorKey: 'Coordinator',
+        accessorKey: 'Discount',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -69,7 +70,7 @@ const userData: ColumnDef<User>[] = [
         }
     },
     {
-        accessorKey: 'Category',
+        accessorKey: 'Valid Until',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -91,7 +92,7 @@ const userData: ColumnDef<User>[] = [
         }
     },
     {
-        accessorKey: 'Dates',
+        accessorKey: 'Usage',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -137,7 +138,7 @@ const userData: ColumnDef<User>[] = [
         accessorKey: 'Actions',
         enableColumnFilter: true,
         enableSorting: true,
-        cell: ({row}) => {
+        cell: ({ row }) => {
             return (
                 <div className="flex gap-2">
                     <Button className={`${row.original.Action === "Activate" ? "bg-[#0DAC87] hover:bg-[#09aa84] cursor-pointer px-8 h-10 rounded-full text-[#FFFFFF] font-bold" : "cursor-pointer px-10 h-10 rounded-full text-[#FFFFFF] font-bold"}`}>
@@ -152,6 +153,7 @@ const userData: ColumnDef<User>[] = [
 ]
 
 const DiscountCode = () => {
+    const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
     return (
         <div>
             <TableHeader
@@ -163,9 +165,12 @@ const DiscountCode = () => {
                 addButtonLabel="Export"
                 addButtonIcon={<Download />}
                 url=""
+                showColumns
+                columnsMenuItems={columnsMenu?.items ?? []}
+                onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
             />
             <div className="bg-white rounded-[25px] mt-3">
-                <ReusableTable data={data} columns={userData} />
+                <ReusableTable data={data} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
             </div>
 
         </div>

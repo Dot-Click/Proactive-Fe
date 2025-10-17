@@ -8,27 +8,15 @@ import z from "zod"
 
 const formSchema = z
     .object({
-        Triptype: z.string().min(1, {
-            message: "Select Trip Type",
+        SessionTime: z.string().min(1, {
+            message: "Session Time is required",
         }),
-        TripTitle: z.string().min(1, {
-            message: "TripTitle is required",
+        MaxLogin: z.string().min(1, {
+            message: "MaxLogin is required",
         }),
-        Description: z.string().min(1, {
-            message: "Description is required",
+        MinPassword: z.string().min(1, {
+            message: "MinPassword is required",
         }),
-        coverImage: z.any().optional(),
-        Location: z.string().min(1, {
-            message: "Select at least one Location",
-        }),
-        mapCoordinates: z.string().optional(),
-        StartDate: z.coerce.number().min(1, {
-            message: "Select Start Date",
-        }),
-        EndDate: z.coerce.number().min(1, {
-            message: "Select End Date",
-        }),
-        Duration: z.string().optional()
     })
 
 const Security = () => {
@@ -36,15 +24,9 @@ const Security = () => {
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
-            Triptype: "",
-            TripTitle: "",
-            Description: "",
-            coverImage: null,
-            Location: "",
-            mapCoordinates: '',
-            StartDate: 0,
-            EndDate: 0,
-            Duration: '',
+            SessionTime: "",
+            MaxLogin: "",
+            MinPassword: "",
         },
     });
 
@@ -77,7 +59,7 @@ const Security = () => {
                             <div className="flex flex-col gap-6">
                                 <FormField
                                     control={form.control}
-                                    name="Triptype"
+                                    name="SessionTime"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel className="text-[#242E2F] font-semibold">
@@ -96,7 +78,7 @@ const Security = () => {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="Triptype"
+                                    name="MaxLogin"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel className="text-[#242E2F] font-semibold">
@@ -115,7 +97,7 @@ const Security = () => {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="Triptype"
+                                    name="MinPassword"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel className="text-[#242E2F] font-semibold">

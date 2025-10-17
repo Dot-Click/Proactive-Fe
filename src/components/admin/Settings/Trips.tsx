@@ -8,27 +8,15 @@ import z from "zod"
 
 const formSchema = z
     .object({
-        Triptype: z.string().min(1, {
-            message: "Select Trip Type",
+        DefaultApproval: z.string().min(1, {
+            message: "Select Default Approval",
         }),
-        TripTitle: z.string().min(1, {
-            message: "TripTitle is required",
+        MaxParticipants: z.string().min(1, {
+            message: "Select Max Participants",
         }),
-        Description: z.string().min(1, {
-            message: "Description is required",
+        MinParticipants: z.string().min(1, {
+            message: "Select Min Participants",
         }),
-        coverImage: z.any().optional(),
-        Location: z.string().min(1, {
-            message: "Select at least one Location",
-        }),
-        mapCoordinates: z.string().optional(),
-        StartDate: z.coerce.number().min(1, {
-            message: "Select Start Date",
-        }),
-        EndDate: z.coerce.number().min(1, {
-            message: "Select End Date",
-        }),
-        Duration: z.string().optional()
     })
 
 const Trips = () => {
@@ -36,15 +24,9 @@ const Trips = () => {
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
-            Triptype: "",
-            TripTitle: "",
-            Description: "",
-            coverImage: null,
-            Location: "",
-            mapCoordinates: '',
-            StartDate: 0,
-            EndDate: 0,
-            Duration: '',
+            DefaultApproval: "",
+            MaxParticipants: "",
+            MinParticipants: "",
         },
     });
 
@@ -101,7 +83,7 @@ const Trips = () => {
                         <div className="px-6 py-6 flex flex-col gap-5 flex-1">
                             <FormField
                                 control={form.control}
-                                name="Triptype"
+                                name="DefaultApproval"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-[#242E2F] font-semibold">
@@ -129,7 +111,7 @@ const Trips = () => {
                             />
                             <FormField
                                 control={form.control}
-                                name="Triptype"
+                                name="MaxParticipants"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-[#242E2F] font-semibold">
@@ -162,7 +144,7 @@ const Trips = () => {
                             />
                             <FormField
                                 control={form.control}
-                                name="Triptype"
+                                name="MinParticipants"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-[#242E2F] font-semibold">

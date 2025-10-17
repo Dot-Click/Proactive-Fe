@@ -35,17 +35,13 @@ function App() {
 
         <Route path="/coordinator-dashboard" element={<CoordinatorLayout />}>
           <Route index element={<CoordinatorDashboard />} />
-          <Route path="/coordinator-dashboard/user-management" element={<UserManagementPage />} />
-          <Route path="/coordinator-dashboard/coordinator-management" element={<CoordinatorPage />} />
-          <Route path="/coordinator-dashboard/add-new-coordinator" element={<AddnewcoordinatorPage />} />
-          <Route path="/coordinator-dashboard/edit-coordinator/:id" element={<EditCoordinatorPage />} />
-          <Route path="/coordinator-dashboard/trip-management" element={<TripOppurtunitiesPage />} />
-          <Route path="/coordinator-dashboard/add-new-trip" element={<AddtripPage />} />
-          <Route path="/coordinator-dashboard/chat-management" element={<ChatManagementPage />} />
-          <Route path="/coordinator-dashboard/payment-membership" element={<PaymentmembershipPage />} />
-          <Route path="/coordinator-dashboard/settings" element={<SettingPage />} />
+          <Route path="/coordinator-dashboard/oppurtunity-management" element={<UserManagementPage />} />
+          <Route path="/coordinator-dashboard/applicants-review" element={<CoordinatorPage />} />
+          <Route path="/coordinator-dashboard/achievement-controll" element={<AddnewcoordinatorPage />} />
+          <Route path="/coordinator-dashboard/chat-users" element={<EditCoordinatorPage />} />
+          <Route path="/coordinator-dashboard/settings" element={<TripOppurtunitiesPage />} />
         </Route>
-
+        
       </Routes>
     </BrowserRouter>
   );

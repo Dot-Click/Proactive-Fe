@@ -10,27 +10,22 @@ import z from "zod"
 
 const formSchema = z
   .object({
-    Triptype: z.string().min(1, {
-      message: "Select Trip Type",
+    PlatformName: z.string().min(1, {
+      message: "Platform Name is required",
     }),
-    TripTitle: z.string().min(1, {
-      message: "TripTitle is required",
+    TimeZone: z.string().min(1, {
+      message: "Select TimeZone",
     }),
-    Description: z.string().min(1, {
-      message: "Description is required",
+    PlatformImage: z.string().min(1, {
+      message: "Platform Image is required",
     }),
-    coverImage: z.any().optional(),
-    Location: z.string().min(1, {
-      message: "Select at least one Location",
+    DefaultLanguage: z.string().min(1, {
+      message: "Select Default Language",
     }),
-    mapCoordinates: z.string().optional(),
-    StartDate: z.coerce.number().min(1, {
-      message: "Select Start Date",
+    Currency: z.string().min(1, {
+      message: "Select Currency",
     }),
-    EndDate: z.coerce.number().min(1, {
-      message: "Select End Date",
-    }),
-    Duration: z.string().optional()
+
   })
 
 const General = () => {
@@ -38,15 +33,11 @@ const General = () => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema) as any,
     defaultValues: {
-      Triptype: "",
-      TripTitle: "",
-      Description: "",
-      coverImage: null,
-      Location: "",
-      mapCoordinates: '',
-      StartDate: 0,
-      EndDate: 0,
-      Duration: '',
+      PlatformName: "",
+      TimeZone: "",
+      PlatformImage: "",
+      DefaultLanguage: "",
+      Currency: "",
     },
   });
 
@@ -69,7 +60,7 @@ const General = () => {
           <div className="grid grid-cols-2 px-5 py-8 gap-6">
             <FormField
               control={form.control}
-              name="Triptype"
+              name="PlatformName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">
@@ -88,7 +79,7 @@ const General = () => {
             />
             <FormField
               control={form.control}
-              name="Triptype"
+              name="TimeZone"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">
@@ -124,7 +115,7 @@ const General = () => {
             />
             <FormField
               control={form.control}
-              name="Triptype"
+              name="PlatformImage"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">
@@ -143,7 +134,7 @@ const General = () => {
             />
             <FormField
               control={form.control}
-              name="Triptype"
+              name="DefaultLanguage"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">
@@ -178,7 +169,7 @@ const General = () => {
             />
             <FormField
               control={form.control}
-              name="Triptype"
+              name="Currency"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">

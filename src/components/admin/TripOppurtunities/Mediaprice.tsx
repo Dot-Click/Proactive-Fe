@@ -211,7 +211,7 @@ const Mediaprice = () => {
                 <FormControl>
                   <div className="flex items-center gap-4">
                     <Input
-                      placeholder="Trip Title"
+                      placeholder="0"
                       {...field}
                       className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33] w-auto"
                     />

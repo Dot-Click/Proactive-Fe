@@ -8,27 +8,9 @@ import z from "zod"
 
 const formSchema = z
     .object({
-        Triptype: z.string().min(1, {
-            message: "Select Trip Type",
+        ReminderDays: z.string().min(1, {
+            message: "ReminderDays is required",
         }),
-        TripTitle: z.string().min(1, {
-            message: "TripTitle is required",
-        }),
-        Description: z.string().min(1, {
-            message: "Description is required",
-        }),
-        coverImage: z.any().optional(),
-        Location: z.string().min(1, {
-            message: "Select at least one Location",
-        }),
-        mapCoordinates: z.string().optional(),
-        StartDate: z.coerce.number().min(1, {
-            message: "Select Start Date",
-        }),
-        EndDate: z.coerce.number().min(1, {
-            message: "Select End Date",
-        }),
-        Duration: z.string().optional()
     })
 
 const Notification = () => {
@@ -36,15 +18,7 @@ const Notification = () => {
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
-            Triptype: "",
-            TripTitle: "",
-            Description: "",
-            coverImage: null,
-            Location: "",
-            mapCoordinates: '',
-            StartDate: 0,
-            EndDate: 0,
-            Duration: '',
+            ReminderDays: "",
         },
     });
 
@@ -84,7 +58,7 @@ const Notification = () => {
                         <form onSubmit={form.handleSubmit(onSubmit)}>
                             <FormField
                                 control={form.control}
-                                name="Triptype"
+                                name="ReminderDays"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-[#242E2F] font-semibold">

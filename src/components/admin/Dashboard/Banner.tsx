@@ -11,7 +11,7 @@ const HandleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
     return (
-        <div className="relative w-full h-70 md:min-w-[480px] rounded-[20px] overflow-hidden lg:mt-1.5 mt-4">
+        <div className="relative w-full h-70 md:min-w-[480px] rounded-[20px] overflow-hidden lg:mt-4 mt-4">
 
             <div
                 className="absolute inset-0 bg-center"

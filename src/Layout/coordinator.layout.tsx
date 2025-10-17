@@ -5,21 +5,19 @@ import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useIsMobile } from "../hooks/use-mobile";
 import Dashboard from "@/assets/sidebaricon/dashboard.png";
-import UserManagement from "@/assets/sidebaricon/user-management.png";
-import Coordinator from "@/assets/sidebaricon/coordinator-management.png";
-import Trip from "@/assets/sidebaricon/trip-oppurtunities.png";
-import Chat from "@/assets/sidebaricon/chat-management.png";
-import Payment from "@/assets/sidebaricon/payment-membership.png";
-import Settings from "@/assets/sidebaricon/settings.png";
+import oppurtunityManagement from "@/assets/sidebaricon/oppurtunity.png";
+import Applicants from "@/assets/sidebaricon/ApplicantReview.png";
+import Achievement from "@/assets/sidebaricon/Achievement.png";
+import CoordinatorChat from "@/assets/sidebaricon/coordinatormsg.png";
+import CoordinatorSettings from "@/assets/sidebaricon/settings.png";
 
 const AdminItems = [
   { label: "Dashboard", href: "/coordinator-dashboard", Icon: Dashboard },
-  { label: "User Management", href: "/dashboard/user-management", Icon: UserManagement },
-  { label: "Coordinator Management", href: "/dashboard/coordinator-management", Icon: Coordinator },
-  { label: "Trip Opportunities", href: "/dashboard/trip-management", Icon: Trip },
-  { label: "Chat Management", href: "/dashboard/chat-management", Icon: Chat },
-  { label: "Payment & Membership", href: "/dashboard/payment-membership", Icon: Payment },
-  { label: "Settings", href: "/dashboard/settings", Icon: Settings },
+  { label: "Opportunity Management", href: "/coordinator-dashboard/oppurtunity-management", Icon: oppurtunityManagement },
+  { label: "Applicants Review", href: "/coordinator-dashboard/applicants-review", Icon: Applicants },
+  { label: "Achievement Control", href: "/coordinator-dashboard/achievement-controll", Icon: Achievement },
+  { label: "Chats with Users", href: "/coordinator-dashboard/chat-users", Icon: CoordinatorChat },
+  { label: "Settings", href: "/coordinator-dashboard/settings", Icon: CoordinatorSettings },
 ]
 
 

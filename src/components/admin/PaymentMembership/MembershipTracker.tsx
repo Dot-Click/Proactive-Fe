@@ -8,6 +8,7 @@ import Coordinator from "@/assets/sidebaricon/coordinators.png"
 import ActiveTrips from "@/assets/sidebaricon/activetrips.png"
 import CloseTrips from "@/assets/sidebaricon/closetrips.png"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
 // import { Badge } from "@/components/ui/badge";
 
 type User = {
@@ -54,7 +55,7 @@ const userData: ColumnDef<User>[] = [
         }
     },
     {
-        accessorKey: 'Coordinator',
+        accessorKey: 'Membership Type',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -71,7 +72,7 @@ const userData: ColumnDef<User>[] = [
         }
     },
     {
-        accessorKey: 'Category',
+        accessorKey: 'Start Date',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -93,7 +94,7 @@ const userData: ColumnDef<User>[] = [
         }
     },
     {
-        accessorKey: 'Dates',
+        accessorKey: 'Expiry Date',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -181,6 +182,8 @@ const stats = [
 ]
 
 const MembershipTracker = () => {
+    const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+
     return (
         <div>
             <div className="px-6 py-4 bg-white rounded-[20px] mt-3">
@@ -206,16 +209,19 @@ const MembershipTracker = () => {
             </div>
             <TableHeader
                 showSearch
-                showFilter
+                showFilter={false}
                 showSort
                 searchPlaceholder="Search Membership"
                 showAddButton={true}
                 addButtonLabel="Export"
                 addButtonIcon={<Download />}
                 url=""
+                showColumns
+                columnsMenuItems={columnsMenu?.items ?? []}
+                onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
             />
             <div className="bg-white rounded-[25px] mt-3">
-                <ReusableTable data={data} columns={userData} />
+                <ReusableTable data={data} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)}/>
             </div>
 
 

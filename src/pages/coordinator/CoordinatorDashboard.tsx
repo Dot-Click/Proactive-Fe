@@ -1,7 +1,10 @@
+import Header from "@/components/coordinator/Dashboard/Header"
 
 const CoordinatorDashboard = () => {
   return (
-    <div>CoordinatorDashboard</div>
+    <div>
+      <Header/>
+    </div>
   )
 }
 

@@ -12,7 +12,7 @@ const DashboardPage = () => {
       <div className="flex lg:flex-row flex-col gap-2 min-h-[40vh]">
         <Banner />
         <Tripcategories />
-        <div className="flex items-center justify-center mt-1 bg-white rounded-[25px] lg:w-[300px] w-full">
+        <div className="lg:mt-3 lg:mb-0.5 flex items-center justify-center mt-1 bg-white rounded-[25px] lg:w-[300px] w-full">
           <Calendar
             mode="range"
             defaultMonth={date}

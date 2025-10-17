@@ -238,7 +238,7 @@ const Addtrip = () => {
                               </FormLabel>
                               <FormControl>
                                 <Textarea
-                                  placeholder="Describr your trip......"
+                                  placeholder="Describe your trip......"
                                   className="bg-[#FAFAFE] border border-[#EFEFEF] h-26 placeholder:text-[#221E33]"
                                   {...field}
                                 />
@@ -476,7 +476,7 @@ const Addtrip = () => {
                 {
                   step === 6 &&
                   <>
-                    <span className="font-semibold text-[20px]">Review & Save</span>
+                    {/* <span className="font-semibold text-[20px]">Review & Save</span> */}
                     <Reviewsave />
                   </>
                 }

@@ -89,7 +89,7 @@ export function SidebarNav({ collapsed, setCollapsed, items }: {
                               <img
                                 src={Icon}
                                 alt={`${label} icon`}
-                                className={`w-4 h-4 transition ${activeItem === label ? "brightness-0 invert" : "invert-[0.6]"
+                                className={`${Icon === 'oppurtunityManagement' ? 'w-2 h-3' : 'w-4 h-4'} transition ${activeItem === label ? "brightness-0 invert" : "invert-[0.6]"
                                   }`}
                               />
                             </TooltipTrigger>

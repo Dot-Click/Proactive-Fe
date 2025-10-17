@@ -77,7 +77,7 @@ const Navbar = ({ collapsed }: NavbarProps) => {
       {/* Left side */}
       <div className="flex flex-col  min-w-0">
         <div className="flex md:items-start items-center justify-between gap-2 md:gap-4">
-          <h1 className="text-lg md:text-2xl font-semibold capitalize truncate max-w-[60vw] md:max-w-none mb-2 md:mb-0">{NavHeading ? NavHeading : 'Dashboard'}</h1>
+          <h1 className="text-lg md:text-2xl font-semibold capitalize truncate max-w-[60vw] md:max-w-none  md:mb-0">{NavHeading ? NavHeading : 'Dashboard'}</h1>
           <DrawerBar />
         </div>
         {
@@ -89,20 +89,20 @@ const Navbar = ({ collapsed }: NavbarProps) => {
       </div>
 
       {/* Right side */}
-      <div className="flex md:items-center items-center gap-2 md:gap-4">
+      <div className="flex md:items-center gap-2 md:gap-4 mt-3 md:mt-0">
         {/* Country icon */}
-        <div className="hidden md:flex bg-[#FFFFFF] rounded-full w-10 h-10 md:w-14 md:h-14 items-center justify-center mt-2 cursor-pointer">
+        <div className="hidden md:flex bg-[#FFFFFF] rounded-full w-10 h-10 md:w-14 md:h-14 items-center justify-center md:mt-1 cursor-pointer">
           <img src={Country} alt="Country" />
         </div>
 
         {/* Notification icon */}
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <div className="cursor-pointer relative bg-[#FFFFFF] rounded-full w-10 h-10 md:w-14 md:h-14 flex items-center justify-center mt-2">
-              <Badge className="absolute left-6 bottom-5 md:left-7 md:bottom-8 bg-[#0DAC87] text-[9px] md:text-[10px] text-white rounded-full w-4 h-4 md:w-4 md:h-4 flex items-center justify-center">
+            <div className="cursor-pointer relative bg-[#FFFFFF] rounded-full w-10 h-10 md:w-14 md:h-14 flex items-center justify-center md:mt-1">
+              <Badge className="font-bold absolute left-6 bottom-5 md:left-7 md:bottom-8 bg-[#0DAC87] text-[9px] md:text-[10px] text-white rounded-full w-4 h-4 md:w-5 md:h-5 flex items-center justify-center">
                 3
               </Badge>
-              <img src={Notification} alt="Notification" />
+              <img src={Notification} alt="Notification"/>
               <DropdownMenuContent className="w-72">
                 <DropdownMenuItem className="cursor-pointer">
                   <Avatar className="lg:w-8 lg:h-8 mr-2">
