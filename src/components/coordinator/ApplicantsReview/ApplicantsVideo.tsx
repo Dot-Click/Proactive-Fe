@@ -1,5 +1,5 @@
 import { DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import intro from "../../../assets/Intro.mp4"
+// import intro from "../../../assets/Intro.mp4"
 
 const ApplicantsVideo = () => {
     return (
@@ -9,7 +9,7 @@ const ApplicantsVideo = () => {
                     <DialogTitle className="font-bold text-[24px]">Introduction Video</DialogTitle>
                 </DialogHeader>
                 <video controls className="w-full lg:h-100">
-                    <source src={intro}/>
+                    {/* <source src={intro}/> */}
                 </video>
             </DialogContent>
         </div>
