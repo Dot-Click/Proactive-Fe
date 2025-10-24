@@ -32,7 +32,7 @@ const CoordinatorLayout = () => {
   return (
     <>
       <div className="flex w-full py-8">
-        <SidebarNav collapsed={collapsed} setCollapsed={setCollapsed} items={AdminItems} Url='/coordinator-dashboard'/>
+        <SidebarNav collapsed={collapsed} setCollapsed={setCollapsed} items={AdminItems} Url='/coordinator-dashboard' />
         <Navbar collapsed={collapsed} />
         <main
           className={`w-full min-w-0 px-4 transition-all duration-300 mt-16 md:mt-22 lg:mt-16 ${collapsed ? "md:-ml-40" : ""}`}
@@ -41,7 +41,7 @@ const CoordinatorLayout = () => {
         </main>
       </div>
 
-    </> 
+    </>
 
   )
 }

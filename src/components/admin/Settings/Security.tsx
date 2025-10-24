@@ -118,6 +118,7 @@ const Security = () => {
                         </form>
                     </Form>
                 </div>
+
                 <div className="flex justify-end md:mt-32 mt-6 px-5 py-4">
                     <Button
                         onClick={form.handleSubmit(onSubmit)}
@@ -125,8 +126,8 @@ const Security = () => {
                         Save Changes
                     </Button>
                 </div>
+                
             </div>
-
         </div>
     )
 }
