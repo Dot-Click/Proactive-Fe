@@ -18,6 +18,7 @@ import ApplicantsReviewPage from "./pages/coordinator/ApplicantsReview.page";
 import AchievementControlPage from "./pages/coordinator/AchievementControl.page";
 import ChatUserPage from "./pages/coordinator/ChatUser.page";
 import CoordinatorSettingPage from "./pages/coordinator/Setting.page";
+import LoginPage from "./pages/user/login.page";
 
 
 
@@ -25,6 +26,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        <Route path="/" element={<LoginPage />} />
+
         <Route path="/dashboard" element={<AdminLayout />}>
           <Route index element={<DashboardPage />} />
           <Route path="/dashboard/user-management" element={<UserManagementPage />} />
@@ -47,7 +51,7 @@ function App() {
           <Route path="/coordinator-dashboard/chat-users" element={<ChatUserPage />} />
           <Route path="/coordinator-dashboard/settings" element={<CoordinatorSettingPage />} />
         </Route>
-        
+
       </Routes>
     </BrowserRouter>
   );
