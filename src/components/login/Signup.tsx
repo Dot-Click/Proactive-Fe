@@ -1,31 +1,30 @@
-import z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "../ui/button";
+import google from "../../assets/google.png"
 import login from "../../assets/login.png"
 import loginLayer from "../../assets/loginLayer.png"
 import loginformbg from "../../assets/loginformbg.png"
 import proactivelogo from "../../assets/proactive-logo.png"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { Input } from "../ui/input"
-import { Checkbox } from "../ui/checkbox"
-import { Button } from "../ui/button"
-import google from "../../assets/google.png"
-import { useNavigate } from "react-router-dom"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
+import { Checkbox } from "../ui/checkbox";
+import { useNavigate } from "react-router-dom";
 
-const LoginSchema = z.object({
+const SignupSchema = z.object({
     email: z.string().email("Invalid email address"),
     password: z.string().min(8, "Password must be at least 8 characters long"),
 })
 
-const onSubmit = (val: z.infer<typeof LoginSchema>) => {
+const onSubmit = (val: z.infer<typeof SignupSchema>) => {
     console.log(val);
 };
 
-
-const Login = () => {
-    type loginSchemaType = z.infer<typeof LoginSchema>
-    const form = useForm<loginSchemaType>({
-        resolver: zodResolver(LoginSchema) as any,
+const Signup = () => {
+    type SignupSchemaType = z.infer<typeof SignupSchema>
+    const form = useForm<SignupSchemaType>({
+        resolver: zodResolver(SignupSchema) as any,
         defaultValues: {
             email: "",
             password: "",
@@ -43,12 +42,12 @@ const navigate = useNavigate()
             ></div>
 
             <div className="relative z-10 grid lg:grid-cols-2 md:grid-cols-1 gap-4 min-h-screen overflow-x-hidden">
-               
+
                 {/* Left Side */}
                 <div className="flex justify-center items-center px-8 py-8">
                     <div
                         style={{ backgroundImage: `url(${loginformbg})` }}
-                        className="bg-cover max-w-[600px] w-full rounded-xl shadow-md"
+                        className="bg-cover max-w-[680px] w-full rounded-xl shadow-md"
                     >
                         <div className="px-8 py-10">
                             <img src={proactivelogo} alt="proactivelogo" className="w-40 h-10" />
@@ -59,7 +58,7 @@ const navigate = useNavigate()
                                 Welcome Back
                             </h1>
                             <p className="text-[#221E33] text-[14px] mt-2">
-                                Sign in to continue your adventure journey
+                                Sign up to continue your adventure journey
                             </p>
                         </div>
 
@@ -128,7 +127,7 @@ const navigate = useNavigate()
 
                                     <div className="mt-8">
                                         <Button className="bg-[#0DAC87] hover:bg-[#11a180] hover:scale-105 w-full rounded-full py-6 cursor-pointer font-semibold transition-all delay-150 duration-200 ease-in">
-                                            Sign In
+                                            Sign Up
                                         </Button>
                                     </div>
 
@@ -140,7 +139,7 @@ const navigate = useNavigate()
 
                                 </form>
                             </Form>
-                            
+
                             <div className="mt-4">
                                 <Button className="bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#221E33] font-bold hover:scale-105 w-full rounded-full py-6 cursor-pointer transition-all delay-150 duration-200 ease-in flex items-center justify-center gap-2">
                                     <img src={google} alt="google" />
@@ -150,9 +149,9 @@ const navigate = useNavigate()
 
                             <div className="mt-6 mb-10">
                                 <p className="text-center text-[12px]">
-                                    Don't have an account?
-                                    <span onClick={()=> navigate("/signup")} className="text-[#0DAC87] underline font-semibold cursor-pointer mx-1">
-                                        Sign Up
+                                    Already have an account?
+                                    <span onClick={()=> navigate("/")} className="text-[#0DAC87] underline font-semibold cursor-pointer mx-1">
+                                        Sign In
                                     </span>
                                 </p>
                             </div>
@@ -190,10 +189,10 @@ const navigate = useNavigate()
                         </div>
                     </div>
                 </div>
-
+                
             </div>
         </div>
     )
 }
 
-export default Login
+export default Signup

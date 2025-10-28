@@ -19,6 +19,8 @@ import AchievementControlPage from "./pages/coordinator/AchievementControl.page"
 import ChatUserPage from "./pages/coordinator/ChatUser.page";
 import CoordinatorSettingPage from "./pages/coordinator/Setting.page";
 import LoginPage from "./pages/user/login.page";
+import SignupPage from "./pages/user/Signup.page";
+import ForgetPassPage from "./pages/user/ForgetPass.page";
 
 
 
@@ -28,6 +30,8 @@ function App() {
       <Routes>
 
         <Route path="/" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/forgetPassword" element={<ForgetPassPage />} />
 
         <Route path="/dashboard" element={<AdminLayout />}>
           <Route index element={<DashboardPage />} />

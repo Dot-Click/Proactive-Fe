@@ -24,7 +24,7 @@ const DashboardPage = () => {
       <div className="w-full">
         <AdminStates />
       </div>
-      
+
       <div className="flex lg:flex-row flex-col gap-2 w-full">
         <div className="lg:flex-[2.5] lg:min-w-0">
           <Chart />
@@ -33,7 +33,6 @@ const DashboardPage = () => {
           <Recentactivity />
         </div>
       </div>
-
     </div>
   )
 }
