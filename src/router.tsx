@@ -21,6 +21,8 @@ import CoordinatorSettingPage from "./pages/coordinator/Setting.page";
 import LoginPage from "./pages/user/login.page";
 import SignupPage from "./pages/user/Signup.page";
 import ForgetPassPage from "./pages/user/ForgetPass.page";
+import Userlayout from "./Layout/user.layout";
+import UserdashboardPage from "./pages/userdashboard/Userdashboard.page";
 
 
 
@@ -54,6 +56,11 @@ function App() {
           <Route path="/coordinator-dashboard/achievements-control" element={<AchievementControlPage />} />
           <Route path="/coordinator-dashboard/chat-users" element={<ChatUserPage />} />
           <Route path="/coordinator-dashboard/settings" element={<CoordinatorSettingPage />} />
+        </Route>
+
+        <Route path="/user-dashboard" element={<Userlayout/>}>
+          <Route index element={<UserdashboardPage />} />
+          {/* <Route path="/user-dashboard/oppurtunities" element={<UserdashboardPage />} /> */}
         </Route>
 
       </Routes>
