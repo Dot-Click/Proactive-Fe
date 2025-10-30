@@ -18,9 +18,9 @@ import ApplicantsReviewPage from "./pages/coordinator/ApplicantsReview.page";
 import AchievementControlPage from "./pages/coordinator/AchievementControl.page";
 import ChatUserPage from "./pages/coordinator/ChatUser.page";
 import CoordinatorSettingPage from "./pages/coordinator/Setting.page";
-import LoginPage from "./pages/user/login.page";
-import SignupPage from "./pages/user/Signup.page";
-import ForgetPassPage from "./pages/user/ForgetPass.page";
+import LoginPage from "./pages/loginpage/login.page";
+import SignupPage from "./pages/loginpage/Signup.page";
+import ForgetPassPage from "./pages/loginpage/ForgetPass.page";
 import Userlayout from "./Layout/user.layout";
 import UserdashboardPage from "./pages/userdashboard/Userdashboard.page";
 

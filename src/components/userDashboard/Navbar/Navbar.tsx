@@ -68,7 +68,7 @@ const location = useLocation();
                     </div>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild className="cursor-pointer">
-                            <div className="lg:p-2 rounded-full hover:bg-gray-100">
+                            <div className="rounded-full hover:bg-gray-100">
                                 <ChevronDown color="#A6AAC9"/>
                             </div>
                         </DropdownMenuTrigger>

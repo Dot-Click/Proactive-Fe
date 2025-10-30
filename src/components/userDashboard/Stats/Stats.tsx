@@ -4,7 +4,7 @@ import userstats3 from "../../../assets/userstats3.png"
 
 const Stats = () => {
     return (
-        <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[16px] w-[65vw] mt-6">
+        <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[16px] w-full lg:w-[66vw] mt-6 ">
             <div className="px-4 py-8">
                 <span className="font-bold">Key States</span>
                 <div className="mt-4 grid lg:grid-cols-3 gap-4">
@@ -33,7 +33,7 @@ const Stats = () => {
                             <img src={userstats3} alt="userstats3" />
                         </div>
                         <div className="flex flex-col justify-center">
-                            <span className="font-medium text-[12px]">Adventure Points</span>
+                            <span className="font-medium text-[12px] text-nowrap">Adventure Points</span>
                             <span className="font-bold text-2xl">1250</span>
                             <span className="text-[#332A2A] text-[10px]">250 to next level</span>
                         </div>

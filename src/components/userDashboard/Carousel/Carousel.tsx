@@ -11,7 +11,6 @@ interface CarouselProps {
 const Carousel = ({UserName, subHeading}: CarouselProps) => {
 const location = useLocation();
 const Heading = location.pathname.split("/")[2]?.split("-").join(" ");
-console.log(Heading);
 
     return (
         <div className="relative w-full h-70 md:min-w-[40px] rounded-[25px] overflow-hidden lg:mt-4 mt-4 mb-4">

@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom"
 const Userlayout = () => {
     return (
         <div className="flex flex-col justify-between bg-[#FFFFFF]">
-            <div className="container mx-auto px-16">
+            <div className="container mx-auto px-8">
                 <Navbar />
             </div>
             <Outlet/>
