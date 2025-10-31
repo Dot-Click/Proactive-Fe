@@ -10,16 +10,18 @@ const Navbar = () => {
 const location = useLocation();
 
     return (
-        <div className="flex justify-between items-center mt-6">
-            <img src={proactive} alt="proactive" className="h-10" />
-            <div className="bg-[#FFFFFF] shadow-md flex items-center px-4 py-3 rounded-full gap-6 cursor-pointer">
+        <div className="flex lg:justify-between lg:items-center justify-center mt-6">
+            <img src={proactive} alt="proactive" className="h-10 hidden lg:flex" />
+
+            <div className="hidden bg-[#FFFFFF] shadow-md lg:flex items-center px-4 py-3 rounded-full gap-6 cursor-pointer">
                 <Link to="/user-dashboard">
                 <span className={`${location.pathname === "/user-dashboard" ? 'bg-[#000000] rounded-full px-6 py-2 text-white font-semibold' : ''}`}>Dashboard</span>
                 </Link>
-                <Link to="/user-dashboard/oppurtunities">
-                <span className={`${location.pathname === "/user-dashboard/oppurtunities" ? 'bg-[#000000] rounded-full px-6 py-2 text-white font-semibold' : ''}`}>Oppurtunities</span>
+                <Link to="/user-dashboard/adventure-oppurtunities">
+                <span className={`${location.pathname === "/user-dashboard/adventure-oppurtunities" ? 'bg-[#000000] rounded-full px-6 py-2 text-white font-semibold' : ''}`}>Oppurtunities</span>
                 </Link>
             </div>
+
             <div className="flex gap-4">
                 {/* Notification icon */}
                 <DropdownMenu>
@@ -86,7 +88,9 @@ const location = useLocation();
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
+                
             </div>
+
         </div>
     )
 }

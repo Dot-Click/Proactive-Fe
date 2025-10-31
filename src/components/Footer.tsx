@@ -11,10 +11,10 @@ import { Separator } from "./ui/separator";
 
 const Footer = () => {
   return (
-    <div className="relative min-h-[90vh] w-screen overflow-x-hidden bg-cover bg-center" style={{ backgroundImage: `url(${footer})` }}>
+    <div className="relative min-h-[90vh] w-screen  bg-cover bg-center" style={{ backgroundImage: `url(${footer})` }}>
       <div className="bg-[#101828]/90 absolute inset-0" />
       {/* parent */}
-      <div className="relative z-10 max-w-5xl mx-auto lg:py-20 py-12 grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="relative z-10 max-w-5xl mx-auto lg:py-20 px-4 lg:px-10 py-12 grid grid-cols-1 md:grid-cols-4 gap-4">
 
         <div className="flex flex-col gap-8 relative z-10 text-white">
           <img src={FooterLogo} alt="FooterLogo" className="w-40" />
@@ -83,7 +83,7 @@ const Footer = () => {
       </div>
 
       <div className="relative z-10 lg:px-20">
-        <Separator className=" border-[#364153] bg-[#364153] mx-auto px-4" />
+        <Separator className="border-[#364153] bg-[#364153] mx-auto px-4" />
         <div className="text-[#FFFFFF] flex flex-col lg:flex-row lg:justify-between items-center lg:mt-6 py-4">
           <span className="text-[12px]">© 2025 Proactive Future. All rights reserved.</span>
           <div className="flex gap-6">

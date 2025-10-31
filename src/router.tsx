@@ -23,6 +23,7 @@ import SignupPage from "./pages/loginpage/Signup.page";
 import ForgetPassPage from "./pages/loginpage/ForgetPass.page";
 import Userlayout from "./Layout/user.layout";
 import UserdashboardPage from "./pages/userdashboard/Userdashboard.page";
+import AdventureOppurtunitiesPage from "./pages/userdashboard/Adventureoppurtunities.page";
 
 
 
@@ -60,7 +61,7 @@ function App() {
 
         <Route path="/user-dashboard" element={<Userlayout/>}>
           <Route index element={<UserdashboardPage />} />
-          {/* <Route path="/user-dashboard/oppurtunities" element={<UserdashboardPage />} /> */}
+          <Route path="/user-dashboard/adventure-oppurtunities" element={<AdventureOppurtunitiesPage />} />
         </Route>
 
       </Routes>

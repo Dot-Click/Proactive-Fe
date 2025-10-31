@@ -10,11 +10,11 @@ import UpcomingAdventures from "@/components/userDashboard/upcomingAdventures/Up
 
 const UserdashboardPage = () => {
   return (
-    <div className="px-16">
+    <div className="px-16 overflow-x-hidden">
       <Carousel UserName={"Alex"} subHeading={"Ready for your next adventure? Let's make it happen!"} />
       <AlertError/>
       <div className="flex lg:flex-row flex-col gap-4 items-start mb-8">
-        <div className="flex flex-col gap-4 flex-1 min-w-0">
+        <div className="flex flex-col gap-4 flex-1 min-w-0 w-full">
           <Stats />
           <UpcomingAdventures />
         </div>

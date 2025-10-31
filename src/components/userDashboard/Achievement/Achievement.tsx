@@ -15,7 +15,7 @@ const Achievement = () => {
                             <div className="flex flex-col mt-2">
                                 <p className="text-[#221E33] text-md font-medium mb-0">Mountain Climber</p>
                                 <p className="text-[10px] text-[#666373] whitespace-nowrap mt-1">80% Completed</p>
-                                <Progress value={80} className="h-[6px] w-45 border border-[#0DAC87] [&>div]:bg-[#0DAC87] mt-1 bg-transparent" />
+                                <Progress value={80} className="h-[6px] lg:w-45 border border-[#0DAC87] [&>div]:bg-[#0DAC87] mt-1 bg-transparent" />
                             </div>
                         </div>
                     </div>
@@ -25,7 +25,7 @@ const Achievement = () => {
                             <div className="flex flex-col mt-5">
                                 <p className="text-[#221E33] text-md font-medium mb-0">Culture Explorer</p>
                                 <p className="text-[10px] text-[#666373] whitespace-nowrap mt-1">80% Completed</p>
-                                <Progress value={80} className="h-[6px] w-45 border border-[#DDAC24] [&>div]:bg-[#DDAC24] mt-1 bg-transparent" />
+                                <Progress value={80} className="h-[6px] lg:w-45 border border-[#DDAC24] [&>div]:bg-[#DDAC24] mt-1 bg-transparent" />
                             </div>
                         </div>
                     </div>
@@ -35,7 +35,7 @@ const Achievement = () => {
                             <div className="flex flex-col mt-6">
                                 <p className="text-[#221E33] text-md font-medium mb-0">Nature Lover</p>
                                 <p className="text-[10px] text-[#666373] whitespace-nowrap mt-1">80% Completed</p>
-                                <Progress value={80} className="h-[6px] w-45 border border-[#A04CD9] [&>div]:bg-[#A04CD9] mt-1 bg-transparent" />
+                                <Progress value={80} className="h-[6px] lg:w-45 border border-[#A04CD9] [&>div]:bg-[#A04CD9] mt-1 bg-transparent" />
                             </div>
                         </div>
                     </div>

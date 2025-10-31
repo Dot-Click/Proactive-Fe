@@ -4,7 +4,7 @@ import userstats3 from "../../../assets/userstats3.png"
 
 const Stats = () => {
     return (
-        <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[16px] w-full lg:w-[66vw] mt-6 ">
+        <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[16px] w-full mt-6 ">
             <div className="px-4 py-8">
                 <span className="font-bold">Key States</span>
                 <div className="mt-4 grid lg:grid-cols-3 gap-4">
