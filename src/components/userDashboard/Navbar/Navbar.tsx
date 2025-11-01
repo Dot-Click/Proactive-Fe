@@ -5,9 +5,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ChevronDown, LogOut } from "lucide-react"
 import Notification from "@/assets/sidebaricon/notification.png"
 import { Link, useLocation } from "react-router-dom"
+import { RiCheckDoubleLine } from "react-icons/ri"
+import { Button } from "@/components/ui/button"
 
 const Navbar = () => {
-const location = useLocation();
+    const location = useLocation();
 
     return (
         <div className="flex lg:justify-between lg:items-center justify-center mt-6">
@@ -15,10 +17,10 @@ const location = useLocation();
 
             <div className="hidden bg-[#FFFFFF] shadow-md lg:flex items-center px-4 py-3 rounded-full gap-6 cursor-pointer">
                 <Link to="/user-dashboard">
-                <span className={`${location.pathname === "/user-dashboard" ? 'bg-[#000000] rounded-full px-6 py-2 text-white font-semibold' : ''}`}>Dashboard</span>
+                    <span className={`${location.pathname === "/user-dashboard" ? 'bg-[#000000] rounded-full px-6 py-2 text-white font-semibold' : ''}`}>Dashboard</span>
                 </Link>
                 <Link to="/user-dashboard/adventure-oppurtunities">
-                <span className={`${location.pathname === "/user-dashboard/adventure-oppurtunities" ? 'bg-[#000000] rounded-full px-6 py-2 text-white font-semibold' : ''}`}>Oppurtunities</span>
+                    <span className={`${location.pathname === "/user-dashboard/adventure-oppurtunities" ? 'bg-[#000000] rounded-full px-6 py-2 text-white font-semibold' : ''}`}>Oppurtunities</span>
                 </Link>
             </div>
 
@@ -31,28 +33,35 @@ const location = useLocation();
                                 3
                             </Badge>
                             <img src={Notification} alt="Notification" />
-                            <DropdownMenuContent className="w-72">
-                                <DropdownMenuItem className="cursor-pointer">
-                                    <Avatar className="lg:w-8 lg:h-8 mr-2">
-                                        <AvatarImage src="https://github.com/shadcn.png" />
-                                        <AvatarFallback>CN</AvatarFallback>
-                                    </Avatar>
-                                    New Notification from <span className="font-semibold">Pachums</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="cursor-pointer">
-                                    <Avatar className="w-8 h-8 mr-2">
-                                        <AvatarImage src="https://github.com/shadcn.png" />
-                                        <AvatarFallback>CN</AvatarFallback>
-                                    </Avatar>
-                                    New Notification from <span className="font-semibold">Pachums</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="cursor-pointer">
-                                    <Avatar className="w-8 h-8 mr-2">
-                                        <AvatarImage src="https://github.com/shadcn.png" />
-                                        <AvatarFallback>CN</AvatarFallback>
-                                    </Avatar>
-                                    New Notification from <span className="font-semibold">Pachums</span>
-                                </DropdownMenuItem>
+                            <DropdownMenuContent className="w-100">
+                                <div className="px-4 py-4">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-lg font-bold bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text">
+                                            Notification
+                                        </span>
+                                        <div className="flex items-center gap-1">
+                                            <RiCheckDoubleLine color="#000000" size={20} />
+                                            <span className="underline text-[#060A14] font-semibold">Mark all as read</span>
+                                        </div>
+                                    </div>
+                                    <div className="mt-8 flex items-center gap-4 cursor-pointer">
+                                        <span className="border-b-2 mt-1 border-[#000000]">All Notification</span>
+                                        <span>Unread</span>
+                                    </div>
+                                </div>
+                                < div className="border-b border-[#D9D9D9] -mt-[16px]" />
+                                <div className="px-2 py-2">
+                                <div className="bg-[#F4F4F4] rounded-[10px] px-4 py-3">
+                                    <div className="flex justify-between items-center">
+                                        <span className="font-bold text-[12px]">Application Approved</span>
+                                        <div className="w-2 h-2 bg-[#0DAC87] rounded-full"/>
+                                    </div>
+                                    <div className="flex flex-col items-start gap-4 mt-2">
+                                        <span className="text-[#787878] text-[12px] ">Your application for Wild Trip: Egypt has been approved! You can now proceed with payment</span>
+                                        <Button className="rounded-full px-6 bg-[#0DAC87] cursor-pointer hover:bg-[#109c7c]">Pay Now</Button>
+                                    </div>
+                                </div>
+                                </div>
                             </DropdownMenuContent>
                         </div>
                     </DropdownMenuTrigger>
@@ -71,7 +80,7 @@ const location = useLocation();
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild className="cursor-pointer">
                             <div className="rounded-full hover:bg-gray-100">
-                                <ChevronDown color="#A6AAC9"/>
+                                <ChevronDown color="#A6AAC9" />
                             </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
@@ -88,7 +97,7 @@ const location = useLocation();
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-                
+
             </div>
 
         </div>

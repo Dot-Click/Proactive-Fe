@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CarouselImg from "../../../assets/carouselimg.png"
 import CarouselImg1 from "../../../assets/Carousel1.png"
 import layer from "../../../assets/carouselLayer.png"
@@ -12,7 +12,7 @@ interface CarouselProps {
 const Carousel = ({UserName, subHeading}: CarouselProps) => {
 const location = useLocation();
 const Heading = location.pathname.split("/")[2]?.split("-").join(" ");
-
+const navigate = useNavigate()
     return (
         <div className="relative w-full h-70 md:min-w-[40px] rounded-[25px] overflow-hidden lg:mt-4 mt-4 mb-4">
 
@@ -29,7 +29,7 @@ const Heading = location.pathname.split("/")[2]?.split("-").join(" ");
                 <span className="text-[#FFFFFF] font-bold lg:text-xl">Good Morning, {UserName}!</span>
                 <span className="text-[#F7ECBE] font-semibold lg:text-5xl text-md uppercase text-nowrap">{Heading ? Heading : 'Dashboard'}</span>
                 <span className="text-[#E5DFFF] ">{subHeading}</span>
-                    <Button className="rounded-full px-6 lg:py-7 bg-[#0DAC87] hover:bg-[#0f9b7a] cursor-pointer mt-2">Browse Adventures</Button>
+                    <Button onClick={()=> navigate("/user-dashboard/adventure-oppurtunities")} className="rounded-full px-6 lg:py-7 bg-[#0DAC87] hover:bg-[#0f9b7a] cursor-pointer mt-2">Browse Adventures</Button>
                 </div>
                 <img src={layer} alt="layer" className="h-60"/>
             </div>

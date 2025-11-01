@@ -7,12 +7,14 @@ import calender from "../../../assets/calender.png"
 import time from "../../../assets/time.png"
 import { FaLocationDot } from "react-icons/fa6"
 import { MdArrowOutward } from "react-icons/md";
+import { useNavigate } from "react-router-dom"
 const UpcomingAdventures = () => {
+const navigate = useNavigate()
     return (
         <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[20px] flex flex-col">
             <div className="px-4 py-6 flex flex-col lg:flex-row gap-3 justify-between items-center">
                 <span className="bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold text-lg">Upcoming Adventures</span>
-                <Button className="bg-[#0DAC87] rounded-full py-6 px-6 hover:bg-[#0d9b7a] cursor-pointer">View All</Button>
+                <Button onClick={()=> navigate("/user-dashboard/adventure-oppurtunities")} className="bg-[#0DAC87] rounded-full py-6 px-6 hover:bg-[#0d9b7a] cursor-pointer">View All</Button>
             </div>
             <Separator className="border-[#D9D9D9] bg-[#D9D9D9] -mt-[8px]" />
             <div className="flex flex-col gap-3 px-4 py-6 overflow-y-scroll h-152">
