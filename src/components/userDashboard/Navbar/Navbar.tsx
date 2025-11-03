@@ -28,7 +28,7 @@ const Navbar = () => {
                 {/* Notification icon */}
                 <DropdownMenu>
                     <DropdownMenuTrigger>
-                        <div className="cursor-pointer relative bg-[#FFFFFF] rounded-full w-10 h-10 lg:w-14 lg:h-14 flex items-center justify-center md:mt-1">
+                        <div className="cursor-pointer relative bg-[#F2FBF9] rounded-full w-10 h-10 lg:w-14 lg:h-14 flex items-center justify-center md:mt-1">
                             <Badge className="font-bold absolute left-6 bottom-6 lg:left-7 lg:bottom-8 bg-[#000000] text-[9px] md:text-[10px] text-white rounded-full w-4 h-4 md:w-5 md:h-5 flex items-center justify-center">
                                 3
                             </Badge>

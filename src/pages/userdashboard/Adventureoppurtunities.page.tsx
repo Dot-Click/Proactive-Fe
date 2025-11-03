@@ -1,3 +1,4 @@
+import Pastadventures from "@/components/Adventureoppurtunities/Pastadventures"
 import Searchbar from "@/components/Adventureoppurtunities/Searchbar"
 import Showtrips from "@/components/Adventureoppurtunities/Showtrips"
 import Tabs from "@/components/Adventureoppurtunities/Tabs"
@@ -17,6 +18,7 @@ const [view, setView] = useState("list")
         <Tabs/>
         <Showtrips view={view}/>
         <Upcomingtrips/>
+        <Pastadventures/>
       </div>
     </>
   )
