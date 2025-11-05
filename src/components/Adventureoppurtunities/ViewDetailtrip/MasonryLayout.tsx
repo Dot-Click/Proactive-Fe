@@ -9,6 +9,8 @@ import zigzag from "../../../assets/zigzag.png"
 import { FaLocationDot } from "react-icons/fa6";
 import calender from "../../../assets/calender.png"
 import star from "../../../assets/sidebaricon/star.png"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import ApplicationForm from "./ApplicationForm";
 
 const MasonryLayout = () => {
   const navigate = useNavigate()
@@ -49,7 +51,12 @@ const MasonryLayout = () => {
               </div>
             </div>
           </div>
-          <Button className="bg-[#0DAC87] hover:bg-[#119b7b] cursor-pointer rounded-full px-8 py-5">Join This Adventure</Button>
+          <Dialog>
+            <DialogTrigger>
+              <Button className="bg-[#0DAC87] hover:bg-[#119b7b] cursor-pointer rounded-full px-8 py-5">Join This Adventure</Button>
+            </DialogTrigger>
+            <ApplicationForm />
+          </Dialog>
         </div>
         <div>
         </div>
