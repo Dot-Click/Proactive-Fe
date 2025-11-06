@@ -12,6 +12,14 @@ import { useNavigate } from "react-router-dom";
 interface SearchbarProps {
     view: string;
 }
+const trips = [
+    { id: 1, name: "Wild Weekend Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild weekend", img: trip1 },
+    { id: 2, name: "Wild trip Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild trip", img: trip2 },
+    { id: 2, name: "Wild Weekend Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild weekend", img: trip3 },
+    { id: 2, name: "Wild trip Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild trip", img: trip1 },
+    { id: 2, name: "Wild Weekend Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild weekend", img: trip2 },
+    { id: 2, name: "Wild trip Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild trip", img: trip3 },
+];
 
 const Showtrips = ({ view }: SearchbarProps) => {
     const navigate = useNavigate()
@@ -30,231 +38,55 @@ const Showtrips = ({ view }: SearchbarProps) => {
                                 <div className="border-b border-[#D9D9D9] mt-[16px]" />
 
                                 <div className="flex flex-col gap-4 mt-5 overflow-x-auto h-150">
-                                    <div className="bg-[#FFFFFF] px-4 py-4 rounded-[20px] shadow-md">
-                                        <div className="flex lg:flex-row flex-col justify-between items-center gap-4">
-                                            <img src={trip1} alt="trip1" className="h-30 w-40" />
-                                            <div className="flex lg:flex-row flex-col justify-between items-center w-full gap-6">
-                                                <div className="flex flex-col lg:flex-row gap-4">
-                                                    <div className="flex flex-col gap-1 w-full items-center lg:items-start">
-                                                        <span className="text-[#1F1B2C] font-bold text-xl">Wild Weekend Barcelona</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <FaLocationDot color="#666373" />
-                                                            <span className="text-[#666373]">Barcelona, Spain</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col lg:flex-row items-start mt-9 gap-4">
-                                                    <div className="flex lg:flex-row flex-col gap-8">
-                                                        <div className="flex lg:flex-row flex-col gap-8">
-                                                            <div className="flex items-center gap-2">
-                                                                <img src={calender} alt="calender" className="h-4" />
-                                                                <span className="text-[#666373] text-[14px] text-nowrap">05-08 August</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-2 h-2 bg-[#28C900] rounded-full" />
-                                                                <span className="text-[#666373] text-[14px] text-nowrap">Plazas disponibles</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <img src={star} alt="star" className="h-4" />
-                                                                <span className="text-[#666373] text-[14px]">4.5 (23)</span>
+                                    {
+                                        trips.map((item, index) => (
+                                            <div key={index} className="bg-[#FFFFFF] px-4 py-4 rounded-[20px] shadow-md">
+                                                <div className="flex lg:flex-row flex-col justify-between items-center gap-4">
+                                                    <img src={item.img} alt="trip1" className="h-30 w-40" />
+                                                    <div className="flex lg:flex-row flex-col justify-between items-center w-full gap-6">
+                                                        <div className="flex flex-col lg:flex-row gap-4">
+                                                            <div className="flex flex-col gap-1 w-full items-center lg:items-start">
+                                                                <span className="text-[#1F1B2C] font-bold text-xl">{item.name}</span>
+                                                                <div className="flex items-center gap-2">
+                                                                    <FaLocationDot color="#666373" />
+                                                                    <span className="text-[#666373]">{item.location}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div className="font-semibold cursor-pointer bg-[#C4FFF0] px-3 py-2 mb-3 rounded-[7px] text-[#156250] text-[14px]">Wild Weekend</div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col lg:flex-row gap-4">
-                                                    <div className="flex lg:flex-row flex-col w-full justify-between gap-4">
-                                                        <div className="flex flex-col gap-1 ">
-                                                            <div onClick={() => navigate("/user-dashboard/viewdetail/:id")} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
-                                                                View Detail
-                                                                <MdArrowOutward color="#FFFFFF" />
+                                                        <div className="flex flex-col lg:flex-row items-start mt-9 gap-4">
+                                                            <div className="flex lg:flex-row flex-col gap-8">
+                                                                <div className="flex lg:flex-row flex-col gap-8">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <img src={calender} alt="calender" className="h-4" />
+                                                                        <span className="text-[#666373] text-[14px] text-nowrap">{item.Date}</span>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-2">
+                                                                        <div className="w-2 h-2 bg-[#28C900] rounded-full" />
+                                                                        <span className="text-[#666373] text-[14px] text-nowrap">{item.Point}</span>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-2">
+                                                                        <img src={star} alt="star" className="h-4" />
+                                                                        <span className="text-[#666373] text-[14px]">{item.rating}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="font-semibold cursor-pointer bg-[#C4FFF0] px-3 py-2 mb-3 rounded-[7px] text-[#156250] text-[14px]">{item.type}</div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="bg-[#FFFFFF] px-4 py-4 rounded-[20px] shadow-md">
-                                        <div className="flex lg:flex-row flex-col justify-between items-center gap-4">
-                                            <img src={trip2} alt="trip2" className="h-30 w-40" />
-                                            <div className="flex lg:flex-row flex-col justify-between items-center w-full gap-6">
-                                                <div className="flex flex-col lg:flex-row gap-4">
-                                                    <div className="flex flex-col gap-1 w-full items-center lg:items-start">
-                                                        <span className="text-[#1F1B2C] font-bold text-xl">Wild Weekend Barcelona</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <FaLocationDot color="#666373" />
-                                                            <span className="text-[#666373]">Barcelona, Spain</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col lg:flex-row items-start mt-9 gap-4">
-                                                    <div className="flex lg:flex-row flex-col gap-8">
-                                                        <div className="flex lg:flex-row flex-col gap-8">
-                                                            <div className="flex items-center gap-2">
-                                                                <img src={calender} alt="calender" className="h-4" />
-                                                                <span className="text-[#666373] text-[14px] text-nowrap">05-08 August</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-2 h-2 bg-[#C9B800] rounded-full" />
-                                                                <span className="text-[#666373] text-[14px] text-nowrap">Últimas plazas</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <img src={star} alt="star" className="h-4" />
-                                                                <span className="text-[#666373] text-[14px]">4.5 (23)</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="font-semibold cursor-pointer bg-[#C4FFF0] px-3 py-2 mb-3 rounded-[7px] text-[#156250] text-[14px]">Wild Weekend</div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col lg:flex-row gap-4">
-                                                    <div className="flex lg:flex-row flex-col w-full justify-between gap-4">
-                                                        <div className="flex flex-col gap-1 ">
-                                                            <div onClick={() => navigate("/user-dashboard/viewdetail/:id")} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
-                                                                View Detail
-                                                                <MdArrowOutward color="#FFFFFF" />
+                                                        <div className="flex flex-col lg:flex-row gap-4">
+                                                            <div className="flex lg:flex-row flex-col w-full justify-between gap-4">
+                                                                <div className="flex flex-col gap-1 ">
+                                                                    <div onClick={() => navigate(`/user-dashboard/viewdetail/${item.id}`)} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
+                                                                        View Detail
+                                                                        <MdArrowOutward color="#FFFFFF" />
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div className="bg-[#FFFFFF] px-4 py-4 rounded-[20px] shadow-md">
-                                        <div className="flex lg:flex-row flex-col justify-between items-center gap-4">
-                                            <img src={trip3} alt="trip3" className="h-30 w-40" />
-                                            <div className="flex lg:flex-row flex-col justify-between items-center w-full gap-6">
-                                                <div className="flex flex-col lg:flex-row gap-4">
-                                                    <div className="flex flex-col gap-1 w-full items-center lg:items-start">
-                                                        <span className="text-[#1F1B2C] font-bold text-xl">Wild Weekend Barcelona</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <FaLocationDot color="#666373" />
-                                                            <span className="text-[#666373]">Barcelona, Spain</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col lg:flex-row items-start mt-9 gap-4">
-                                                    <div className="flex lg:flex-row flex-col gap-8">
-                                                        <div className="flex lg:flex-row flex-col gap-8">
-                                                            <div className="flex items-center gap-2">
-                                                                <img src={calender} alt="calender" className="h-4" />
-                                                                <span className="text-[#666373] text-[14px] text-nowrap">05-08 August</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-2 h-2 bg-[#C9B800] rounded-full" />
-                                                                <span className="text-[#666373] text-[14px] text-nowrap">Últimas plazas</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <img src={star} alt="star" className="h-4" />
-                                                                <span className="text-[#666373] text-[14px]">4.5 (23)</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="font-semibold cursor-pointer bg-[#C4FFF0] px-3 py-2 mb-3 rounded-[7px] text-[#156250] text-[14px]">Wild Weekend</div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col lg:flex-row gap-4">
-                                                    <div className="flex lg:flex-row flex-col w-full justify-between gap-4">
-                                                        <div className="flex flex-col gap-1 ">
-                                                            <div onClick={() => navigate("/user-dashboard/viewdetail/:id")} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
-                                                                View Detail
-                                                                <MdArrowOutward color="#FFFFFF" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="bg-[#FFFFFF] px-4 py-4 rounded-[20px] shadow-md">
-                                        <div className="flex lg:flex-row flex-col justify-between items-center gap-4">
-                                            <img src={trip1} alt="trip1" className="h-30 w-40" />
-                                            <div className="flex lg:flex-row flex-col justify-between items-center w-full gap-6">
-                                                <div className="flex flex-col lg:flex-row gap-4">
-                                                    <div className="flex flex-col gap-1 w-full items-center lg:items-start">
-                                                        <span className="text-[#1F1B2C] font-bold text-xl">Wild Weekend Barcelona</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <FaLocationDot color="#666373" />
-                                                            <span className="text-[#666373]">Barcelona, Spain</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col lg:flex-row items-start mt-9 gap-4">
-                                                    <div className="flex lg:flex-row flex-col gap-8">
-                                                        <div className="flex lg:flex-row flex-col gap-8">
-                                                            <div className="flex items-center gap-2">
-                                                                <img src={calender} alt="calender" className="h-4" />
-                                                                <span className="text-[#666373] text-[14px] text-nowrap">05-08 August</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-2 h-2 bg-[#C90000] rounded-full" />
-                                                                <span className="text-[#666373] text-[14px] text-nowrap">1 restante</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <img src={star} alt="star" className="h-4" />
-                                                                <span className="text-[#666373] text-[14px]">4.5 (23)</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="font-semibold cursor-pointer bg-[#C4FFF0] px-3 py-2 mb-3 rounded-[7px] text-[#156250] text-[14px]">Wild Weekend</div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col lg:flex-row gap-4">
-                                                    <div className="flex lg:flex-row flex-col w-full justify-between gap-4">
-                                                        <div className="flex flex-col gap-1 ">
-                                                            <div onClick={() => navigate("/user-dashboard/viewdetail/:id")} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
-                                                                View Detail
-                                                                <MdArrowOutward color="#FFFFFF" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="bg-[#FFFFFF] px-4 py-4 rounded-[20px] shadow-md">
-                                        <div className="flex lg:flex-row flex-col justify-between items-center gap-4">
-                                            <img src={trip1} alt="trip1" className="h-30 w-40" />
-                                            <div className="flex lg:flex-row flex-col justify-between items-center w-full gap-6">
-                                                <div className="flex flex-col lg:flex-row gap-4">
-                                                    <div className="flex flex-col gap-1 w-full items-center lg:items-start">
-                                                        <span className="text-[#1F1B2C] font-bold text-xl">Wild Weekend Barcelona</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <FaLocationDot color="#666373" />
-                                                            <span className="text-[#666373]">Barcelona, Spain</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col lg:flex-row items-start mt-9 gap-4">
-                                                    <div className="flex lg:flex-row flex-col gap-8">
-                                                        <div className="flex lg:flex-row flex-col gap-8">
-                                                            <div className="flex items-center gap-2">
-                                                                <img src={calender} alt="calender" className="h-4" />
-                                                                <span className="text-[#666373] text-[14px] text-nowrap">05-08 August</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-2 h-2 bg-[#C90000] rounded-full" />
-                                                                <span className="text-[#666373] text-[14px] text-nowrap">1 restante</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <img src={star} alt="star" className="h-4" />
-                                                                <span className="text-[#666373] text-[14px]">4.5 (23)</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="font-semibold cursor-pointer bg-[#C4FFF0] px-3 py-2 mb-3 rounded-[7px] text-[#156250] text-[14px]">Wild Weekend</div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col lg:flex-row gap-4">
-                                                    <div className="flex lg:flex-row flex-col w-full justify-between gap-4">
-                                                        <div className="flex flex-col gap-1">
-                                                            <div onClick={() => navigate("/user-dashboard/viewdetail/:id")} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
-                                                                View Detail
-                                                                <MdArrowOutward color="#FFFFFF" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </>

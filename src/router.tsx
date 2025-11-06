@@ -25,6 +25,7 @@ import Userlayout from "./Layout/user.layout";
 import UserdashboardPage from "./pages/userdashboard/Userdashboard.page";
 import AdventureOppurtunitiesPage from "./pages/userdashboard/Adventureoppurtunities.page";
 import ViewDetailTripPage from "./pages/userdashboard/ViewDetailtrip.page";
+import UserSettingPage from "./pages/settings/Setting.page";
 
 
 
@@ -64,6 +65,7 @@ function App() {
           <Route index element={<UserdashboardPage />} />
           <Route path="/user-dashboard/adventure-oppurtunities" element={<AdventureOppurtunitiesPage />} />
           <Route path="/user-dashboard/viewdetail/:id" element={<ViewDetailTripPage />} />
+          <Route path="/user-dashboard/user-settings" element={<UserSettingPage/>} />
         </Route>
 
       </Routes>
