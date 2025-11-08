@@ -11,7 +11,7 @@ import { Separator } from "./ui/separator";
 
 const Footer = () => {
   return (
-    <div className="relative min-h-[90vh] w-screen  bg-cover bg-center" style={{ backgroundImage: `url(${footer})` }}>
+    <div className="relative min-h-[90vh] lg:w-337 bg-cover bg-center" style={{ backgroundImage: `url(${footer})` }}>
       <div className="bg-[#101828]/90 absolute inset-0" />
       {/* parent */}
       <div className="relative z-10 max-w-5xl mx-auto lg:py-20 px-4 lg:px-10 py-12 grid grid-cols-1 md:grid-cols-4 gap-4">

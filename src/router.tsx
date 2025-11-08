@@ -26,6 +26,8 @@ import UserdashboardPage from "./pages/userdashboard/Userdashboard.page";
 import AdventureOppurtunitiesPage from "./pages/userdashboard/Adventureoppurtunities.page";
 import ViewDetailTripPage from "./pages/userdashboard/ViewDetailtrip.page";
 import UserSettingPage from "./pages/settings/Setting.page";
+import UserSidelayout from "./Layout/userSide.layout";
+import HomePage from "./pages/userSide/home.page";
 
 
 
@@ -61,11 +63,18 @@ function App() {
           <Route path="/coordinator-dashboard/settings" element={<CoordinatorSettingPage />} />
         </Route>
 
-        <Route path="/user-dashboard" element={<Userlayout/>}>
+        <Route path="/user-dashboard" element={<Userlayout />}>
           <Route index element={<UserdashboardPage />} />
           <Route path="/user-dashboard/adventure-oppurtunities" element={<AdventureOppurtunitiesPage />} />
           <Route path="/user-dashboard/viewdetail/:id" element={<ViewDetailTripPage />} />
-          <Route path="/user-dashboard/user-settings" element={<UserSettingPage/>} />
+          <Route path="/user-dashboard/user-settings" element={<UserSettingPage />} />
+        </Route>
+
+        <Route path="/home" element={<UserSidelayout />}>
+          <Route index element={<HomePage />} />
+          {/* <Route path="/user-dashboard/adventure-oppurtunities" element={<AdventureOppurtunitiesPage />} />
+          <Route path="/user-dashboard/viewdetail/:id" element={<ViewDetailTripPage />} />
+          <Route path="/user-dashboard/user-settings" element={<UserSettingPage />} /> */}
         </Route>
 
       </Routes>
