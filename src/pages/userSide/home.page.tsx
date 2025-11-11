@@ -1,8 +1,9 @@
+import AdventureOppurtunities from "@/components/userSide/AdventureOppurtunities/AdventureOppurtunities"
 
 const HomePage = () => {
   return (
     <div>
-      <h1>Home</h1>
+      <AdventureOppurtunities/>
     </div>
   )
 }

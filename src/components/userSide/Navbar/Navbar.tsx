@@ -10,10 +10,19 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import carousel from "../../../assets/carousel.png"
+
 const UserSideNavbar = () => {
     return (
         <>
-            <div className="flex justify-between lg:items-center mt-6">
+            <div className="relative ">
+                <img
+                    src={carousel}
+                    alt="carousel"
+                    className="w-full h-[60vh] object-cover object-center md:h-full"
+                />
+            </div>
+            <div className="flex justify-between lg:items-center mt-6 absolute top-0 left-0 right-0 container mx-auto px-8 z-10">
                 <img src={proactive} alt="proactive" className="lg:h-10 h-8" />
 
                 <div className="hidden bg-[#FFFFFF] shadow-lg lg:flex items-center px-4 py-2 rounded-full gap-6 cursor-pointer">
