@@ -36,7 +36,7 @@ const userData: ColumnDef<User>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12 flex-shrink-0">
+          <Avatar className="h-12 w-12 shrink-0">
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
@@ -168,11 +168,11 @@ const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: st
       <div className="bg-[#FFFFFF] mt-3 rounded-[25px] px-5 py-5">
         <div className="flex flex-col md:flex-row justify-between items-center ">
           <div className="flex flex-col gap-1">
-            <span className="text-center md:text-start bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold">Chat Widget Control</span>
+            <span className="text-center md:text-start bg-linear-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold">Chat Widget Control</span>
             <span className="text-[#A19EAE] text-center md:text-start">Enable or disable the floating chat widget on all trip pages</span>
           </div>
           <div className="bg-[#FAFAFA] px-6 py-4 rounded-full flex justify-between gap-2 mt-4 md:mt-0 items-center md:w-auto w-full">
-            <span className="bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold">Chat Widget</span>
+            <span className="bg-linear-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold">Chat Widget</span>
             <Switch className="w-12" />
           </div>
         </div>

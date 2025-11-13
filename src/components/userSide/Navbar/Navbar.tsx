@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import proactive from "../../../assets/proactive-logo.png";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Menu } from "lucide-react";
@@ -13,6 +13,7 @@ import {
 import carousel from "../../../assets/carousel.png"
 
 const UserSideNavbar = () => {
+const navigate = useNavigate()
     return (
         <>
             <div className="relative ">
@@ -104,8 +105,8 @@ const UserSideNavbar = () => {
                 </div>
 
                 <div className="lg:flex hidden items-center gap-4">
-                    <Button className="bg-light text-black hover:bg-[#c5e4dc] cursor-pointer px-7 py-6 font-bold rounded-full">Log In</Button>
-                    <Button className="bg-[#0DAC87] hover:bg-[#0fa17f] cursor-pointer px-7 py-6 font-bold rounded-full">Join Now</Button>
+                    <Button onClick={()=> navigate("/login")} className="bg-light text-black hover:bg-[#c5e4dc] cursor-pointer px-7 py-6 font-bold rounded-full">Log In</Button>
+                    <Button onClick={()=> navigate("/signup")} className="bg-[#0DAC87] hover:bg-[#0fa17f] cursor-pointer px-7 py-6 font-bold rounded-full">Join Now</Button>
                 </div>
 
                 <div className="lg:hidden flex">

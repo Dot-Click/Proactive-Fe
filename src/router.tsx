@@ -36,7 +36,7 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/forgetPassword" element={<ForgetPassPage />} />
 
@@ -70,7 +70,7 @@ function App() {
           <Route path="/user-dashboard/user-settings" element={<UserSettingPage />} />
         </Route>
 
-        <Route path="/home" element={<UserSidelayout />}>
+        <Route path="/" element={<UserSidelayout />}>
           <Route index element={<HomePage />} />
           {/* <Route path="/user-dashboard/adventure-oppurtunities" element={<AdventureOppurtunitiesPage />} />
           <Route path="/user-dashboard/viewdetail/:id" element={<ViewDetailTripPage />} />

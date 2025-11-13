@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom"
 
 const UserSidelayout = () => {
     return (
-        <div className="flex flex-col md:h-100 bg-[#FFFFFF]">
+        <div className="flex flex-col bg-[#FFFFFF]">
             <div className="relative ">
                 <UserSideNavbar />
                 <HeroSection />
