@@ -1,7 +1,7 @@
 import Whatwedo1 from "../../../assets/Whatwedo1.png"
 import Whatwedo2 from "../../../assets/Whatwedo2.png"
 import Whatwedo3 from "../../../assets/Whatwedo3.png"
-import Whatwedo4 from "../../../assets/Whatwedo4.png"
+import Whatwedo4 from "../../../assets/whatwedo4.png"
 import Whatwedo5 from "../../../assets/Whatwedo5.png"
 import Whatwedo6 from "../../../assets/Whatwedo6.png"
 const WhatwedoCard = () => {
