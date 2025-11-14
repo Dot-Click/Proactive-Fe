@@ -37,7 +37,7 @@ const UserProfile = () => {
                     <Progress value={80} className="[&>div]:bg-[#030213]" />
                     <div className="flex flex-col mt-3 gap-3">
                         <span className="text-[#4A5565] text-[12px] font-medium">Add emergency contact and preferences to reach 100%</span>
-                        <Button className="text-[#221E33] font-medium rounded-full py-6 bg-gradient-to-b from-[#FFFFFF] to-[#F2F2F2] 
+                        <Button className="text-[#221E33] font-medium rounded-full py-6 bg-linear-to-b from-[#FFFFFF] to-[#F2F2F2] 
                         border border-[#FFFFFF] cursor-pointer hover:bg-[#E6E6E6]
                         ">Complete Profile</Button>
                     </div>
