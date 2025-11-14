@@ -2,7 +2,7 @@ import AdventureMoment from "../../../assets/Adventuremoment.png"
 import Adventuremomentscards from "./Adventuremomentscards"
 const Adventuremoments = () => {
     return (
-        <div className="relative">
+        <div className="relative py-10">
             <img src={AdventureMoment} alt="AdventureMoment"/>
             <div className="flex flex-col gap-8 absolute inset-0 top-40">
                 <h1 className="font-bold text-4xl text-center bg-linear-to-r from-[#FFFFFF] to-[#E3E3E3] text-transparent bg-clip-text">Adventure Moments</h1>
