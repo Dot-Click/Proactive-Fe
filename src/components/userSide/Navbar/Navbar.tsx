@@ -16,7 +16,7 @@ const UserSideNavbar = () => {
 const navigate = useNavigate()
     return (
         <>
-            <div className="relative ">
+            <div className="relative bg-gradient-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
                 <img
                     src={carousel}
                     alt="carousel"

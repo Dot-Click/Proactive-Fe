@@ -16,7 +16,7 @@ const Adventuremomentscards = () => {
                 <div className="absolute inset-0 flex justify-center items-center mb-12 z-10">
                     <img src={Play} alt="Play" className="h-10 cursor-pointer" />
                 </div>
-                <div className="flex flex-col justify-end px-8 py-16 gap-8 absolute inset-0">
+                <div className="flex flex-col justify-end px-8 py-16 lg:gap-8 absolute inset-0">
                     <h4 className="text-[#FFFFFF] font-bold  text-lg">Travel forest with guider</h4>
                     <div className="flex items-center gap-3">
                         <img src={location} alt="location" className="h-5"/>
@@ -34,7 +34,7 @@ const Adventuremomentscards = () => {
                 <div className="absolute inset-0 flex justify-center items-center mb-12 z-10">
                     <img src={Play} alt="Play" className="h-10 cursor-pointer" />
                 </div>
-                <div className="flex flex-col justify-end px-8 py-15 gap-4 absolute inset-0">
+                <div className="flex flex-col justify-end px-8 py-15 lg:gap-4 absolute inset-0">
                     <h4 className="text-[#FFFFFF] font-bold text-lg">Vibrant orange and pink <br /> canyon landscape</h4>
                     <div className="flex items-center gap-3">
                         <img src={location} alt="location" className="h-5"/>
@@ -52,7 +52,7 @@ const Adventuremomentscards = () => {
                 <div className="absolute inset-0 flex justify-center items-center mb-12 z-10">
                     <img src={Play} alt="Play" className="h-10 cursor-pointer" />
                 </div>
-                <div className="flex flex-col justify-end px-8 py-15 gap-4 absolute inset-0">
+                <div className="flex flex-col justify-end px-8 py-15 lg:gap-4 absolute inset-0">
                     <h4 className="text-[#FFFFFF] font-bold  text-lg">Underwater adventure scuba <br /> diver</h4>
                     <div className="flex items-center gap-3">
                         <img src={location} alt="location" className="h-5"/>
