@@ -1,6 +1,6 @@
-import importantMask from "../../../assets/importantmask.png"
-import importantbg from "../../../assets/importantbg.png"
-import importantlayer from "../../../assets/importantlayer.png"
+import importantMask from "../../../../assets/importantmask.png"
+import importantbg from "../../../../assets/importantbg.png"
+import importantlayer from "../../../../assets/importantlayer.png"
 import ImpactCard from "./ImpactCard";
 const ImpactNumber = () => {
     return (

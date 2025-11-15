@@ -6,19 +6,29 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import carousel from "../../../assets/carousel.png"
+import  oppHero from "../../../assets//openoppurtunities.png"
+
+const heroImages: Record<string, string> = {
+    "/": carousel,
+    "/open-oppurtunities": oppHero,
+    // "/wild-weekend": wwHero,
+    // "/wild-trip": wtHero,
+    // "/erasmus-plus": erasmusHero,
+    // jitne chaho add karo
+};
 
 const UserSideNavbar = () => {
 const navigate = useNavigate()
+const bgImage = heroImages[location.pathname] || carousel;
     return (
         <>
-            <div className="relative bg-gradient-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
+            <div className="relative bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
                 <img
-                    src={carousel}
+                    src={bgImage}
                     alt="carousel"
                     className="w-full h-[60vh] object-cover object-center md:h-full"
                 />
@@ -27,9 +37,9 @@ const navigate = useNavigate()
                 <img src={proactive} alt="proactive" className="lg:h-10 h-8" />
 
                 <div className="hidden bg-[#FFFFFF] shadow-lg lg:flex items-center px-4 py-2 rounded-full gap-6 cursor-pointer">
-                    <Link to="/user-dashboard">
+                    <Link to="/">
                         <span
-                            className={`${location.pathname === "/user-dashboard"
+                            className={`${location.pathname === "/"
                                 ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
                                 : ""
                                 }`}
@@ -37,10 +47,10 @@ const navigate = useNavigate()
                             Home
                         </span>
                     </Link>
-                    <Link to="/user-dashboard/adventure-oppurtunities">
+                    <Link to="/open-oppurtunities">
                         <span
                             className={`${location.pathname ===
-                                "/user-dashboard/adventure-oppurtunities"
+                                "/open-oppurtunities"
                                 ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
                                 : ""
                                 }`}
@@ -80,24 +90,18 @@ const navigate = useNavigate()
                                         <ChevronDown className='w-4 h-4' />
                                     </div>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="bg-[#FFFFFF]/95 flex flex-col justify-center items-center px-4 py-4 mt-4">
-                                    <div className="flex gap-6">
-                                        <div className="flex flex-col gap-2">
-                                            <DropdownMenuLabel className="font-bold">Nosotros</DropdownMenuLabel>
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">¿Quienes somos?</DropdownMenuItem>
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Socios</DropdownMenuItem>
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Coordinadores</DropdownMenuItem>
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Ventajas</DropdownMenuItem>
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Contacto</DropdownMenuItem>
+                                <DropdownMenuContent className="bg-[#FFFFFF]/95 flex flex-col justify-center items-center px-2 mt-4">
+                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A] mt-2">About Us</DropdownMenuItem>
+                                            <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Become a Member</DropdownMenuItem>
+                                            <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Coordinators</DropdownMenuItem>
+                                            <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Benefits</DropdownMenuItem>
+                                            <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Contact</DropdownMenuItem>
+                                            <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                             <DropdownMenuItem className="cursor-pointer text-[#332A2A]">FAQ</DropdownMenuItem>
-                                        </div>
-                                        <div className="border-r border-[#565960]/40" />
-                                        <div className="flex flex-col gap-2">
-                                            <DropdownMenuLabel className="font-bold">Comunidad</DropdownMenuLabel>
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Comunidad de whatsapp</DropdownMenuItem>
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Difusión de telegram</DropdownMenuItem>
-                                        </div>
-                                    </div>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </span>

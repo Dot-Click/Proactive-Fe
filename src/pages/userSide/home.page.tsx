@@ -1,8 +1,9 @@
-import Adventuremoments from "@/components/userSide/Adventuremoments/Adventuremoments"
-import AdventureOppurtunities from "@/components/userSide/AdventureOppurtunities/AdventureOppurtunities"
-import Follow from "@/components/userSide/Follow/Follow"
-import ImpactNumber from "@/components/userSide/ImpactNumber/ImpactNumber"
-import Whatwedo from "@/components/userSide/whatwedo/Whatwedo"
+import Adventuremoments from "@/components/userSide/Home/Adventuremoments/Adventuremoments"
+import AdventureOppurtunities from "@/components/userSide/Home/AdventureOppurtunities/AdventureOppurtunities"
+import Follow from "@/components/userSide/Home/Follow/Follow"
+import ImpactNumber from "@/components/userSide/Home/ImpactNumber/ImpactNumber"
+import OurMerchant from "@/components/userSide/Home/Merchant/OurMerchant"
+import Whatwedo from "@/components/userSide/Home/whatwedo/Whatwedo"
 
 const HomePage = () => {
   return (
@@ -12,6 +13,7 @@ const HomePage = () => {
       <Whatwedo/>
       <ImpactNumber/>
       <Follow/>
+      <OurMerchant/>
     </div>
   )
 }

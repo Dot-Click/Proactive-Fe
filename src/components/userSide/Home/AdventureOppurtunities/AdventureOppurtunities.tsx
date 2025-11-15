@@ -4,7 +4,7 @@ import Adventureoppurtunitiescard from "./Adventureoppurtunitiescard"
 
 const AdventureOppurtunities = () => {
     return (
-        <div className="bg-gradient-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
+        <div className="bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
             {/* <div className="relative flex justify-between items-center">
                 <img src={linearline} alt="linearline"  className="absolute top-25 left-25"/>
                 <img src={Box} alt="Box" className="absolute top-25 right-25" />

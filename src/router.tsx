@@ -28,6 +28,7 @@ import ViewDetailTripPage from "./pages/userdashboard/ViewDetailtrip.page";
 import UserSettingPage from "./pages/settings/Setting.page";
 import UserSidelayout from "./Layout/userSide.layout";
 import HomePage from "./pages/userSide/home.page";
+import OpenOppurtunitiesPage from "./pages/userSide/openoppurtunities.page";
 
 
 
@@ -72,6 +73,7 @@ function App() {
 
         <Route path="/" element={<UserSidelayout />}>
           <Route index element={<HomePage />} />
+          <Route path="/open-oppurtunities" element={<OpenOppurtunitiesPage />} />
           {/* <Route path="/user-dashboard/adventure-oppurtunities" element={<AdventureOppurtunitiesPage />} />
           <Route path="/user-dashboard/viewdetail/:id" element={<ViewDetailTripPage />} />
           <Route path="/user-dashboard/user-settings" element={<UserSettingPage />} /> */}

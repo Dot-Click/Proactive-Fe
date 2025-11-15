@@ -1,7 +1,7 @@
-import impact1 from "../../../assets/impact1.png"
-import impact2 from "../../../assets/impact2.png"
-import impact3 from "../../../assets/impact3.png"
-import impact4 from "../../../assets/impact4.png"
+import impact1 from "../../../../assets/impact1.png"
+import impact2 from "../../../../assets/impact2.png"
+import impact3 from "../../../../assets/impact3.png"
+import impact4 from "../../../../assets/impact4.png"
 import CountUp from 'react-countup';
 
 const ImpactCard = () => {

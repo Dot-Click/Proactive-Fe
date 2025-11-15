@@ -1,4 +1,4 @@
-import AdventureMoment from "../../../assets/Adventuremoment.png"
+import AdventureMoment from "../../../../assets/Adventuremoment.png"
 import Adventuremomentscards from "./Adventuremomentscards"
 const Adventuremoments = () => {
     return (

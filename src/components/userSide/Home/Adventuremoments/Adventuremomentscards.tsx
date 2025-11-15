@@ -1,8 +1,8 @@
-import Play from "../../../assets/play2.png"
-import momentscard1 from "../../../assets/momentscard1.png"
-import momentscard2 from "../../../assets/momentscard2.png"
-import momentscard3 from "../../../assets/momentscard3.png"
-import location from "../../../assets/footerlocation.png"
+import Play from "../../../../assets/play2.png"
+import momentscard1 from "../../../../assets/momentscard1.png"
+import momentscard2 from "../../../../assets/momentscard2.png"
+import momentscard3 from "../../../../assets/momentscard3.png"
+import location from "../../../../assets/footerlocation.png"
 const Adventuremomentscards = () => {
     return (
         <div className="flex flex-col lg:flex-row gap-2 mb-8">

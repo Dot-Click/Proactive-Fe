@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button"
-import adventureoppurunities1 from "../../../assets/adventureoppurtunities1.png"
-import adventureoppurunities2 from "../../../assets/adventureoppurtunities2.png"
-import adventureoppurunities3 from "../../../assets/adventureoppurtunities3.png"
-import calender from "../../../assets/calenderwhite.png"
-import location from "../../../assets/locationwhite.png"
+import adventureoppurunities1 from "../../../../assets/adventureoppurtunities1.png"
+import adventureoppurunities2 from "../../../../assets/adventureoppurtunities2.png"
+import adventureoppurunities3 from "../../../../assets/adventureoppurtunities3.png"
+import calender from "../../../../assets/calenderwhite.png"
+import location from "../../../../assets/locationwhite.png"
 const Adventureoppurtunitiescard = () => {
     return (
         <div className="flex flex-col lg:flex-row gap-5">
