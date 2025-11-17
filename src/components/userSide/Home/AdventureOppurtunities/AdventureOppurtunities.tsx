@@ -9,7 +9,7 @@ const AdventureOppurtunities = () => {
                 <img src={linearline} alt="linearline"  className="absolute top-25 left-25"/>
                 <img src={Box} alt="Box" className="absolute top-25 right-25" />
             </div> */}
-            <div className="flex flex-col lg:gap-8 gap-4 py-10">
+            <div className="flex flex-col lg:gap-8 gap-4 lg:pt-60 pt-70">
                 <h1 className="text-center lg:text-4xl text-2xl font-bold bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">Adventure Oppurtunities</h1>
                 <p className="text-center text-sm text-[#221E33]">Choose your path to adventure. Whether you're looking for a quick escape or an extended journey, <br className="lg:block hidden"/>
                     we have the perfect experience waiting for you.</p>

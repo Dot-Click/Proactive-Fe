@@ -1,4 +1,3 @@
-import HeroSectionOppurtunities from "@/components/userSide/OpenOppurtunities/HeroSection/HeroSection"
 import Pastadventures from "@/components/userSide/OpenOppurtunities/PastAdventure/Pastadventures"
 import Searchbar from "@/components/userSide/OpenOppurtunities/SearchBar/Searchbar"
 import Showtrips from "@/components/userSide/OpenOppurtunities/Showtrip/Showtrips"
@@ -10,8 +9,9 @@ const OpenOppurtunitiesPage = () => {
   const [view, setView] = useState("list")
   return (
     <div>
-      <HeroSectionOppurtunities />
+      <div className="pt-40 lg:pt-0">
       <Searchbar view={view} setView={setView} />
+      </div>
       <Tabs />
       <Showtrips view={view} />
       <Upcomingtrips />

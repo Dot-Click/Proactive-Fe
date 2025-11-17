@@ -9,34 +9,15 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import carousel from "../../../assets/carousel.png"
-import  oppHero from "../../../assets//openoppurtunities.png"
-
-const heroImages: Record<string, string> = {
-    "/": carousel,
-    "/open-oppurtunities": oppHero,
-    // "/wild-weekend": wwHero,
-    // "/wild-trip": wtHero,
-    // "/erasmus-plus": erasmusHero,
-    // jitne chaho add karo
-};
 
 const UserSideNavbar = () => {
 const navigate = useNavigate()
-const bgImage = heroImages[location.pathname] || carousel;
     return (
         <>
-            <div className="relative bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
-                <img
-                    src={bgImage}
-                    alt="carousel"
-                    className="w-full h-[60vh] object-cover object-center md:h-full"
-                />
-            </div>
             <div className="flex justify-between lg:items-center mt-6 absolute top-0 left-0 right-0 container mx-auto px-8 z-10">
-                <img src={proactive} alt="proactive" className="lg:h-10 h-8" />
+                <img src={proactive} alt="proactive" className="lg:h-10 h-5" />
 
-                <div className="hidden bg-[#FFFFFF] shadow-lg lg:flex items-center px-4 py-2 rounded-full gap-6 cursor-pointer">
+                <div className="hidden bg-[#FFFFFF]/75 shadow-lg lg:flex items-center px-4 py-2 rounded-full gap-6 cursor-pointer">
                     <Link to="/">
                         <span
                             className={`${location.pathname === "/"
@@ -69,7 +50,9 @@ const bgImage = heroImages[location.pathname] || carousel;
                                     </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="bg-[#FFFFFF]/95 flex flex-col justify-center items-center px-4 mt-4">
+                                    <Link to="/wild-weekend">
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Weekend</DropdownMenuItem>
+                                    </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Trip</DropdownMenuItem>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />

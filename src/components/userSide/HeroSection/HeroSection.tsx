@@ -1,0 +1,146 @@
+import { useLocation } from "react-router-dom";
+import carousel from "../../../assets/carousel.png"
+import oppHero from "../../../assets/openoppurtunities.png"
+import downloadimg from "../../../assets/Download.png"
+import wwHero from "../../../assets/wildweekend.png"
+import type { JSX } from "react";
+
+interface HeroContent {
+  image: string;
+  title: string | JSX.Element;
+  subtitle: string | JSX.Element;
+  imageClass: string;
+  buttons?: {
+    text: string;
+    className: string;
+  }[];
+  downloadimg?: string
+}
+
+const heroData: Record<string, HeroContent> = {
+  "/": {
+    image: carousel,
+    title: (
+      <div className="flex flex-wrap justify-center items-center md:mt-30 mt-70">
+        <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap md:mt-12 ">
+          Your Next
+        </span>
+        <div className="flex items-center justify-center">
+          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke-1 text-transparent bg-clip-text bg-linear-to-b from-[#F7ECBE] to-[#F7ECBE]">
+            ADV
+          </span>
+          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke md:-translate-y-2">
+            E
+          </span>
+          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke md:-translate-y-2">
+            N
+          </span>
+          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke-1 text-transparent bg-clip-text bg-linear-to-b from-[#F7ECBE] to-[#F7ECBE]">
+            TURE
+          </span>
+        </div>
+        <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap md:mt-12">
+          Awaits
+        </span>
+      </div>
+    ),
+    subtitle: (
+      <span className="text-[12px] md:text-lg">
+        Discover extraordinary experiences,<br className="lg:block hidden"/>
+        connect with fellow adventurers, and create memories that last a
+        lifetime with Proactive Future.
+      </span>
+    ),
+    imageClass: "sm:h-[70vh] lg:h-[100vh]",
+    buttons: [
+      {
+        text: "Join the Adventure",
+        className:
+          "bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-4 py-3 md:py-3 md:px-7 font-medium text-sm md:text-base",
+      },
+      {
+        text: "Get to Know Us",
+        className:
+          "bg-[#FFFFFF] hover:bg-[#e7d9d9] cursor-pointer rounded-full px-4 py-3 md:py-3 md:px-7 text-[#000000] font-medium text-sm lg:text-base",
+      },
+    ],
+    downloadimg: downloadimg
+  },
+
+  "/open-oppurtunities": {
+    image: oppHero,
+    title: (
+      <h1 className="font-bold text-[14px] md:text-6xl text-nowrap md:mt-12 mt-40">Open Opportunities</h1>
+    ),
+    subtitle: (
+    <span className="text-[10px] md:text-[16px]">
+        Discover amazing destinations and join our community of adventurers
+    </span>
+),
+    imageClass: "sm:h-[60vh] lg:h-[60vh]",
+  },
+
+  "/wild-weekend": {
+    image: wwHero,
+    title: (
+      <h1 className="font-extrabold text-[14px] md:text-6xl text-nowrap md:mt-12 mt-40">Wild Weekend</h1>
+    ),
+    subtitle: (
+      <span className="text-[10px] md:text-[16px]">Your escape into nature, connection, and unforgettable memories</span>
+    ),
+    imageClass: "sm:h-[60vh] lg:h-[60vh]",
+  },
+
+//   "/wild-trip": {
+//     image: wtHero,
+//     title: "Wild Trip",
+//     subtitle: "Travel. Explore. Experience more."
+//   },
+
+//   "/erasmus-plus": {
+//     image: erasmusHero,
+//     title: "Erasmus+ Youth Exchange",
+//     subtitle: "Grow, learn and explore new cultures."
+//   }
+};
+
+const HeroSection = () => {
+  const location = useLocation();
+  const path = location.pathname;
+  const hero = heroData[path];
+
+  if (!hero) return null;
+
+  return (
+    <div key={path} className={`relative w-full ${hero.imageClass}`}>
+
+      {/* Background Image */}
+      <img
+        src={hero.image}
+        className="w-full object-cover absolute inset-0 z-0"
+      />
+
+      {/* Text */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
+        <h1 className="text-xl md:text-4xl font-bold">{hero.title}</h1>
+        <p className="text-xs md:text-lg lg:mt-4">{hero.subtitle}</p>
+        {hero.buttons && (
+          <div className="flex md:flex-row gap-4 md:mt-4 mt-2">
+            {hero.buttons.map((button, index) => (
+              <button key={index} className={button.className}>
+                {button.text}
+              </button>
+            ))}
+          </div>
+        )}
+        {hero.downloadimg && (
+          <div className="lg:block hidden absolute right-24 -bottom-31 flex md:flex-row gap-4 md:mt-4 mt-2">
+            <img src={hero.downloadimg} alt="Download" className="w-16" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default HeroSection;
