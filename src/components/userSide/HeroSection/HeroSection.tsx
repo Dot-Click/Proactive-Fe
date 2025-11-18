@@ -3,6 +3,7 @@ import carousel from "../../../assets/carousel.png"
 import oppHero from "../../../assets/openoppurtunities.png"
 import downloadimg from "../../../assets/Download.png"
 import wwHero from "../../../assets/wildweekend.png"
+import wtHero from "../../../assets/wildtrip.png"
 import type { JSX } from "react";
 
 interface HeroContent {
@@ -46,7 +47,7 @@ const heroData: Record<string, HeroContent> = {
     ),
     subtitle: (
       <span className="text-[12px] md:text-lg">
-        Discover extraordinary experiences,<br className="lg:block hidden"/>
+        Discover extraordinary experiences,<br className="lg:block hidden" />
         connect with fellow adventurers, and create memories that last a
         lifetime with Proactive Future.
       </span>
@@ -73,17 +74,17 @@ const heroData: Record<string, HeroContent> = {
       <h1 className="font-bold text-[14px] md:text-6xl text-nowrap md:mt-12 mt-40">Open Opportunities</h1>
     ),
     subtitle: (
-    <span className="text-[10px] md:text-[16px]">
+      <span className="text-[10px] md:text-[16px]">
         Discover amazing destinations and join our community of adventurers
-    </span>
-),
+      </span>
+    ),
     imageClass: "sm:h-[60vh] lg:h-[60vh]",
   },
 
   "/wild-weekend": {
     image: wwHero,
     title: (
-      <h1 className="font-extrabold text-[14px] md:text-6xl text-nowrap md:mt-12 mt-40">Wild Weekend</h1>
+      <h1 className="font-extrabold text-[14px] md:text-6xl text-nowrap lg:mt-12 md:mt-0 mt-40 ">Wild Weekend</h1>
     ),
     subtitle: (
       <span className="text-[10px] md:text-[16px]">Your escape into nature, connection, and unforgettable memories</span>
@@ -91,17 +92,22 @@ const heroData: Record<string, HeroContent> = {
     imageClass: "sm:h-[60vh] lg:h-[60vh]",
   },
 
-//   "/wild-trip": {
-//     image: wtHero,
-//     title: "Wild Trip",
-//     subtitle: "Travel. Explore. Experience more."
-//   },
+  "/wild-trip": {
+    image: wtHero,
+    title: (
+      <h1 className="font-extrabold text-[14px] md:text-6xl text-nowrap lg:mt-12 md:mt-0 mt-40 ">Wild Trip</h1>
+    ),
+    subtitle: (
+      <span>From deserts to glaciers – trips that change your perspective.</span>
+    ),
+    imageClass: "sm:h-[60vh] lg:h-[60vh] "
+  },
 
-//   "/erasmus-plus": {
-//     image: erasmusHero,
-//     title: "Erasmus+ Youth Exchange",
-//     subtitle: "Grow, learn and explore new cultures."
-//   }
+  //   "/erasmus-plus": {
+  //     image: erasmusHero,
+  //     title: "Erasmus+ Youth Exchange",
+  //     subtitle: "Grow, learn and explore new cultures."
+  //   }
 };
 
 const HeroSection = () => {

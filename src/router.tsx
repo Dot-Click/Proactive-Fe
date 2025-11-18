@@ -30,6 +30,7 @@ import UserSidelayout from "./Layout/userSide.layout";
 import HomePage from "./pages/userSide/home.page";
 import OpenOppurtunitiesPage from "./pages/userSide/openoppurtunities.page";
 import WildweekendPage from "./pages/userSide/Wildweekend.page";
+import WildtripPage from "./pages/userSide/Wildtrip.page";
 
 
 
@@ -76,8 +77,8 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/open-oppurtunities" element={<OpenOppurtunitiesPage />} />
           <Route path="/wild-weekend" element={<WildweekendPage />} />
-          {/* <Route path="/user-dashboard/viewdetail/:id" element={<ViewDetailTripPage />} />
-          <Route path="/user-dashboard/user-settings" element={<UserSettingPage />} /> */}
+          <Route path="/wild-trip" element={<WildtripPage />} />
+          {/* <Route path="/user-dashboard/user-settings" element={<UserSettingPage />} /> */}
         </Route>
 
       </Routes>
