@@ -3,6 +3,8 @@ import adventureoppurunities1 from "../../../../assets/adventureoppurtunities1.p
 import adventureoppurunities2 from "../../../../assets/adventureoppurtunities2.png"
 import adventureoppurunities3 from "../../../../assets/adventureoppurtunities3.png"
 import clock from "../../../../assets/clock.png"
+import Shadowblack from "../../../../assets/blackshadow.png"
+
 const OuttripCard = () => {
     return (
         <div className="flex flex-col lg:flex-row gap-5">
@@ -12,7 +14,9 @@ const OuttripCard = () => {
                     alt="adventureoppurunities1"
                     className="h-full w-full "
                 />
-                <div className="absolute inset-0 bg-linear-to-b from-[#000000]/2 to-[#000000]/60 mix-blend-multiply z-0"></div>
+                <div className="absolute inset-0 z-0 top-auto">
+                    <img src={Shadowblack} alt="Shadowblack" />
+                </div>
 
                 <div className="absolute inset-0 flex flex-col justify-end items-end py-6 px-4 z-10">
                     <div className="w-full space-y-3 mb-2">
@@ -38,7 +42,9 @@ const OuttripCard = () => {
                     alt="adventureoppurunities2"
                     className="h-full w-full "
                 />
-                <div className="absolute inset-0 bg-linear-to-b from-[#000000]/2 to-[#000000]/60 mix-blend-multiply z-0"></div>
+                <div className="absolute inset-0 z-0 top-auto">
+                    <img src={Shadowblack} alt="Shadowblack" />
+                </div>
 
                 <div className="absolute inset-0 flex flex-col justify-end items-end py-6 px-4 z-10">
                     <div className="w-full space-y-3 mb-2">
@@ -64,7 +70,9 @@ const OuttripCard = () => {
                     alt="adventureoppurunities3"
                     className="h-full w-full "
                 />
-                <div className="absolute inset-0 bg-linear-to-b from-[#000000]/2 to-[#000000]/60 mix-blend-multiply z-0"></div>
+                <div className="absolute inset-0 z-0 top-auto">
+                    <img src={Shadowblack} alt="Shadowblack" />
+                </div>
 
                 <div className="absolute inset-0 flex flex-col justify-end items-end py-6 px-4 z-10">
                     <div className="w-full space-y-3 mb-2">

@@ -31,6 +31,8 @@ import HomePage from "./pages/userSide/home.page";
 import OpenOppurtunitiesPage from "./pages/userSide/openoppurtunities.page";
 import WildweekendPage from "./pages/userSide/Wildweekend.page";
 import WildtripPage from "./pages/userSide/Wildtrip.page";
+import ErasmusPage from "./pages/userSide/Erasmus.page";
+import InternaleventsPage from "./pages/userSide/Internalevents.page";
 
 
 
@@ -78,7 +80,8 @@ function App() {
           <Route path="/open-oppurtunities" element={<OpenOppurtunitiesPage />} />
           <Route path="/wild-weekend" element={<WildweekendPage />} />
           <Route path="/wild-trip" element={<WildtripPage />} />
-          {/* <Route path="/user-dashboard/user-settings" element={<UserSettingPage />} /> */}
+          <Route path="/erasmus-plus" element={<ErasmusPage />} />
+          <Route path="/internal-events" element={<InternaleventsPage />} />
         </Route>
 
       </Routes>

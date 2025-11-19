@@ -58,9 +58,13 @@ const navigate = useNavigate()
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Trip</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <Link to={'/erasmus-plus'}>
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Erasmus+</DropdownMenuItem>
+                                    </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <Link to={'/internal-events'}>
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Internal Events</DropdownMenuItem>
+                                    </Link>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </span>
@@ -95,7 +99,7 @@ const navigate = useNavigate()
 
                 <div className="lg:flex hidden items-center gap-4">
                     <Button onClick={()=> navigate("/login")} className="bg-light text-black hover:bg-[#c5e4dc] cursor-pointer px-7 py-6 font-bold rounded-full">Log In</Button>
-                    <Button onClick={()=> navigate("/signup")} className="bg-[#0DAC87] hover:bg-[#0fa17f] cursor-pointer px-7 py-6 font-bold rounded-full">Join Now</Button>
+                    <Button onClick={()=> navigate("/signup")} className="bg-[#0DAC87] hover:bg-[#0fa17f] border border-[#FFFFFF]/64 cursor-pointer px-7 py-6 font-bold rounded-full">Join Now</Button>
                 </div>
 
                 <div className="lg:hidden flex">
