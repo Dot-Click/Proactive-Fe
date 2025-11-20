@@ -1,4 +1,4 @@
-import connectingPeople from "../../../../assets/connectingPeople.png"
+import connectingPeople from "../../../../assets/ConnectingPeople.png"
 import box2 from "../../../../assets/box2.png"
 
 const ConnectingPeople = () => {
