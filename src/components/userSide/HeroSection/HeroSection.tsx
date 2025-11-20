@@ -8,6 +8,7 @@ import erasmusHero from "../../../assets/Erasmus+.png"
 import InternalEvents from "../../../assets/Internalevents.png"
 import greenshadow from "../../../assets/greenshadow.png"
 import lightgreenshadow from "../../../assets/lightgreenshadow.png"
+import About from "../../../assets/About.png"
 import type { JSX } from "react";
 import type React from "react";
 
@@ -183,7 +184,29 @@ const heroData: Record<string, HeroContent> = {
     ),
     imageClass: 'sm:h-[60vh] lg:h-[60vh]',
     // downloadimg: downloadimg
-  }
+  },
+  "/about": {
+    image: (
+      <>
+        <div className="relative bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
+          <img src={About} alt="About" className="relative" />
+          <img
+            src={lightgreenshadow}
+            alt="lightgreenshadow"
+            className="absolute inset-0 z-0"
+          />
+        </div>
+      </>
+    ),
+    title: (
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] md:text-7xl text-nowrap lg:mt-12 md:mt-0 mt-40 ">About US</h1>
+    ),
+    subtitle: (
+      <span>Discover extraordinary experiences, <br className="lg:flex hidden"/> connect with fellow adventurers, and create memories that last a lifetime with Proactive Future.</span>
+    ),
+    imageClass: 'sm:h-[38vh] lg:h-[60vh]',
+    // downloadimg: downloadimg
+  },
 };
 const HeroSection = () => {
   const location = useLocation();

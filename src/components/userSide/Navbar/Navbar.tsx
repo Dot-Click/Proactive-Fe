@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 const UserSideNavbar = () => {
-const navigate = useNavigate()
+    const navigate = useNavigate()
     return (
         <>
             <div className="flex justify-between lg:items-center mt-6 absolute top-0 left-0 right-0 container mx-auto px-8 z-10">
@@ -51,19 +51,19 @@ const navigate = useNavigate()
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="bg-[#FFFFFF]/95 flex flex-col justify-center items-center px-4 mt-4">
                                     <Link to="/wild-weekend">
-                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Weekend</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Weekend</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/wild-trip'}>
-                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Trip</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Trip</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/erasmus-plus'}>
-                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Erasmus+</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Erasmus+</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/internal-events'}>
-                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Internal Events</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Internal Events</DropdownMenuItem>
                                     </Link>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -80,17 +80,19 @@ const navigate = useNavigate()
                                     </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="bg-[#FFFFFF]/95 flex flex-col justify-center items-center px-2 mt-4">
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A] mt-2">About Us</DropdownMenuItem>
-                                            <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Become a Member</DropdownMenuItem>
-                                            <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Coordinators</DropdownMenuItem>
-                                            <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Benefits</DropdownMenuItem>
-                                            <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Contact</DropdownMenuItem>
-                                            <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
-                                            <DropdownMenuItem className="cursor-pointer text-[#332A2A]">FAQ</DropdownMenuItem>
+                                    <Link to={'/about'}>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A] mt-2">About Us</DropdownMenuItem>
+                                    </Link>
+                                    <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Become a Member</DropdownMenuItem>
+                                    <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Coordinators</DropdownMenuItem>
+                                    <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Benefits</DropdownMenuItem>
+                                    <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Contact</DropdownMenuItem>
+                                    <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">FAQ</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </span>
@@ -98,12 +100,12 @@ const navigate = useNavigate()
                 </div>
 
                 <div className="lg:flex hidden items-center gap-4">
-                    <Button onClick={()=> navigate("/login")} className="bg-light text-black hover:bg-[#c5e4dc] cursor-pointer px-7 py-6 font-bold rounded-full">Log In</Button>
-                    <Button onClick={()=> navigate("/signup")} className="bg-[#0DAC87] hover:bg-[#0fa17f] border border-[#FFFFFF]/64 cursor-pointer px-7 py-6 font-bold rounded-full">Join Now</Button>
+                    <Button onClick={() => navigate("/login")} className="bg-light text-black hover:bg-[#c5e4dc] cursor-pointer px-7 py-6 font-bold rounded-full">Log In</Button>
+                    <Button onClick={() => navigate("/signup")} className="bg-[#0DAC87] hover:bg-[#0fa17f] border border-[#FFFFFF]/64 cursor-pointer px-7 py-6 font-bold rounded-full">Join Now</Button>
                 </div>
 
                 <div className="lg:hidden flex">
-                    <Menu color="#000000"/>
+                    <Menu color="#000000" />
                 </div>
 
             </div>
