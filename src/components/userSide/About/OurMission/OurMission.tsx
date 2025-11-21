@@ -2,7 +2,7 @@ import OurMissionImg from "../../../../assets/OurMission.png"
 import box2 from "../../../../assets/box2.png"
 const OurMission = () => {
   return (
-    <div className="bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD] md:py-16 py-20">
+    <div className="bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD] lg:py-16 md:py-10 py-20">
       <div className="flex lg:flex-row flex-col lg:gap-20 gap-8 justify-center items-center">
         <div className="flex flex-col lg:gap-8 gap-2 lg:mt-16 mt-20">
           <div className="relative">

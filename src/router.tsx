@@ -34,6 +34,8 @@ import WildtripPage from "./pages/userSide/Wildtrip.page";
 import ErasmusPage from "./pages/userSide/Erasmus.page";
 import InternaleventsPage from "./pages/userSide/Internalevents.page";
 import AboutPage from "./pages/userSide/About.page";
+import BecomeMemberPage from "./pages/userSide/BecomeMember.page";
+import TravelCoordinatorPage from "./pages/userSide/TravelCoordinator.page";
 
 
 
@@ -84,10 +86,11 @@ function App() {
           <Route path="/erasmus-plus" element={<ErasmusPage />} />
           <Route path="/internal-events" element={<InternaleventsPage />} />
           <Route path="/about" element={<AboutPage/>} />
+          <Route path="/member" element={<BecomeMemberPage/>} />
+          <Route path="/travel-coordinator" element={<TravelCoordinatorPage/>} />
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
-
 export default App;

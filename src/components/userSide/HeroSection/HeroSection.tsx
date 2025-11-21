@@ -9,6 +9,8 @@ import InternalEvents from "../../../assets/Internalevents.png"
 import greenshadow from "../../../assets/greenshadow.png"
 import lightgreenshadow from "../../../assets/lightgreenshadow.png"
 import About from "../../../assets/About.png"
+import Member from "../../../assets/BecomeMember.png"
+import TravelCoordinatore from "../../../assets/Travelcoordinator.png"
 import type { JSX } from "react";
 import type React from "react";
 
@@ -21,7 +23,8 @@ interface HeroContent {
     text: string;
     className: string;
   }[];
-  downloadimg?: string
+  downloadimg?: string;
+  CTA?: string | JSX.Element;
 }
 
 const heroData: Record<string, HeroContent> = {
@@ -199,14 +202,67 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] md:text-7xl text-nowrap lg:mt-12 md:mt-0 mt-40 ">About US</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-3xl text-nowrap lg:mt-12 md:mt-0 mt-40 ">About US</h1>
     ),
     subtitle: (
-      <span>Discover extraordinary experiences, <br className="lg:flex hidden"/> connect with fellow adventurers, and create memories that last a lifetime with Proactive Future.</span>
+      <span className="text-[12px] lg:text-xl">Discover extraordinary experiences, <br className="lg:flex hidden" /> connect with fellow adventurers, and create memories that last a lifetime with Proactive Future.</span>
     ),
-    imageClass: 'sm:h-[38vh] lg:h-[60vh]',
+    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[28vh]',
     // downloadimg: downloadimg
   },
+  "/member": {
+    image: (
+      <>
+        <div className="relative">
+          <img src={Member} alt="Member" className="relative" />
+          <img
+            src={lightgreenshadow}
+            alt="lightgreenshadow"
+            className="absolute inset-0 z-0"
+          />
+        </div>
+      </>
+    ),
+    title: (
+      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-12 md:mt-0 mt-40">Become a Member</h1>
+    ),
+    subtitle: (
+      <span className="text-[12px] md:flex hidden">Unlock exclusive benefits and join our travel community of adventurous souls exploring the world together.</span>
+    ),
+    imageClass: 'sm:h-[38vh] lg:h-[60vh] md:h-[28vh]',
+    // downloadimg: downloadimg
+    buttons: (
+      [
+        {
+          text: 'Join Now for €50',
+        className:
+          "lg:mt-4 md:mt-0 mt-40 bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
+        },
+      ]
+    )
+  },
+    "/travel-coordinator": {
+    image: (
+      <>
+        <div className="relative">
+          <img src={TravelCoordinatore} alt="TravelCoordinatore" className="relative" />
+          <img
+            src={lightgreenshadow}
+            alt="lightgreenshadow"
+            className="absolute inset-0 z-0"
+          />
+        </div>
+      </>
+    ),
+    title: (
+      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-30 md:mt-0 mt-40">Our Travel Coordinators</h1>
+    ),
+    subtitle: (
+      <span className="text-[16px] md:flex hidden">The passionate travelers who turn every trip into an unforgettable journey</span>
+    ),
+    imageClass: 'sm:h-[38vh] lg:h-[40vh] md:h-[28vh]',
+    // downloadimg: downloadimg
+ },
 };
 const HeroSection = () => {
   const location = useLocation();

@@ -15,7 +15,7 @@ const UserSideNavbar = () => {
     return (
         <>
             <div className="flex justify-between lg:items-center mt-6 absolute top-0 left-0 right-0 container mx-auto px-8 z-10">
-                <img src={proactive} alt="proactive" className="lg:h-10 h-5" />
+                <img src={proactive} alt="proactive" className="lg:h-10 h-5 lg:flex hidden" />
 
                 <div className="hidden bg-[#FFFFFF]/75 shadow-lg lg:flex items-center px-4 py-2 rounded-full gap-6 cursor-pointer">
                     <Link to="/">
@@ -84,9 +84,13 @@ const UserSideNavbar = () => {
                                         <DropdownMenuItem className="cursor-pointer text-[#332A2A] mt-2">About Us</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <Link to={'/member'}>
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Become a Member</DropdownMenuItem>
+                                    </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <Link to={'/travel-coordinator'}>
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Coordinators</DropdownMenuItem>
+                                    </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Benefits</DropdownMenuItem>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
@@ -105,7 +109,7 @@ const UserSideNavbar = () => {
                 </div>
 
                 <div className="lg:hidden flex">
-                    <Menu color="#000000" />
+                    <Menu color="#ffffff" />
                 </div>
 
             </div>
