@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { RiCheckDoubleLine } from "react-icons/ri";
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown, LogOut, Settings } from "lucide-react";
 import proactive from "../../../assets/proactive-logo.png";
 import Notification from "../../../assets/sidebaricon/notification.png";
 import PayNow from "@/components/Adventureoppurtunities/ViewDetailtrip/PayNow";
@@ -29,23 +29,21 @@ const Navbar = () => {
         <div className="hidden bg-[#FFFFFF] shadow-md lg:flex items-center px-4 py-3 rounded-full gap-6 cursor-pointer">
           <Link to="/user-dashboard">
             <span
-              className={`${
-                location.pathname === "/user-dashboard"
-                  ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
-                  : ""
-              }`}
+              className={`${location.pathname === "/user-dashboard"
+                ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
+                : ""
+                }`}
             >
               Dashboard
             </span>
           </Link>
           <Link to="/user-dashboard/adventure-oppurtunities">
             <span
-              className={`${
-                location.pathname ===
+              className={`${location.pathname ===
                 "/user-dashboard/adventure-oppurtunities"
-                  ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
-                  : ""
-              }`}
+                ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
+                : ""
+                }`}
             >
               Opportunities
             </span>
@@ -66,7 +64,7 @@ const Navbar = () => {
             <DropdownMenuContent className="w-100">
               <div className="px-4 py-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">
+                  <span className="text-lg font-bold bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">
                     Notification
                   </span>
                   <div className="flex items-center gap-1">
@@ -80,21 +78,19 @@ const Navbar = () => {
                 <div className="mt-8 flex items-center gap-4 cursor-pointer">
                   <span
                     onClick={() => setShow(true)}
-                    className={`${
-                      show
-                        ? "border-b-2 mt-1 border-[#000000] font-medium"
-                        : "text-[#606066]"
-                    }`}
+                    className={`${show
+                      ? "border-b-2 mt-1 border-[#000000] font-medium"
+                      : "text-[#606066]"
+                      }`}
                   >
                     All Notification
                   </span>
                   <span
                     onClick={() => setShow(false)}
-                    className={`${
-                      show
-                        ? "text-[#606066]"
-                        : "border-b-2 mt-1 border-[#000000] font-medium"
-                    }`}
+                    className={`${show
+                      ? "text-[#606066]"
+                      : "border-b-2 mt-1 border-[#000000] font-medium"
+                      }`}
                   >
                     Unread
                   </span>
@@ -122,7 +118,7 @@ const Navbar = () => {
                     <Button
                       onClick={(e) => {
                         e.stopPropagation();
-                        setDropdownOpen(false); 
+                        setDropdownOpen(false);
                         setOpen(true);
                       }}
                       className="rounded-full px-6 bg-[#0DAC87] cursor-pointer hover:bg-[#109c7c]"
@@ -132,15 +128,13 @@ const Navbar = () => {
                   </div>
                 </div>
               </div>
-              
+
             </DropdownMenuContent>
           </DropdownMenu>
 
           <div className="flex items-center gap-2 lg:gap-3">
             <Avatar className="w-10 h-10 lg:w-16 lg:h-16">
-              <Link to={'/user-dashboard/user-settings'}>
               <AvatarImage src="https://github.com/shadcn.png" />
-              </Link>
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="hidden lg:flex flex-col">
@@ -148,26 +142,38 @@ const Navbar = () => {
               <span className="text-sm text-gray-500">Pachums@gmail.com</span>
             </div>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild className="cursor-pointer">
+              <DropdownMenuTrigger className="cursor-pointer">
                 <div className="rounded-full hover:bg-gray-100">
                   <ChevronDown color="#A6AAC9" />
                 </div>
               </DropdownMenuTrigger>
+
               <DropdownMenuContent>
-                <DropdownMenuItem className="flex flex-col gap-2 items-start cursor-pointer">
-                  <div className="flex lg:hidden flex-col">
-                    <span className="font-semibold text-sm lg:text-lg">
-                      Pachums
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      Pachums@gmail.com
-                    </span>
-                  </div>
-                  <div className="flex justify-start items-center gap-3">
-                    <LogOut />
-                    Logout
-                  </div>
-                </DropdownMenuItem>
+
+                <div className="lg:hidden flex flex-col px-3 py-2">
+                  <span className="font-semibold text-sm lg:text-lg">Pachums</span>
+                  <span className="text-sm text-gray-500">Pachums@gmail.com</span>
+                </div>
+
+                <div className="flex flex-col">
+                  <DropdownMenuItem asChild>
+                    <div className="inline-flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-md">
+                      <LogOut />
+                      Logout
+                    </div>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link
+                      to="/user-dashboard/user-settings"
+                      className="inline-flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-md cursor-pointer"
+                    >
+                      <Settings />
+                      Setting
+                    </Link>
+                  </DropdownMenuItem>
+                </div>
+
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

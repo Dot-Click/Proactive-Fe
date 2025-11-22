@@ -11,13 +11,16 @@ import lightgreenshadow from "../../../assets/lightgreenshadow.png"
 import About from "../../../assets/About.png"
 import Member from "../../../assets/BecomeMember.png"
 import TravelCoordinatore from "../../../assets/Travelcoordinator.png"
+import advantages from "../../../assets/benefits.png"
+import contact from "../../../assets/Contact.png"
+import faq from "../../../assets/FAQ.png"
 import type { JSX } from "react";
 import type React from "react";
 
 interface HeroContent {
   image: React.ReactNode;
   title: string | JSX.Element;
-  subtitle: string | JSX.Element;
+  subtitle?: string | JSX.Element;
   imageClass: string;
   buttons?: {
     text: string;
@@ -235,13 +238,13 @@ const heroData: Record<string, HeroContent> = {
       [
         {
           text: 'Join Now for €50',
-        className:
-          "lg:mt-4 md:mt-0 mt-40 bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
+          className:
+            "lg:mt-4 md:mt-0 mt-40 bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
         },
       ]
     )
   },
-    "/travel-coordinator": {
+  "/travel-coordinator": {
     image: (
       <>
         <div className="relative">
@@ -262,7 +265,60 @@ const heroData: Record<string, HeroContent> = {
     ),
     imageClass: 'sm:h-[38vh] lg:h-[40vh] md:h-[28vh]',
     // downloadimg: downloadimg
- },
+  },
+  "/advantages": {
+    image: (
+      <>
+        <div className="relative">
+          <img src={advantages} alt="advantages" className="relative" />
+        </div>
+      </>
+    ),
+    title: (
+      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] md:text-7xl text-nowrap lg:mt-50 mt-20">Advantages</h1>
+    ),
+    imageClass: 'sm:h-[38vh] lg:h-[66vh] md:h-[28vh]',
+    downloadimg: downloadimg,
+  },
+  "/contact": {
+    image: (
+      <>
+        <div className="relative">
+          <img src={contact} alt="contact" className="relative" />
+          <img
+            src={lightgreenshadow}
+            alt="lightgreenshadow"
+            className="absolute inset-0 z-0"
+          />
+        </div>
+      </>
+    ),
+    title: (
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-3xl text-nowrap lg:mt-30 md:mt-0 mt-40">Contact</h1>
+    ),
+    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[28vh]',
+    // downloadimg: downloadimg
+  },
+  "/faq": {
+    image: (
+      <>
+        <div className="relative">
+          <img src={faq} alt="faq" className="relative" />
+          <img
+            src={lightgreenshadow}
+            alt="lightgreenshadow"
+            className="absolute inset-0 z-0"
+          />
+        </div>
+      </>
+    ),
+    title: (
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-3xl text-nowrap lg:mt-30 md:mt-0 mt-40">Frequently Asked Questions</h1>
+    ),
+    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[28vh]',
+    // downloadimg: downloadimg
+  },
+
 };
 const HeroSection = () => {
   const location = useLocation();

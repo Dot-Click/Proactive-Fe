@@ -7,7 +7,7 @@ const UserSidelayout = () => {
 
     return (
         <div className="flex flex-col  bg-[#FFFFFF]">
-            <div className="relative">
+            <div className="relative lg:h-[500px] h-[300px]">
                 <UserSideNavbar />
                 <HeroSection/>
             </div>

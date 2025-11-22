@@ -92,11 +92,17 @@ const UserSideNavbar = () => {
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Coordinators</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <Link to={'/advantages'}>
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Benefits</DropdownMenuItem>
+                                    </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <Link to={'/contact'}>
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Contact</DropdownMenuItem>
+                                    </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
+                                    <Link to={'/faq'}>
                                     <DropdownMenuItem className="cursor-pointer text-[#332A2A]">FAQ</DropdownMenuItem>
+                                    </Link>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </span>

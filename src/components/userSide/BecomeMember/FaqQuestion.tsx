@@ -36,37 +36,37 @@ const FaqQuestion = () => {
     return (
         <div className="flex flex-col gap-8 py-4">
 
-{faqs.map((faq, index) => (
-  <div key={index} className="flex flex-col">
-    <div className="flex justify-between items-center gap-40 bg-[#F0F5FD] px-5 py-4 rounded-tl-[20px] rounded-tr-[20px]">
-      <h1 className="text-[#221E33] font-bold text-[12px] lg:text-[16px]">{faq.q}</h1>
+            {faqs.map((faq, index) => (
+                <div key={index} className="flex flex-col">
+                    <div className="flex justify-between items-center gap-40 bg-[#F0F5FD] px-5 py-4 rounded-tl-[20px] rounded-tr-[20px]">
+                        <h1 className="text-[#221E33] font-bold text-[12px] lg:text-[16px]">{faq.q}</h1>
 
-      <div className="bg-white shadow-sm px-4 py-4 rounded-full">
-        {
-          openIndex === index ? (
-            <ImCross
-              size={20}
-              className="cursor-pointer"
-              onClick={() => toggle(index)}
-            />
-          ) : (
-            <FaPlus
-              size={20}
-              className="cursor-pointer"
-              onClick={() => toggle(index)}
-            />
-          )
-        }
-      </div>
-    </div>
+                        <div className="bg-white shadow-sm px-4 py-4 rounded-full">
+                            {
+                                openIndex === index ? (
+                                    <ImCross
+                                        size={20}
+                                        className="cursor-pointer"
+                                        onClick={() => toggle(index)}
+                                    />
+                                ) : (
+                                    <FaPlus
+                                        size={20}
+                                        className="cursor-pointer"
+                                        onClick={() => toggle(index)}
+                                    />
+                                )
+                            }
+                        </div>
+                    </div>
 
-    {openIndex === index && (
-      <div className="bg-white shadow-sm px-5 py-8 rounded-bl-[20px] rounded-br-[20px] transition duration-300">
-        <p className="md:w-[700px]">{faq.a}</p>
-      </div>
-    )}
-  </div>
-))}
+                    {openIndex === index && (
+                        <div className="bg-white shadow-sm px-5 py-8 rounded-bl-[20px] rounded-br-[20px] transition duration-300">
+                            <p className="md:w-[700px]">{faq.a}</p>
+                        </div>
+                    )}
+                </div>
+            ))}
 
             {/* <div className="flex flex-col">
                 <div className="flex justify-between items-center gap-40 bg-[#F0F5FD] px-5 py-4 rounded-tl-[20px] rounded-tr-[20px]">

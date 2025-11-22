@@ -6,7 +6,7 @@ import Ourjourney from "@/components/userSide/About/Ourjourney/Ourjourney"
 import OurMission from "@/components/userSide/About/OurMission/OurMission"
 import OurValues from "@/components/userSide/About/OurValues/OurValues"
 import Part from "@/components/userSide/About/Part/Part"
-import OpenOppurtunities from "@/components/userSide/WildWeekend/OpenOppurtunities/OpenOppurtunities"
+import JoinOurStory from "@/components/userSide/Benefits/JoinOurStory"
 
 const AboutPage = () => {
   return (
@@ -19,7 +19,7 @@ const AboutPage = () => {
         <Part/>
         <OurCollaboration/>
         <Ourjourney/>
-        <OpenOppurtunities/>
+        <JoinOurStory/>
     </div>
   )
 }

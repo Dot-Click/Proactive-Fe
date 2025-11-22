@@ -6,7 +6,7 @@ import Fellowexplorer3 from "../../../assets/Fellowexplorer3.png"
 import Fellowexplorer4 from "../../../assets/Fellowexplorer4.png"
 const FellowExplorer = () => {
     return (
-        <div className="flex lg:flex-row flex-col justify-center lg:items-start items-center lg:mt-30 lg:py-20 md:py-0 py-40 gap-12">
+        <div className="flex lg:flex-row flex-col justify-center lg:items-start items-center md:py-0 py-40 gap-12">
             <div className="relative">
                 <img src={FellowExplorerImg} alt="FellowExplorerImg" className="lg:h-165 h-100" />
             </div>

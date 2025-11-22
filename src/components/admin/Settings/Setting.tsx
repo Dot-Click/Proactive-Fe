@@ -3,11 +3,12 @@ import General from "./General";
 import Trips from "./Trips";
 import Notification from "./Notification";
 import Security from "./Security";
+import AddFAQ from "./AddFAQ";
 
 const Setting = () => {
   const [activeTab, setActiveTab] = useState("General");
 
-  const tabs = ["General", "Trips", "Notifications", "Security & Data"];
+  const tabs = ["General", "Trips", "Notifications", "Security & Data", "Add FAQ"];
 
   return (
     <>
@@ -31,6 +32,7 @@ const Setting = () => {
       {activeTab === 'Trips' && <Trips />}
       {activeTab === 'Notifications' && <Notification />}
       {activeTab === 'Security & Data' && <Security />}
+      {activeTab === 'Add FAQ' && <AddFAQ />}
     </>
   );
 }

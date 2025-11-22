@@ -36,6 +36,9 @@ import InternaleventsPage from "./pages/userSide/Internalevents.page";
 import AboutPage from "./pages/userSide/About.page";
 import BecomeMemberPage from "./pages/userSide/BecomeMember.page";
 import TravelCoordinatorPage from "./pages/userSide/TravelCoordinator.page";
+import BenefitPage from "./pages/userSide/Benefit.page";
+import ContactPage from "./pages/userSide/Contact.page";
+import FaqPage from "./pages/userSide/Faq.page";
 
 
 
@@ -88,9 +91,13 @@ function App() {
           <Route path="/about" element={<AboutPage/>} />
           <Route path="/member" element={<BecomeMemberPage/>} />
           <Route path="/travel-coordinator" element={<TravelCoordinatorPage/>} />
+          <Route path="/advantages" element={<BenefitPage/>} />
+          <Route path="/contact" element={<ContactPage/>} />
+          <Route path="/faq" element={<FaqPage/>} />
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
+
 export default App;
