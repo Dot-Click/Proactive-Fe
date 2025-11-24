@@ -35,7 +35,7 @@ const AdminLayout = () => {
     <>
       <div className="flex w-full py-8">
         <SidebarNav collapsed={collapsed} setCollapsed={setCollapsed} items={AdminItems} Url='/dashboard'/>
-        <Navbar collapsed={collapsed} />
+        <Navbar collapsed={collapsed} role="admin"/>
         <main
           className={`w-full min-w-0 px-4 transition-all duration-300 mt-16 md:mt-14 lg:mt-16 ${collapsed ? "md:-ml-40" : ""}`}
         >

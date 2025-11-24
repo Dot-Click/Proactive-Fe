@@ -3,7 +3,7 @@ import Howdo from "../../../../assets/Howdo.png"
 import when from "../../../../assets/When.png"
 const WildWeekendCard = () => {
     return (
-<div className="flex lg:flex-row flex-col justify-center items-center gap-6 py-6 lg:mb-10 mt-30 md:mt-0">
+        <div className="flex lg:flex-row flex-col justify-center items-center gap-6 py-6 lg:mb-30 lg:-mt-10 md:mt-20 mb-20 -mt-10">
             <div className="relative">
                 <img src={What} alt="What" className="lg:h-65 h-50" />
                 <div className="flex flex-col lg:gap-6 gap-2 absolute inset-0 px-4 lg:py-12 py-6">

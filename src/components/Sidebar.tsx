@@ -75,33 +75,31 @@ export function SidebarNav({ collapsed, setCollapsed, items, Url }: Urlprops) {
               Menu
             </SidebarGroupLabel>
             {items.map(({ label, href, Icon }) => (
-              <SidebarGroupContent key={label}>
+              <SidebarGroupContent key={href}>
                 <SidebarMenu>
-                  <SidebarMenuItem key={label}>
+                  <SidebarMenuItem key={href}>
                     <SidebarMenuButton
                       onClick={() => setActiveItem(label)}
                       asChild
-                      className={`px-6 py-5 flex items-center w-full text-[#A19EAE] rounded-none ${activeItem === label && "bg-black text-[white] font-semibold hover:bg-black hover:text-[white]"}`}
+                      className={`px-6 py-5 flex items-center w-full text-[#A19EAE] rounded-none ${activeItem === label && "bg-black text-[white] font-semibold"
+                        }`}
                     >
                       <Link to={href} className="flex items-center gap-3 w-full">
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <img
-                                src={Icon}
-                                alt={`${label} icon`}
-                                className={`${Icon === 'oppurtunityManagement' ? 'w-2 h-3' : 'w-4 h-4'} transition ${activeItem === label ? "brightness-0 invert" : "invert-[0.6]"
-                                  }`}
-                              />
-                            </TooltipTrigger>
-                            {collapsed && (
+                        {!collapsed && <img src={Icon} className="w-4 h-4" />}
+                        {!collapsed && <span>{label}</span>}
+
+                        {collapsed && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <img src={Icon} className="w-4 h-4" />
+                              </TooltipTrigger>
                               <TooltipContent side="right">
                                 <span>{label}</span>
                               </TooltipContent>
-                            )}
-                          </Tooltip>
-                        </TooltipProvider>
-                        {!collapsed && <span>{label}</span>}
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -110,6 +108,7 @@ export function SidebarNav({ collapsed, setCollapsed, items, Url }: Urlprops) {
             ))}
           </SidebarGroup>
         </SidebarContent>
+        
       </Sidebar>
 
 

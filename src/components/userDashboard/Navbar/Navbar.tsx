@@ -15,15 +15,24 @@ import { ChevronDown, LogOut, Settings } from "lucide-react";
 import proactive from "../../../assets/proactive-logo.png";
 import Notification from "../../../assets/sidebaricon/notification.png";
 import PayNow from "@/components/Adventureoppurtunities/ViewDetailtrip/PayNow";
+import { UserDashboardDrawerItems } from "@/components/DrawerItems";
+import DrawerBar from "@/components/Drawer";
 
-const Navbar = () => {
+interface NavbarProps {
+  role: string
+}
+const Navbar = ({ role }: NavbarProps) => {
+  const DrawerItems = role === "user-dashboard"
+    ? UserDashboardDrawerItems
+    : [];
+
   const location = useLocation();
   const [show, setShow] = useState(true);
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   return (
     <>
-      <div className="flex lg:justify-between lg:items-center justify-center mt-6">
+      <div className="flex lg:justify-between lg:items-center justify-center items-center gap-6 mt-6">
         <img src={proactive} alt="proactive" className="h-10 hidden lg:flex" />
 
         <div className="hidden bg-[#FFFFFF] shadow-md lg:flex items-center px-4 py-3 rounded-full gap-6 cursor-pointer">
@@ -177,12 +186,17 @@ const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+
         </div>
+
+
+        <DrawerBar items={DrawerItems} />
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <PayNow />
       </Dialog>
+
     </>
   );
 };

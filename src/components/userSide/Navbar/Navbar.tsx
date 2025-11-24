@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import proactive from "../../../assets/proactive-logo.png";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Menu } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -9,9 +9,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import DrawerBar from "@/components/Drawer";
+import { UserSideDrawerItems } from "@/components/DrawerItems";
 
-const UserSideNavbar = () => {
-    const navigate = useNavigate()
+const UserSideNavbar = ({ role }: { role: string }) => {
+  const DrawerItems = role === "UserSide" 
+    ? UserSideDrawerItems 
+    : [];
+const navigate = useNavigate()
     return (
         <>
             <div className="flex justify-between lg:items-center mt-6 absolute top-0 left-0 right-0 container mx-auto px-8 z-10">
@@ -85,23 +90,23 @@ const UserSideNavbar = () => {
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/member'}>
-                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Become a Member</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Become a Member</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/travel-coordinator'}>
-                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Coordinators</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Coordinators</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/advantages'}>
-                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Benefits</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Benefits</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/contact'}>
-                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Contact</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Contact</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/faq'}>
-                                    <DropdownMenuItem className="cursor-pointer text-[#332A2A]">FAQ</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">FAQ</DropdownMenuItem>
                                     </Link>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -115,7 +120,7 @@ const UserSideNavbar = () => {
                 </div>
 
                 <div className="lg:hidden flex">
-                    <Menu color="#ffffff" />
+                    <DrawerBar items={DrawerItems} />
                 </div>
 
             </div>

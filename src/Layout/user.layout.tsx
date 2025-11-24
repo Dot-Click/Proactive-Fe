@@ -6,7 +6,7 @@ const Userlayout = () => {
     return (
         <div className="flex flex-col justify-between bg-[#FFFFFF]">
             <div className="container mx-auto px-8">
-                <Navbar />
+                <Navbar role="user-dashboard"/>
             </div>
             <Outlet/>
             <Footer />

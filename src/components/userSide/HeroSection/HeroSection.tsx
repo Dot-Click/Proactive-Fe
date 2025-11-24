@@ -29,26 +29,29 @@ interface HeroContent {
   downloadimg?: string;
   CTA?: string | JSX.Element;
 }
-
 const heroData: Record<string, HeroContent> = {
   "/": {
-    image: <img src={carousel} alt="carousel" />,
+    image: (
+      <div className="bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
+        <img src={carousel} alt="carousel" />
+      </div>
+    ),
     title: (
       <div className="flex flex-wrap justify-center items-center md:mt-30 mt-70">
         <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap md:mt-12 ">
           Your Next
         </span>
         <div className="flex items-center justify-center">
-          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke-1 text-transparent bg-clip-text bg-linear-to-b from-[#F7ECBE] to-[#F7ECBE]">
+          <span className="text-[14px] lg:text-8xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
             ADV
           </span>
-          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke md:-translate-y-2">
+          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke lg:mb-8">
             E
           </span>
-          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke md:-translate-y-2">
+          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke lg:mt-4">
             N
           </span>
-          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke-1 text-transparent bg-clip-text bg-linear-to-b from-[#F7ECBE] to-[#F7ECBE]">
+          <span className="text-[14px] lg:text-8xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
             TURE
           </span>
         </div>
@@ -118,12 +121,12 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] md:text-6xl text-nowrap lg:mt-12 md:mt-0 mt-40 ">Wild Weekend</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40 ">Wild Weekend</h1>
     ),
     subtitle: (
       <span className="text-[10px] md:text-[16px]">Your escape into nature, connection, and unforgettable memories</span>
     ),
-    imageClass: "sm:h-[60vh] lg:h-[60vh]",
+    imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
   },
 
   "/wild-trip": {
@@ -140,12 +143,12 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] md:text-6xl text-nowrap lg:mt-12 md:mt-0 mt-40 ">Wild Trip</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40 ">Wild Trip</h1>
     ),
     subtitle: (
       <span>From deserts to glaciers – trips that change your perspective.</span>
     ),
-    imageClass: "sm:h-[60vh] lg:h-[60vh] "
+    imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]"
   },
   "/erasmus-plus": {
     image: (
@@ -161,12 +164,12 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] md:text-6xl text-nowrap lg:mt-12 md:mt-0 mt-40 ">Erasmus +</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40 ">Erasmus +</h1>
     ),
     subtitle: (
       <span>Discover, connect, and learn with Erasmus+ journeys.</span>
     ),
-    imageClass: 'sm:h-[60vh] lg:h-[60vh]',
+    imageClass: 'sm:h-[60vh] lg:h-[60vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
   "/internal-events": {
@@ -183,12 +186,12 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] md:text-7xl text-nowrap lg:mt-12 md:mt-0 mt-40 ">Internal events</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40 ">Internal events</h1>
     ),
     subtitle: (
       <span>Building connections, sharing moments, growing together.</span>
     ),
-    imageClass: 'sm:h-[60vh] lg:h-[60vh]',
+    imageClass: 'sm:h-[60vh] lg:h-[60vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
   "/about": {
@@ -205,12 +208,12 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-3xl text-nowrap lg:mt-12 md:mt-0 mt-40 ">About US</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40 ">About US</h1>
     ),
     subtitle: (
       <span className="text-[12px] lg:text-xl">Discover extraordinary experiences, <br className="lg:flex hidden" /> connect with fellow adventurers, and create memories that last a lifetime with Proactive Future.</span>
     ),
-    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[28vh]',
+    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
   "/member": {
@@ -227,12 +230,12 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-12 md:mt-0 mt-40">Become a Member</h1>
+      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40">Become a Member</h1>
     ),
     subtitle: (
       <span className="text-[12px] md:flex hidden">Unlock exclusive benefits and join our travel community of adventurous souls exploring the world together.</span>
     ),
-    imageClass: 'sm:h-[38vh] lg:h-[60vh] md:h-[28vh]',
+    imageClass: 'sm:h-[38vh] lg:h-[60vh] md:h-[20vh]',
     // downloadimg: downloadimg
     buttons: (
       [
@@ -263,7 +266,7 @@ const heroData: Record<string, HeroContent> = {
     subtitle: (
       <span className="text-[16px] md:flex hidden">The passionate travelers who turn every trip into an unforgettable journey</span>
     ),
-    imageClass: 'sm:h-[38vh] lg:h-[40vh] md:h-[28vh]',
+    imageClass: 'sm:h-[38vh] lg:h-[40vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
   "/advantages": {

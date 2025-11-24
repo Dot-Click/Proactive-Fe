@@ -7,9 +7,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { useLocation } from "react-router-dom"
 import { useIsMobile } from "../hooks/use-mobile"
 import DrawerBar from "./Drawer"
+import { AdminDrawerItems, CoordinatorDrawerItems } from "./DrawerItems"
 
 interface NavbarProps {
   collapsed: boolean;
+  role: string
 }
 
 const SubHeading = [
@@ -82,7 +84,10 @@ const SubHeading = [
   }
 ]
 
-const Navbar = ({ collapsed }: NavbarProps) => {
+const Navbar = ({ collapsed, role }: NavbarProps) => {
+  const DrawerItems = role === "coordinator" 
+    ? CoordinatorDrawerItems 
+    : AdminDrawerItems;
   const location = useLocation();
   const isMobile = useIsMobile();
   let NavHeading = location.pathname.split("/")[2]?.split("-").join(" ");
@@ -182,7 +187,7 @@ const Navbar = ({ collapsed }: NavbarProps) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <DrawerBar />
+          <DrawerBar items={DrawerItems} />
         </div>
 
       </div >

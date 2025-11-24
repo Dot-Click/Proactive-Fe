@@ -32,7 +32,7 @@ const OurCollabrationCard = () => {
                 </div>
                 <img src={collabration1} alt="collabration1" className="lg:h-100 h-50" />
                 <div
-                    className="lg:flex hidden absolute left-250 top-320 -translate-y-1/2 -translate-x-1/3 w-60 h-80 bg-[radial-gradient(circle_at_50%_50%,#76F0D4,rgba(250,250,250,0.05))] rounded-full blur-3xl opacity-30">
+                    className="lg:flex hidden absolute left-280 top-360 -translate-y-1/2 -translate-x-1/3 w-60 h-80 bg-[radial-gradient(circle_at_50%_50%,#76F0D4,rgba(250,250,250,0.05))] rounded-full blur-3xl opacity-30">
                 </div>
             </div>
 

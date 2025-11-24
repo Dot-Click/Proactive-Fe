@@ -15,7 +15,7 @@ interface SearchbarProps {
 
 const Searchbar = ({ view, setView }: SearchbarProps) => {
     return (
-        <div className="bg-[#FAFAFA] px-4 sm:px-16 py-6 mt-6">
+        <div className="bg-[#FAFAFA] px-4 sm:px-16 py-6 ">
             <div className="flex lg:flex-row flex-col items-center gap-4">
                 <div className="relative">
                     <Search color="#666373" size={20} className="absolute left-4 top-1/2 -translate-y-1/2" />

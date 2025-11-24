@@ -11,7 +11,7 @@ import Achievement from "@/assets/sidebaricon/Achievement.png";
 import CoordinatorChat from "@/assets/sidebaricon/coordinatormsg.png";
 import CoordinatorSettings from "@/assets/sidebaricon/settings.png";
 
-const AdminItems = [
+const CoordinaItems = [
   { label: "Dashboard", href: "/coordinator-dashboard", Icon: Dashboard },
   { label: "Opportunity Management", href: "/coordinator-dashboard/oppurtunities-management", Icon: oppurtunityManagement },
   { label: "Applicants Review", href: "/coordinator-dashboard/applicants-review", Icon: Applicants },
@@ -32,8 +32,8 @@ const CoordinatorLayout = () => {
   return (
     <>
       <div className="flex w-full py-8">
-        <SidebarNav collapsed={collapsed} setCollapsed={setCollapsed} items={AdminItems} Url='/coordinator-dashboard' />
-        <Navbar collapsed={collapsed} />
+        <SidebarNav collapsed={collapsed} setCollapsed={setCollapsed} items={CoordinaItems} Url='/coordinator-dashboard' />
+        <Navbar collapsed={collapsed} role="coordinator"/>
         <main
           className={`w-full min-w-0 px-4 transition-all duration-300 mt-16 md:mt-22 lg:mt-16 ${collapsed ? "md:-ml-40" : ""}`}
         >
