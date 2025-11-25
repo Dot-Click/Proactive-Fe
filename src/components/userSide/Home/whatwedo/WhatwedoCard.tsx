@@ -8,9 +8,9 @@ const WhatwedoCard = () => {
     return (
         <div className="flex lg:flex-row flex-col gap-6">
             <div className="relative">
-                <img src={Whatwedo1} alt="Whatwedo1" className="h-70 w-50" />
+                <img src={Whatwedo1} alt="Whatwedo1" className="h-70 w-54" />
                 <div className="absolute inset-0 top-2 left-2 right-2">
-                    <img src={Whatwedo3} alt="Whatwedo3" className="" />
+                    <img src={Whatwedo6} alt="Whatwedo6" className="w-50 h-27" />
                 </div>
                 <div className="flex flex-col gap-3 absolute inset-0 top-35 left-2 right-2">
                     <h4 className="font-bold">Wild Weekends</h4>
@@ -36,9 +36,9 @@ const WhatwedoCard = () => {
                 </div>
             </div>
             <div className="relative">
-                <img src={Whatwedo2} alt="Whatwedo2" className="h-70 w-50" />
+                <img src={Whatwedo2} alt="Whatwedo2" className="h-70 w-54" />
                 <div className="absolute inset-0 top-2 left-2 right-2">
-                    <img src={Whatwedo6} alt="Whatwedo6" className="" />
+                    <img src={Whatwedo3} alt="Whatwedo3" className="w-50 h-27" />
                 </div>
                 <div className="flex flex-col gap-3 absolute inset-0 top-32 left-2 right-2">
                     <h4 className="font-bold">Coordinator <br /> Courses & Events</h4>

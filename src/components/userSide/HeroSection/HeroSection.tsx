@@ -38,24 +38,24 @@ const heroData: Record<string, HeroContent> = {
     ),
     title: (
       <div className="flex flex-wrap justify-center items-center md:mt-30 mt-70">
-        <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap md:mt-12 ">
+        <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap lg:mt-12 ">
           Your Next
         </span>
         <div className="flex items-center justify-center">
-          <span className="text-[14px] lg:text-8xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
+          <span className="text-[14px] lg:text-8xl md:text-4xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
             ADV
           </span>
-          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke lg:mb-8">
+          <span className="text-[14px] lg:text-8xl md:text-4xl font-extrabold text-stroke md:mb-8">
             E
           </span>
-          <span className="text-[14px] lg:text-8xl font-extrabold text-stroke lg:mt-4">
+          <span className="text-[14px] lg:text-8xl md:text-4xl font-extrabold text-stroke md:mt-4">
             N
           </span>
-          <span className="text-[14px] lg:text-8xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
+          <span className="text-[14px] lg:text-8xl md:text-4xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
             TURE
           </span>
         </div>
-        <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap md:mt-12">
+        <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap lg:mt-12">
           Awaits
         </span>
       </div>
@@ -67,7 +67,7 @@ const heroData: Record<string, HeroContent> = {
         lifetime with Proactive Future.
       </span>
     ),
-    imageClass: "sm:h-[70vh] lg:h-[100vh]",
+    imageClass: "sm:h-[70vh] lg:h-[100vh] md:h-[30vh]",
     buttons: [
       {
         text: "Join the Adventure",
@@ -97,14 +97,14 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] md:text-6xl text-nowrap md:mt-12 mt-40">Open Opportunities</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40">Open Opportunities</h1>
     ),
     subtitle: (
       <span className="text-[10px] md:text-[16px]">
         Discover amazing destinations and join our community of adventurers
       </span>
     ),
-    imageClass: "sm:h-[60vh] lg:h-[60vh]",
+    imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
   },
 
   "/wild-weekend": {
@@ -121,7 +121,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40 ">Wild Weekend</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40">Wild Weekend</h1>
     ),
     subtitle: (
       <span className="text-[10px] md:text-[16px]">Your escape into nature, connection, and unforgettable memories</span>
@@ -297,9 +297,9 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-3xl text-nowrap lg:mt-30 md:mt-0 mt-40">Contact</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-40">Contact</h1>
     ),
-    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[28vh]',
+    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
   "/faq": {
@@ -316,9 +316,9 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-3xl text-nowrap lg:mt-30 md:mt-0 mt-40">Frequently Asked Questions</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-40">Frequently Asked Questions</h1>
     ),
-    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[28vh]',
+    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
 
@@ -332,13 +332,6 @@ const HeroSection = () => {
 
   return (
     <div key={path} className={`relative w-full ${hero.imageClass}`}>
-
-      {/* Background Image */}
-      {/* <img
-        src={hero.image as string}
-        alt="hero"
-        className="w-full object-cover absolute inset-0 z-0"
-      /> */}
       <div className="w-full object-cover absolute inset-0 z-0">
         {hero.image}
       </div>

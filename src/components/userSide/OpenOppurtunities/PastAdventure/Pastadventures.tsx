@@ -17,8 +17,8 @@ const Pastadventures = () => {
                 <h4 className="bg-linear-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold text-4xl">Past Adventures</h4>
                 <span className="text-[#221E33] text-sm text-center">Explore our completed adventures and see the amazing experiences we've created</span>
             </div>
-            <div className="grid lg:grid-cols-4 gap-4 py-12">
-                <div className="relative flex justify-center">
+            <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 py-12">
+                <div className="relative flex justify-center items-center">
                     <img src={Pastadventure1} alt="Pastadventure1" className="w-100 h-100 rounded-[14px]" />
                     <div className="absolute inset-0 bg-linear-to-b from-[#000000]/5 to-[#000000]/70 mix-blend-multiply rounded-[14px]"></div>
 

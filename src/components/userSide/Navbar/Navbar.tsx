@@ -19,7 +19,7 @@ const UserSideNavbar = ({ role }: { role: string }) => {
 const navigate = useNavigate()
     return (
         <>
-            <div className="flex justify-between lg:items-center mt-6 absolute top-0 left-0 right-0 container mx-auto px-8 z-10">
+            <div className="flex justify-between items-center gap-8 px-6 mt-6 absolute top-0 left-0 right-0 container mx-auto z-10">
                 <img src={proactive} alt="proactive" className="lg:h-10 h-5 lg:flex hidden" />
 
                 <div className="hidden bg-[#FFFFFF]/75 shadow-lg lg:flex items-center px-4 py-2 rounded-full gap-6 cursor-pointer">
@@ -35,9 +35,9 @@ const navigate = useNavigate()
                     </Link>
                     <Link to="/open-oppurtunities">
                         <span
-                            className={`${location.pathname ===
+                            className={`text-nowrap ${location.pathname ===
                                 "/open-oppurtunities"
-                                ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
+                                ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold text-nowrap"
                                 : ""
                                 }`}
                         >
@@ -49,7 +49,7 @@ const navigate = useNavigate()
                         <span className="flex items-center gap-1">
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="cursor-pointer">
-                                    <div className="flex gap-1 items-center">
+                                    <div className="flex gap-1 items-center text-nowrap">
                                         What We Do
                                         <ChevronDown className='w-4 h-4' />
                                     </div>

@@ -34,7 +34,7 @@ const Login = () => {
 const navigate = useNavigate()
     return (
         <div
-            className="relative min-h-screen w-screen bg-cover bg-center"
+            className="relative min-h-screen w-screen bg-cover"
             style={{ backgroundImage: `url(${login})` }}
         >
             <div
@@ -55,7 +55,7 @@ const navigate = useNavigate()
                         </div>
 
                         <div className="flex flex-col justify-center items-center">
-                            <h1 className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text text-3xl font-bold px-8">
+                            <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text text-3xl font-bold px-8">
                                 Welcome Back
                             </h1>
                             <p className="text-[#221E33] text-[14px] mt-2">
@@ -170,19 +170,19 @@ const navigate = useNavigate()
                         <span className="text-[#FFFFFF] lg:text-[18px] lg:tracking-tighter">Join thousands of adventurers exploring the world's <br /> most incredible destinations</span>
                     </div>
                     <div className="grid lg:grid-cols-3 mt-8 lg:gap-2 gap-3">
-                        <div className="bg-gradient-to-b from-[#000000]/63 to-[#00000000]/0 px-14 py-4 border border-[#FFFFFF]/20 rounded-lg">
+                        <div className="bg-linear-to-b from-[#000000]/63 to-[#00000000]/0 px-14 py-4 border border-[#FFFFFF]/20 rounded-lg">
                             <div className="flex flex-col text-center">
                                 <span className="text-4xl text-white font-bold">150+</span>
                                 <span className="text-md text-white">Adventures</span>
                             </div>
                         </div>
-                        <div className="bg-gradient-to-b from-[#000000]/63 to-[#00000000]/0  py-4 border border-[#FFFFFF]/20 rounded-lg">
+                        <div className="bg-linear-to-b from-[#000000]/63 to-[#00000000]/0  py-4 border border-[#FFFFFF]/20 rounded-lg">
                             <div className="flex flex-col text-center">
                                 <span className="text-4xl text-white font-bold">2500+</span>
                                 <span className="text-md text-white">Members</span>
                             </div>
                         </div>
-                        <div className="bg-gradient-to-b from-[#000000]/63 to-[#00000000]/0 py-4 border border-[#FFFFFF]/20 rounded-lg">
+                        <div className="bg-linear-to-b from-[#000000]/63 to-[#00000000]/0 py-4 border border-[#FFFFFF]/20 rounded-lg">
                             <div className="flex flex-col text-center">
                                 <span className="text-4xl text-white font-bold">50+</span>
                                 <span className="text-md text-white">Countries Visited</span>

@@ -8,7 +8,7 @@ const LeadAdventure = () => {
             <img
                 src={leadadventurebg}
                 alt="leadadventurebg"
-                className="relative w-full object-cover lg:h-100 md:h-80"
+                className="relative w-full object-cover lg:h-100 h-80"
             />
             <img src={leadadventurebgcolor} alt="leadadventurebgcolor" className="absolute inset-0 opacity-50 lg:h-100 h-50"/>
             <div className="flex flex-col justify-center gap-6 absolute inset-0 px-4">

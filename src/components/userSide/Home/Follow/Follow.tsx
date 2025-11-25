@@ -14,7 +14,7 @@ const Follow = () => {
           <img
             src={box1}
             alt="box1"
-            className="w-26 h-28 absolute bottom-12 left-28 opacity-50 lg:flex hiddenz-5"
+            className="w-26 h-28 absolute bottom-12 left-28 opacity-50 lg:flex hidden z-5"
           />
           <p className="text-center text-[#221E33] font-medium">Get inspired by real adventures from our community. Follow @proactivefuture for daily <br className="lg:block hidden" /> doses of wanderlust!</p>        
         </div>

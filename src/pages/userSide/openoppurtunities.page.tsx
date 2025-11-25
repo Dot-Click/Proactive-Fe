@@ -9,7 +9,7 @@ const OpenOppurtunitiesPage = () => {
   const [view, setView] = useState("list")
   return (
     <div>
-      <div className="lg:pt-0">
+      <div className="lg:pt-0 md:pt-20">
       <Searchbar view={view} setView={setView} />
       </div>
       <Tabs />

@@ -4,7 +4,7 @@ import TravellingIcon from "../../../assets/Travellingicon.png"
 const TravellingWithUs = () => {
     return (
         <div className="relative">
-            <img src={Travellingbg} alt="Travellingbg" className="h-150 lg:h-140 object-cover"/>
+            <img src={Travellingbg} alt="Travellingbg" className="h-130 lg:h-140 object-cover"/>
             <div className="flex flex-col justify-center items-center gap-8 absolute inset-0">
                 <img src={TravellingIcon} alt="TravellingIcon" className="h-12" />
                 <h1 className="bg-linear-to-r from-[#F7ECBE] to-[#F7ECBE]/96  text-transparent bg-clip-text font-bold md:text-4xl">Already Traveling With Us?</h1>
