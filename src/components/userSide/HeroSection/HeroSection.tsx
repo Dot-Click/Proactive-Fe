@@ -67,7 +67,7 @@ const heroData: Record<string, HeroContent> = {
         lifetime with Proactive Future.
       </span>
     ),
-    imageClass: "sm:h-[70vh] lg:h-[100vh] md:h-[30vh]",
+    imageClass: "sm:h-[70vh] lg:h-[100vh] md:h-[30vh] h-[50vh]",
     buttons: [
       {
         text: "Join the Adventure",
@@ -340,7 +340,7 @@ const HeroSection = () => {
         <h1 className="text-xl md:text-4xl font-bold">{hero.title}</h1>
         <p className="text-xs md:text-lg lg:mt-4">{hero.subtitle}</p>
         {hero.buttons && (
-          <div className="flex md:flex-row gap-4 md:mt-4 mt-2">
+          <div className="flex md:flex-row flex-col gap-4 md:mt-4 mt-2">
             {hero.buttons.map((button, index) => (
               <button key={index} className={button.className}>
                 {button.text}
