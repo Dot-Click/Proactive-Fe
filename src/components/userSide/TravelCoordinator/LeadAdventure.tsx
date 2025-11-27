@@ -10,7 +10,7 @@ const LeadAdventure = () => {
                 alt="leadadventurebg"
                 className="relative w-full object-cover lg:h-100 h-80"
             />
-            <img src={leadadventurebgcolor} alt="leadadventurebgcolor" className="absolute inset-0 opacity-50 lg:h-100 h-50"/>
+            <img src={leadadventurebgcolor} alt="leadadventurebgcolor" className="absolute inset-0 opacity-50 lg:h-100 md:h-80 h-80"/>
             <div className="flex flex-col justify-center gap-6 absolute inset-0 px-4">
                 <h1 className="text-center text-[#F7EBBE] lg:text-4xl md:text-3xl sm:text-2xl font-bold">
                     Ready to Lead Adventures?

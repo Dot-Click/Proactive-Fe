@@ -37,7 +37,7 @@ const heroData: Record<string, HeroContent> = {
       </div>
     ),
     title: (
-      <div className="flex flex-wrap justify-center items-center md:mt-30 mt-70">
+      <div className="flex flex-wrap justify-center items-center md:mt-30 mt-60">
         <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap lg:mt-12 ">
           Your Next
         </span>
@@ -67,7 +67,7 @@ const heroData: Record<string, HeroContent> = {
         lifetime with Proactive Future.
       </span>
     ),
-    imageClass: "sm:h-[70vh] lg:h-[100vh] md:h-[30vh] h-[50vh]",
+    imageClass: "sm:h-[70vh] lg:h-[100vh] md:h-[30vh]",
     buttons: [
       {
         text: "Join the Adventure",
@@ -97,7 +97,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40">Open Opportunities</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">Open Opportunities</h1>
     ),
     subtitle: (
       <span className="text-[10px] md:text-[16px]">
@@ -121,7 +121,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40">Wild Weekend</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">Wild Weekend</h1>
     ),
     subtitle: (
       <span className="text-[10px] md:text-[16px]">Your escape into nature, connection, and unforgettable memories</span>
@@ -143,7 +143,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40 ">Wild Trip</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30 ">Wild Trip</h1>
     ),
     subtitle: (
       <span>From deserts to glaciers – trips that change your perspective.</span>
@@ -164,7 +164,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40 ">Erasmus +</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">Erasmus +</h1>
     ),
     subtitle: (
       <span>Discover, connect, and learn with Erasmus+ journeys.</span>
@@ -186,7 +186,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40 ">Internal events</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">Internal events</h1>
     ),
     subtitle: (
       <span>Building connections, sharing moments, growing together.</span>
@@ -208,10 +208,10 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40 ">About US</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">About US</h1>
     ),
     subtitle: (
-      <span className="text-[12px] lg:text-xl">Discover extraordinary experiences, <br className="lg:flex hidden" /> connect with fellow adventurers, and create memories that last a lifetime with Proactive Future.</span>
+      <span className="text-[10px] lg:text-xl">Discover extraordinary experiences, <br className="lg:flex hidden" /> connect with fellow adventurers, and create memories that last a lifetime with Proactive Future.</span>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
     // downloadimg: downloadimg
@@ -230,7 +230,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-40">Become a Member</h1>
+      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-10">Become a Member</h1>
     ),
     subtitle: (
       <span className="text-[12px] md:flex hidden">Unlock exclusive benefits and join our travel community of adventurous souls exploring the world together.</span>
@@ -242,7 +242,7 @@ const heroData: Record<string, HeroContent> = {
         {
           text: 'Join Now for €50',
           className:
-            "lg:mt-4 md:mt-0 mt-40 bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
+            "lg:mt-4 md:mt-0 mt-30 bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
         },
       ]
     )
@@ -261,10 +261,10 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-30 md:mt-0 mt-40">Our Travel Coordinators</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-30 md:mt-0 mt-30">Our Travel Coordinators</h1>
     ),
     subtitle: (
-      <span className="text-[16px] md:flex hidden">The passionate travelers who turn every trip into an unforgettable journey</span>
+      <span className="lg:text-[16px] text-[10px]">The passionate travelers who turn every trip into an unforgettable journey</span>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[40vh] md:h-[20vh]',
     // downloadimg: downloadimg
@@ -278,7 +278,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] md:text-7xl text-nowrap lg:mt-50 mt-20">Advantages</h1>
+      <h1 className=" bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] md:text-7xl text-nowrap lg:mt-50 mt-50">Advantages</h1>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[66vh] md:h-[28vh]',
     downloadimg: downloadimg,
@@ -297,7 +297,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-40">Contact</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-40">Contact</h1>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
     // downloadimg: downloadimg
@@ -316,7 +316,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-40">Frequently Asked Questions</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">Frequently Asked Questions</h1>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
     // downloadimg: downloadimg
@@ -340,7 +340,7 @@ const HeroSection = () => {
         <h1 className="text-xl md:text-4xl font-bold">{hero.title}</h1>
         <p className="text-xs md:text-lg lg:mt-4">{hero.subtitle}</p>
         {hero.buttons && (
-          <div className="flex md:flex-row flex-col gap-4 md:mt-4 mt-2">
+          <div className="flex md:flex-row gap-4 md:mt-4 mt-2">
             {hero.buttons.map((button, index) => (
               <button key={index} className={button.className}>
                 {button.text}

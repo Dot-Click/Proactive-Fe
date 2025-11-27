@@ -5,11 +5,11 @@ import OurCollabrationCard from "./OurCollabrationCard"
 const OurCollaboration = () => {
     return (
         <>
-        <div className="flex justify-center items-start pt-10 mr-100">
-        <img src={advantsges} alt="advantsges" className="h-25 lg:flex hidden"/>
+        <div className="flex justify-center items-start pt-10 ">
+        <img src={advantsges} alt="advantsges" className="mr-100 h-25 lg:flex hidden"/>
         </div>
-        <div className="md:py-80 py-50">
-            <div className="flex flex-col justify-center items-center h-100 lg:gap-20 gap-12 px-2">
+        <div className="md:py-80 py-60">
+            <div className="flex flex-col justify-center items-center md:h-120 h-100 lg:gap-20 gap-4 px-2">
                 <div className="relative">
                     <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text 
                   font-bold lg:text-4xl relative z-10">

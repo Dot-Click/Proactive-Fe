@@ -189,8 +189,10 @@ const Navbar = ({ role }: NavbarProps) => {
 
         </div>
 
+        <div className="lg:hidden flex">
+          <DrawerBar items={DrawerItems} />
+        </div>
 
-        <DrawerBar items={DrawerItems} />
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>

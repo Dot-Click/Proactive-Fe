@@ -10,7 +10,7 @@ const AdventureOppurtunitiesPage = () => {
 const [view, setView] = useState("list")
   return (
     <>
-      <div className="px-16 overflow-x-hidden">
+      <div className="md:px-16 px-4 overflow-x-hidden">
         <Carousel UserName={"Alex"} subHeading={"Discover amazing destinations and join our community of adventurers"} />
       </div>
       <div>

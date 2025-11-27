@@ -64,7 +64,7 @@ const MeetCoordinator = () => {
     return (
         <div className="bg-[#FAFAFA] py-20">
             <div className="flex flex-col gap-4 justify-center items-center ">
-                <h1 className="bg-linear-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold text-4xl">Meet Our Coordinators</h1>
+                <h1 className="text-center bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-4xl">Meet Our Coordinators</h1>
                 <p className="text-center text-[#221E33]">Get to know the amazing people who make every Proactive Future adventure unforgettable</p>
             </div>
             <div className="grid lg:grid-cols-4 items-center gap-4 px-12 py-12">

@@ -28,7 +28,7 @@ const DrawerBar = ({ items }: Itemsprops) => {
         <div>
             <Drawer direction="left">
                 <DrawerTrigger asChild>
-                    <Menu className="w-6 h-6 cursor-pointer lg:hidden block" color="white"/>
+                    <Menu className="w-6 h-6 cursor-pointer lg:hidden block" color="black"/>
                 </DrawerTrigger>
                 <DrawerContent className="h-screen w-72 sm:w-80 p-0 border-r">
                     <div className="h-full flex flex-col bg-white">

@@ -10,7 +10,7 @@ import UpcomingAdventures from "@/components/userDashboard/upcomingAdventures/Up
 
 const UserdashboardPage = () => {
   return (
-    <div className="px-16 overflow-x-hidden">
+    <div className="md:px-16 px-4 overflow-x-hidden">
       <Carousel UserName={"Alex"} subHeading={"Ready for your next adventure? Let's make it happen!"} />
       <AlertError/>
       <div className="flex lg:flex-row flex-col gap-4 items-start mb-8">
