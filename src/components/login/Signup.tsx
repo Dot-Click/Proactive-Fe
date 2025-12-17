@@ -10,22 +10,50 @@ import proactivelogo from "../../assets/proactive-logo.png"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { useNavigate } from "react-router-dom";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { useState } from "react";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { ChevronDownIcon } from "lucide-react"
+import { Calendar } from "@/components/ui/calendar"
+import { toast } from "sonner";
+import { useCreateUser } from "@/hooks/UserRegisterhook";
+
+const allowedGenders = ["Male", "Female", "Other"];
 
 const SignupSchema = z.object({
-    FirstName: z.string().optional(),
-    LastName: z.string().optional(),
+    FirstName: z.string().min(2, 'FirstName is required'),
+    LastName: z.string().min(2, 'LastName is required'),
     NickName: z.string().optional(),
-    PhoneNumber: z.string().optional(),
-    DOB: z.string().optional(),
-    Gender: z.string().optional(),
-    Address: z.string().optional(),
+    PhoneNumber: z.string().regex(/^\+?\d{10,15}$/, "Invalid phone number"),
+    DOB: z.string()
+        .min(1, "DOB is required")
+        .regex(/^\d{4}-\d{2}-\d{2}$/, "DOB must be in YYYY-MM-DD format")
+        .refine((date) => {
+            const d = new Date(date);
+            return !isNaN(d.getTime());
+        }, "DOB must be a valid date"),
+    Gender: z.enum(allowedGenders, "Gender must be Male, Female, or Other"),
+    Address: z.string().min(1, "Address is required"),
     email: z.string().email("Invalid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
-})
+    Password: z.string()
+        .min(8, "Password must be at least 8 characters long")
+        .refine((val) => /[A-Z]/.test(val), "Password must contain at least one uppercase letter")
+        .refine((val) => /[0-9]/.test(val), "Password must contain at least one number")
+        .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), "Password must contain at least one special character"),
+});
 
-const onSubmit = (val: z.infer<typeof SignupSchema>) => {
-    console.log(val);
-};
 
 const Signup = () => {
     type SignupSchemaType = z.infer<typeof SignupSchema>
@@ -40,10 +68,45 @@ const Signup = () => {
             Gender: "",
             Address: "",
             email: "",
-            password: "",
+            Password: "",
         },
     });
     const navigate = useNavigate()
+    const [open, setOpen] = useState(false)
+    const [date, setDate] = useState<Date | undefined>(undefined)
+    const createUserMutation = useCreateUser();
+
+    const onSubmit = async (val: z.infer<typeof SignupSchema>) => {
+        const {
+            FirstName,
+            LastName,
+            NickName,
+            PhoneNumber,
+            DOB,
+            Gender,
+            Address,
+            email,
+            Password,
+        } = val;
+        try {
+            await createUserMutation.mutateAsync({
+                FirstName,
+                LastName,
+                NickName,
+                PhoneNumber,
+                DOB,
+                Gender,
+                Address,
+                email,
+                Password,
+            })
+            toast.success("Account Created Successfully")
+        } catch (error: any) {
+            const message = error?.response?.data?.message || "Error creating user";
+            toast.error(message)
+        }
+    };
+
     return (
         <div
             className="relative h-screen w-screen overflow-hidden bg-cover"
@@ -67,7 +130,7 @@ const Signup = () => {
 
                         <div className="flex flex-col justify-center items-center">
                             <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text text-3xl font-bold px-8">
-                                Welcome Back
+                                Welcome Back 
                             </h1>
                             <p className="text-[#221E33] text-[14px] mt-2">
                                 Sign up to continue your adventure journey
@@ -78,6 +141,26 @@ const Signup = () => {
                             <Form {...form}>
                                 <form onSubmit={form.handleSubmit(onSubmit)}>
                                     <div className="space-y-6">
+                                        <FormField
+                                            control={form.control}
+                                            name="email"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="text-[#242E2F] font-semibold">
+                                                        Email Address
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            type="email"
+                                                            placeholder="Enter your email"
+                                                            {...field}
+                                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <FormField
                                                 control={form.control}
@@ -172,12 +255,36 @@ const Signup = () => {
                                                             DOB
                                                         </FormLabel>
                                                         <FormControl>
-                                                            <Input
-                                                                type="DOB"
+                                                            <Popover {...field} open={open} onOpenChange={setOpen}>
+                                                                <PopoverTrigger asChild>
+                                                                    <Button
+                                                                        variant="outline"
+                                                                        id="date"
+                                                                        className="w-full justify-between text-[#242E2F] bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5"
+                                                                    >
+                                                                        {date ? date.toLocaleDateString() : "Select date"}
+                                                                        <ChevronDownIcon />
+                                                                    </Button>
+                                                                </PopoverTrigger>
+                                                                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                                                                    <Calendar
+                                                                        mode="single"
+                                                                        selected={date}
+                                                                        captionLayout="dropdown"
+                                                                        onSelect={(selectedDate) => {
+                                                                            setDate(selectedDate);
+                                                                            field.onChange(selectedDate?.toISOString().split("T")[0]);
+                                                                            setOpen(false);
+                                                                        }}
+                                                                    />
+                                                                </PopoverContent>
+                                                            </Popover>
+                                                            {/* <Input
                                                                 placeholder="Enter your DOB"
                                                                 {...field}
+                                                                type="date"
                                                                 className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
-                                                            />
+                                                            /> */}
                                                         </FormControl>
                                                         <FormMessage />
                                                     </FormItem>
@@ -192,9 +299,57 @@ const Signup = () => {
                                                             Gender
                                                         </FormLabel>
                                                         <FormControl>
+                                                            <Select value={field.value} onValueChange={field.onChange}>
+                                                                <SelectTrigger {...field} className="md:w-[220px] w-full py-5 bg-[#FAFAFE] border border-[#EFEFEF]">
+                                                                    <SelectValue placeholder="Select a Gender" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectGroup>
+                                                                        <SelectLabel>Select Gender</SelectLabel>
+                                                                        <SelectItem value="Male">Male</SelectItem>
+                                                                        <SelectItem value="Female">Female</SelectItem>
+                                                                    </SelectGroup>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <FormField
+                                                control={form.control}
+                                                name="Address"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel className="text-[#242E2F] font-semibold">
+                                                            Address
+                                                        </FormLabel>
+                                                        <FormControl>
                                                             <Input
-                                                                type="Gender"
-                                                                placeholder="Enter your Gender"
+                                                                type="Address"
+                                                                placeholder="Enter your Address"
+                                                                {...field}
+                                                                className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={form.control}
+                                                name="Password"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel className="text-[#242E2F] font-semibold">
+                                                            Password
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                type="password"
+                                                                placeholder="Enter your password"
                                                                 {...field}
                                                                 className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
                                                             />
@@ -204,70 +359,12 @@ const Signup = () => {
                                                 )}
                                             />
                                         </div>
-                                        <FormField
-                                            control={form.control}
-                                            name="Address"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-[#242E2F] font-semibold">
-                                                        Address
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            type="Address"
-                                                            placeholder="Enter your Address"
-                                                            {...field}
-                                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={form.control}
-                                            name="email"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-[#242E2F] font-semibold">
-                                                        Email Address
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            type="email"
-                                                            placeholder="Enter your email"
-                                                            {...field}
-                                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={form.control}
-                                            name="password"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-[#242E2F] font-semibold">
-                                                        Password
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            type="password"
-                                                            placeholder="Enter your password"
-                                                            {...field}
-                                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
                                     </div>
                                     <div className="mt-8">
                                         <Button className="bg-[#0DAC87] hover:bg-[#11a180] hover:scale-105 w-full rounded-full py-6 cursor-pointer font-semibold transition-all delay-150 duration-200 ease-in">
-                                            Sign Up
+                                            {
+                                                createUserMutation.isPending ? "...Loading" : "Sign Up"
+                                            }
                                         </Button>
                                     </div>
 

@@ -11,15 +11,14 @@ import { Checkbox } from "../ui/checkbox"
 import { Button } from "../ui/button"
 import google from "../../assets/google.png"
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
+import { useLoginUser } from "@/hooks/UseLoginhook"
 
 const LoginSchema = z.object({
     email: z.string().email("Invalid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
+    Password: z.string().min(8, "Password must be at least 8 characters long"),
 })
 
-const onSubmit = (val: z.infer<typeof LoginSchema>) => {
-    console.log(val);
-};
 
 
 const Login = () => {
@@ -28,10 +27,25 @@ const Login = () => {
         resolver: zodResolver(LoginSchema) as any,
         defaultValues: {
             email: "",
-            password: "",
+            Password: "",
         },
     });
-const navigate = useNavigate()
+    const navigate = useNavigate()
+    const loginUserMutation = useLoginUser()
+    const onSubmit = async (val: z.infer<typeof LoginSchema>) => {
+        const { email, Password } = val
+        try {
+            const response = await loginUserMutation.mutateAsync({
+                email,
+                Password
+            })
+            toast.success("Login Successfully")
+            console.log(response)
+        } catch (error: any) {
+            const message = error?.response?.data?.message || "Something went wrong";
+            toast.error(message);
+        }
+    };
     return (
         <div
             className="relative min-h-screen w-screen bg-cover"
@@ -43,7 +57,7 @@ const navigate = useNavigate()
             ></div>
 
             <div className="relative z-10 grid lg:grid-cols-2 md:grid-cols-1 gap-4 min-h-screen overflow-x-hidden">
-               
+
                 {/* Left Side */}
                 <div className="flex justify-center items-center px-8 py-8">
                     <div
@@ -89,7 +103,7 @@ const navigate = useNavigate()
                                         />
                                         <FormField
                                             control={form.control}
-                                            name="password"
+                                            name="Password"
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -121,14 +135,16 @@ const navigate = useNavigate()
                                                 Remember me
                                             </label>
                                         </div>
-                                        <span onClick={()=> navigate("/forgetPassword")} className="text-[12px] font-semibold text-[#0DAC87] underline cursor-pointer">
+                                        <span onClick={() => navigate("/forgetPassword")} className="text-[12px] font-semibold text-[#0DAC87] underline cursor-pointer">
                                             Forget Password
                                         </span>
                                     </div>
 
                                     <div className="mt-8">
                                         <Button className="bg-[#0DAC87] hover:bg-[#11a180] hover:scale-105 w-full rounded-full py-6 cursor-pointer font-semibold transition-all delay-150 duration-200 ease-in">
-                                            Sign In
+                                            {
+                                                loginUserMutation.isPending ? "...Loading" : "Sign In"
+                                            }
                                         </Button>
                                     </div>
 
@@ -140,7 +156,7 @@ const navigate = useNavigate()
 
                                 </form>
                             </Form>
-                            
+
                             <div className="mt-4">
                                 <Button className="bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#221E33] font-bold hover:scale-105 w-full rounded-full py-6 cursor-pointer transition-all delay-150 duration-200 ease-in flex items-center justify-center gap-2">
                                     <img src={google} alt="google" />
@@ -151,7 +167,7 @@ const navigate = useNavigate()
                             <div className="mt-6 mb-10">
                                 <p className="text-center text-[12px]">
                                     Don't have an account?
-                                    <span onClick={()=> navigate("/signup")} className="text-[#0DAC87] underline font-semibold cursor-pointer mx-1">
+                                    <span onClick={() => navigate("/signup")} className="text-[#0DAC87] underline font-semibold cursor-pointer mx-1">
                                         Sign Up
                                     </span>
                                 </p>

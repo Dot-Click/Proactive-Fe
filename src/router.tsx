@@ -51,6 +51,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/forgetPassword" element={<ForgetPassPage />} />
 
+        {/* Admin Dashboard */}
         <Route path="/dashboard" element={<AdminLayout />}>
           <Route index element={<DashboardPage />} />
           <Route path="/dashboard/user-management" element={<UserManagementPage />} />
@@ -64,6 +65,7 @@ function App() {
           <Route path="/dashboard/settings" element={<SettingPage />} />
         </Route>
 
+        {/* Coordinator Dashboard */}
         <Route path="/coordinator-dashboard" element={<CoordinatorLayout />}>
           <Route index element={<CoordinatorDashboard />} />
           <Route path="/coordinator-dashboard/add-new-trip" element={<AddCoordinatortripPage />} />
@@ -74,6 +76,7 @@ function App() {
           <Route path="/coordinator-dashboard/settings" element={<CoordinatorSettingPage />} />
         </Route>
 
+        {/* User Dashboard */}
         <Route path="/user-dashboard" element={<Userlayout />}>
           <Route index element={<UserdashboardPage />} />
           <Route path="/user-dashboard/adventure-oppurtunities" element={<AdventureOppurtunitiesPage />} />
@@ -81,6 +84,7 @@ function App() {
           <Route path="/user-dashboard/user-settings" element={<UserSettingPage />} />
         </Route>
 
+        {/* Landing Page */}
         <Route path="/" element={<UserSidelayout />}>
           <Route index element={<HomePage />} />
           <Route path="/open-oppurtunities" element={<OpenOppurtunitiesPage />} />
@@ -88,13 +92,14 @@ function App() {
           <Route path="/wild-trip" element={<WildtripPage />} />
           <Route path="/erasmus-plus" element={<ErasmusPage />} />
           <Route path="/internal-events" element={<InternaleventsPage />} />
-          <Route path="/about" element={<AboutPage/>} />
-          <Route path="/member" element={<BecomeMemberPage/>} />
-          <Route path="/travel-coordinator" element={<TravelCoordinatorPage/>} />
-          <Route path="/advantages" element={<BenefitPage/>} />
-          <Route path="/contact" element={<ContactPage/>} />
-          <Route path="/faq" element={<FaqPage/>} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/member" element={<BecomeMemberPage />} />
+          <Route path="/travel-coordinator" element={<TravelCoordinatorPage />} />
+          <Route path="/advantages" element={<BenefitPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/faq" element={<FaqPage />} />
         </Route>
+
       </Routes>
     </BrowserRouter>
   );

@@ -1,16 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useCreateFaqs } from "@/hooks/UseCreateFaqshook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod"
 
 const formSchema = z
     .object({
-        Question: z.string().min(1, {
+        question: z.string().min(1, {
             message: "Question is required",
         }),
-        Answer: z.string().min(1, {
+        answers: z.string().min(1, {
             message: "Answer is required",
         }),
     })
@@ -20,13 +22,25 @@ const AddFAQ = () => {
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
-            Question: "",
-            Answer: "",
+            question: "",
+            answers: "",
         },
     });
+    const CreateFaqsMutation = useCreateFaqs();
 
-    const onSubmit = (val: z.infer<typeof formSchema>) => {
-        console.log(val);
+    const onSubmit = async (val: z.infer<typeof formSchema>) => {
+    const {question, answers} = val
+     try{
+        await CreateFaqsMutation.mutateAsync({
+            question,
+            answers
+        });
+        toast.success("FAQ added successfully");
+        form.reset();
+     }catch(err: any){
+        const message = err?.response?.data?.message || "Something went wrong";
+        toast.error(message);
+     }
     };
 
     return (
@@ -47,7 +61,7 @@ const AddFAQ = () => {
                                 <div className="flex flex-col gap-6 w-full">
                                     <FormField
                                         control={form.control}
-                                        name="Question"
+                                        name="question"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel className="text-[#242E2F] font-semibold">
@@ -67,7 +81,7 @@ const AddFAQ = () => {
 
                                     <FormField
                                         control={form.control}
-                                        name="Answer"
+                                        name="answers"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel className="text-[#242E2F] font-semibold">
@@ -94,7 +108,9 @@ const AddFAQ = () => {
                             onClick={form.handleSubmit(onSubmit)}
                             className="rounded-full px-12 py-5 cursor-pointer"
                         >
-                            Add 
+                            {
+                                CreateFaqsMutation.isPending ? "Adding..." : "Add"
+                            }  
                         </Button>
                     </div>
 

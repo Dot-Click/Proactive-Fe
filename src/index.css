@@ -129,3 +129,6 @@
   -webkit-text-stroke: 1px #A7D9ED;
 }
 
+body{
+  overflow-x: hidden;
+}
