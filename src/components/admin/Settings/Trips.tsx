@@ -8,10 +8,11 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import z from "zod"
 import ApprovalSetting from "./ApprovalSetting"
+import { UseCreateCategory } from "@/hooks/UseCreateCategoryhook"
 
 const formSchema = z
     .object({
-        AddCategory: z.string().min(1, {
+        name: z.string().min(1, {
             message: "Add Category",
         }),
     })
@@ -22,14 +23,22 @@ const Trips = () => {
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
-            AddCategory: ""
+            name: ""
         },
     });
-
-    const onSubmit = (val: z.infer<typeof formSchema>) => {
-        console.log(val);
-        form.reset()
-        toast.success('Category Added Successfully')
+    const CategoryMutation = UseCreateCategory()
+    const onSubmit = async (val: z.infer<typeof formSchema>) => {
+        const { name } = val
+        try {
+            await CategoryMutation.mutateAsync({
+                name
+            })
+            form.reset()
+            toast.success('Category Added Successfully')
+        } catch (error: any) {
+            const message = error?.response?.data?.message || "Something went wrong";
+            toast.error(message);
+        }
     };
 
     return (
@@ -69,7 +78,7 @@ const Trips = () => {
                                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-3">
                                         <FormField
                                             control={form.control}
-                                            name="AddCategory"
+                                            name="name"
                                             render={({ field }) => (
                                                 <FormItem className="w-full">
                                                     <FormControl>
@@ -80,7 +89,11 @@ const Trips = () => {
                                             )}
                                         />
 
-                                        <Button className="cursor-pointer px-4 py-2">Add</Button>
+                                        <Button className="cursor-pointer px-4 py-2">
+                                        {
+                                            CategoryMutation.isPending ? "...adding" : "Add"
+                                        }
+                                        </Button>
                                     </form>
                                 </Form>
                             </div>
@@ -88,7 +101,9 @@ const Trips = () => {
                     }
 
                     <div className="mt-2" onClick={() => SetShowHide(prev => !prev)}>
-                        <Button className="w-full rounded-full px-14 py-6 cursor-pointer">Add Category</Button>
+                        <Button className="w-full rounded-full px-14 py-6 cursor-pointer">
+                        Add Category
+                        </Button>
                     </div>
 
                 </div>

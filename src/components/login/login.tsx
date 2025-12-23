@@ -16,8 +16,12 @@ import { useLoginUser } from "@/hooks/UseLoginhook"
 
 const LoginSchema = z.object({
     email: z.string().email("Invalid email address"),
-    Password: z.string().min(8, "Password must be at least 8 characters long"),
-})
+    Password: z.string()
+        .min(8, "Password must be at least 8 characters long")
+        .refine((val) => /[A-Z]/.test(val), "Password must contain at least one uppercase letter")
+        .refine((val) => /[0-9]/.test(val), "Password must contain at least one number")
+        .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), "Password must contain at least one special character"),
+});
 
 
 
@@ -35,12 +39,11 @@ const Login = () => {
     const onSubmit = async (val: z.infer<typeof LoginSchema>) => {
         const { email, Password } = val
         try {
-            const response = await loginUserMutation.mutateAsync({
+            await loginUserMutation.mutateAsync({
                 email,
                 Password
             })
-            toast.success("Login Successfully")
-            console.log(response)
+            // toast.success(response?.data?.message)
         } catch (error: any) {
             const message = error?.response?.data?.message || "Something went wrong";
             toast.error(message);

@@ -17,6 +17,8 @@ import Notification from "../../../assets/sidebaricon/notification.png";
 import PayNow from "@/components/Adventureoppurtunities/ViewDetailtrip/PayNow";
 import { UserDashboardDrawerItems } from "@/components/DrawerItems";
 import DrawerBar from "@/components/Drawer";
+import { useLogoutUser } from "@/hooks/Uselogouthook";
+import { toast } from "sonner";
 
 interface NavbarProps {
   role: string
@@ -30,6 +32,19 @@ const Navbar = ({ role }: NavbarProps) => {
   const [show, setShow] = useState(true);
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const Logoutmutation = useLogoutUser();
+
+
+  const Handlelogout = async () => {
+    try {
+      await Logoutmutation.mutateAsync()
+    } catch (error: any) {
+      const message = error?.response?.data?.message || "Error on logout";
+      toast.error(message)
+    }
+  }
+
+
   return (
     <>
       <div className="flex lg:justify-between lg:items-center justify-center items-center gap-6 mt-6">
@@ -166,7 +181,7 @@ const Navbar = ({ role }: NavbarProps) => {
 
                 <div className="flex flex-col">
                   <DropdownMenuItem asChild>
-                    <div className="inline-flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-md">
+                    <div onClick={Handlelogout} className="inline-flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-md">
                       <LogOut />
                       Logout
                     </div>

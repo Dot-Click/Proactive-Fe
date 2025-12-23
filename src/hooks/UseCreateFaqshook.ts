@@ -9,7 +9,8 @@ interface UserCreateFaqsData {
 }
 
 const mutationFunction = async (data: UserCreateFaqsData): Promise<AxiosResponse<any, any, {}>> => {
-    return await api.post("/api/faqs", data);
+    const res = await api.post("/api/faqs", data);
+    return res.data
 };
 
 export const useCreateFaqs = () => {

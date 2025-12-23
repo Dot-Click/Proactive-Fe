@@ -89,7 +89,7 @@ const Signup = () => {
             Password,
         } = val;
         try {
-            await createUserMutation.mutateAsync({
+          const response = await createUserMutation.mutateAsync({
                 FirstName,
                 LastName,
                 NickName,
@@ -100,6 +100,9 @@ const Signup = () => {
                 email,
                 Password,
             })
+            if(response.data.user.role === "user"){
+                navigate("/login")
+            }
             toast.success("Account Created Successfully")
         } catch (error: any) {
             const message = error?.response?.data?.message || "Error creating user";

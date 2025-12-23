@@ -15,8 +15,9 @@ interface UserData {
     Password: string;
 }
 
-const mutationFunction = async (data: UserData): Promise<AxiosResponse<any, any, {}>> => {
-    return await api.post("/api/auth/register", data);
+const mutationFunction = async (data: UserData) => {
+  const res = await api.post("/api/auth/register", data);
+  return res.data; 
 };
 
 export const useCreateUser = () => {

@@ -10,29 +10,36 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { UseforgotPassword } from "@/hooks/UseforgotPasswordhook";
+import { UseResetPasswordhook } from "@/hooks/UseResetPasswordhook";
 
-const SignupSchema = z.object({
-  email: z.string().email("Invalid email address"),
-})
+const ResetPasswordSchema = z.object({
+  token: z.string("token is required"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters long")
+    .refine((val) => /[A-Z]/.test(val), "Password must contain at least one uppercase letter")
+    .refine((val) => /[0-9]/.test(val), "Password must contain at least one number")
+    .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), "Password must contain at least one special character"),
+});
 
 
-const ForgetPassword = () => {
-  type SignupSchemaType = z.infer<typeof SignupSchema>
-  const form = useForm<SignupSchemaType>({
-    resolver: zodResolver(SignupSchema) as any,
+const ResetPassword = () => {
+  type ResetPasswordSchemaType = z.infer<typeof ResetPasswordSchema>
+  const form = useForm<ResetPasswordSchemaType>({
+    resolver: zodResolver(ResetPasswordSchema) as any,
     defaultValues: {
-      email: "",
+      token: "",
+      password: ""
     },
   });
   const navigate = useNavigate();
-  const forgotPasswordMutation = UseforgotPassword()
+  const ResetPasswordMutation = UseResetPasswordhook()
 
-  const onSubmit = async (val: z.infer<typeof SignupSchema>) => {
-    const { email } = val
+  const onSubmit = async (val: z.infer<typeof ResetPasswordSchema>) => {
+    const { password, token } = val
     try {
-      await forgotPasswordMutation.mutateAsync({
-        email
+      await ResetPasswordMutation.mutateAsync({
+        password,
+        token
       })
     } catch (error: any) {
       const message = error?.response?.data?.message || "Error Forgot Password";
@@ -64,10 +71,10 @@ const ForgetPassword = () => {
 
             <div className="flex flex-col justify-center items-center">
               <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text text-3xl font-bold px-8">
-                Forget Password
+                Reset Password
               </h1>
               <p className="text-[#221E33] text-[14px] mt-2">
-                Please enter your email to reset your password
+                Please enter your Token and New Password to reset your old password
               </p>
             </div>
 
@@ -77,16 +84,36 @@ const ForgetPassword = () => {
                   <div className="space-y-6">
                     <FormField
                       control={form.control}
-                      name="email"
+                      name="token"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-[#242E2F] font-semibold">
-                            Email Address
+                            Token
                           </FormLabel>
                           <FormControl>
                             <Input
-                              type="email"
-                              placeholder="Enter your email"
+                              type="text"
+                              placeholder="Enter your Token"
+                              {...field}
+                              className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#242E2F] font-semibold">
+                            Password
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              placeholder="Enter your Password"
                               {...field}
                               className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
                             />
@@ -98,7 +125,7 @@ const ForgetPassword = () => {
                   </div>
                   <Button type="submit" className="rounded-full cursor-pointer w-full mt-6 bg-[#0DAC87] hover:bg-[#129b7b] text-white px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
                     {
-                      forgotPasswordMutation.isPending ? "...Loading" : "Forget Password"
+                      ResetPasswordMutation.isPending ? "...Loading" : "Reset Password"
                     }
                   </Button>
                   <Button onClick={() => navigate("/login")} type="button" className="rounded-full cursor-pointer w-full mt-4 bg-transparent border border-[#0DAC87] hover:bg-[#0DAC87] hover:text-white text-[#0DAC87] px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
@@ -144,4 +171,4 @@ const ForgetPassword = () => {
   )
 }
 
-export default ForgetPassword
+export default ResetPassword

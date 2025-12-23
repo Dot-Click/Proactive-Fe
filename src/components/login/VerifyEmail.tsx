@@ -8,32 +8,29 @@ import z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { UseforgotPassword } from "@/hooks/UseforgotPasswordhook";
+import { UseVerifytokenhook } from "@/hooks/UseVerifytokenhook";
 
-const SignupSchema = z.object({
-  email: z.string().email("Invalid email address"),
+const TokenSchema = z.object({
+  token: z.string("token is required"),
 })
 
 
-const ForgetPassword = () => {
-  type SignupSchemaType = z.infer<typeof SignupSchema>
-  const form = useForm<SignupSchemaType>({
-    resolver: zodResolver(SignupSchema) as any,
+const VerifyEmail = () => {
+  type TokenSchemaType = z.infer<typeof TokenSchema>
+  const form = useForm<TokenSchemaType>({
+    resolver: zodResolver(TokenSchema) as any,
     defaultValues: {
-      email: "",
+      token: "",
     },
   });
-  const navigate = useNavigate();
-  const forgotPasswordMutation = UseforgotPassword()
-
-  const onSubmit = async (val: z.infer<typeof SignupSchema>) => {
-    const { email } = val
+  const VerifytokenMutation = UseVerifytokenhook()
+  const onSubmit = async (val: z.infer<typeof TokenSchema>) => {
+    const { token } = val
     try {
-      await forgotPasswordMutation.mutateAsync({
-        email
-      })
+        await VerifytokenMutation.mutateAsync({
+            token
+        })
     } catch (error: any) {
       const message = error?.response?.data?.message || "Error Forgot Password";
       toast.error(message)
@@ -64,10 +61,10 @@ const ForgetPassword = () => {
 
             <div className="flex flex-col justify-center items-center">
               <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text text-3xl font-bold px-8">
-                Forget Password
+                Email Verification
               </h1>
               <p className="text-[#221E33] text-[14px] mt-2">
-                Please enter your email to reset your password
+                Please enter your Token to Verify your email
               </p>
             </div>
 
@@ -77,16 +74,16 @@ const ForgetPassword = () => {
                   <div className="space-y-6">
                     <FormField
                       control={form.control}
-                      name="email"
+                      name="token"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-[#242E2F] font-semibold">
-                            Email Address
+                            Token
                           </FormLabel>
                           <FormControl>
                             <Input
-                              type="email"
-                              placeholder="Enter your email"
+                              type="text"
+                              placeholder="Enter Token"
                               {...field}
                               className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
                             />
@@ -98,11 +95,9 @@ const ForgetPassword = () => {
                   </div>
                   <Button type="submit" className="rounded-full cursor-pointer w-full mt-6 bg-[#0DAC87] hover:bg-[#129b7b] text-white px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
                     {
-                      forgotPasswordMutation.isPending ? "...Loading" : "Forget Password"
+                        VerifytokenMutation.isPending ? "...Loading" : "Submit"
                     }
-                  </Button>
-                  <Button onClick={() => navigate("/login")} type="button" className="rounded-full cursor-pointer w-full mt-4 bg-transparent border border-[#0DAC87] hover:bg-[#0DAC87] hover:text-white text-[#0DAC87] px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
-                    Back to Login
+                    
                   </Button>
                 </form>
               </Form>
@@ -144,4 +139,4 @@ const ForgetPassword = () => {
   )
 }
 
-export default ForgetPassword
+export default VerifyEmail

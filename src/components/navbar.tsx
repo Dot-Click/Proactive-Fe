@@ -8,6 +8,8 @@ import { useLocation } from "react-router-dom"
 import { useIsMobile } from "../hooks/use-mobile"
 import DrawerBar from "./Drawer"
 import { AdminDrawerItems, CoordinatorDrawerItems } from "./DrawerItems"
+import { useLogoutUser } from "@/hooks/Uselogouthook"
+import { toast } from "sonner"
 
 interface NavbarProps {
   collapsed: boolean;
@@ -85,11 +87,12 @@ const SubHeading = [
 ]
 
 const Navbar = ({ collapsed, role }: NavbarProps) => {
-  const DrawerItems = role === "coordinator" 
-    ? CoordinatorDrawerItems 
+  const DrawerItems = role === "coordinator"
+    ? CoordinatorDrawerItems
     : AdminDrawerItems;
   const location = useLocation();
   const isMobile = useIsMobile();
+  const Logoutmutation = useLogoutUser();
   let NavHeading = location.pathname.split("/")[2]?.split("-").join(" ");
   if (NavHeading === "payment membership") {
     NavHeading = "Payment & Membership";
@@ -99,6 +102,15 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
     ? "left-4 right-4 top-4"
     : `${collapsed ? "left-20" : "left-60"} -right-0 top-6`;
 
+
+  const Handlelogout = async () => {
+    try {
+     await Logoutmutation.mutateAsync()
+    } catch (error: any) {
+      const message = error?.response?.data?.message || "Error on logout";
+      toast.error(message)
+    }
+  }
   return (
     <header
       className={`absolute z-10 ${containerPositionClass} flex justify-between items-center px-4 md:px-8 transition-all duration-300`}
@@ -180,7 +192,7 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
                   <span className="font-semibold text-sm lg:text-lg">Pachums</span>
                   <span className="text-sm text-gray-500">Pachums@gmail.com</span>
                 </div>
-                <div className="flex justify-start items-center gap-3">
+                <div className="flex justify-start items-center gap-3" onClick={Handlelogout}>
                   <LogOut />
                   Logout
                 </div>

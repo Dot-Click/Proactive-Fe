@@ -39,6 +39,8 @@ import TravelCoordinatorPage from "./pages/userSide/TravelCoordinator.page";
 import BenefitPage from "./pages/userSide/Benefit.page";
 import ContactPage from "./pages/userSide/Contact.page";
 import FaqPage from "./pages/userSide/Faq.page";
+import VerifyEmail from "./components/login/VerifyEmail";
+import ResetPassword from "./components/login/ResetPassword";
 
 
 
@@ -50,6 +52,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/forgetPassword" element={<ForgetPassPage />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Admin Dashboard */}
         <Route path="/dashboard" element={<AdminLayout />}>

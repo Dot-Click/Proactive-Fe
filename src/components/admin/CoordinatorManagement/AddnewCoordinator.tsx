@@ -26,48 +26,57 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { useCreateCoordinator } from "@/hooks/UseCreateCoordinator";
+import { toast } from "sonner";
 
 const formSchema = z
   .object({
-    username: z.string().min(2, {
+    fullName: z.string().min(2, {
       message: "Username must be at least 2 characters.",
     }),
     email: z.string().email({ message: "Invalid email address" }),
-    phone: z
+    phoneNumber: z
       .string()
       .min(1, { message: "Phone number is required" })
       .refine((val) => /^[0-9]{10,15}$/.test(val), {
         message: "Enter a valid phone number",
       }),
-    Bio: z.string().min(2, {
+    bio: z.string().min(2, {
       message: "Bio must be at least 2 characters.",
     }),
-    Specialties: z.array(z.string()).min(1, {
+    specialities: z.array(z.string()).min(1, {
       message: "Select at least one speciality",
     }),
-    Languages: z.array(z.string()).min(1, {
+    languages: z.array(z.string()).min(1, {
       message: "Select at least one language",
     }),
-    certificate: z.string().min(1, {
+    certificateLvl: z.string().min(1, {
       message: "Select at least one certificate",
     }),
-    experience: z.coerce.number().min(1, {
+    yearsOfExperience: z.coerce.number().min(1, {
       message: "Experience is required",
     }),
-    coordinator: z.string().min(1, {
+    type: z.string().min(1, {
       message: "Select Coordinator type",
     }),
-    level: z.string().min(1, {
+    accessLvl: z.string().min(1, {
       message: "Select Permission",
     }),
-    Password: z.string().min(6, {
+    password: z.string().min(6, {
       message: "Password must be at least 6 characters",
     }),
     confirmPassword: z.string().min(6, {
       message: "Confirm Password must be at least 6 characters",
     }),
+    profilePicture: z
+      .instanceof(File, { message: "Profile picture is required" })
+      .refine((file) => file.size <= 5 * 1024 * 1024, "File must be less than 5MB")
+      .refine(
+        (file) => ["image/jpeg", "image/png"].includes(file.type),
+        "Only JPEG or PNG files are allowed"
+      )
   })
-  .refine((data) => data.Password === data.confirmPassword, {
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords must match",
     path: ["confirmPassword"],
   });
@@ -77,31 +86,69 @@ const AddnewCoordinator = () => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema) as any,
     defaultValues: {
-      username: "",
+      fullName: "",
       email: "",
-      phone: "",
-      Bio: "",
-      Specialties: [],
-      Languages: [],
-      certificate: "",
-      experience: 0,
-      coordinator: "",
-      level: "",
-      Password: "",
+      phoneNumber: "",
+      bio: "",
+      specialities: [],
+      languages: [],
+      certificateLvl: "",
+      yearsOfExperience: 0,
+      type: "",
+      accessLvl: "",
+      password: "",
       confirmPassword: "",
+      profilePicture: undefined,
     },
   });
 
   const navigate = useNavigate();
-  const [profile, setProfile] = useState("");
+  const [profileFile, setProfileFile] = useState<File | undefined>(undefined);
+  const [profilePreview, setProfilePreview] = useState<string>("");
 
   const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    setProfile(file ? URL.createObjectURL(file) : "");
+    if (file) {
+      setProfileFile(file);
+      setProfilePreview(URL.createObjectURL(file));
+      form.setValue("profilePicture", file);
+    }
   };
+  const CreateCoordinatorMutation = useCreateCoordinator();
+  const onSubmit = async (val: z.infer<typeof formSchema>) => {
+    if (!profileFile) {
+      toast.error("Please upload a profile picture");
+      return;
+    }
+    const coordinatorDetails = {
+      fullName: val.fullName,
+      phoneNumber: val.phoneNumber,
+      bio: val.bio,
+      specialities: val.specialities,
+      languages: val.languages,
+      certificateLvl: val.certificateLvl,
+      yearsOfExperience: val.yearsOfExperience,
+      type: val.type,
+      accessLvl: val.accessLvl,
+      profilePicture: ""
+    };
+    const formData = new FormData();
+    formData.append("coordinatorDetails", JSON.stringify(coordinatorDetails));
+    formData.append("email", val.email);
+    formData.append("password", val.password);
+    formData.append("prof_pic", profileFile);
 
-  const onSubmit = (val: z.infer<typeof formSchema>) => {
-    console.log(val);
+    try {
+      await CreateCoordinatorMutation.mutateAsync(formData);
+      toast.success("Coordinator added successfully");
+      form.reset();
+      setProfileFile(undefined);
+      setProfilePreview("");
+    } catch (err: any) {
+      const message = err?.response?.data?.message || "Something went wrong";
+      toast.error(message);
+    }
+
   };
 
   return (
@@ -129,39 +176,6 @@ const AddnewCoordinator = () => {
                 Upload Profile
               </span>
 
-              {/* <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px] mt-4 w-[220px] h-[220px] md:w-[200px] md:h-[200px] overflow-hidden">
-                <input
-                  type="file"
-                  id="coordinatorProfile"
-                  className="hidden"
-                  onChange={HandleuploadProfile}
-                />
-
-                <label
-                  htmlFor="coordinatorProfile"
-                  className="block w-full h-full cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
-                >
-                  <div
-                    className={`${profile ? "py-0" : "py-6"} flex flex-col items-center justify-center w-full h-full`}
-                  >
-                    {profile ? (
-                      <img
-                        src={profile}
-                        alt="profile"
-                        className="w-full h-full object-cover rounded-[10px]"
-                      />
-                    ) : (
-                      <>
-                        <img src={imgupload} alt="upload" width={80} className="" />
-                        <span className="mt-6 text-[#242E2F] text-[14px] text-center">
-                          Image must be <br /> 500px by 500px
-                        </span>
-                      </>
-                    )}
-                  </div>
-                </label>
-              </div> */}
-
               <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#221E33] rounded-[10px] mt-4 w-[220px] h-[220px] md:w-[200px] md:h-[200px] overflow-hidden">
                 <input
                   type="file"
@@ -175,9 +189,9 @@ const AddnewCoordinator = () => {
                   className="block w-full h-full cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
                 >
                   <div className="flex flex-col items-center justify-center w-full h-full">
-                    {profile ? (
+                    {profilePreview ? (
                       <img
-                        src={profile}
+                        src={profilePreview}
                         alt="profile"
                         className="w-full h-full object-cover object-center rounded-[10px]"
                       />
@@ -200,7 +214,7 @@ const AddnewCoordinator = () => {
                 {/* Full Name */}
                 <FormField
                   control={form.control}
-                  name="username"
+                  name="fullName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[#242E2F] font-semibold">
@@ -242,7 +256,7 @@ const AddnewCoordinator = () => {
                 {/* Phone */}
                 <FormField
                   control={form.control}
-                  name="phone"
+                  name="phoneNumber"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[#242E2F] font-semibold">
@@ -281,7 +295,7 @@ const AddnewCoordinator = () => {
                 {/* Bio */}
                 <FormField
                   control={form.control}
-                  name="Bio"
+                  name="bio"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[#242E2F] font-semibold">
@@ -314,7 +328,7 @@ const AddnewCoordinator = () => {
               {/* Specialties */}
               <FormField
                 control={form.control}
-                name="Specialties"
+                name="specialities"
                 render={({ field }) => {
                   const selected = field.value || [];
                   const toggle = (item: string) =>
@@ -366,7 +380,7 @@ const AddnewCoordinator = () => {
               {/* Languages */}
               <FormField
                 control={form.control}
-                name="Languages"
+                name="languages"
                 render={({ field }) => {
                   const selected = field.value || [];
                   const toggle = (lang: string) =>
@@ -418,7 +432,7 @@ const AddnewCoordinator = () => {
               {/* Certificate */}
               <FormField
                 control={form.control}
-                name="certificate"
+                name="certificateLvl"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -447,7 +461,7 @@ const AddnewCoordinator = () => {
               {/* Experience */}
               <FormField
                 control={form.control}
-                name="experience"
+                name="yearsOfExperience"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -482,7 +496,7 @@ const AddnewCoordinator = () => {
               {/* Coordinator Type */}
               <FormField
                 control={form.control}
-                name="coordinator"
+                name="type"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -516,7 +530,7 @@ const AddnewCoordinator = () => {
               {/* Access Level */}
               <FormField
                 control={form.control}
-                name="level"
+                name="accessLvl"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -557,7 +571,7 @@ const AddnewCoordinator = () => {
               {/* Password */}
               <FormField
                 control={form.control}
-                name="Password"
+                name="password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -604,7 +618,10 @@ const AddnewCoordinator = () => {
                 type="submit"
                 className="rounded-full px-8 py-6 font-medium cursor-pointer"
               >
-                Save Coordinator
+                {
+                  CreateCoordinatorMutation.isPending ? "Adding..." : "Save Coordinator"
+                }
+
               </Button>
             </div>
           </div>
