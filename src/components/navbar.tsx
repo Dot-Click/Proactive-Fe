@@ -10,6 +10,9 @@ import DrawerBar from "./Drawer"
 import { AdminDrawerItems, CoordinatorDrawerItems } from "./DrawerItems"
 import { useLogoutUser } from "@/hooks/Uselogouthook"
 import { toast } from "sonner"
+import { UsegetNotifications } from "@/hooks/getNotificationhook"
+import { FaCheckDouble } from "react-icons/fa6";
+import { useMarkAsReadNotification } from "@/hooks/MarkAsReadNotification"
 
 interface NavbarProps {
   collapsed: boolean;
@@ -87,6 +90,8 @@ const SubHeading = [
 ]
 
 const Navbar = ({ collapsed, role }: NavbarProps) => {
+  const { data, isLoading, isError } = UsegetNotifications()
+  const markAsRead = useMarkAsReadNotification();
   const DrawerItems = role === "coordinator"
     ? CoordinatorDrawerItems
     : AdminDrawerItems;
@@ -105,7 +110,7 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
 
   const Handlelogout = async () => {
     try {
-     await Logoutmutation.mutateAsync()
+      await Logoutmutation.mutateAsync()
     } catch (error: any) {
       const message = error?.response?.data?.message || "Error on logout";
       toast.error(message)
@@ -144,27 +149,44 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
               </Badge>
               <img src={Notification} alt="Notification" />
               <DropdownMenuContent className="w-72">
-                <DropdownMenuItem className="cursor-pointer">
-                  <Avatar className="lg:w-8 lg:h-8 mr-2">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  New Notification from <span className="font-semibold">Pachums</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  <Avatar className="w-8 h-8 mr-2">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  New Notification from <span className="font-semibold">Pachums</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  <Avatar className="w-8 h-8 mr-2">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  New Notification from <span className="font-semibold">Pachums</span>
-                </DropdownMenuItem>
+                {isLoading && (
+                  <div className="px-3 py-2 text-sm">Loading...</div>
+                )}
+
+                {isError && (
+                  <div className="px-3 py-2 text-sm text-red-500">Error</div>
+                )}
+
+                {!isLoading && !isError && data?.length === 0 && (
+                  <div className="px-3 py-2 text-sm text-gray-500 text-center">
+                    No Notification
+                  </div>
+                )}
+
+                {!isLoading && !isError && data && data?.length > 0 &&
+                  data?.map((val, index) => (
+                    <DropdownMenuItem
+                      key={index}
+                      className="flex flex-col items-start gap-2 cursor-pointer"
+                    >
+                      <div className="flex justify-between items-center w-full">
+                        <span className="text-sm font-semibold">{val.title}</span>
+                        <FaCheckDouble
+                          className={`cursor-pointer ${val.read ? "text-blue-500" : "text-gray-400"
+                            }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            markAsRead.mutateAsync(val.id);
+                          }}
+                        />
+                      </div>
+
+                      <span className="text-sm text-gray-500 text-start">
+                        {val.description}
+                      </span>
+                    </DropdownMenuItem>
+                  ))
+                }
               </DropdownMenuContent>
             </div>
           </DropdownMenuTrigger>

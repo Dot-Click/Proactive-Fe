@@ -57,11 +57,14 @@ const Trips = () => {
                 <div className="flex flex-col gap-4 px-5 py-4">
 
                     <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
-                        <div className="flex flex-col">
-                            <span className="text-[#221E33] font-bold">Wild Weekend</span>
-                            <span className="text-[#727272] text-[12px]">Manual approval required</span>
-                        </div>
-                        <Switch className="w-12" />
+                                <>
+                                
+                                <div className="flex flex-col">
+                                    <span className="text-[#221E33] font-bold">Wild Weekend</span>
+                                    <span className="text-[#727272] text-[12px]">Manual approval required</span>
+                                </div>
+                                <Switch className="w-12" /> 
+                                </>
                     </div>
 
                     <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
