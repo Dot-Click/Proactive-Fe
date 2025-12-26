@@ -19,13 +19,16 @@ export const useLoginUser = () => {
     const navigate = useNavigate();
     return useMutation({
         mutationFn: mutationFunction,
+
         onSuccess: (response) => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
             const role = response?.data?.user?.role
             const token = response?.data?.accessToken
+            const userId = response?.data?.user.id
             toast.success(response.message)
             if (token) {
                 localStorage.setItem("token", token)
+                localStorage.setItem("userId", userId)
             }else{
                 console.log('No Access Token In Response')
             }

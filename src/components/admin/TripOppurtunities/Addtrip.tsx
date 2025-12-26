@@ -6,31 +6,12 @@ import Template from "@/assets/sidebaricon/template.png";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-// import {
-//   Form,
-//   FormControl,
-//   FormField,
-//   FormItem,
-//   FormLabel,
-//   FormMessage,
-// } from "@/components/ui/form";
-// import { Input } from "@/components/ui/input";
-// import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-// import { Badge } from "@/components/ui/badge";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Upload } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
@@ -40,9 +21,9 @@ import Included from "./Included";
 import Coordinator from "./Coordinator";
 import Mediaprice from "./Mediaprice";
 import Reviewsave from "./Reviewsave";
-// import { Check } from "lucide-react";
+import { UsegetCategory } from "@/hooks/getCategoryhook";
 
-interface Urlprops{
+interface Urlprops {
   backUrl?: string
 }
 
@@ -62,18 +43,19 @@ const formSchema = z
       message: "Select at least one Location",
     }),
     mapCoordinates: z.string().optional(),
-    StartDate: z.coerce.number().min(1, {
+    StartDate: z.date({
       message: "Select Start Date",
     }),
-    EndDate: z.coerce.number().min(1, {
+    EndDate: z.date({
       message: "Select End Date",
     }),
     Duration: z.string().optional()
   })
-const Addtrip = ({backUrl}:Urlprops) => {
+const Addtrip = ({ backUrl }: Urlprops) => {
   type FormSchemaType = z.infer<typeof formSchema>;
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema) as any,
+    shouldUnregister: false,
     defaultValues: {
       Triptype: "",
       TripTitle: "",
@@ -81,8 +63,8 @@ const Addtrip = ({backUrl}:Urlprops) => {
       coverImage: null,
       Location: "",
       mapCoordinates: '',
-      StartDate: 0,
-      EndDate: 0,
+      StartDate: undefined,
+      EndDate: undefined,
       Duration: '',
     },
   });
@@ -94,6 +76,25 @@ const Addtrip = ({backUrl}:Urlprops) => {
   const [profile, setProfile] = useState("");
   const [step, setStep] = useState(1)
   const totalStep = 6
+  const { data, isLoading, isError } = UsegetCategory()
+  const startDateCal = form.watch("StartDate");
+  const endDateCal = form.watch("EndDate");
+  useEffect(() => {
+    if (startDateCal && endDateCal) {
+      const start = new Date(startDateCal);
+      const end = new Date(endDateCal);
+      if (end >= start) {
+        const diffTime = end.getTime() - start.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+        form.setValue("Duration", `${diffDays} Days`);
+      } else {
+        form.setValue("Duration", "");
+      }
+    } else {
+      form.setValue("Duration", "");
+    }
+  }, [startDate, endDate]);
 
   const steps = [
     "Basic Information",
@@ -113,9 +114,12 @@ const Addtrip = ({backUrl}:Urlprops) => {
     console.log(val);
   };
 
-  const next = () => {
-    if (step < totalStep) setStep(step + 1)
-  }
+  const next = async () => {
+    const valid = await form.trigger();
+    if (valid && step < totalStep) {
+      setStep(step + 1);
+    }
+  };
 
   const previous = () => {
     if (step > 1) setStep(step - 1)
@@ -194,15 +198,19 @@ const Addtrip = ({backUrl}:Urlprops) => {
                                     <SelectValue placeholder="Select Category" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="Adventure">Adventure</SelectItem>
-                                    <SelectItem value="Leisure">Leisure</SelectItem>
-                                    <SelectItem value="Business">Business</SelectItem>
-                                    <SelectItem value="Cultural">Cultural</SelectItem>
-                                    <SelectItem value="Religious">Religious</SelectItem>
-                                    <SelectItem value="Educational">Educational</SelectItem>
-                                    <SelectItem value="Group Tour">Group Tour</SelectItem>
-                                    <SelectItem value="Solo Travel">Solo Travel</SelectItem>
-                                    <SelectItem value="Family Trip">Family Trip</SelectItem>
+                                    {
+                                      isLoading && <p>Loading...</p>
+                                    }
+                                    {
+                                      isError && <p>Something went wrong</p>
+                                    }
+                                    {
+                                      data?.categories.map((category: any) => (
+                                        <SelectItem key={category.id} value={category.name}>
+                                          {category.name}
+                                        </SelectItem>
+                                      ))
+                                    }
                                   </SelectContent>
                                 </Select>
                               </FormControl>
@@ -376,6 +384,7 @@ const Addtrip = ({backUrl}:Urlprops) => {
                                       onSelect={(date) => {
                                         setStartDate(date)
                                         setOpenStart(false)
+                                        field.onChange(date);
                                       }}
                                     />
                                   </PopoverContent>
@@ -412,6 +421,7 @@ const Addtrip = ({backUrl}:Urlprops) => {
                                       onSelect={(date) => {
                                         setendDate(date)
                                         setOpenEnd(false)
+                                        field.onChange(date);
                                       }}
                                     />
                                   </PopoverContent>
@@ -433,6 +443,7 @@ const Addtrip = ({backUrl}:Urlprops) => {
                                 <Input
                                   placeholder="Auto-calculated"
                                   {...field}
+                                  readOnly
                                   className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                                 />
                               </FormControl>
@@ -492,12 +503,19 @@ const Addtrip = ({backUrl}:Urlprops) => {
                       {step === totalStep ? "Preview Trip Page" : "previous"}
                     </Button>
                   }
+                  {/* <Button
+                    type="button"
+                    onClick={step === totalStep ? form.handleSubmit(onSubmit) : next}
+                    className={`${step === totalStep ? 'bg-[#0DAC87] hover:bg-[#0d9e7c]' : 'bg-[#000000]'} cursor-pointer rounded-full px-12 py-5 w-full md:w-auto`}>
+                    {step === totalStep ? "Publish" : "Next"}
+                  </Button> */}
                   <Button
                     type="button"
                     onClick={step === totalStep ? form.handleSubmit(onSubmit) : next}
                     className={`${step === totalStep ? 'bg-[#0DAC87] hover:bg-[#0d9e7c]' : 'bg-[#000000]'} cursor-pointer rounded-full px-12 py-5 w-full md:w-auto`}>
                     {step === totalStep ? "Publish" : "Next"}
                   </Button>
+
                 </div>
 
               </div>

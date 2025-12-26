@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import z from "zod"
 import ApprovalSetting from "./ApprovalSetting"
 import { UseCreateCategory } from "@/hooks/UseCreateCategoryhook"
+import { UsegetCategory } from "@/hooks/getCategoryhook"
 
 const formSchema = z
     .object({
@@ -27,6 +28,7 @@ const Trips = () => {
         },
     });
     const CategoryMutation = UseCreateCategory()
+    const { data, isLoading, isError } = UsegetCategory()
     const onSubmit = async (val: z.infer<typeof formSchema>) => {
         const { name } = val
         try {
@@ -53,27 +55,38 @@ const Trips = () => {
                 </div>
 
                 <div className="border-b border-[#EDEDED]" />
-
+                {
+                    isLoading && <p>Loading...</p>
+                }
+                {
+                    isError && <p>Something went wrong</p>
+                }
                 <div className="flex flex-col gap-4 px-5 py-4">
-
-                    <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
-                                <>
-                                
-                                <div className="flex flex-col">
-                                    <span className="text-[#221E33] font-bold">Wild Weekend</span>
-                                    <span className="text-[#727272] text-[12px]">Manual approval required</span>
+                    {
+                        data?.categories.map((category: any) => (
+                            <>
+                                <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
+                                    <div key={category.id} className="flex flex-col">
+                                        <span className="text-[#221E33] font-bold">{category.name}</span>
+                                        <span className="text-[#727272] text-[12px]">Manual approval required</span>
+                                    </div>
+                                    <Switch className="w-12" />
                                 </div>
-                                <Switch className="w-12" /> 
-                                </>
-                    </div>
+                            </>
+                        ))
+                    }
+                    {/* <div className="flex flex-col">
+                            <span className="text-[#221E33] font-bold">Wild Weekend</span>
+                            <span className="text-[#727272] text-[12px]">Manual approval required</span>
+                        </div> */}
 
-                    <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
+                    {/* <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
                         <div className="flex flex-col">
                             <span className="text-[#221E33] font-bold">Wild Trip</span>
                             <span className="text-[#727272] text-[12px]">Auto-approval enabled</span>
                         </div>
                         <Switch className="w-12" />
-                    </div>
+                    </div> */}
                     {
                         showhide ?
                             <div className="flex lg:flex-row flex-col gap-8">
@@ -93,9 +106,9 @@ const Trips = () => {
                                         />
 
                                         <Button className="cursor-pointer px-4 py-2">
-                                        {
-                                            CategoryMutation.isPending ? "...adding" : "Add"
-                                        }
+                                            {
+                                                CategoryMutation.isPending ? "...adding" : "Add"
+                                            }
                                         </Button>
                                     </form>
                                 </Form>
@@ -105,7 +118,7 @@ const Trips = () => {
 
                     <div className="mt-2" onClick={() => SetShowHide(prev => !prev)}>
                         <Button className="w-full rounded-full px-14 py-6 cursor-pointer">
-                        Add Category
+                            Add Category
                         </Button>
                     </div>
 

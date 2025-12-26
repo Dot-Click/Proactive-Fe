@@ -13,6 +13,7 @@ import { toast } from "sonner"
 import { UsegetNotifications } from "@/hooks/getNotificationhook"
 import { FaCheckDouble } from "react-icons/fa6";
 import { useMarkAsReadNotification } from "@/hooks/MarkAsReadNotification"
+import { useState } from "react"
 
 interface NavbarProps {
   collapsed: boolean;
@@ -98,6 +99,8 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const Logoutmutation = useLogoutUser();
+  // const [open, setOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   let NavHeading = location.pathname.split("/")[2]?.split("-").join(" ");
   if (NavHeading === "payment membership") {
     NavHeading = "Payment & Membership";
@@ -140,56 +143,60 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
           <img src={Country} alt="Country" />
         </div>
 
+
         {/* Notification icon */}
-        <DropdownMenu>
-          <DropdownMenuTrigger>
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+          <DropdownMenuTrigger asChild>
             <div className="cursor-pointer relative bg-[#FFFFFF] rounded-full w-10 h-10 lg:w-14 lg:h-14 flex items-center justify-center md:mt-1">
               <Badge className="font-bold absolute left-6 bottom-6 lg:left-7 lg:bottom-8 bg-[#0DAC87] text-[9px] md:text-[10px] text-white rounded-full w-4 h-4 md:w-5 md:h-5 flex items-center justify-center">
-                3
+                {data?.filter(n => !n.read).length ?? 0}
               </Badge>
               <img src={Notification} alt="Notification" />
-              <DropdownMenuContent className="w-72">
-                {isLoading && (
-                  <div className="px-3 py-2 text-sm">Loading...</div>
-                )}
-
-                {isError && (
-                  <div className="px-3 py-2 text-sm text-red-500">Error</div>
-                )}
-
-                {!isLoading && !isError && data?.length === 0 && (
-                  <div className="px-3 py-2 text-sm text-gray-500 text-center">
-                    No Notification
-                  </div>
-                )}
-
-                {!isLoading && !isError && data && data?.length > 0 &&
-                  data?.map((val, index) => (
-                    <DropdownMenuItem
-                      key={index}
-                      className="flex flex-col items-start gap-2 cursor-pointer"
-                    >
-                      <div className="flex justify-between items-center w-full">
-                        <span className="text-sm font-semibold">{val.title}</span>
-                        <FaCheckDouble
-                          className={`cursor-pointer ${val.read ? "text-blue-500" : "text-gray-400"
-                            }`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            markAsRead.mutateAsync(val.id);
-                          }}
-                        />
-                      </div>
-
-                      <span className="text-sm text-gray-500 text-start">
-                        {val.description}
-                      </span>
-                    </DropdownMenuItem>
-                  ))
-                }
-              </DropdownMenuContent>
             </div>
           </DropdownMenuTrigger>
+
+          <DropdownMenuContent
+            className="w-72"
+            onCloseAutoFocus={(e) => e.preventDefault()}
+          >
+            {isLoading && (
+              <div className="px-3 py-2 text-sm">Loading...</div>
+            )}
+            {isError && (
+              <div className="px-3 py-2 text-sm text-red-500">Error</div>
+            )}
+
+            {!isLoading && !isError && data?.length === 0 && (
+              <div className="px-3 py-2 text-sm text-gray-500 text-center">
+                No Notification
+              </div>
+            )}
+
+            {!isLoading && !isError && data && data?.length > 0 &&
+              data?.map((val) => (
+                <div
+                  key={val.id}
+                  className="px-3 py-2 hover:bg-muted rounded-md"
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-sm">{val.title}</span>
+
+                    <FaCheckDouble
+                      className={`cursor-pointer ${val.read ? "text-blue-500" : "text-gray-400"
+                        }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        markAsRead.mutate(val.id);
+                      }}
+                    />
+                  </div>
+
+                  <span className="text-sm text-gray-500">
+                    {val.description}
+                  </span>
+                </div>
+              ))}
+          </DropdownMenuContent>
         </DropdownMenu>
 
         {/* Avatar and dropdown */}

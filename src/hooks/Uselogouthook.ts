@@ -17,6 +17,7 @@ const navigate = useNavigate()
         mutationFn: mutationFunction,
         onSuccess: (response) => {
             localStorage.removeItem("token")
+            localStorage.removeItem("userId")
             toast.success(response?.data?.message)
             navigate("/login")
         },

@@ -13,7 +13,6 @@ export interface Notification {
 
 const getNotifications = async (): Promise<Notification[]> => {
     const response = await api.get("/api/notification/");
-    console.log(response)
     return response.data.data;
 };
 
@@ -21,5 +20,6 @@ export const UsegetNotifications = () => {
     return useQuery<Notification[]>({
         queryKey: ["notifications"],
         queryFn: getNotifications,
+        staleTime: 5 * 60 * 1000, // 5 minutes
     });
 };

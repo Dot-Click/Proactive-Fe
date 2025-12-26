@@ -4,6 +4,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { UsegetCoordinator } from "@/hooks/getCoordinatorhook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload } from "lucide-react";
 import { useState } from "react";
@@ -39,6 +40,7 @@ const Coordinator = () => {
   type FormSchemaType = z.infer<typeof formSchema>;
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema) as any,
+    shouldUnregister: false, 
     defaultValues: {
       Triptype: "",
       TripTitle: "",
@@ -53,6 +55,7 @@ const Coordinator = () => {
   });
   const [profile, setProfile] = useState("");
   const [show, setShow] = useState(false)
+  const {data} = UsegetCoordinator();
   const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     setProfile(file ? URL.createObjectURL(file) : "");
@@ -100,9 +103,11 @@ const Coordinator = () => {
                               <SelectValue placeholder="Select Coordinator" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="Maria">Maria</SelectItem>
-                              <SelectItem value="John">John</SelectItem>
-                              <SelectItem value="David">David</SelectItem>
+                              {
+                                data?.coordinators?.map((coordinator: any) => (
+                                  <SelectItem key={coordinator.id} value={coordinator.name}>{coordinator.name}</SelectItem>
+                                ))
+                              }
                             </SelectContent>
                           </Select>
                         </FormControl>
@@ -202,7 +207,7 @@ const Coordinator = () => {
                     )}
                   />
                   <div className="flex justify-start mt-4">
-                    <Button onClick={()=> setShow(false)} type="button" variant={'outline'} className="text-[#9C0000] rounded-full px-8 py-4 border border-[#9C0000] cursor-pointer">Remove</Button>
+                    <Button onClick={() => setShow(false)} type="button" variant={'outline'} className="text-[#9C0000] rounded-full px-8 py-4 border border-[#9C0000] cursor-pointer">Remove</Button>
                   </div>
                 </div>
               </>

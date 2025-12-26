@@ -6,45 +6,22 @@ import { useForm } from "react-hook-form";
 import z from "zod"
 import gallery from "@/assets/sidebaricon/gallery.png"
 import { Input } from "@/components/ui/input";
-const formSchema = z
-  .object({
-    Triptype: z.string().min(1, {
-      message: "Select Trip Type",
-    }),
-    TripTitle: z.string().min(1, {
-      message: "TripTitle is required",
-    }),
-    Description: z.string().min(1, {
-      message: "Description is required",
-    }),
-    coverImage: z.any().optional(),
-    Location: z.string().min(1, {
-      message: "Select at least one Location",
-    }),
-    mapCoordinates: z.string().optional(),
-    StartDate: z.coerce.number().min(1, {
-      message: "Select Start Date",
-    }),
-    EndDate: z.coerce.number().min(1, {
-      message: "Select End Date",
-    }),
-    Duration: z.string().optional()
-  })
-
+const formSchema = z.object({
+  PromotionalVideo: z.any().optional(),
+  GalleryImages: z.array(z.any()).min(1, "At least one gallery image is required"),
+  BestPrice: z.string().min(1, "Best Price is required"),
+  FinalPrice: z.string().min(1, "Final Price is required"),
+});
 const Mediaprice = () => {
   type FormSchemaType = z.infer<typeof formSchema>;
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema) as any,
+    shouldUnregister: false,
     defaultValues: {
-      Triptype: "",
-      TripTitle: "",
-      Description: "",
-      coverImage: null,
-      Location: "",
-      mapCoordinates: '',
-      StartDate: 0,
-      EndDate: 0,
-      Duration: '',
+      PromotionalVideo: null,
+      GalleryImages: [],
+      BestPrice: "",
+      FinalPrice: "",
     },
   });
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>(Array(8).fill(""));
@@ -106,7 +83,7 @@ const Mediaprice = () => {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
-            name="coverImage"
+            name="PromotionalVideo"
             render={() => (
               <FormItem className="md:col-span-2 mt-6">
                 <FormLabel className="text-[#242E2F] font-semibold">
@@ -183,7 +160,7 @@ const Mediaprice = () => {
           </div>
           <FormField
             control={form.control}
-            name="TripTitle"
+            name="BestPrice"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[#242E2F] font-semibold mt-8">
@@ -191,7 +168,7 @@ const Mediaprice = () => {
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Trip Title"
+                    placeholder="Guarantee Message"
                     {...field}
                     className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                   />
@@ -202,7 +179,7 @@ const Mediaprice = () => {
           />
           <FormField
             control={form.control}
-            name="TripTitle"
+            name="FinalPrice"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[#242E2F] font-semibold mt-8">

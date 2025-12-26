@@ -1,5 +1,5 @@
-// import api from "@/config/axios";
-// import { useQuery  } from "@tanstack/react-query";
+import api from "@/config/axios";
+import { useQuery  } from "@tanstack/react-query";
 
 // export interface Coordinator {
 //     accessLvl: string;
@@ -20,16 +20,15 @@
 // }
 
 
-// const getCategories = async () => {
-//     const response = await api.get("/api/categories");
-//     console.log(response)
-//     return response.data;
-// };
+const getCategories = async () => {
+    const response = await api.get("/api/categories");
+    return response.data.data;
+};
 
-// export const UsegetCategory = () => {
-//     return useQuery({
-//         queryKey: ["category"],
-//         queryFn: getCategories,
-//         staleTime: 60 * 3 * 1000, 
-//     });
-// };
+export const UsegetCategory = () => {
+    return useQuery({
+        queryKey: ["category"],
+        queryFn: getCategories,
+        staleTime: 60 * 3 * 1000, 
+    });
+};
