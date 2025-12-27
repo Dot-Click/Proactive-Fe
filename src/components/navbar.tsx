@@ -14,6 +14,7 @@ import { UsegetNotifications } from "@/hooks/getNotificationhook"
 import { FaCheckDouble } from "react-icons/fa6";
 import { useMarkAsReadNotification } from "@/hooks/MarkAsReadNotification"
 import { useState } from "react"
+import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
 
 interface NavbarProps {
   collapsed: boolean;
@@ -99,8 +100,8 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const Logoutmutation = useLogoutUser();
-  // const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { data: user } = UsegetCurrentUser();
   let NavHeading = location.pathname.split("/")[2]?.split("-").join(" ");
   if (NavHeading === "payment membership") {
     NavHeading = "Payment & Membership";
@@ -156,7 +157,7 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent
-            className="w-72"
+            className="w-80"
             onCloseAutoFocus={(e) => e.preventDefault()}
           >
             {isLoading && (
@@ -206,8 +207,8 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div className="hidden lg:flex flex-col">
-            <span className="font-semibold text-sm lg:text-lg">Pachums</span>
-            <span className="text-sm text-gray-500">Pachums@gmail.com</span>
+            <span className="font-semibold text-sm lg:text-lg">{user?.data?.user?.FirstName}</span>
+            <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="cursor-pointer">
@@ -218,8 +219,8 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
             <DropdownMenuContent>
               <DropdownMenuItem className="flex flex-col gap-2 items-start cursor-pointer">
                 <div className="flex lg:hidden flex-col">
-                  <span className="font-semibold text-sm lg:text-lg">Pachums</span>
-                  <span className="text-sm text-gray-500">Pachums@gmail.com</span>
+                  <span className="font-semibold text-sm lg:text-lg">{user?.data?.user?.FirstName}</span>
+                  <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
                 </div>
                 <div className="flex justify-start items-center gap-3" onClick={Handlelogout}>
                   <LogOut />

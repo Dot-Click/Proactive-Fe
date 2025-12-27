@@ -22,6 +22,7 @@ const mutationFunction = async (data: FormData): Promise<AxiosResponse<any>> => 
     const res = await api.post("/api/admin/coordinator", data, {
         headers: {"Content-Type": "multipart/form-data"}
     });
+    console.log(res)
     return res.data
 };
 

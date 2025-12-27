@@ -13,6 +13,7 @@ export interface Coordinator {
     specialities: string[];
     type: string;
     yearsOfExperience: number;
+    location: string;
 }
 
 interface CoordinatorProps {
@@ -22,6 +23,7 @@ interface CoordinatorProps {
 
 const getCoordinator = async (): Promise<CoordinatorProps> => {
     const response = await api.get("/api/admin/coordinator");
+    console.log(response)
     return response.data.data;
 };
 

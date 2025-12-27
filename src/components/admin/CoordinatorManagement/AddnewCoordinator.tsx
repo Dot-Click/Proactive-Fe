@@ -56,6 +56,7 @@ const formSchema = z
     yearsOfExperience: z.coerce.number().min(1, {
       message: "Experience is required",
     }),
+    location: z.string().optional(),
     type: z.string().min(1, {
       message: "Select Coordinator type",
     }),
@@ -94,6 +95,7 @@ const AddnewCoordinator = () => {
       languages: [],
       certificateLvl: "",
       yearsOfExperience: 0,
+      location: "",
       type: "",
       accessLvl: "",
       password: "",
@@ -120,23 +122,25 @@ const AddnewCoordinator = () => {
       toast.error("Please upload a profile picture");
       return;
     }
-    const coordinatorDetails = {
-      fullName: val.fullName,
-      phoneNumber: val.phoneNumber,
-      bio: val.bio,
-      specialities: val.specialities,
-      languages: val.languages,
-      certificateLvl: val.certificateLvl,
-      yearsOfExperience: val.yearsOfExperience,
-      type: val.type,
-      accessLvl: val.accessLvl,
-      profilePicture: ""
-    };
     const formData = new FormData();
-    formData.append("coordinatorDetails", JSON.stringify(coordinatorDetails));
+    formData.append("fullName", val.fullName);
     formData.append("email", val.email);
+    formData.append("phoneNumber", val.phoneNumber);
+    formData.append("bio", val.bio);
+    formData.append("certificateLvl", val.certificateLvl);
+    formData.append("yearsOfExperience", String(val.yearsOfExperience));
+    formData.append("type", val.type);
+    formData.append("accessLvl", val.accessLvl);
+
+    if (val.location) {
+      formData.append("location", val.location);
+    }
+    formData.append("specialities", JSON.stringify(val.specialities));
+    formData.append("languages", JSON.stringify(val.languages));
+
     formData.append("password", val.password);
     formData.append("prof_pic", profileFile);
+
 
     try {
       await CreateCoordinatorMutation.mutateAsync(formData);
@@ -471,6 +475,26 @@ const AddnewCoordinator = () => {
                       <Input
                         type="number"
                         placeholder="00"
+                        {...field}
+                        className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[#242E2F] font-semibold">
+                      Location
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Location"
                         {...field}
                         className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6"
                       />

@@ -171,21 +171,21 @@ const {data, isLoading, isError} = UsegetCoordinator()
 
                         {/* Details */}
                         <div className="grid grid-cols-2 gap-2 mt-4">
-                            <div className="flex flex-col">
+                            <div className="flex items-center gap-3">
                                 <span className="text-[#221E33] font-semibold text-[14px]">Location:</span>
-                                <span className="text-[#727272] text-[12px]"></span>
+                                <span className="text-[#727272] text-[12px]">{user.location || "N/A"}</span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <span className="text-[#221E33] font-semibold text-[14px]">Experience:</span>
-                                <span className="text-[#727272] text-[14px]">{user.yearsOfExperience}</span>
+                                <span className="text-[#727272] text-[14px]">{user.yearsOfExperience || "N/A"}</span>
                             </div>
-                            <div className="flex flex-col">
+                            <div className="flex items-center gap-3">
                                 <span className="text-[#221E33] font-semibold text-[14px]">Success Rate:</span>
-                                <span className="text-[#727272] text-[12px]"></span>
+                                <span className="text-[#727272] text-[12px]">N/A</span>
                             </div>
-                            <div className="flex flex-col">
+                            <div className="flex items-center gap-3">
                                 <span className="text-[#221E33] font-semibold text-[14px]">Last Active:</span>
-                                <span className="text-[#727272] text-[12px]"></span>
+                                <span className="text-[#727272] text-[12px]">N/A</span>
                             </div>
                         </div>
 
