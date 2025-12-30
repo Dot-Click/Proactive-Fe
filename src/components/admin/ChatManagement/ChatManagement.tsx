@@ -151,7 +151,7 @@ const userData: ColumnDef<User>[] = [
             <DialogTrigger>
               <Button className="cursor-pointer px-4 h-10 rounded-full">View Message</Button>
             </DialogTrigger>
-            <MessageModal/>
+            <MessageModal />
           </Dialog>
           <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] hover:text-[#9C0000] font-bold">Close</Button>
         </div>
@@ -162,7 +162,7 @@ const userData: ColumnDef<User>[] = [
 ]
 
 const ChatManagement = () => {
-const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+  const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
   return (
     <>
       <div className="bg-[#FFFFFF] mt-3 rounded-[25px] px-5 py-5">

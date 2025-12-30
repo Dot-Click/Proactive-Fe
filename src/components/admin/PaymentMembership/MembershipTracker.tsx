@@ -2,31 +2,26 @@ import { Button } from "@/components/ui/button";
 import ReusableTable from "@/Table/ReusableTable"
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
-import { Download } from "lucide-react"
+import { Download, LoaderIcon } from "lucide-react"
 import TotalUsers from "@/assets/sidebaricon/totalusers.png"
 import Coordinator from "@/assets/sidebaricon/coordinators.png"
 import ActiveTrips from "@/assets/sidebaricon/activetrips.png"
 import CloseTrips from "@/assets/sidebaricon/closetrips.png"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
+import { UsegetPayment } from "@/hooks/getPaymenthook";
 // import { Badge } from "@/components/ui/badge";
 
-type User = {
-    User: string;
-    Membershiptype: string;
-    StartDate: string;
-    ExpiryDate: string;
-    Status: string;
-};
+type User = any;
 
-const data: User[] = [
-    { User: 'Sarah L.', Membershiptype: 'Gold', StartDate: '2024-01-15', ExpiryDate: '2024-12-31', Status: 'Active' },
-    { User: 'Sarah L.', Membershiptype: 'Gold', StartDate: '2024-01-15', ExpiryDate: '2024-12-31', Status: 'Active' },
-]
+// const data: User[] = [
+//     { User: 'Sarah L.', Membershiptype: 'Gold', StartDate: '2024-01-15', ExpiryDate: '2024-12-31', Status: 'Active' },
+//     { User: 'Sarah L.', Membershiptype: 'Gold', StartDate: '2024-01-15', ExpiryDate: '2024-12-31', Status: 'Active' },
+// ]
 
 const userData: ColumnDef<User>[] = [
     {
-        accessorKey: 'User',
+        accessorKey: 'user',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -35,6 +30,9 @@ const userData: ColumnDef<User>[] = [
             </div>
         ),
         cell: ({ row }) => {
+            const u = row.original.user;
+            const displayName = u ? (u.firstName || u.nickName ? `${u.firstName || ''} ${u.lastName || ''}`.trim() : u.email) : 'Unknown';
+            const email = u?.email || '';
             return (
                 <div className="flex items-center gap-3">
                     <Avatar className="h-12 w-12 flex-shrink-0">
@@ -44,10 +42,10 @@ const userData: ColumnDef<User>[] = [
 
                     <div className="flex flex-col justify-center cursor-pointer">
                         <span className="font-semibold text-[14px] text-[#666373]">
-                            {row.original.User}
+                            {displayName}
                         </span>
                         <span className="text-[12px] text-[#666373]">
-                            sarah.l@email.com
+                            {email}
                         </span>
                     </div>
                 </div>
@@ -66,7 +64,7 @@ const userData: ColumnDef<User>[] = [
         cell: ({ row }) => {
             return (
                 <div className="text-center bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full w-20 py-3 font-semibold">
-                    {row.original.Membershiptype}
+                    {row.original.membershipType || 'N/A'}
                 </div>
             )
         }
@@ -84,11 +82,15 @@ const userData: ColumnDef<User>[] = [
             return (
                 <div className="flex flex-col justify-center cursor-pointer pl-2">
                     <span className="font-semibold text-[14px] text-[#666373]">
-                        {row.original.StartDate}
+                        {new Date(row.original.createdAt).toLocaleString("en-US", {
+                            month: "short",
+                            day: "2-digit",
+                            year: "numeric",
+                        }) || 'N/A'}
                     </span>
-                    <span className="text-[12px] text-[#666373]">
+                    {/* <span className="text-[12px] text-[#666373]">
                         Source: Trip Payment
-                    </span>
+                    </span> */}
                 </div>
             )
         }
@@ -103,20 +105,25 @@ const userData: ColumnDef<User>[] = [
             </div>
         ),
         cell: ({ row }) => {
+            const daysLeft = Math.ceil((new Date(row.original.membershipExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
             return (
                 <div className="flex flex-col justify-center cursor-pointer ">
                     <span className="font-semibold text-[14px] text-[#666373]">
-                        {row.original.ExpiryDate}
+                        {new Date(row.original.membershipExpiry).toLocaleString("en-US", {
+                            month: "short",
+                            day: "2-digit",
+                            year: "numeric",
+                        }) || 'N/A'}
                     </span>
                     <span className="text-[12px] text-[#666373]">
-                        40 days left
+                        {daysLeft} days left
                     </span>
                 </div>
             )
         }
     },
     {
-        accessorKey: 'Status',
+        accessorKey: 'status',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -129,7 +136,7 @@ const userData: ColumnDef<User>[] = [
                 <Button
                     className='rounded-full bg-[#35FF62]/10 text-[#077B21] border border-[#077B21] hover:bg-[#35FF62]/20 px-8 py-5'
                 >
-                    {row.original.Status}
+                    {row.original.status}
                 </Button>
             )
         }
@@ -150,40 +157,52 @@ const userData: ColumnDef<User>[] = [
     },
 ]
 
-const stats = [
-    {
-        id: 1,
-        name: 'Total Active Memberships',
-        value: '134',
-        icon: TotalUsers,
-        change: '+5%',
-    },
-    {
-        id: 2,
-        name: 'Expiring Soon',
-        value: '25',
-        icon: Coordinator,
-        change: '+10%'
-    },
-    {
-        id: 3,
-        name: 'Average Duration',
-        value: '365 days',
-        icon: ActiveTrips,
-        change: '+8%'
-    },
-    {
-        id: 4,
-        name: 'Monthly Renewals',
-        value: '18',
-        icon: CloseTrips,
-        change: '-12%'
-    }
-]
 
 const MembershipTracker = () => {
+    const { data: MembershipData, isLoading, isError } = UsegetPayment();
+    const membershipPaymentsData = MembershipData?.membershipPayments?.payments;
+    const membershipPaymentsStats = MembershipData?.membershipPayments?.keyStates;
+    const stats = [
+        {
+            id: 1,
+            name: 'Total Active Memberships',
+            value: isLoading ? 'Loading...' : membershipPaymentsStats?.totalActiveMemberships || '0',
+            icon: TotalUsers,
+            change: '+5%',
+        },
+        {
+            id: 2,
+            name: 'Expiring Soon',
+            value: isLoading ? 'Loading...' : membershipPaymentsStats?.expiringSoon || '0',
+            icon: Coordinator,
+            change: '+10%'
+        },
+        {
+            id: 3,
+            name: 'Average Duration',
+            value: isLoading ? 'Loading...' : membershipPaymentsStats?.averageDuration || '0',
+            icon: ActiveTrips,
+            change: '+8%'
+        },
+        {
+            id: 4,
+            name: 'Monthly Renewals',
+            value: isLoading ? 'Loading...' : membershipPaymentsStats?.monthlyRenewals || '0',
+            icon: CloseTrips,
+            change: '-12%'
+        }
+    ]
     const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
-
+    if (isError) {
+        return <div>Error loading membership data.</div>;
+    }
+    if (isLoading) {
+        return (
+            <div className="w-full flex items-center justify-center py-10">
+                <LoaderIcon className="animate-spin" />
+            </div>
+        )
+    }
     return (
         <div>
             <div className="px-6 py-4 bg-white rounded-[20px] mt-3">
@@ -221,7 +240,7 @@ const MembershipTracker = () => {
                 onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
             />
             <div className="bg-white rounded-[25px] mt-3">
-                <ReusableTable data={data} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)}/>
+                <ReusableTable data={membershipPaymentsData ?? []} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
             </div>
 
 

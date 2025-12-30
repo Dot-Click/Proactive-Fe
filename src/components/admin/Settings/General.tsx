@@ -2,27 +2,32 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { UsegetSettinghook } from "@/hooks/getSettinghook";
+import { UseupdateSetting } from "@/hooks/updatesettinghook";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { toast } from "sonner";
 import z from "zod"
 
 
 
 const formSchema = z
   .object({
-    PlatformName: z.string().min(1, {
+    platformName: z.string().min(1, {
       message: "Platform Name is required",
     }),
-    TimeZone: z.string().min(1, {
+    timeZone: z.string().min(1, {
       message: "Select TimeZone",
     }),
-    PlatformImage: z.string().min(1, {
+    logo: z.string().min(1, {
       message: "Platform Image is required",
     }),
-    DefaultLanguage: z.string().min(1, {
+    defaultLanguage: z.string().min(1, {
       message: "Select Default Language",
     }),
-    Currency: z.string().min(1, {
+    currency: z.string().min(1, {
       message: "Select Currency",
     }),
 
@@ -33,17 +38,44 @@ const General = () => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema) as any,
     defaultValues: {
-      PlatformName: "",
-      TimeZone: "",
-      PlatformImage: "",
-      DefaultLanguage: "",
-      Currency: "",
+      platformName: "",
+      timeZone: "",
+      logo: "",
+      defaultLanguage: "",
+      currency: "",
     },
   });
+  const { mutateAsync, isPending } = UseupdateSetting();
+  const { data } = UsegetSettinghook();
+  const generalSettingData = data?.settings;
 
-  const onSubmit = (val: z.infer<typeof formSchema>) => {
-    console.log(val);
+  useEffect(() => {
+    if (generalSettingData) {
+      form.reset({
+        platformName: generalSettingData.platformName ?? "",
+        timeZone: generalSettingData.timeZone ?? "",
+        logo: generalSettingData.logo ?? "",
+        defaultLanguage: generalSettingData.defaultLanguage ?? "",
+        currency: generalSettingData.currency ?? "",
+      });
+    }
+  }, [generalSettingData, form]);
+  const onSubmit = async (val: z.infer<typeof formSchema>) => {
+    try {
+      const { currency, defaultLanguage, logo, timeZone, platformName } = val;
+      await mutateAsync({
+        currency,
+        defaultLanguage,
+        logo,
+        timeZone,
+        platformName,
+      });
+      toast.success("Settings updated successfully");
+    } catch (error) {
+      toast.error("Failed to update settings");
+    }
   };
+
 
   return (
     <div className="rounded-[10px] mt-4 bg-white md:min-h-[100vh]">
@@ -60,7 +92,7 @@ const General = () => {
           <div className="grid grid-cols-2 px-5 py-8 gap-6">
             <FormField
               control={form.control}
-              name="PlatformName"
+              name="platformName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">
@@ -79,23 +111,20 @@ const General = () => {
             />
             <FormField
               control={form.control}
-              name="TimeZone"
+              name="timeZone"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">
                     Time zone
                   </FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
                         <SelectValue placeholder="Select Time Zone" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent >
                         <SelectItem value="UTC-8">Pacific Time (UTC-8)</SelectItem>
-                        <SelectItem value="UTC-5">Eastern Time (UTC-5)</SelectItem>
+                        <SelectItem value={"UTC-5"}>Eastern Time (UTC-5)</SelectItem>
                         <SelectItem value="UTC+0">Greenwich Mean Time (UTC+0)</SelectItem>
                         <SelectItem value="UTC+1">Central European Time (UTC+1)</SelectItem>
                         <SelectItem value="UTC+3">Arabian Standard Time (UTC+3)</SelectItem>
@@ -115,7 +144,7 @@ const General = () => {
             />
             <FormField
               control={form.control}
-              name="PlatformImage"
+              name="logo"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">
@@ -134,7 +163,7 @@ const General = () => {
             />
             <FormField
               control={form.control}
-              name="DefaultLanguage"
+              name="defaultLanguage"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">
@@ -142,8 +171,8 @@ const General = () => {
                   </FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value ?? ""}
+                      onValueChange={(v) => field.onChange(v)}
                     >
                       <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
                         <SelectValue placeholder="Default Language" />
@@ -169,7 +198,7 @@ const General = () => {
             />
             <FormField
               control={form.control}
-              name="Currency"
+              name="currency"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">
@@ -177,8 +206,8 @@ const General = () => {
                   </FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value ?? ""}
+                      onValueChange={(v) => field.onChange(v)}
                     >
                       <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
                         <SelectValue placeholder="Currency" />
@@ -206,7 +235,16 @@ const General = () => {
             />
           </div>
           <div className="flex justify-end px-5 py-8 mt-35">
-            <Button className="rounded-full px-12 py-5 cursor-pointer">Save Changes</Button>
+            <Button type="submit" disabled={isPending} className="rounded-full px-12 py-5 cursor-pointer flex items-center gap-2">
+              {isPending ? (
+                <>
+                  <LoaderIcon className="animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                "Save Changes"
+              )}
+            </Button>
           </div>
         </form>
       </Form>

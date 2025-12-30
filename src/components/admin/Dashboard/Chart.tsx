@@ -39,9 +39,6 @@ export function Chart() {
     if (isError) {
         return <div>Error loading chart data.</div>;
     }
-    if (isLoading) {
-        return <div>Loading chart data...</div>;
-    }
 
     return (
         <>

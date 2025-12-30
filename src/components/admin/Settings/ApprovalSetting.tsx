@@ -1,20 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { UsegetSettinghook } from "@/hooks/getSettinghook";
+import { UseupdateSetting } from "@/hooks/updatesettinghook";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {  useForm } from "react-hook-form";
+import { LoaderIcon } from "lucide-react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod"
 
 
 const formSchema = z
     .object({
-        DefaultApproval: z.string().min(1, {
+        defaultApproval: z.string().min(1, {
             message: "Select Default Approval",
         }),
-        MaxParticipants: z.string().min(1, {
+        defaultMaxParticipants: z.string().min(1, {
             message: "Select Max Participants",
         }),
-        MinParticipants: z.string().min(1, {
+        defaultMinParticipants: z.string().min(1, {
             message: "Select Min Participants",
         }),
     })
@@ -24,14 +29,37 @@ const ApprovalSetting = () => {
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
-            DefaultApproval: "",
-            MaxParticipants: "",
-            MinParticipants: "",
+            defaultApproval: "",
+            defaultMaxParticipants: "",
+            defaultMinParticipants: "",
         },
     });
+    const { mutateAsync, isPending } = UseupdateSetting();
+    const { data } = UsegetSettinghook();
+    const ApprovalSettingData = data?.settings;
 
-    const onSubmit = (val: z.infer<typeof formSchema>) => {
-        console.log(val);
+    useEffect(() => {
+        if (ApprovalSettingData) {
+            form.reset({
+                defaultApproval: ApprovalSettingData.defaultApproval ?? "",
+                defaultMaxParticipants: ApprovalSettingData.defaultMaxParticipants ?? "",
+                defaultMinParticipants: ApprovalSettingData.defaultMinParticipants ?? "",
+            });
+        }
+    }, [ApprovalSettingData, form]);
+
+    const onSubmit = async (val: z.infer<typeof formSchema>) => {
+        const { defaultApproval, defaultMaxParticipants, defaultMinParticipants } = val
+        try {
+            await mutateAsync({
+                defaultApproval,
+                defaultMaxParticipants,
+                defaultMinParticipants
+            });
+            toast.success("Settings updated successfully");
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
     };
 
     return (
@@ -49,7 +77,7 @@ const ApprovalSetting = () => {
                     <div className="px-6 py-6 flex flex-col gap-5 flex-1">
                         <FormField
                             control={form.control}
-                            name="DefaultApproval"
+                            name="defaultApproval"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -77,7 +105,7 @@ const ApprovalSetting = () => {
                         />
                         <FormField
                             control={form.control}
-                            name="MaxParticipants"
+                            name="defaultMaxParticipants"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -89,7 +117,7 @@ const ApprovalSetting = () => {
                                             defaultValue={field.value}
                                         >
                                             <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                                                <SelectValue placeholder="60" />
+                                                <SelectValue placeholder="Select Max Participants" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="5">5 Participants</SelectItem>
@@ -110,11 +138,11 @@ const ApprovalSetting = () => {
                         />
                         <FormField
                             control={form.control}
-                            name="MinParticipants"
+                            name="defaultMinParticipants"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="text-[#242E2F] font-semibold">
-                                        Default Min Parcipants
+                                        Default Min Participants
                                     </FormLabel>
                                     <FormControl>
                                         <Select
@@ -122,7 +150,7 @@ const ApprovalSetting = () => {
                                             defaultValue={field.value}
                                         >
                                             <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                                                <SelectValue placeholder="05" />
+                                                <SelectValue placeholder="Select Min Participants" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="1">1 Participant</SelectItem>
@@ -140,7 +168,12 @@ const ApprovalSetting = () => {
                         />
                     </div>
                     <div className="flex justify-end md:mt-36 px-6 py-6">
-                        <Button className="rounded-full px-14 py-6 cursor-pointer">Save Changes</Button>
+                        <Button className="rounded-full px-14 py-6 cursor-pointer">{isPending ? (
+                            <>
+                                <LoaderIcon className="animate-spin" />
+                                <span>Saving...</span>
+                            </>
+                        ) : "Save Changes"}</Button>
                     </div>
                 </form>
             </Form>

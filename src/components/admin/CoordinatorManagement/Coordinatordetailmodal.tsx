@@ -7,6 +7,7 @@ import clock from "@/assets/sidebaricon/clock.png"
 import star from "@/assets/sidebaricon/star.png"
 import { Progress } from "@/components/ui/progress"
 import { useNavigate } from "react-router-dom"
+import { UsegetCoordinatorbyId } from "@/hooks/getCoordinatorhookid"
 
 const CoordinatorData = [
     {
@@ -26,8 +27,16 @@ const CoordinatorData = [
         Number: '60%'
     },
 ]
-const Coordinatordetailmodal = () => {
-const navigate = useNavigate()
+const Coordinatordetailmodal = ({ coordinatorId }: { coordinatorId: string }) => {
+    const navigate = useNavigate()
+    const { data, isLoading, isError } = UsegetCoordinatorbyId(coordinatorId);
+    const coordinator = data?.coordinator
+    {
+        isLoading && <p>Loading...</p>
+    }
+    {
+        isError && <p>Error loading coordinator details.</p>
+    }
     return (
         <div>
             <DialogContent className="sm:max-w-[880px] max-h-[90vh] border-[6px] border-[#E3E3E3] rounded-[20px] overflow-y-auto">
@@ -35,19 +44,18 @@ const navigate = useNavigate()
                     <DialogTitle className="font-bold text-[24px]">Coordinator Details</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4">
-
                     <div className="flex lg:flex-row lg:items-center justify-between gap-3 bg-[#FAFAFE] md:px-6 px-4 py-6 rounded-[16px] mt-5">
-                        
+
                         <div className="flex flex-col lg:flex-row items-start gap-2">
                             <Avatar className="h-20 w-20">
-                                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                                <AvatarImage src={coordinator?.profilePicture} alt="@shadcn" />
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
 
                             <div className="flex flex-col justify-between">
                                 <div>
-                                    <h2 className="text-[18px] text-[#221E33] font-semibold leading-tight">Pavel Novak</h2>
-                                    <p className="text-[13px] text-[#666373]">pavel.n@email.com</p>
+                                    <h2 className="text-[18px] text-[#221E33] font-semibold leading-tight">{coordinator?.fullName}</h2>
+                                    <p className="text-[13px] text-[#666373]">{coordinator?.email}</p>
                                 </div>
 
                                 <div className="flex gap-2 mt-3">
@@ -66,11 +74,11 @@ const navigate = useNavigate()
                                     </div>
                                     <div className="flex flex-col lg:flex-row items-center gap-1.5 ">
                                         <img src={Map} alt="map" className="h-4" />
-                                        <span className="text-center lg:text-start">Barcelona, Spain</span>
+                                        <span className="text-center lg:text-start">{coordinator?.location}</span>
                                     </div>
                                     <div className="flex flex-col lg:flex-row items-center gap-1.5 ">
                                         <img src={clock} alt="clock" className="h-4" />
-                                        <span className="text-center lg:text-start">1 year experience</span>
+                                        <span className="text-center lg:text-start">{coordinator?.yearsOfExperience} years experience</span>
                                     </div>
                                 </div>
                             </div>
@@ -105,27 +113,31 @@ const navigate = useNavigate()
                             <div className="px-5 py-4 flex flex-col gap-4">
                                 <div className="flex flex-col gap-2">
                                     <span className="text-[#666373]">Specialties:</span>
-                                    <div className="text-[#666373] grid lg:grid-cols-2 gap-y-2 ">
-                                        <Badge className="px-5 py-2 font-medium bg-[#F5F5F5] text-[#727272] text-[15px]">Adventure Travel</Badge>
-                                        <Badge className="px-5 py-2 font-medium bg-[#F5F5F5] text-[#727272] text-[15px]">Desert Expeditions</Badge>
-                                        <Badge className="px-5 py-2 font-medium bg-[#F5F5F5] text-[#727272] text-[15px]">Wildlife</Badge>
-                                    </div>
+                                    {
+                                        coordinator?.specialities.map((speciality: string[]) => (
+                                            <div className="text-[#666373] grid lg:grid-cols-2 gap-y-2 ">
+                                                <Badge className="px-5 py-2 font-medium bg-[#F5F5F5] text-[#727272] text-[15px]">{speciality}</Badge>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <span className="text-[#666373]">Languages:</span>
-                                    <div className="text-[#666373] grid lg:grid-cols-3 gap-y-2">
-                                        <Badge className="px-7 py-2 font-medium bg-[#F5F5F5] text-[#727272] text-[15px]">English</Badge>
-                                        <Badge className="px-7 py-2 font-medium bg-[#F5F5F5] text-[#727272] text-[15px]">Arabic</Badge>
-                                        <Badge className="px-7 py-2 font-medium bg-[#F5F5F5] text-[#727272] text-[15px]">Spanish</Badge>
-                                    </div>
+                                    {
+                                        coordinator?.languages.map((language: string[]) => (
+                                            <div className="text-[#666373] grid lg:grid-cols-3 gap-y-2">
+                                                <Badge className="px-7 py-2 font-medium bg-[#F5F5F5] text-[#727272] text-[15px]">{language}</Badge>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-[#666373]">Certification Level</span>
-                                    <span className="text-[#666373] font-semibold">Certified Coordinator</span>
+                                    <span className="text-[#666373] font-semibold">{coordinator?.certificateLvl}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-[#666373]">Member Since</span>
-                                    <span className="text-[#666373]">2023-09-15</span>
+                                    <span className="text-[#666373]">{new Date(coordinator?.userCreatedAt).toLocaleDateString("en-US")}</span>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +176,7 @@ const navigate = useNavigate()
                     <Button className="w-full md:w-auto rounded-full bg-[#E0DDDD] hover:bg-[#c7c1c1] cursor-pointer text-[#606066] h-12 px-10 font-bold">Go Back</Button>
                     <DialogFooter className="w-full md:w-auto">
                         <div className="flex md:flex-row flex-col gap-4 w-full md:w-auto">
-                            <Button onClick={()=> navigate("/dashboard/edit-coordinator/:id")} className="w-full md:w-auto font-bold rounded-full bg-[#0DAC87] hover:bg-[#09a07d] cursor-pointer h-12 px-10">Edit Profile</Button>
+                            <Button onClick={() => navigate("/dashboard/edit-coordinator/:id")} className="w-full md:w-auto font-bold rounded-full bg-[#0DAC87] hover:bg-[#09a07d] cursor-pointer h-12 px-10">Edit Profile</Button>
                             <Button className="w-full md:w-auto font-bold rounded-full bg-[#000000] cursor-pointer h-12 px-10">Send Email</Button>
                             <Button variant={'outline'} className="w-full md:w-auto cursor-pointer font-bold rounded-full h-12 px-10 border border-[#9C0000] text-[#9C0000] hover:text-[#9C0000]">Block User</Button>
                         </div>

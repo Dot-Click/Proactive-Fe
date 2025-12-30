@@ -10,6 +10,7 @@ import z from "zod"
 import ApprovalSetting from "./ApprovalSetting"
 import { UseCreateCategory } from "@/hooks/UseCreateCategoryhook"
 import { UsegetCategory } from "@/hooks/getCategoryhook"
+import { LoaderIcon } from "lucide-react"
 
 const formSchema = z
     .object({
@@ -29,6 +30,7 @@ const Trips = () => {
     });
     const CategoryMutation = UseCreateCategory()
     const { data, isLoading, isError } = UsegetCategory()
+
     const onSubmit = async (val: z.infer<typeof formSchema>) => {
         const { name } = val
         try {
@@ -56,7 +58,11 @@ const Trips = () => {
 
                 <div className="border-b border-[#EDEDED]" />
                 {
-                    isLoading && <p>Loading...</p>
+                    isLoading && (
+                        <div className="w-full flex items-center justify-center py-10">
+                            <LoaderIcon className="animate-spin" />
+                        </div>
+                    )
                 }
                 {
                     isError && <p>Something went wrong</p>

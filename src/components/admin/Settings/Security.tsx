@@ -2,21 +2,27 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch"
+import { UsegetSettinghook } from "@/hooks/getSettinghook";
+import { UseupdateSetting } from "@/hooks/updatesettinghook";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderIcon } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod"
 
 const formSchema = z
     .object({
-        SessionTime: z.string().min(1, {
+        sessionTimeout: z.string().min(1, {
             message: "Session Time is required",
         }),
-        MaxLogin: z.string().min(1, {
+        maxLogins: z.string().min(1, {
             message: "MaxLogin is required",
         }),
-        MinPassword: z.string().min(1, {
+        minPasswordLength: z.string().min(1, {
             message: "MinPassword is required",
         }),
+        twoFactorEnabled: z.boolean(),
     })
 
 const Security = () => {
@@ -24,14 +30,39 @@ const Security = () => {
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
-            SessionTime: "",
-            MaxLogin: "",
-            MinPassword: "",
+            sessionTimeout: "",
+            maxLogins: "",
+            minPasswordLength: "",
+            twoFactorEnabled: false,
         },
     });
+    const { mutateAsync, isPending } = UseupdateSetting();
+    const { data } = UsegetSettinghook();
+    const SecurityData = data?.settings;
 
-    const onSubmit = (val: z.infer<typeof formSchema>) => {
-        console.log(val);
+    useEffect(() => {
+        if (SecurityData) {
+            form.reset({
+                sessionTimeout: SecurityData.sessionTimeout?.toString() ?? "",
+                maxLogins: SecurityData.maxLogins?.toString() ?? "",
+                minPasswordLength: SecurityData.minPasswordLength?.toString() ?? "",
+                twoFactorEnabled: !!SecurityData.twoFactorEnabled,
+            });
+        }
+    }, [SecurityData, form]);
+
+    const onSubmit = async (val: z.infer<typeof formSchema>) => {
+        try {
+            await mutateAsync({
+                sessionTimeout: val.sessionTimeout,
+                maxLogins: val.maxLogins,
+                minPasswordLength: val.minPasswordLength,
+                twoFactorEnabled: val.twoFactorEnabled,
+            });
+            toast.success("Settings updated successfully");
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
     };
 
     return (
@@ -47,19 +78,29 @@ const Security = () => {
                 {/* <div className="border-b border-[#EDEDED]" /> */}
 
                 <div className="px-5 py-4 flex flex-col gap-5 md:w-[84vh]">
-                    <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
-                        <div className="flex flex-col">
-                            <span className="text-[#221E33] font-bold">Require Two-Factor Authentication</span>
-                            <span className="text-[#727272] text-[12px]">Mandatory 2FA for all admin users</span>
-                        </div>
-                        <Switch className="w-12" />
-                    </div>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <FormField
+                                control={form.control}
+                                name="twoFactorEnabled"
+                                render={({ field }) => (
+                                    <FormItem className="mb-6">
+                                        <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-4 rounded-[20px]">
+                                            <div className="flex flex-col">
+                                                <span className="text-[#221E33] font-bold">Require Two-Factor Authentication</span>
+                                                <span className="text-[#727272] text-[12px]">Mandatory 2FA for all admin users</span>
+                                            </div>
+                                            <FormControl>
+                                                <Switch checked={!!field.value} onCheckedChange={(v) => field.onChange(v)} className="w-12" />
+                                            </FormControl>
+                                        </div>
+                                    </FormItem>
+                                )}
+                            />
                             <div className="flex flex-col gap-6">
                                 <FormField
                                     control={form.control}
-                                    name="SessionTime"
+                                    name="sessionTimeout"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel className="text-[#242E2F] font-semibold">
@@ -78,7 +119,7 @@ const Security = () => {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="MaxLogin"
+                                    name="maxLogins"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel className="text-[#242E2F] font-semibold">
@@ -97,7 +138,7 @@ const Security = () => {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="MinPassword"
+                                    name="minPasswordLength"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel className="text-[#242E2F] font-semibold">
@@ -123,10 +164,15 @@ const Security = () => {
                     <Button
                         onClick={form.handleSubmit(onSubmit)}
                         className="rounded-full px-12 py-5 cursor-pointer ">
-                        Save Changes
+                        {isPending ? (
+                            <>
+                                <LoaderIcon className="animate-spin" />
+                                <span>Saving...</span>
+                            </>
+                        ) : "Save Changes"}
                     </Button>
                 </div>
-                
+
             </div>
         </div>
     )

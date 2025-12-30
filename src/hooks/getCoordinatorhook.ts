@@ -2,6 +2,7 @@ import api from "@/config/axios";
 import { useQuery  } from "@tanstack/react-query";
 
 export interface Coordinator {
+    id: string;
     accessLvl: string;
     bio: string;
     certificateLvl: string;
@@ -23,7 +24,6 @@ interface CoordinatorProps {
 
 const getCoordinator = async (): Promise<CoordinatorProps> => {
     const response = await api.get("/api/admin/coordinator");
-    console.log(response)
     return response.data.data;
 };
 
