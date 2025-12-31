@@ -7,7 +7,7 @@ import { UseupdateSetting } from "@/hooks/updatesettinghook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { toast } from "sonner";
 import z from "zod"
 
@@ -49,7 +49,7 @@ const General = () => {
   const { data } = UsegetSettinghook();
   const generalSettingData = data?.settings;
 
-  useEffect(() => {
+  useMemo(() => {
     if (generalSettingData) {
       form.reset({
         platformName: generalSettingData.platformName ?? "",
@@ -60,6 +60,7 @@ const General = () => {
       });
     }
   }, [generalSettingData, form]);
+
   const onSubmit = async (val: z.infer<typeof formSchema>) => {
     try {
       const { currency, defaultLanguage, logo, timeZone, platformName } = val;

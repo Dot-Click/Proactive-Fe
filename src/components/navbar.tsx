@@ -102,6 +102,8 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
   const Logoutmutation = useLogoutUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { data: user } = UsegetCurrentUser();
+  const userData = user?.data?.user;
+  const displayName = userData?.role === "coordinator" ? userData?.coordinatorDetails?.fullName : userData?.FirstName || "Admin";
   let NavHeading = location.pathname.split("/")[2]?.split("-").join(" ");
   if (NavHeading === "payment membership") {
     NavHeading = "Payment & Membership";
@@ -207,7 +209,7 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div className="hidden lg:flex flex-col">
-            <span className="font-semibold text-sm lg:text-lg">{user?.data?.user?.FirstName}</span>
+            <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
             <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
           </div>
           <DropdownMenu>
@@ -219,7 +221,7 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
             <DropdownMenuContent>
               <DropdownMenuItem className="flex flex-col gap-2 items-start cursor-pointer">
                 <div className="flex lg:hidden flex-col">
-                  <span className="font-semibold text-sm lg:text-lg">{user?.data?.user?.FirstName}</span>
+                  <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
                   <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
                 </div>
                 <div className="flex justify-start items-center gap-3" onClick={Handlelogout}>

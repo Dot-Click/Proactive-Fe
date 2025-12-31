@@ -22,8 +22,8 @@ const trips = [
 ];
 
 const ViewDetailTripPage = () => {
-  const { id } = useParams()
-  const trip = trips.find((t) => t.id === Number(id))
+  const { tripId } = useParams()
+  const trip = trips.find((t) => t.id === Number(tripId))
   if (!trip) return <div>Trip not found</div>;
 
   return (

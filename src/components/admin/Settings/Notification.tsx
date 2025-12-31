@@ -60,7 +60,7 @@ const Notification = () => {
 
     return (
         <div>
-            <div className="rounded-[10px] mt-4 bg-white md:min-h-[100vh]">
+            <div className="rounded-[10px] mt-4 bg-white md:min-h-[100vh] flex flex-col">
 
                 <div className="bg-[#FAFAFA] rounded-t-[10px]">
                     <h1 className="text-[#221E33] font-bold text-[18px] sm:text-[20px] px-6 py-6">
@@ -71,65 +71,69 @@ const Notification = () => {
                 <div className="border-b border-[#EDEDED]" />
 
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="px-5 py-4 grid md:grid-cols-2 gap-5">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="px-5 py-4 flex flex-col gap-5 flex-1 overflow-auto">
 
-                        <FormField
-                            control={form.control}
-                            name="emailNotification"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
-                                        <div className="flex flex-col">
-                                            <span className="text-[#221E33] font-bold">Email Notifications</span>
-                                            <span className="text-[#727272] text-[12px]">Send notifications via email</span>
+                        <div className="grid md:grid-cols-2 gap-5">
+
+                            <FormField
+                                control={form.control}
+                                name="emailNotification"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
+                                            <div className="flex flex-col">
+                                                <span className="text-[#221E33] font-bold">Email Notifications</span>
+                                                <span className="text-[#727272] text-[12px]">Send notifications via email</span>
+                                            </div>
+                                            <FormControl>
+                                                <Switch checked={!!field.value} onCheckedChange={(v) => field.onChange(v)} className="w-12" />
+                                            </FormControl>
                                         </div>
-                                        <FormControl>
-                                            <Switch checked={!!field.value} onCheckedChange={(v) => field.onChange(v)} className="w-12" />
-                                        </FormControl>
-                                    </div>
-                                </FormItem>
-                            )}
-                        />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="smsNotification"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
-                                        <div className="flex flex-col">
-                                            <span className="text-[#221E33] font-bold">SMS Notifications</span>
-                                            <span className="text-[#727272] text-[12px]">Send notifications via SMS</span>
+                            <FormField
+                                control={form.control}
+                                name="smsNotification"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">
+                                            <div className="flex flex-col">
+                                                <span className="text-[#221E33] font-bold">SMS Notifications</span>
+                                                <span className="text-[#727272] text-[12px]">Send notifications via SMS</span>
+                                            </div>
+                                            <FormControl>
+                                                <Switch checked={!!field.value} onCheckedChange={(v) => field.onChange(v)} className="w-12" />
+                                            </FormControl>
                                         </div>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="ReminderDays"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-[#242E2F] font-semibold">
+                                            Reminder Days Before Trip
+                                        </FormLabel>
                                         <FormControl>
-                                            <Switch checked={!!field.value} onCheckedChange={(v) => field.onChange(v)} className="w-12" />
+                                            <Input
+                                                placeholder="03"
+                                                {...field}
+                                                className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                            />
                                         </FormControl>
-                                    </div>
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="ReminderDays"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-[#242E2F] font-semibold">
-                                        Reminder Days Before Trip
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="03"
-                                            {...field}
-                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        </div>
 
-                        <div className="flex justify-end md:mt-0 md:col-span-2">
+                        <div className="flex justify-end mt-auto">
                             <Button type="submit" disabled={isPending} className="rounded-full px-14 py-6 cursor-pointer">
                                 {isPending ? (
                                     <>
@@ -139,6 +143,7 @@ const Notification = () => {
                                 ) : "Save Changes"}
                             </Button>
                         </div>
+
                     </form>
                 </Form>
             </div>

@@ -11,20 +11,21 @@ import z from "zod"
 import cloudupload from "../../../assets/cloudupload.png"
 import { XIcon } from "lucide-react";
 import { FaCircleExclamation } from "react-icons/fa6";
+import { toast } from "sonner";
+import { UseApplication } from "@/hooks/UseApplicationSubmithook";
+import { useParams } from "react-router-dom";
 
 const formSchema = z
     .object({
-        Name: z.string().min(1, {
-            message: "Name is required",
-        }),
-        Email: z.string().email("Email is required",),
-        Gender: z.string().min(1, {
+        dietaryRestrictions: z.string().min(1, {
             message: "Gender is required",
         }),
-        ShortIntro: z.string().min(1, {
+        shortIntro: z.string().min(1, {
             message: "ShortIntro is required",
         }),
-        IntroVideo: z.any().optional(),
+        introVideo: z.instanceof(File, {
+            message: "Intro video is required",
+        }),
     })
 
 const ApplicationForm = () => {
@@ -32,26 +33,40 @@ const ApplicationForm = () => {
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
-            Name: "Will Bettelheim",
-            Email: "willbettelheim@gmail.com",
-            Gender: "",
-            ShortIntro: "",
-            IntroVideo: null,
+            dietaryRestrictions: "",
+            shortIntro: "",
+            introVideo: undefined,
         },
     });
     const [video, setVideo] = useState("");
     const [showHide, setShowHide] = useState(true)
+    const { tripId } = useParams();
+    const { mutateAsync, isPending } = UseApplication();
     const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        setVideo(file ? URL.createObjectURL(file) : "");
+        if (file) {
+            form.setValue("introVideo", file as any);
+            setVideo(URL.createObjectURL(file));
+        }
     };
 
-    const onSubmit = (val: z.infer<typeof formSchema>) => {
-        console.log(val);
-        console.log(video);
-        form.reset()
-        setVideo("")
-        setShowHide(false)
+    const onSubmit = async (val: z.infer<typeof formSchema>) => {
+        try {
+            const formData = new FormData();
+            if (tripId) {
+                formData.append("tripId", tripId);
+            }
+            formData.append("shortIntro", val.shortIntro);
+            formData.append("dietaryRestrictions", val.dietaryRestrictions);
+            if (val.introVideo) {
+                formData.append("introVideo", val.introVideo);
+            }
+            await mutateAsync(formData as any);
+            toast.success("Application submitted successfully");
+            setShowHide(false);
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
     };
 
     return (
@@ -70,48 +85,28 @@ const ApplicationForm = () => {
                             <Form {...form}>
                                 <form onSubmit={form.handleSubmit(onSubmit)}>
                                     <div className="flex flex-col gap-5">
-                                        <FormField
-                                            control={form.control}
-                                            name="Name"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-[#242E2F] font-semibold">
-                                                        Name
-                                                        <span className="text-[#666373] text-[10px] mt-1">(from Profile)</span>
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            placeholder="Session Timeout"
-                                                            {...field}
-                                                            className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
+                                        <FormLabel className="text-[#242E2F] font-semibold">
+                                            Name
+                                            <span className="text-[#666373] text-[10px] mt-1">(from Profile)</span>
+                                        </FormLabel>
+                                        <Input
+                                            placeholder="Name"
+                                            readOnly
+                                            className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                                         />
-                                        <FormField
-                                            control={form.control}
-                                            name="Email"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-[#242E2F] font-semibold">
-                                                        Email<span className="text-[#666373] text-[10px] mt-1">(from Profile)</span>
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            placeholder="Max Login Attempts"
-                                                            {...field}
-                                                            className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
+
+                                        <FormLabel className="text-[#242E2F] font-semibold">
+                                            Email<span className="text-[#666373] text-[10px] mt-1">(from Profile)</span>
+                                        </FormLabel>
+                                        <Input
+                                            placeholder="Email"
+                                            readOnly
+                                            className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                                         />
+
                                         <FormField
                                             control={form.control}
-                                            name="Gender"
+                                            name="dietaryRestrictions"
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -138,7 +133,7 @@ const ApplicationForm = () => {
                                         />
                                         <FormField
                                             control={form.control}
-                                            name="ShortIntro"
+                                            name="shortIntro"
                                             render={({ field }) => (
                                                 <FormItem className="md:col-span-2">
                                                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -157,7 +152,7 @@ const ApplicationForm = () => {
                                         />
                                         <FormField
                                             control={form.control}
-                                            name="IntroVideo"
+                                            name="introVideo"
                                             render={() => (
                                                 <FormItem className="md:col-span-3">
                                                     <FormLabel className="text-[#242E2F] font-semibold">
@@ -205,7 +200,7 @@ const ApplicationForm = () => {
                                     </div>
                                     <div className="mt-8">
                                         <Button type="submit" className="rounded-full cursor-pointer w-full mt-6 bg-[#0DAC87] hover:bg-[#129b7b] text-white px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
-                                            Submit Application
+                                            {isPending ? "Submitting..." : "Submit Application"}
                                         </Button>
                                         <DialogClose asChild>
                                             <Button type="button" className="rounded-full cursor-pointer w-full mt-4 bg-transparent border border-[#0DAC87] hover:bg-[#0DAC87] hover:text-white text-[#0DAC87] px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
@@ -233,7 +228,7 @@ const ApplicationForm = () => {
                                 </div>
                                 <span className="lg:text-center text-[#BEBEBE] text-[11px]">You'll receive an email notification once your application is reviewed. If approved, you'll be  able to proceed with payment.</span>
                             </div>
-                            <DialogClose asChild onClick={()=> setShowHide(true)}>
+                            <DialogClose asChild onClick={() => setShowHide(true)}>
                                 <Button type="button" className="rounded-full cursor-pointer lg:w-110 w-full mt-4 bg-[#0DAC87] border border-[#0DAC87] hover:bg-transparent text-white hover:text-[#0DAC87] px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
                                     Back to Details
                                 </Button>

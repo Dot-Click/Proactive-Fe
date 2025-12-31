@@ -5,7 +5,7 @@ import { UsegetSettinghook } from "@/hooks/getSettinghook";
 import { UseupdateSetting } from "@/hooks/updatesettinghook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod"
@@ -38,7 +38,7 @@ const ApprovalSetting = () => {
     const { data } = UsegetSettinghook();
     const ApprovalSettingData = data?.settings;
 
-    useEffect(() => {
+    useMemo(() => {
         if (ApprovalSettingData) {
             form.reset({
                 defaultApproval: ApprovalSettingData.defaultApproval ?? "",
@@ -84,10 +84,7 @@ const ApprovalSetting = () => {
                                         Default Approval Flow
                                     </FormLabel>
                                     <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
+                                        <Select onValueChange={field.onChange} value={field.value}>
                                             <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
                                                 <SelectValue placeholder="Select Approval" />
                                             </SelectTrigger>
@@ -112,10 +109,7 @@ const ApprovalSetting = () => {
                                         Default Max Participants
                                     </FormLabel>
                                     <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
+                                        <Select onValueChange={field.onChange} value={field.value}>
                                             <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
                                                 <SelectValue placeholder="Select Max Participants" />
                                             </SelectTrigger>

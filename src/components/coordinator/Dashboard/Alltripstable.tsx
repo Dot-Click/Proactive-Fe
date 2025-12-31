@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { UsegetcoordinatordashboardStats } from "@/hooks/getcoordinatordashboardStats";
 import {
     flexRender,
     getCoreRowModel,
@@ -12,45 +13,47 @@ import {
     type SortingState,
     type VisibilityState,
 } from "@tanstack/react-table";
+import { LoaderIcon } from "lucide-react";
 import { useState } from "react";
+//     const data: User[] = [
+//     {
+//         tripName: allTripsdata?.tripName || "Wild Weekend Barcelona",
+//         Categories: "Weekend",
+//         Date: "10–12 Sep 2025",
+//     },
+//     {
+//         tripName: "Wild Weekend Barcelona",
+//         Categories: "Weekend",
+//         Date: "10–12 Sep 2025",
+//     },
+//     {
+//         tripName: "Wild Weekend Barcelona",
+//         Categories: "Weekend",
+//         Date: "10–12 Sep 2025",
+//     },
+//     {
+//         tripName: "Wild Weekend Barcelona",
+//         Categories: "Weekend",
+//         Date: "10–12 Sep 2025",
+//     },
+//     {
+//         tripName: "Wild Weekend Barcelona",
+//         Categories: "Weekend",
+//         Date: "10–12 Sep 2025",
+//     },
+// ];
 
 type User = {
     tripName: string;
-    Categories: string;
-    Date: string;
+    category: string;
+    startDate: string;
+    location: string;
 };
 
-const data: User[] = [
-    {
-        tripName: "Wild Weekend Barcelona",
-        Categories: "Weekend",
-        Date: "10–12 Sep 2025",
-    },
-    {
-        tripName: "Wild Weekend Barcelona",
-        Categories: "Weekend",
-        Date: "10–12 Sep 2025",
-    },
-    {
-        tripName: "Wild Weekend Barcelona",
-        Categories: "Weekend",
-        Date: "10–12 Sep 2025",
-    },
-    {
-        tripName: "Wild Weekend Barcelona",
-        Categories: "Weekend",
-        Date: "10–12 Sep 2025",
-    },
-    {
-        tripName: "Wild Weekend Barcelona",
-        Categories: "Weekend",
-        Date: "10–12 Sep 2025",
-    },
-];
 
 const userData: ColumnDef<User>[] = [
     {
-        accessorKey: "Trip Name",
+        accessorKey: "tripName",
         header: () => <div className="font-semibold">Trip Name</div>,
         cell: ({ row }) => (
             <div className="flex items-center gap-3 w-60">
@@ -62,34 +65,39 @@ const userData: ColumnDef<User>[] = [
                     <span className="font-medium text-sm text-[#3b3745] text-nowrap">
                         {row.original.tripName}
                     </span>
-                    <span className="text-xs text-[#8a8698]">Barcelona, Spain</span>
+                    <span className="text-xs text-[#8a8698]">{row.original.location}</span>
                 </div>
             </div>
         ),
     },
     {
-        accessorKey: "Category",
+        accessorKey: "category",
         header: () => <div className="font-semibold pl-2">Category</div>,
         cell: ({ row }) => (
             <div className="w-40">
-                <div className="text-center bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full w-26 py-3 font-semibold">
-                    {row.original.Categories}
+                <div className="text-center bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full py-3 font-semibold">
+                    {row.original.category}
                 </div>
             </div>
         ),
     },
     {
-        accessorKey: "Dates",
+        accessorKey: "startDate",
         header: () => <div className="font-semibold">Dates</div>,
         cell: ({ row }) => (
-            <div className="flex flex-col w-30">
-                <div className="font-semibold text-[#666373] text-[14px]">{row.original.Date}</div>
-                <span className="text-[#666373] text-[12px]">8/16 joined</span>
+            <div className="flex flex-col w-40">
+                <div className="font-semibold text-[#666373] text-[14px]">{new Date(row.original.startDate).toLocaleString("en-Us",{
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                })}
+                </div>
+                {/* <span className="text-[#666373] text-[12px]">8/16 joined</span> */}
             </div>
         ),
     },
     {
-        accessorKey: "Actions",
+        accessorKey: "actions",
         header: () => <div className="font-semibold">Actions</div>,
         cell: () => (
             <div className="flex gap-2">
@@ -114,9 +122,10 @@ const Alltripstable = () => {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
-
+    const { data: alltrips, isLoading, isError } = UsegetcoordinatordashboardStats();
+    const allTripsdata = alltrips?.allTrips;
     const table = useReactTable({
-        data,
+        data: allTripsdata ?? [],
         columns: userData,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -141,10 +150,18 @@ const Alltripstable = () => {
                     All Trips
                 </span>
                 <span className="text-[#666373] text-sm">
-                    Showing {table.getRowModel().rows.length} of {data.length} trips
+                    Showing {table.getRowModel().rows.length} of {allTripsdata?.length} trips
                 </span>
             </div>
+            {
+                isLoading && <div className="w-full flex items-center justify-center py-10">
+                    <LoaderIcon className="animate-spin" />
+                </div>
 
+            }
+            {
+                isError && <p className="text-red-500">Error loading data.</p>
+            }
             <div className="rounded-lg overflow-y-auto max-h-[300px] pl-2">
                 <table className="min-w-full border-separate border-spacing-y-2">
                     <thead className="text-left text-md font-bold text-[#221E33]">

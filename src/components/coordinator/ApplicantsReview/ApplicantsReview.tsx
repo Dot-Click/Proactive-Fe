@@ -5,25 +5,30 @@ import type { ColumnDef } from "@tanstack/react-table";
 import play from "../../../assets/play.png"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ApplicantsVideo from "./ApplicantsVideo";
+import { UsegetallApplication } from "@/hooks/getallApplication";
+import { LoaderIcon } from "lucide-react";
 
 type User = {
-    Name: string;
-    Trip: string;
-    Message: string;
+    userFirstName: string;
+    userLastName: string;
+    userEmail: string;
+    tripTitle: string;
+    shortIntro: string;
+    introVideo: string;
 };
 
-const data: User[] = [
-    { Name: 'Emma Wilson', Trip: 'Wild Weekend Barcelona', Message: 'I love exploring new cultures and meeting like-minded travelers...' },
-    { Name: 'Emma Wilson', Trip: 'Wild Weekend Barcelona', Message: 'I love exploring new cultures and meeting like-minded travelers...' },
-    { Name: 'Emma Wilson', Trip: 'Wild Weekend Barcelona', Message: 'I love exploring new cultures and meeting like-minded travelers...' },
-    { Name: 'Emma Wilson', Trip: 'Wild Weekend Barcelona', Message: 'I love exploring new cultures and meeting like-minded travelers...' },
-    { Name: 'Emma Wilson', Trip: 'Wild Weekend Barcelona', Message: 'I love exploring new cultures and meeting like-minded travelers...' },
+// const data: User[] = [
+//     { Name: 'Emma Wilson', Trip: 'Wild Weekend Barcelona', Message: 'I love exploring new cultures and meeting like-minded travelers...' },
+//     { Name: 'Emma Wilson', Trip: 'Wild Weekend Barcelona', Message: 'I love exploring new cultures and meeting like-minded travelers...' },
+//     { Name: 'Emma Wilson', Trip: 'Wild Weekend Barcelona', Message: 'I love exploring new cultures and meeting like-minded travelers...' },
+//     { Name: 'Emma Wilson', Trip: 'Wild Weekend Barcelona', Message: 'I love exploring new cultures and meeting like-minded travelers...' },
+//     { Name: 'Emma Wilson', Trip: 'Wild Weekend Barcelona', Message: 'I love exploring new cultures and meeting like-minded travelers...' },
 
-]
+// ]
 
 const userData: ColumnDef<User>[] = [
     {
-        accessorKey: 'Name',
+        accessorKey: 'userFirstName',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -40,16 +45,16 @@ const userData: ColumnDef<User>[] = [
                     </Avatar>
                     <div className="flex flex-col">
                         <span className="font-medium text-sm text-[#3b3745] text-nowrap">
-                            {row.original.Name}
+                            {row.original.userFirstName} {row.original.userLastName}
                         </span>
-                        <span className="text-xs text-[#8a8698]">emma.wilson@email.com</span>
+                        <span className="text-xs text-[#8a8698]">{row.original.userEmail}</span>
                     </div>
                 </div>
             )
         }
     },
     {
-        accessorKey: 'Trip',
+        accessorKey: 'tripTitle',
         // header: 'Name',
         enableColumnFilter: true,
         enableSorting: true,
@@ -65,14 +70,14 @@ const userData: ColumnDef<User>[] = [
                         className="bg-[#221E33] text-white hover:bg-[#221E33] cursor-pointer rounded-full
           px-4 py-5 font-semibold"
                     >
-                        {row.original.Trip}
+                        {row.original.tripTitle}
                     </Button>
                 </div>
             )
         }
     },
     {
-        accessorKey: 'Message',
+        accessorKey: 'shortIntro',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -83,7 +88,7 @@ const userData: ColumnDef<User>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex flex-col w-70 whitespace-pre-line">
-                    <div className="text-[#666373] text-[14px] w-70">{row.original.Message}</div>
+                    <div className="text-[#666373] text-[14px] w-70">{row.original.shortIntro}</div>
                 </div>
             )
         }
@@ -97,7 +102,8 @@ const userData: ColumnDef<User>[] = [
                 <h1>Video</h1>
             </div>
         ),
-        cell: () => {
+        cell: ({ row }) => {
+            const video = row.original.introVideo;
             return (
                 <div className="w-30">
                     <Dialog>
@@ -107,7 +113,7 @@ const userData: ColumnDef<User>[] = [
                                 Play Video
                             </Button>
                         </DialogTrigger>
-                        <ApplicantsVideo />
+                        <ApplicantsVideo video={video} />
                     </Dialog>
                 </div>
             )
@@ -141,13 +147,25 @@ const userData: ColumnDef<User>[] = [
 ]
 
 const ApplicantsReview = () => {
+    const { data: applicationdata, isLoading, isError } = UsegetallApplication();
+
     return (
-        <div className="lg:mt-5">
-            <ReusableTable
-                columns={userData}
-                data={data}
-            />
-        </div>
+        <>
+            <div className="lg:mt-5">
+            {
+                isLoading && <div className="w-full flex items-center justify-center py-10">
+                    <LoaderIcon className="animate-spin" />
+                </div>
+            }
+            {
+                isError && <p className="text-red-500">Error loading data.</p>
+            }
+                <ReusableTable
+                    columns={userData}
+                    data={applicationdata ?? []}
+                />
+            </div>
+        </>
     )
 }
 
