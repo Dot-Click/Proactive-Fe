@@ -1,59 +1,109 @@
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { UseDeletefaqbyId } from "@/hooks/deletefaqbyidhook";
+import { UsegetallFaqs } from "@/hooks/getallFaqs";
+import { EllipsisVerticalIcon, LoaderIcon, Trash } from "lucide-react";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import { toast } from "sonner";
 
-const faqs = [
-    {
-        q: "What is the difference between a Wild Trip (WT) and a Wild Weekend (WW)?",
-        a: "A Wild Trip is a longer adventure (5–12 days) with multiple activities, destinations, and cultural experiences. A Wild Weekend is a short escape (2–4 days), usually Friday to Sunday, designed for quick adventure and fun.",
-    },
-    {
-        q: "What is the difference between a Wild Trip (WT) and a Wild Weekend (WW)?",
-        a: "A Wild Trip is a longer adventure (5–12 days)...",
-    },
-    {
-        q: "What is the difference between a Wild Trip (WT) and a Wild Weekend (WW)?",
-        a: "A Wild Trip is a longer adventure (5–12 days)...",
-    },
-    {
-        q: "What is the difference between a Wild Trip (WT) and a Wild Weekend (WW)?",
-        a: "A Wild Trip is a longer adventure (5–12 days)...",
-    },
-    {
-        q: "What is the difference between a Wild Trip (WT) and a Wild Weekend (WW)?",
-        a: "A Wild Trip is a longer adventure (5–12 days)...",
-    },
+// const faqs = [
+//     {
+//         q: "What is the difference between a Wild Trip (WT) and a Wild Weekend (WW)?",
+//         a: "A Wild Trip is a longer adventure (5–12 days) with multiple activities, destinations, and cultural experiences. A Wild Weekend is a short escape (2–4 days), usually Friday to Sunday, designed for quick adventure and fun.",
+//     },
+//     {
+//         q: "What is the difference between a Wild Trip (WT) and a Wild Weekend (WW)?",
+//         a: "A Wild Trip is a longer adventure (5–12 days)...",
+//     },
+//     {
+//         q: "What is the difference between a Wild Trip (WT) and a Wild Weekend (WW)?",
+//         a: "A Wild Trip is a longer adventure (5–12 days)...",
+//     },
+//     {
+//         q: "What is the difference between a Wild Trip (WT) and a Wild Weekend (WW)?",
+//         a: "A Wild Trip is a longer adventure (5–12 days)...",
+//     },
+//     {
+//         q: "What is the difference between a Wild Trip (WT) and a Wild Weekend (WW)?",
+//         a: "A Wild Trip is a longer adventure (5–12 days)...",
+//     },
 
-];
+// ];
 
-const FaqQuestion = () => {
+const FaqQuestion = ({ role }: { role: string }) => {
     const [openIndex, setOpenIndex] = useState(null);
+    const { data, isLoading, isError } = UsegetallFaqs();
+    const { mutateAsync: DeletefaqbyId, isPending } = UseDeletefaqbyId();
     const toggle = (index: any) => {
         setOpenIndex(openIndex === index ? null : index);
     };
 
+    if (isError) {
+        return <div>Error loading FAQ data.</div>;
+    }
+    if (isLoading) {
+        return (
+            <div className="w-full flex items-center justify-center py-10">
+                <LoaderIcon className="animate-spin" />
+            </div>
+        )
+    }
+
+    const HandleDelete = async (faqId: string) => {
+        try {
+            await DeletefaqbyId({ faqId });
+            toast.success("FAQ deleted successfully.");
+        } catch (error) {
+            toast.error("Failed to delete FAQ.");
+        }
+    }
     return (
         <div className="flex flex-col gap-8 px-5 py-4">
 
-            {faqs.map((faq, index) => (
+            {data?.faqs?.map((faq: any, index: number) => (
                 <div key={index} className="flex flex-col">
                     <div className="flex md:flex-row flex-col md:justify-between md:items-center items-start md:gap-40 gap-6 bg-[#F0F5FD] px-5 py-4 rounded-tl-[20px] rounded-tr-[20px]">
-                        <h1 className="text-[#221E33] font-bold text-[12px] lg:text-[16px]">{faq.q}</h1>
-
-                        <div className="bg-white shadow-sm px-4 py-4 rounded-full">
+                        <h1 className="text-[#221E33] font-bold text-[12px] lg:text-[16px]">{faq.question}</h1>
+                        <div className="flex items-center gap-2">
+                            <div className="bg-white shadow-sm px-4 py-4 rounded-full">
+                                {
+                                    openIndex === index ? (
+                                        <ImCross
+                                            size={20}
+                                            className="cursor-pointer"
+                                            onClick={() => toggle(index)}
+                                        />
+                                    ) : (
+                                        <FaPlus
+                                            size={20}
+                                            className="cursor-pointer"
+                                            onClick={() => toggle(index)}
+                                        />
+                                    )
+                                }
+                            </div>
                             {
-                                openIndex === index ? (
-                                    <ImCross
-                                        size={20}
-                                        className="cursor-pointer"
-                                        onClick={() => toggle(index)}
-                                    />
-                                ) : (
-                                    <FaPlus
-                                        size={20}
-                                        className="cursor-pointer"
-                                        onClick={() => toggle(index)}
-                                    />
+                                role === "admin" && (
+                                    <div className="flex items-center gap-2">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <EllipsisVerticalIcon className="cursor-pointer" />
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent
+                                                onClick={() => HandleDelete(faq.id)}
+                                                className="cursor-pointer flex justify-center items-center py-2">
+                                                {
+                                                    isPending ? <LoaderIcon className="animate-spin h-4 w-4" /> :
+                                                        <>
+                                                            <Trash className="mx-2 text-red-600"/>
+                                                            <p className="text-red-600">Delete Category</p>
+                                                        </>
+                                                }
+
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
                                 )
                             }
                         </div>
@@ -61,7 +111,7 @@ const FaqQuestion = () => {
 
                     {openIndex === index && (
                         <div className="bg-white shadow-sm px-5 py-8 rounded-bl-[20px] rounded-br-[20px] transition duration-300">
-                            <p className="md:w-[700px]">{faq.a}</p>
+                            <p className="md:w-[700px]">{faq.answers}</p>
                         </div>
                     )}
                 </div>

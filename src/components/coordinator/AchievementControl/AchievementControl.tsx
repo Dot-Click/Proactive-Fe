@@ -9,6 +9,8 @@ import Mountain from "../../../assets/Mountain.png"
 import Explorer from "../../../assets/Explorer.png"
 import { Progress } from "@/components/ui/progress";
 import Achievementlibrary from "./Achievementlibrary";
+import { UsegetallAchievements } from "@/hooks/getallAchievementhook";
+import { LoaderIcon } from "lucide-react";
 
 type User = {
   Name: string;
@@ -47,7 +49,7 @@ const userData: ColumnDef<User>[] = [
             <span className="font-medium text-sm text-[#3b3745] text-nowrap">
               {row.original.Name}
             </span>
-            <span className="text-xs text-[#8a8698]">alex@example.com</span>
+            {/* <span className="text-xs text-[#8a8698]">alex@example.com</span> */}
           </div>
         </div>
       )
@@ -69,7 +71,7 @@ const userData: ColumnDef<User>[] = [
             <span className="font-medium text-sm text-[#3b3745] text-nowrap">
               {row.original.Trips}
             </span>
-            <span className="text-xs text-[#8a8698]">Barcelona, Spain</span>
+            {/* <span className="text-xs text-[#8a8698]">Barcelona, Spain</span> */}
           </div>
         </div>
       )
@@ -163,7 +165,23 @@ const userData: ColumnDef<User>[] = [
 ]
 
 const AchievementControl = () => {
+  const { isLoading, isError } = UsegetallAchievements();
+  // console.log(Achievement);
   const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+  if (isLoading) {
+    return (
+      <div className="w-full flex items-center justify-center py-10">
+        <LoaderIcon className="animate-spin" />
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="w-full flex items-center justify-center py-10">
+        <span className="text-red-500">Error loading data.</span>
+      </div>
+    );
+  }
   return (
     <div className="lg:mt-5">
       <TableHeader
@@ -186,7 +204,7 @@ const AchievementControl = () => {
         />
       </div>
       <div>
-        <Achievementlibrary/>
+        <Achievementlibrary />
       </div>
     </div>
   )

@@ -41,9 +41,9 @@ const ApprovalSetting = () => {
     useMemo(() => {
         if (ApprovalSettingData) {
             form.reset({
-                defaultApproval: ApprovalSettingData.defaultApproval ?? "",
-                defaultMaxParticipants: ApprovalSettingData.defaultMaxParticipants ?? "",
-                defaultMinParticipants: ApprovalSettingData.defaultMinParticipants ?? "",
+                defaultApproval: String(ApprovalSettingData.defaultApproval ?? ""),
+                defaultMaxParticipants: String(ApprovalSettingData.defaultMaxParticipants ?? ""),
+                defaultMinParticipants: String(ApprovalSettingData.defaultMinParticipants ?? ""),
             });
         }
     }, [ApprovalSettingData, form]);
@@ -140,8 +140,7 @@ const ApprovalSetting = () => {
                                     </FormLabel>
                                     <FormControl>
                                         <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                            onValueChange={field.onChange} value={field.value}
                                         >
                                             <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
                                                 <SelectValue placeholder="Select Min Participants" />

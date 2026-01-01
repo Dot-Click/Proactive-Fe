@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import FaqQuestion from "@/components/userSide/BecomeMember/FaqQuestion";
 import { useCreateFaqs } from "@/hooks/UseCreateFaqshook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -29,18 +30,18 @@ const AddFAQ = () => {
     const CreateFaqsMutation = useCreateFaqs();
 
     const onSubmit = async (val: z.infer<typeof formSchema>) => {
-    const {question, answers} = val
-     try{
-        await CreateFaqsMutation.mutateAsync({
-            question,
-            answers
-        });
-        toast.success("FAQ added successfully");
-        form.reset();
-     }catch(err: any){
-        const message = err?.response?.data?.message || "Something went wrong";
-        toast.error(message);
-     }
+        const { question, answers } = val
+        try {
+            await CreateFaqsMutation.mutateAsync({
+                question,
+                answers
+            });
+            toast.success("FAQ added successfully");
+            form.reset();
+        } catch (err: any) {
+            const message = err?.response?.data?.message || "Something went wrong";
+            toast.error(message);
+        }
     };
 
     return (
@@ -102,6 +103,7 @@ const AddFAQ = () => {
                             </form>
                         </Form>
                     </div>
+                    <FaqQuestion role={"admin"}/>
 
                     <div className="flex justify-end p-5">
                         <Button
@@ -110,7 +112,7 @@ const AddFAQ = () => {
                         >
                             {
                                 CreateFaqsMutation.isPending ? "Adding..." : "Add"
-                            }  
+                            }
                         </Button>
                     </div>
 

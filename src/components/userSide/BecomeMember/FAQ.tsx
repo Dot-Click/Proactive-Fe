@@ -15,7 +15,7 @@ const FAQ = () => {
                     className="w-28 h-26 absolute left-156 top-30 opacity-80 lg:flex hidden"
                 />
                 <p className="text-[#221E33] lg:text-[14px] text-[10px] text-center">Everything you need to know about membership</p>
-            <FaqQuestion/>
+                <FaqQuestion role={"user"} />
             </div>
         </div>
     )

@@ -19,7 +19,7 @@ export const useCreateFaqs = () => {
     return useMutation<AxiosResponse<any, any, {}>, Error, UserCreateFaqsData>({
         mutationFn: mutationFunction,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["faqs"] });
+            queryClient.invalidateQueries({ queryKey: ["All-faqs"] });
         },
     });
 };
