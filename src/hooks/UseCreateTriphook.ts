@@ -3,12 +3,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 
 
-const mutationFunction = async (data: FormData) => {
+const mutationFunction = async (data: any) => {
     const res = await api.post("/api/trips", data);
     return res.data
 };
 
-export const UseCreateCategory = () => {
+export const UseCreateTrip = () => {
     const queryClient = useQueryClient();
 
     return useMutation({

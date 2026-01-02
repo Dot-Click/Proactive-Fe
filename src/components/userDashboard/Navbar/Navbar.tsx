@@ -19,6 +19,7 @@ import { UserDashboardDrawerItems } from "@/components/DrawerItems";
 import DrawerBar from "@/components/Drawer";
 import { useLogoutUser } from "@/hooks/Uselogouthook";
 import { toast } from "sonner";
+import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
 
 interface NavbarProps {
   role: string
@@ -33,6 +34,9 @@ const Navbar = ({ role }: NavbarProps) => {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const Logoutmutation = useLogoutUser();
+  const { data: user } = UsegetCurrentUser();
+  const userData = user?.data?.user;
+  const displayName = userData?.role === "coordinator" ? userData?.coordinatorDetails?.fullName : userData?.FirstName || "Admin";
 
 
   const Handlelogout = async () => {
@@ -162,8 +166,8 @@ const Navbar = ({ role }: NavbarProps) => {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="hidden lg:flex flex-col">
-              <span className="font-semibold text-sm lg:text-lg">Pachums</span>
-              <span className="text-sm text-gray-500">Pachums@gmail.com</span>
+              <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
+              <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger className="cursor-pointer">
@@ -175,8 +179,8 @@ const Navbar = ({ role }: NavbarProps) => {
               <DropdownMenuContent>
 
                 <div className="lg:hidden flex flex-col px-3 py-2">
-                  <span className="font-semibold text-sm lg:text-lg">Pachums</span>
-                  <span className="text-sm text-gray-500">Pachums@gmail.com</span>
+                  <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
+                  <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
                 </div>
 
                 <div className="flex flex-col">

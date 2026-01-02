@@ -5,20 +5,12 @@ import included2 from "../../../assets/included2.png";
 import included3 from "../../../assets/included3.png";
 import included4 from "../../../assets/included4.png";
 import included5 from "../../../assets/included5.png";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useFormContext } from "react-hook-form";
 import clsx from "clsx";
 import { useState } from "react";
+import type { TripFormType } from "./tripschema";
 
-const formSchemaIncluded = z.object({
-  included: z.array(z.string()).min(1, "Select at least one included item"),
-  notIncluded: z
-    .array(z.string())
-    .min(1, "Select at least one not included item"),
-});
 
-type FormSchemaType = z.infer<typeof formSchemaIncluded>;
 
 const INCLUDED_ITEMS = [
   {
@@ -90,7 +82,7 @@ const SelectCard = ({
   <div
     onClick={onClick}
     className={clsx(
-      "relative cursor-pointer rounded-[15px] border px-2 py-4 transition-all",
+      "relative cursor-pointer rounded-[15px] border px-2 py-4 transition-all ",
       selected
         ? "border-[#108700] ring-2 ring-[#108700]/20 bg-[#F5FFF5]"
         : "border-[#C1C1C1] bg-white"
@@ -110,32 +102,26 @@ const SelectCard = ({
 );
 
 const Included = () => {
-  const form = useForm<FormSchemaType>({
-    resolver: zodResolver(formSchemaIncluded),
-    defaultValues: {
-      included: [],
-      notIncluded: [],
-    },
-  });
 
-  const toggleValue = (
-    values: string[],
-    value: string,
-    onChange: (v: string[]) => void
-  ) => {
-    if (values.includes(value)) {
-      onChange(values.filter((v) => v !== value));
-    } else {
-      onChange([...values, value]);
-    }
-  };
+  // const toggleValue = (
+  //   values: string[],
+  //   value: string,
+  //   onChange: (v: string[]) => void
+  // ) => {
+  //   if (values.includes(value)) {
+  //     onChange(values.filter((v) => v !== value));
+  //   } else {
+  //     onChange([...values, value]);
+  //   }
+  // };
   const [ShowIncludedItems, setShowIncludedItems] = useState<boolean>(true);
   const [ShownotIncludedItems, setShowNotIncludedItems] = useState<boolean>(true);
+  const { control } = useFormContext<TripFormType>();
 
   return (
-    <form className="mb-20 space-y-8">
-      <div>
-        <div className="flex justify-between items-center mt-6">
+    <form className="">
+      <div className="bg-white px-6 py-6">
+        <div className="flex justify-between items-center mt-6 mb-6">
           <span className="text-[#108700] font-medium">What’s Included</span>
           <Button
             type="button"
@@ -149,38 +135,35 @@ const Included = () => {
         {
           ShowIncludedItems && (
             <Controller
-              control={form.control}
               name="included"
-              render={({ field, fieldState }) => (
-                <>
-                  <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6 py-4">
-                    {INCLUDED_ITEMS.map((item) => (
-                      <SelectCard
-                        key={item.id}
-                        icon={item.icon}
-                        title={item.title}
-                        desc={item.desc}
-                        selected={field.value.includes(item.id)}
-                        onClick={() =>
-                          toggleValue(field.value, item.id, field.onChange)
-                        }
-                      />
-                    ))}
-                  </div>
-                  {fieldState.error && (
-                    <p className="text-sm text-red-500">
-                      {fieldState.error.message}
-                    </p>
-                  )}
-                </>
+              control={control}
+              render={({ field }) => (
+                <div className="grid grid-cols-3 gap-4">
+                  {INCLUDED_ITEMS.map((item) => (
+                    <SelectCard
+                      key={item.id}
+                      selected={field.value.includes(item.id)}
+                      onClick={() =>
+                        field.onChange(
+                          field.value.includes(item.id)
+                            ? field.value.filter((i) => i !== item.id)
+                            : [...field.value, item.id]
+                        )
+                      }
+                      icon={item.icon}
+                      title={item.title}
+                      desc={item.desc}
+                    />
+                  ))}
+                </div>
               )}
             />
           )
         }
       </div>
 
-      <div>
-        <div className="flex justify-between items-center mt-6">
+      <div className="bg-white px-6 py-6">
+        <div className="flex justify-between items-center mt-6 mb-6">
           <span className="text-[#D40004] font-medium">What’s Not Included</span>
           <Button
             type="button"
@@ -194,30 +177,27 @@ const Included = () => {
         {
           ShownotIncludedItems && (
             <Controller
-              control={form.control}
               name="notIncluded"
-              render={({ field, fieldState }) => (
-                <>
-                  <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6 py-4">
-                    {NOT_INCLUDED_ITEMS.map((item) => (
-                      <SelectCard
-                        key={item.id}
-                        icon={item.icon}
-                        title={item.title}
-                        desc={item.desc}
-                        selected={field.value.includes(item.id)}
-                        onClick={() =>
-                          toggleValue(field.value, item.id, field.onChange)
-                        }
-                      />
-                    ))}
-                  </div>
-                  {fieldState.error && (
-                    <p className="text-sm text-red-500">
-                      {fieldState.error.message}
-                    </p>
-                  )}
-                </>
+              control={control}
+              render={({ field }) => (
+                <div className="grid grid-cols-3 gap-4">
+                  {NOT_INCLUDED_ITEMS.map((item) => (
+                    <SelectCard
+                      key={item.id}
+                      selected={field.value.includes(item.id)}
+                      onClick={() =>
+                        field.onChange(
+                          field.value.includes(item.id)
+                            ? field.value.filter((i) => i !== item.id)
+                            : [...field.value, item.id]
+                        )
+                      }
+                      icon={item.icon}
+                      title={item.title}
+                      desc={item.desc}
+                    />
+                  ))}
+                </div>
               )}
             />
           )}
