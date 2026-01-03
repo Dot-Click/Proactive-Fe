@@ -14,6 +14,7 @@ const Coordinator = () => {
   const [profile, setProfile] = useState("");
   const [show, setShow] = useState(false)
   const { data } = UsegetCoordinator();
+  console.log(data)
   const { control } = useFormContext<TripFormType>();
   const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -58,7 +59,7 @@ const Coordinator = () => {
                             <SelectContent>
                               {
                                 data?.coordinators?.map((coordinator: any) => (
-                                  <SelectItem key={coordinator.id} value={coordinator.name}>{coordinator.name}</SelectItem>
+                                  <SelectItem key={coordinator.id} value={coordinator.id}>{coordinator.fullName}</SelectItem>
                                 ))
                               }
                             </SelectContent>

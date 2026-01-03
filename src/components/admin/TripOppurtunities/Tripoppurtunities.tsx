@@ -14,12 +14,10 @@ type User = {
   startDate: string;
   endDate: string;
   approvalStatus: string;
+  coverImage: string;
+  description: string
 };
 
-// const data: User[] = [
-//   { name: 'Wild Weekend Barcelona', Coordinator: 'Maria Rodriguez', category: 'Weekend', startDate: '10–12 Sep 2025', endDate: '10–12 Sep 2025', approvalStatus: 'Pending' },
-//   { name: 'Wild Weekend Barcelona', Coordinator: 'Maria Rodriguez', category: 'Weekend', startDate: '10–12 Sep 2025', endDate: '10–12 Sep 2025', approvalStatus: 'Live' },
-// ]
 
 const userData: ColumnDef<User>[] = [
   {
@@ -36,7 +34,7 @@ const userData: ColumnDef<User>[] = [
       return (
         <div className="flex items-center gap-3">
           <Avatar className="h-12 w-12 flex-shrink-0">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarImage src={row.original.coverImage || "https://github.com/shadcn.png"} alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
 
@@ -44,9 +42,9 @@ const userData: ColumnDef<User>[] = [
             <span className="font-semibold text-[14px] text-[#666373]">
               {row.original.name}
             </span>
-            {/* <span className="text-[12px] text-[#666373]">
-              Barcelona, Spain
-            </span> */}
+            <span className="text-[12px] text-[#666373] line-clamp-2">
+              {row.original.description}
+            </span>
           </div>
         </div>
       )
@@ -134,7 +132,7 @@ const userData: ColumnDef<User>[] = [
         <div >
           <span className="text-[#666373] text-[13px]">
             {
-              new Date(row.original.startDate).toLocaleDateString('en-US', {
+              new Date(row.original.endDate).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric'

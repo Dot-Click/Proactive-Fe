@@ -259,6 +259,7 @@ const BasicInfo = () => {
                                                     mode="single"
                                                     selected={field.value}
                                                     onSelect={(date) => {
+                                                        if (!date) return;
                                                         setStartDate(date);
                                                         setOpenStart(false);
                                                         field.onChange(date);
@@ -295,6 +296,7 @@ const BasicInfo = () => {
                                                     mode="single"
                                                     selected={field.value}
                                                     onSelect={(date) => {
+                                                        if (!date) return;
                                                         setendDate(date);
                                                         setOpenEnd(false);
                                                         field.onChange(date);
