@@ -14,6 +14,7 @@ import { FaCircleExclamation } from "react-icons/fa6";
 import { toast } from "sonner";
 import { UseApplication } from "@/hooks/UseApplicationSubmithook";
 import { useParams } from "react-router-dom";
+import { UsegetTripbyid } from "@/hooks/gettripbyidhook";
 
 const formSchema = z
     .object({
@@ -40,7 +41,9 @@ const ApplicationForm = () => {
     });
     const [video, setVideo] = useState("");
     const [showHide, setShowHide] = useState(true)
-    const { tripId } = useParams();
+    const { id } = useParams();
+    const {data} = UsegetTripbyid(id ?? '');
+    const titleName = data?.trip[0]
     const { mutateAsync, isPending } = UseApplication();
     const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -53,8 +56,8 @@ const ApplicationForm = () => {
     const onSubmit = async (val: z.infer<typeof formSchema>) => {
         try {
             const formData = new FormData();
-            if (tripId) {
-                formData.append("tripId", tripId);
+            if (id) {
+                formData.append("tripId", id);
             }
             formData.append("shortIntro", val.shortIntro);
             formData.append("dietaryRestrictions", val.dietaryRestrictions);
@@ -115,15 +118,17 @@ const ApplicationForm = () => {
                                                     <FormControl>
                                                         <Select
                                                             onValueChange={field.onChange}
-                                                            defaultValue={field.value}
+                                                            value={field.value}
                                                         >
                                                             <SelectTrigger className="w-full bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6">
-                                                                <SelectValue placeholder="Select Gender" />
+                                                                <SelectValue placeholder="Select dietary restrictions" />
                                                             </SelectTrigger>
                                                             <SelectContent>
-                                                                <SelectItem value="Male">Male</SelectItem>
-                                                                <SelectItem value="Female">Female</SelectItem>
-                                                                <SelectItem value="Other">Other</SelectItem>
+                                                                <SelectItem value="none">None</SelectItem>
+                                                                <SelectItem value="vegetarian">Vegetarian</SelectItem>
+                                                                <SelectItem value="vegan">Vegan</SelectItem>
+                                                                <SelectItem value="halal">Halal</SelectItem>
+                                                                <SelectItem value="gluten-free">Gluten-free</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormControl>
@@ -220,7 +225,7 @@ const ApplicationForm = () => {
                             </DialogTitle>
                         </DialogHeader>
                         <div className="px-7 py-7 flex flex-col lg:gap-10 gap-4 justify-center items-center">
-                            <span className="text-[#666373] lg:text-center">Your application for Sahara Desert Adventure has been submitted successfully. Our coordinator will review your application and get <br /> back to you within 48 hours.</span>
+                            <span className="text-[#666373] lg:text-center">Your application for {titleName?.title} has been submitted successfully. Our coordinator will review your application and get <br /> back to you within 48 hours.</span>
                             <div className="bg-[#F4F4F4] rounded-[15px] px-7 py-6 flex flex-col justify-center items-center gap-2">
                                 <div className="flex gap-2 items-center">
                                     <FaCircleExclamation color="#666373" />

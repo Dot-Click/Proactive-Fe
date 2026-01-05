@@ -8,33 +8,29 @@ import SurfaceCamp from "@/components/Adventureoppurtunities/ViewDetailtrip/Surf
 import Tripmood from "@/components/Adventureoppurtunities/ViewDetailtrip/Tripmood"
 import VideoSection from "@/components/Adventureoppurtunities/ViewDetailtrip/VideoSection"
 import { useParams } from "react-router-dom"
-import trip1 from "../../assets/trip1.png"
-import trip2 from "../../assets/trip2.png"
-import trip3 from "../../assets/trip3.png"
-
-const trips = [
-  { id: 1, name: "Wild Weekend Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild weekend", img: trip1 },
-  { id: 2, name: "Wild trip Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild trip", img: trip2 },
-  { id: 2, name: "Wild Weekend Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild weekend", img: trip3 },
-  { id: 2, name: "Wild trip Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild trip", img: trip1 },
-  { id: 2, name: "Wild Weekend Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild weekend", img: trip2 },
-  { id: 2, name: "Wild trip Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild trip", img: trip3 },
-];
+import { UsegetTripbyid } from "@/hooks/gettripbyidhook"
+import { LoaderIcon } from "lucide-react"
 
 const ViewDetailTripPage = () => {
-  const { tripId } = useParams()
-  const trip = trips.find((t) => t.id === Number(tripId))
-  if (!trip) return <div>Trip not found</div>;
+  const { id } = useParams()
+  const { data, isLoading, error } = UsegetTripbyid(id ?? '');
+  if (isLoading) return (
+    <div className="w-full flex items-center justify-center py-10">
+      <LoaderIcon className="animate-spin" />
+    </div>
+  )
+  if (error || !data) return <div className="text-center text-red-900">Trip not found</div>
 
+  const trip: any = data
   return (
     <div>
-      <MasonryLayout />
-      <Locationmeetingpoint />
+      <MasonryLayout trip={trip} />
+      <Locationmeetingpoint trip={trip} />
       <Tripmood />
       {trip.type === "wild weekend" && <SurfaceCamp />}
       {trip.type === "wild trip" && <Daybyday />}
-      <Includeditem />
-      <VideoSection />
+      <Includeditem trip={trip}/>
+      <VideoSection trip={trip}/>
       <Coordinatordetail />
       <ParticipantsCards />
     </div>

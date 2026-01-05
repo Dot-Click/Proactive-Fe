@@ -84,7 +84,7 @@ function App() {
         <Route path="/user-dashboard" element={<Userlayout />}>
           <Route index element={<UserdashboardPage />} />
           <Route path="/user-dashboard/adventure-oppurtunities" element={<AdventureOppurtunitiesPage />} />
-          <Route path="/user-dashboard/viewdetail/:tripId" element={<ViewDetailTripPage />} />
+          <Route path="/user-dashboard/viewdetail/:id" element={<ViewDetailTripPage />} />
           <Route path="/user-dashboard/user-settings" element={<UserSettingPage />} />
         </Route>
 

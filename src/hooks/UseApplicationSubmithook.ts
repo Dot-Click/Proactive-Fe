@@ -2,16 +2,20 @@ import api from "@/config/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 
-export interface ApplicationData {
-    Name: string;
-    Email: string;
-    dietaryRestrictions: string;
-    shortIntro: string;
-    introVideo: string;
-}
+// export interface ApplicationData {
+//     Name: string;
+//     Email: string;
+//     dietaryRestrictions: string;
+//     shortIntro: string;
+//     introVideo: string;
+// }
 
-const mutationFunction = async (data: ApplicationData) => {
-    const res = await api.post("/api/user/applications", data);
+const mutationFunction = async (FormData: FormData) => {
+    const res = await api.post("/api/user/applications", FormData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
     return res.data
 };
 

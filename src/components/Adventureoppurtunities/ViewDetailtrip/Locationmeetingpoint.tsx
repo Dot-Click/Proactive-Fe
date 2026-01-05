@@ -2,7 +2,8 @@ import locationmeeting1 from "../../../assets/locationmeeting1.png"
 import locationmeeting2 from "../../../assets/locationmeeting2.png"
 import locationmeeting3 from "../../../assets/locationmeeting3.png"
 import locationmeeting4 from "../../../assets/locationmeeting4.png"
-const Locationmeetingpoint = () => {
+const Locationmeetingpoint = ({ trip }: { trip: any }) => {
+    const data = trip?.trip[0]
     return (
         <>
             <div className="border-b border-[#C1C1C1]" />
@@ -16,7 +17,7 @@ const Locationmeetingpoint = () => {
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-[#156250]">Group size</span>
-                                <span className="text-[#221E33] font-semibold">12 People</span>
+                                <span className="text-[#221E33] font-semibold">{data?.groupSize || "20"} People</span>
                             </div>
                         </div>
                     </div>
@@ -27,7 +28,7 @@ const Locationmeetingpoint = () => {
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-[#156250]">Rithm</span>
-                                <span className="text-[#221E33] font-semibold">Medium</span>
+                                <span className="text-[#221E33] font-semibold">{data?.rhythm || "No Rithm"}</span>
                             </div>
                         </div>
                     </div>
@@ -38,7 +39,7 @@ const Locationmeetingpoint = () => {
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-[#156250]">Sport level</span>
-                                <span className="text-[#221E33] font-semibold">Intermediate</span>
+                                <span className="text-[#221E33] font-semibold">{data?.sportLvl || "No Sport level"}</span>
                             </div>
                         </div>
                     </div>
