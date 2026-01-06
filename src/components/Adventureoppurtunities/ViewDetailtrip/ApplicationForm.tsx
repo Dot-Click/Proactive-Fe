@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { UseApplication } from "@/hooks/UseApplicationSubmithook";
 import { useParams } from "react-router-dom";
 import { UsegetTripbyid } from "@/hooks/gettripbyidhook";
+import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
 
 const formSchema = z
     .object({
@@ -42,7 +43,9 @@ const ApplicationForm = () => {
     const [video, setVideo] = useState("");
     const [showHide, setShowHide] = useState(true)
     const { id } = useParams();
-    const {data} = UsegetTripbyid(id ?? '');
+    const { data } = UsegetTripbyid(id ?? '');
+    const { data: currentUser } = UsegetCurrentUser();
+    const userdetail = currentUser?.data?.user
     const titleName = data?.trip[0]
     const { mutateAsync, isPending } = UseApplication();
     const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,8 +83,9 @@ const ApplicationForm = () => {
                         <DialogHeader>
                             <DialogTitle className="flex justify-between items-center font-bold text-[24px] bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">
                                 Application Form
-                                <XIcon color="#000000" className="" />
-                                <span className="sr-only text-[#3A354F] font-bold ">Close</span>
+                                <DialogClose asChild>
+                                    <XIcon color="#000000" className="cursor-pointer" />
+                                </DialogClose>
                             </DialogTitle>
                         </DialogHeader>
                         <div className="py-6 px-7">
@@ -95,6 +99,7 @@ const ApplicationForm = () => {
                                         <Input
                                             placeholder="Name"
                                             readOnly
+                                            value={userdetail?.FirstName}
                                             className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                                         />
 
@@ -104,6 +109,7 @@ const ApplicationForm = () => {
                                         <Input
                                             placeholder="Email"
                                             readOnly
+                                            value={userdetail?.email}
                                             className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                                         />
 
