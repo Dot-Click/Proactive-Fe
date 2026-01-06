@@ -14,7 +14,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import PaymentSuccess from "../../../assets/SuccessPayment.png"
 import { toast } from 'sonner';
 
-const stripePromise = loadStripe('pk_test_51SmTZoCH3SkNAQE0K34EAB3pLqC35LDLkerIUhpwjaGZ9VnnYAR0EA2o8K4SmyiDPiw3HuKroI2yG9EHmwNVDlXu00wvY51fvS');
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const PaymentSchema = z.object({
     CardHolder: z.string().min(2, 'Card Holder Name is required'),

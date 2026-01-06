@@ -26,7 +26,7 @@ import {
 import { loadStripe } from "@stripe/stripe-js"
 import { toast } from "sonner"
 
-const stripePromise = loadStripe('pk_test_51SmTZoCH3SkNAQE0K34EAB3pLqC35LDLkerIUhpwjaGZ9VnnYAR0EA2o8K4SmyiDPiw3HuKroI2yG9EHmwNVDlXu00wvY51fvS');
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const PaymentSchema = z.object({
     CardHolder: z.string().min(2, 'Card Holder Name is required'),
@@ -193,7 +193,7 @@ const PayNow = () => {
                 <div className="bg-[#FFFFFF] rounded-[15px] px-4 py-4 mt-12 flex lg:flex-row flex-col gap-3 items-center">
                     <img src={trip} alt="trip" className="h-20 w-22 rounded-[10px]" />
                     <div className="flex flex-col gap-2">
-                        <h4 className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-xl">
+                        <h4 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-xl">
                             Wild Weekend Barcelona
                         </h4>
                         <div className="flex items-center justify-center lg:justify-start gap-4">
@@ -208,7 +208,7 @@ const PayNow = () => {
                         </div>
                     </div>
                     <div className="flex flex-1 justify-end">
-                        <h4 className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-xl">
+                        <h4 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-xl">
                             €950.00
                         </h4>
                     </div>
