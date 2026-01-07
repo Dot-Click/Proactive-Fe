@@ -15,6 +15,7 @@ export interface Coordinator {
     type: string;
     yearsOfExperience: number;
     location: string;
+    isActive: boolean;
 }
 
 interface CoordinatorProps {

@@ -11,6 +11,9 @@ import ApprovalSetting from "./ApprovalSetting"
 import { UseCreateCategory } from "@/hooks/UseCreateCategoryhook"
 import { UsegetCategory } from "@/hooks/getCategoryhook"
 import { LoaderIcon } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { EllipsisVerticalIcon, Trash } from "lucide-react";
+import { UseDeleteCategoryById } from "@/hooks/deletecategorybyidhook"
 
 const formSchema = z
     .object({
@@ -30,7 +33,15 @@ const Trips = () => {
     });
     const CategoryMutation = UseCreateCategory()
     const { data, isLoading, isError } = UsegetCategory()
-
+    const { mutateAsync: DeleteCategorybyId, isPending } = UseDeleteCategoryById();
+    const handleDelete = async (id: string) => {
+        try {
+            await DeleteCategorybyId({ id });
+            toast.success('Category Deleted Successfully')
+        } catch (error) {
+            toast.error('Failed to delete Category')
+        }
+    }
     const onSubmit = async (val: z.infer<typeof formSchema>) => {
         const { name } = val
         try {
@@ -55,7 +66,6 @@ const Trips = () => {
                         Trip Categories
                     </h1>
                 </div>
-
                 <div className="border-b border-[#EDEDED]" />
                 {
                     isLoading && (
@@ -76,7 +86,27 @@ const Trips = () => {
                                         <span className="text-[#221E33] font-bold">{category.name}</span>
                                         <span className="text-[#727272] text-[12px]">Manual approval required</span>
                                     </div>
-                                    <Switch className="w-12" />
+                                    <div className="flex">
+                                        <Switch className="w-12" />
+                                        <div className="flex items-center gap-2">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <EllipsisVerticalIcon className="cursor-pointer" />
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent
+                                                    onClick={() => handleDelete(category.id)}
+                                                    className="cursor-pointer flex justify-center items-center py-2">
+                                                    {
+                                                    isPending ? <LoaderIcon className="animate-spin h-4 w-4" /> :
+                                                        <>
+                                                            <Trash className="mx-2 text-red-600" />
+                                                            <p className="text-red-600">Delete Category</p>
+                                                        </>
+                                                }
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </div>
+                                    </div>
                                 </div>
                             </>
                         ))

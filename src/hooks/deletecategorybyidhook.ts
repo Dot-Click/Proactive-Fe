@@ -2,11 +2,7 @@ import api from "@/config/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const DeleteCategorybyId = async (data: any) => {
-    const response = await api.delete(`/api/categories/${data.categoryId}`, {
-        headers: {
-            "Content-Type": "application/json",
-        }
-    });
+    const response = await api.delete(`/api/categories/${data.id}`);
     return response.data.data;
 };
 

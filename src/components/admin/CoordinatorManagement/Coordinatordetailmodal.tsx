@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import Map from "@/assets/sidebaricon/map.png"
 import clock from "@/assets/sidebaricon/clock.png"
 import star from "@/assets/sidebaricon/star.png"
@@ -173,7 +173,9 @@ const Coordinatordetailmodal = ({ coordinatorId }: { coordinatorId: string }) =>
                 </div>
 
                 <div className="flex md:flex-row flex-col gap-2 justify-between items-center mt-8">
+                    <DialogClose asChild>
                     <Button className="w-full md:w-auto rounded-full bg-[#E0DDDD] hover:bg-[#c7c1c1] cursor-pointer text-[#606066] h-12 px-10 font-bold">Go Back</Button>
+                    </DialogClose>
                     <DialogFooter className="w-full md:w-auto">
                         <div className="flex md:flex-row flex-col gap-4 w-full md:w-auto">
                             <Button onClick={() => navigate("/dashboard/edit-coordinator/:id")} className="w-full md:w-auto font-bold rounded-full bg-[#0DAC87] hover:bg-[#09a07d] cursor-pointer h-12 px-10">Edit Profile</Button>

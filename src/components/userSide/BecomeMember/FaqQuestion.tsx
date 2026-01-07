@@ -97,7 +97,7 @@ const FaqQuestion = ({ role }: { role: string }) => {
                                                     isPending ? <LoaderIcon className="animate-spin h-4 w-4" /> :
                                                         <>
                                                             <Trash className="mx-2 text-red-600"/>
-                                                            <p className="text-red-600">Delete Category</p>
+                                                            <p className="text-red-600">Delete FAQ</p>
                                                         </>
                                                 }
 

@@ -7,6 +7,8 @@ import { LoaderIcon, Star } from "lucide-react"
 import Coordinatordetailmodal from "./Coordinatordetailmodal"
 import { UsegetCoordinator, type Coordinator } from "@/hooks/getCoordinatorhook"
 import { useState } from "react"
+import { UseupdateCoordinatorStatus } from "@/hooks/updatecoordinatorstatushook"
+import { toast } from "sonner"
 
 
 // const CoordinatorData = [
@@ -92,6 +94,7 @@ import { useState } from "react"
 
 const Coordinatorinfo = () => {
     const { data, isLoading, isError } = UsegetCoordinator();
+    const { mutateAsync } = UseupdateCoordinatorStatus();
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [open, setOpen] = useState(false);
     if (isError) {
@@ -103,6 +106,14 @@ const Coordinatorinfo = () => {
                 <LoaderIcon className="animate-spin" />
             </div>
         )
+    }
+
+    const HandleBlockCoordinator = async (id: string) => {
+        try {
+            await mutateAsync({ id });
+        } catch (error) {
+            toast.error('Failed to block Coordinator')
+        }
     }
     return (
         <>
@@ -117,7 +128,11 @@ const Coordinatorinfo = () => {
                     url="/dashboard/add-new-coordinator"
                 />
                 <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 mt-3">
-                    {data?.coordinators?.map((user: Coordinator, i: number) => (
+                    {data?.coordinators?.length === 0 ? (
+                        <div className="bg-white border border-[#E0E1E2] px-4 py-6 rounded-[20px] shadow-sm hover:shadow-md transition-all duration-300">
+                            <span className="text-[#221E33] font-semibold text-[16px]">No Coordinators Found</span>
+                        </div>
+                    ) : data?.coordinators?.map((user: Coordinator, i: number) => (
                         <div
                             key={i}
                             className="bg-white border border-[#E0E1E2] px-4 py-6 rounded-[20px] shadow-sm hover:shadow-md transition-all duration-300"
@@ -139,7 +154,7 @@ const Coordinatorinfo = () => {
                                         </span>
                                     </div>
                                 </div>
-                                <Badge className="bg-[#35FF62]/10 text-[#077B21] border border-[#077B21] rounded-full px-3 py-[2px] mt-2 lg:mt-0 text-[12px] font-medium">
+                                <Badge className="bg-[#35FF62]/10 text-[#077B21] border border-[#077B21] rounded-full px-3 py-0.5 mt-2 lg:mt-0 text-[12px] font-medium">
                                     Active
                                 </Badge>
                             </div>
@@ -167,7 +182,7 @@ const Coordinatorinfo = () => {
                                     {user.specialities.map((speciality, i) => (
                                         <div
                                             key={i}
-                                            className="bg-[#F5F5F5] rounded-[8px] px-3 py-1.5 text-[12px] text-[#727272]"
+                                            className="bg-[#F5F5F5] rounded-xl px-3 py-1.5 text-[12px] text-[#727272]"
                                         >
                                             {speciality}
                                         </div>
@@ -215,10 +230,11 @@ const Coordinatorinfo = () => {
 
                                 <div>
                                     <Button
+                                        onClick={() => HandleBlockCoordinator(user.id)}
                                         variant="outline"
                                         className="cursor-pointer w-full h-11 rounded-full border border-[#9C0000] text-[#9C0000] hover:text-[#9C0000] font-semibold text-[14px] hover:bg-[#FFF0F0]"
                                     >
-                                        Block
+                                        {user.isActive ? "Block" : "Unblock"}
                                     </Button>
                                 </div>
                             </div>
