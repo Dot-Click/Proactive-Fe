@@ -13,6 +13,7 @@ import logo from "../../../assets/sidebaricon/favicon.png"
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import PaymentSuccess from "../../../assets/SuccessPayment.png"
 import { toast } from 'sonner';
+// import { UsegetCurrentUser } from '@/hooks/getCurrentUserhook';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -150,7 +151,6 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: (paymentMethodId: string) => v
 const PaymentModal = () => {
     const [showhide, setShowHide] = useState(true);
     const { mutateAsync } = UseMembership();
-
     const handlePaymentSuccess = async (paymentMethodId: string) => {
         try {
             await mutateAsync({
