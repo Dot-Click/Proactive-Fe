@@ -79,6 +79,11 @@ const Trips = () => {
                 }
                 <div className="flex flex-col gap-4 px-5 py-4">
                     {
+                        data?.categories?.length === 0 ? (
+                        <div className="flex items-center justify-center bg-white border border-[#E0E1E2] px-4 py-6 rounded-[20px] shadow-sm hover:shadow-md transition-all duration-300">
+                            <span className="text-[#221E33] font-semibold text-[16px]">No Category Found</span>
+                        </div>
+                        ) : 
                         data?.categories.map((category: any) => (
                             <>
                                 <div className="flex justify-between items-center bg-[#FAFAFE] px-5 py-3 rounded-[20px]">

@@ -61,61 +61,66 @@ const FaqQuestion = ({ role }: { role: string }) => {
     return (
         <div className="flex flex-col gap-8 px-5 py-4">
 
-            {data?.faqs?.map((faq: any, index: number) => (
-                <div key={index} className="flex flex-col">
-                    <div className="flex md:flex-row flex-col md:justify-between md:items-center items-start md:gap-40 gap-6 bg-[#F0F5FD] px-5 py-4 rounded-tl-[20px] rounded-tr-[20px]">
-                        <h1 className="text-[#221E33] font-bold text-[12px] lg:text-[16px]">{faq.question}</h1>
-                        <div className="flex items-center gap-2">
-                            <div className="bg-white shadow-sm px-4 py-4 rounded-full">
+            {data?.faqs?.length === 0 ? (
+                <div className="bg-white border border-[#E0E1E2] px-4 py-6 rounded-[20px] shadow-sm hover:shadow-md transition-all duration-300">
+                    <span className="text-[#221E33] font-semibold text-[16px]">No FAQs Found</span>
+                </div>
+            ) :
+                data?.faqs?.map((faq: any, index: number) => (
+                    <div key={index} className="flex flex-col">
+                        <div className="flex md:flex-row flex-col md:justify-between md:items-center items-start md:gap-40 gap-6 bg-[#F0F5FD] px-5 py-4 rounded-tl-[20px] rounded-tr-[20px]">
+                            <h1 className="text-[#221E33] font-bold text-[12px] lg:text-[16px]">{faq.question}</h1>
+                            <div className="flex items-center gap-2">
+                                <div className="bg-white shadow-sm px-4 py-4 rounded-full">
+                                    {
+                                        openIndex === index ? (
+                                            <ImCross
+                                                size={20}
+                                                className="cursor-pointer"
+                                                onClick={() => toggle(index)}
+                                            />
+                                        ) : (
+                                            <FaPlus
+                                                size={20}
+                                                className="cursor-pointer"
+                                                onClick={() => toggle(index)}
+                                            />
+                                        )
+                                    }
+                                </div>
                                 {
-                                    openIndex === index ? (
-                                        <ImCross
-                                            size={20}
-                                            className="cursor-pointer"
-                                            onClick={() => toggle(index)}
-                                        />
-                                    ) : (
-                                        <FaPlus
-                                            size={20}
-                                            className="cursor-pointer"
-                                            onClick={() => toggle(index)}
-                                        />
+                                    role === "admin" && (
+                                        <div className="flex items-center gap-2">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <EllipsisVerticalIcon className="cursor-pointer" />
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent
+                                                    onClick={() => HandleDelete(faq.id)}
+                                                    className="cursor-pointer flex justify-center items-center py-2">
+                                                    {
+                                                        isPending ? <LoaderIcon className="animate-spin h-4 w-4" /> :
+                                                            <>
+                                                                <Trash className="mx-2 text-red-600" />
+                                                                <p className="text-red-600">Delete FAQ</p>
+                                                            </>
+                                                    }
+
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </div>
                                     )
                                 }
                             </div>
-                            {
-                                role === "admin" && (
-                                    <div className="flex items-center gap-2">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <EllipsisVerticalIcon className="cursor-pointer" />
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent
-                                                onClick={() => HandleDelete(faq.id)}
-                                                className="cursor-pointer flex justify-center items-center py-2">
-                                                {
-                                                    isPending ? <LoaderIcon className="animate-spin h-4 w-4" /> :
-                                                        <>
-                                                            <Trash className="mx-2 text-red-600"/>
-                                                            <p className="text-red-600">Delete FAQ</p>
-                                                        </>
-                                                }
-
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-                                )
-                            }
                         </div>
+
+                        {openIndex === index && (
+                            <div className="bg-white shadow-sm px-5 py-8 rounded-bl-[20px] rounded-br-[20px] transition duration-300">
+                                <p className="md:w-[700px]">{faq.answers}</p>
+                            </div>
+                        )}
                     </div>
-
-                    {openIndex === index && (
-                        <div className="bg-white shadow-sm px-5 py-8 rounded-bl-[20px] rounded-br-[20px] transition duration-300">
-                            <p className="md:w-[700px]">{faq.answers}</p>
-                        </div>
-                    )}
-                </div>
-            ))}
+                ))}
 
             {/* <div className="flex flex-col">
                 <div className="flex justify-between items-center gap-40 bg-[#F0F5FD] px-5 py-4 rounded-tl-[20px] rounded-tr-[20px]">

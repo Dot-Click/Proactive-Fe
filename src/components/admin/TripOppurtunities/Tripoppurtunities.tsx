@@ -1,25 +1,30 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UsegetTrips } from "@/hooks/gettriphook";
+import { UseupdateRejectedtripStatus } from "@/hooks/updatetripRejectedstatushook";
+import { Useupdatetripstatus } from "@/hooks/updatetripstatushook";
 import ReusableTable from "@/Table/ReusableTable";
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
 import { LoaderIcon } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
-type User = {
+type trip = {
+  id: string;
   name: string;
   Coordinator: string;
   category: string;
   startDate: string;
   endDate: string;
   approvalStatus: string;
+  status: string;
   coverImage: string;
   description: string
 };
 
 
-const userData: ColumnDef<User>[] = [
+const userData: ColumnDef<trip>[] = [
   {
     accessorKey: 'name',
     enableColumnFilter: true,
@@ -160,10 +165,10 @@ const userData: ColumnDef<User>[] = [
       return (
         <div className="text-center">
           <Button
-            className={`${row.original.approvalStatus === 'Pending' ? 'bg-[#CE5600]/10 text-[#CE5600] border border-[#CE5600] hover:bg-[#CE5600]/20 px-6 py-4' : 'bg-[#35FF62]/10 text-[#077B21] border border-[#077B21] hover:bg-[#35FF62]/20 px-10 py-4'} text-center cursor-pointer rounded-full
+            className={`${row.original.status === 'Pending' ? 'bg-[#CE5600]/10 text-[#CE5600] border border-[#CE5600] hover:bg-[#CE5600]/20 px-6 py-4' : 'bg-[#35FF62]/10 text-[#077B21] border border-[#077B21] hover:bg-[#35FF62]/20 px-10 py-4'} text-center cursor-pointer rounded-full
         font-semibold`}
           >
-            {row.original.approvalStatus}
+            {row.original.status}
           </Button>
         </div>
       )
@@ -178,11 +183,28 @@ const userData: ColumnDef<User>[] = [
         <h1>Actions</h1>
       </div>
     ),
-    cell: () => {
+    cell: ({row}) => {
+      const {mutateAsync} = Useupdatetripstatus();
+      const {mutateAsync: mutateAsync2} = UseupdateRejectedtripStatus();
+    const HandleApproveTrip = async (id: string) => {
+      try {
+        await mutateAsync({id});
+      } catch (error) {
+        toast.error('Failed to Approve Trip')
+      }
+    }
+
+    const HandleRejectTrip = async (id: string) => {
+      try {
+        await mutateAsync2({id});
+      } catch (error) {
+        toast.error('Failed to Reject Trip')
+      }
+    }
       return (
         <div className="flex gap-2">
-          <Button className="cursor-pointer px-7 h-10 rounded-full">Approve</Button>
-          <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] font-bold">Reject</Button>
+          <Button className="cursor-pointer px-7 h-10 rounded-full" onClick={() => HandleApproveTrip(row.original.id)}>{row.original.status === "live" ? "Approved" : "Approve"}</Button>
+          <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] font-bold" onClick={() => HandleRejectTrip(row.original.id)}>{row.original.status === "pending" ? "Rejected" : "Reject"}</Button>
         </div>
       )
     }
