@@ -21,7 +21,7 @@ const UserdashboardPage = () => {
         <div className="flex flex-col gap-4 w-full lg:w-80 shrink-0">
           <UserProfile />
           <Achievement />
-          <ReviewReminder />
+          {/* <ReviewReminder /> */}
         </div>
       </div>
     </div>
