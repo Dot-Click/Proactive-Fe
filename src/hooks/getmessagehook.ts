@@ -27,7 +27,9 @@ const getmessagebyid = async (id: string) => {
 
 export const Usegetmessagebyid = (id: string) => {
     return useQuery({
-        queryKey: ["chat", id],
+        queryKey: ["chat", id, "messages"],
         queryFn: () => getmessagebyid(id),
+        enabled: !!id && id.trim() !== "", // Only fetch when chatId is available
+        staleTime: 30 * 1000, // 30 seconds
     });
 };

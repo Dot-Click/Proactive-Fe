@@ -5,9 +5,12 @@ import included1 from "../../../assets/included1.png"
 // import included5 from "../../../assets/included5.png"
 
 const Includeditem = ({ trip }: { trip: any }) => {
-    const data = trip?.trip[0]
-    const IncludedItem = data?.included;
-    const NotIncludedItem = data?.notIncluded;
+    const data = trip?.trip?.[0] || trip?.trip || trip;
+    
+    // Handle both camelCase and snake_case field names from database
+    const IncludedItem = data?.included || data?.Included || [];
+    const NotIncludedItem = data?.notIncluded || data?.not_included || data?.NotIncluded || [];
+    
     return (
         <>
 
@@ -19,17 +22,28 @@ const Includeditem = ({ trip }: { trip: any }) => {
                     <h4 className="font-bold text-[#000000] text-lg">What's Included</h4>
                     {/* included */}
                     <div className="grid lg:grid-cols-5 md:grid-cols-2 gap-6 py-4">
-                        {
+                        {IncludedItem && Array.isArray(IncludedItem) && IncludedItem.length > 0 ? (
                             IncludedItem.map((item: any, index: number) => (
                                 <div key={index} className="bg-[#FFFFFF] border border-[#C1C1C1] rounded-[15px] px-2 py-4">
                                     <div className="flex flex-col gap-4 py-4 justify-center items-center">
-                                        <img src={included1} alt="included1" className="w-10 h-8" />
+                                        <img 
+                                            src={item?.img || included1} 
+                                            alt={item?.title || "included item"} 
+                                            className="w-10 h-8"
+                                            onError={(e) => {
+                                                (e.target as HTMLImageElement).src = included1;
+                                            }}
+                                        />
                                         <h4 className="font-semibold">{item?.title}</h4>
-                                        <span className="text-[#606066] text-[11px] text-center">Boutique camp accommodation with cozy shared spaces.</span>
+                                        <span className="text-[#606066] text-[11px] text-center">
+                                            {item?.description || "Boutique camp accommodation with cozy shared spaces."}
+                                        </span>
                                     </div>
                                 </div>
                             ))
-                        }
+                        ) : (
+                            <p className="text-sm text-gray-500">No items available</p>
+                        )}
 
                         {/* <div className="bg-[#FFFFFF] border border-[#C1C1C1] rounded-[15px] px-2 py-4">
                             <div className="flex flex-col gap-4 py-4 justify-center items-center">
@@ -65,22 +79,27 @@ const Includeditem = ({ trip }: { trip: any }) => {
                     <h4 className="font-bold text-[#B80505] text-lg">Not Included</h4>
                     {/* Not included */}
                     <div className="grid lg:grid-cols-5 md:grid-cols-2 gap-6 py-4">
-                        {NotIncludedItem?.length > 0 ? (
+                        {NotIncludedItem && Array.isArray(NotIncludedItem) && NotIncludedItem.length > 0 ? (
                             NotIncludedItem.map((item: any, index: number) => (
                                 <div key={index} className="bg-[#FFFFFF] border border-[#C1C1C1] rounded-[15px] px-2 py-4">
                                     <div className="flex flex-col gap-4 py-4 justify-center items-center">
-                                        <img src={included1} alt="included1" className="w-10 h-8" />
+                                        <img 
+                                            src={item?.img || included1} 
+                                            alt={item?.title || "not included item"} 
+                                            className="w-10 h-8"
+                                            onError={(e) => {
+                                                (e.target as HTMLImageElement).src = included1;
+                                            }}
+                                        />
                                         <h4 className="font-semibold">{item?.title}</h4>
                                         <span className="text-[#606066] text-[11px] text-center">
-                                            Flights to/from Barcelona not <br /> covered.
+                                            {item?.description || "Flights to/from Barcelona not covered."}
                                         </span>
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-sm text-gray-500">
-                                No items available
-                            </p>
+                            <p className="text-sm text-gray-500">No items available</p>
                         )}
                         {/* <div className="bg-[#FFFFFF] border border-[#C1C1C1] rounded-[15px] px-2 py-4">
                             <div className="flex flex-col gap-4 py-4 justify-center items-center">

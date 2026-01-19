@@ -3,7 +3,8 @@ import locationmeeting2 from "../../../assets/locationmeeting2.png"
 import locationmeeting3 from "../../../assets/locationmeeting3.png"
 import locationmeeting4 from "../../../assets/locationmeeting4.png"
 const Locationmeetingpoint = ({ trip }: { trip: any }) => {
-    const data = trip?.trip[0]
+    // Extract trip data - handle both direct trip object and nested structure
+    const data = trip?.trip?.[0] || trip?.trip || trip;
     return (
         <>
             <div className="border-b border-[#C1C1C1]" />
@@ -50,7 +51,7 @@ const Locationmeetingpoint = ({ trip }: { trip: any }) => {
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-[#156250]">N.O Days/ Nights</span>
-                                <span className="text-[#221E33] font-semibold">5 Days / 4 Nights</span>
+                                <span className="text-[#221E33] font-semibold">{data?.duration || "5 Days / 4 Nights"}</span>
                             </div>
                         </div>
                     </div>

@@ -63,12 +63,16 @@ const formSchema = z
     accessLvl: z.string().min(1, {
       message: "Select Permission",
     }),
-    password: z.string().min(6, {
-      message: "Password must be at least 6 characters",
-    }),
-    confirmPassword: z.string().min(6, {
-      message: "Confirm Password must be at least 6 characters",
-    }),
+    password: z.string()
+      .min(8, "Password must be at least 8 characters long")
+      .refine((val) => /[A-Z]/.test(val), "Password must contain at least one uppercase letter")
+      .refine((val) => /[0-9]/.test(val), "Password must contain at least one number")
+      .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), "Password must contain at least one special character"),
+    confirmPassword: z.string()
+      .min(8, "Confirm Password must be at least 8 characters long")
+      .refine((val) => /[A-Z]/.test(val), "Confirm Password must contain at least one uppercase letter")
+      .refine((val) => /[0-9]/.test(val), "Confirm Password must contain at least one number")
+      .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), "Confirm Password must contain at least one special character"),
     profilePicture: z
       .instanceof(File, { message: "Profile picture is required" })
       .refine((file) => file.size <= 5 * 1024 * 1024, "File must be less than 5MB")

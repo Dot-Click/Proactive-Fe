@@ -21,7 +21,8 @@ const ViewDetailTripPage = () => {
   )
   if (error || !data) return <div className="text-center text-red-900">Trip not found</div>
 
-  const trip: any = data
+  // Extract trip from API response structure: { trip: {...} }
+  const trip: any = data?.trip || data
   return (
     <div>
       <MasonryLayout trip={trip} />
@@ -31,7 +32,7 @@ const ViewDetailTripPage = () => {
       {trip.type === "wild trip" && <Daybyday />}
       <Includeditem trip={trip}/>
       <VideoSection trip={trip}/>
-      <Coordinatordetail />
+      <Coordinatordetail trip={trip} />
       <ParticipantsCards />
     </div>
   )

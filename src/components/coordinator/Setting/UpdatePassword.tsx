@@ -4,22 +4,32 @@ import z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { UseChangePassword } from "@/hooks/UseChangePasswordhook";
 
 const formSchema = z
     .object({
         CurrentPassword: z.string().min(1, {
             message: "Current Password is required",
         }),
-        NewPassword: z.string().min(1, {
-            message: "New Password is required",
-        }),
+        NewPassword: z
+            .string()
+            .min(8, "Password must be at least 8 characters long")
+            .refine((val) => /[A-Z]/.test(val), "Password must contain at least one uppercase letter")
+            .refine((val) => /[0-9]/.test(val), "Password must contain at least one number")
+            .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), "Password must contain at least one special character"),
         ConfirmNewPassword: z.string().min(1, {
             message: "Confirm Password is required",
         }),
     })
+    .refine((data) => data.NewPassword === data.ConfirmNewPassword, {
+        message: "Passwords do not match",
+        path: ["ConfirmNewPassword"],
+    })
 
 const UpdatePassword = () => {
     type FormSchemaType = z.infer<typeof formSchema>;
+    const { mutate: changePassword, isPending } = UseChangePassword();
+    
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
@@ -28,8 +38,19 @@ const UpdatePassword = () => {
             ConfirmNewPassword: ""
         },
     });
+    
     const onSubmit = (val: z.infer<typeof formSchema>) => {
-        console.log(val);
+        changePassword(
+            {
+                currentPassword: val.CurrentPassword,
+                newPassword: val.NewPassword,
+            },
+            {
+                onSuccess: () => {
+                    form.reset();
+                },
+            }
+        );
     };
 
 
@@ -104,7 +125,13 @@ const UpdatePassword = () => {
                                 )}
                             />
                         </div>
-                        <Button className="mt-6 rounded-full px-6 py-4 cursor-pointer">Update Password</Button>
+                        <Button 
+                            type="submit"
+                            className="mt-6 rounded-full px-6 py-4 bg-[#0DAC87] hover:bg-[#0f9c7b] cursor-pointer"
+                            disabled={isPending}
+                        >
+                            {isPending ? "Updating..." : "Update Password"}
+                        </Button>
                     </form>
                 </Form>
             </div>

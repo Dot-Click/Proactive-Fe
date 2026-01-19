@@ -59,7 +59,7 @@ const Coordinator = () => {
                             <SelectContent>
                               {
                                 data?.coordinators?.map((coordinator: any) => (
-                                  <SelectItem key={coordinator.id} value={coordinator.id}>{coordinator.fullName}</SelectItem>
+                                  <SelectItem key={coordinator.id} value={coordinator.userId}>{coordinator.fullName}</SelectItem>
                                 ))
                               }
                             </SelectContent>

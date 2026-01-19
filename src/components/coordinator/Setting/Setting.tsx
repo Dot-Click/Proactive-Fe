@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import Camera from "../../../assets/Camera.png"
@@ -9,6 +9,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import UpdatePassword from "./UpdatePassword";
 import NotificationPreferences from "./NotificationPreferences";
+import { UsegetCoordinatorSetting } from "@/hooks/getCoordinatorSettinghook";
+import { UseupdateCoordinatorSetting } from "@/hooks/updateCoordinatorSettinghook";
 
 const formSchema = z
   .object({
@@ -20,6 +22,9 @@ const formSchema = z
 
 const Setting = () => {
   type FormSchemaType = z.infer<typeof formSchema>;
+  const { data: settingsData, isLoading } = UsegetCoordinatorSetting();
+  const { mutate: updateSettings, isPending } = UseupdateCoordinatorSetting();
+  
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema) as any,
     defaultValues: {
@@ -27,15 +32,41 @@ const Setting = () => {
       Email: "",
     },
   });
+
   const [profile, setProfile] = useState("");
+  const [profileFile, setProfileFile] = useState<File | null>(null);
+
+  // Update form when settings data is loaded
+  useEffect(() => {
+    if (settingsData) {
+      form.reset({
+        Name: settingsData.Name || "",
+        Email: settingsData.Email || "",
+      });
+      if (settingsData.avatar) {
+        setProfile(settingsData.avatar);
+      }
+    }
+  }, [settingsData, form]);
 
   const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    setProfile(file ? URL.createObjectURL(file) : "");
+    if (file) {
+      setProfileFile(file);
+      setProfile(URL.createObjectURL(file));
+    }
   };
 
   const onSubmit = (val: z.infer<typeof formSchema>) => {
-    console.log(val);
+    const formData = new FormData();
+    formData.append("Name", val.Name);
+    formData.append("Email", val.Email);
+    
+    if (profileFile) {
+      formData.append("prof_pic", profileFile);
+    }
+
+    updateSettings(formData);
   };
 
 
@@ -48,13 +79,18 @@ const Setting = () => {
 
         <div className="flex mt-6 gap-3 items-center lg:justify-start justify-center px-6">
           <Avatar className="w-20 h-20">
-            <AvatarImage className="object-cover" src={profile ? profile : "https://github.com/shadcn.png"} alt="@shadcn" />
+            <AvatarImage className="object-cover" src={profile || "https://github.com/shadcn.png"} alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <input onChange={HandleuploadProfile} type="file" id="coordinatorphoto" className="hidden" />
-          <Button type="button" className="rounded-full w-42">
+          <input 
+            onChange={HandleuploadProfile} 
+            type="file" 
+            id="coordinatorphoto" 
+            className="hidden" 
+            accept="image/*"
+          />
+          <Button type="button" className="rounded-full w-42" disabled={isLoading}>
             <label htmlFor="coordinatorphoto" className="flex gap-2 items-center cursor-pointer">
-              {/* <Camera strokeWidth={3} size={60} /> */}
               <img src={Camera} alt="Camera" width={16} />
               Change Photo
             </label>
@@ -104,7 +140,13 @@ const Setting = () => {
                   )}
                 />
               </div>
-              <Button className="mt-4 rounded-full px-6 py-4 bg-[#0DAC87] hover:bg-[#0f9c7b] cursor-pointer">Save Changes</Button>
+              <Button 
+                type="submit"
+                className="mt-4 rounded-full px-6 py-4 bg-[#0DAC87] hover:bg-[#0f9c7b] cursor-pointer"
+                disabled={isPending || isLoading}
+              >
+                {isPending ? "Saving..." : "Save Changes"}
+              </Button>
             </form>
           </Form>
         </div>

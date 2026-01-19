@@ -144,6 +144,10 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       });
     }
     if (data.CoordinatorPhoto) formData.append('tt_img', data.CoordinatorPhoto as File);
+    // Add coordinator ID to FormData as 'coordinators' (backend expects this field)
+    if (data.CoordinatorName) {
+      formData.append('coordinators', data.CoordinatorName);
+    }
 
     try {
       await mutateAsync(formData); 

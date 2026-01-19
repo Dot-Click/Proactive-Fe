@@ -6,7 +6,8 @@ import { FaPause, FaPlay } from "react-icons/fa";
 const VideoSection = ({ trip }: { trip: any }) => {
     const videoRef = useRef<HTMLVideoElement>(null)
     const [playing, setPlaying] = useState(false)
-    const data = trip?.trip[0]
+    // Extract trip data - handle both direct trip object and nested structure
+    const data = trip?.trip?.[0] || trip?.trip || trip;
     const ToggleVideo = () => {
         if (videoRef?.current?.paused) {
             videoRef?.current?.play()

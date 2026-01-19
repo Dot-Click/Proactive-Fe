@@ -9,21 +9,59 @@ import MessageModal from "./MessageModal"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { useState } from "react"
+import { Usegetchat } from "@/hooks/getchathook"
+import { LoaderIcon } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 
-type User = {
+type ChatData = {
+  id: string;
   User: string;
   Coordinator: string;
   trip: string;
   LastMessage: string;
   Status: string;
+  chat: any;
 };
 
-const data: User[] = [
-  { User: 'Lisa W.', Coordinator: 'Maria Rodriguez', trip: 'Wild Weekend Barcelona', LastMessage: '2024-11-22 14:30', Status: 'Open' },
-  { User: 'Lisa W.', Coordinator: 'Maria Rodriguez', trip: 'Wild Weekend Barcelona', LastMessage: '2024-11-22 14:30', Status: 'Open' },
-]
+const ChatManagement = () => {
+  const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+  const [selectedChat, setSelectedChat] = useState<any>(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { data: chatsData, isLoading } = Usegetchat()
+  const chats = chatsData || []
 
-const userData: ColumnDef<User>[] = [
+  const tableData: ChatData[] = chats.map((chat: any) => {
+    const user = chat.participants?.find((p: any) => 
+      p.user?.type === 'user' || 
+      (p.userId && !chat.participants?.some((p2: any) => p2.user?.type === 'coordinator' && p2.userId === p.userId))
+    )
+    const coordinator = chat.participants?.find((p: any) => 
+      p.user?.type === 'coordinator' || 
+      (p.userId && chat.participants?.some((p2: any) => p2.user?.type === 'user' && p2.userId !== p.userId))
+    )
+    
+    const userName = user?.user?.fullName || user?.user?.name || user?.user?.email?.split('@')[0] || 'Unknown User'
+    const coordinatorName = coordinator?.user?.fullName || coordinator?.user?.name || coordinator?.user?.email?.split('@')[0] || 'Unknown Coordinator'
+    const tripName = chat.trip?.title || chat.tripId || 'No Trip'
+    const lastMessageTime = chat.lastMessage?.createdAt 
+      ? new Date(chat.lastMessage.createdAt).toLocaleString()
+      : chat.updatedAt 
+      ? new Date(chat.updatedAt).toLocaleString()
+      : 'N/A'
+    const status = chat.trip?.status === 'closed' ? 'Closed' : 'Open'
+
+    return {
+      id: chat.id || chat._id,
+      User: userName,
+      Coordinator: coordinatorName,
+      trip: tripName,
+      LastMessage: lastMessageTime,
+      Status: status,
+      chat: chat
+    }
+  })
+
+  const userData: ColumnDef<ChatData>[] = [
   {
     accessorKey: 'User',
     enableColumnFilter: true,
@@ -34,11 +72,19 @@ const userData: ColumnDef<User>[] = [
       </div>
     ),
     cell: ({ row }) => {
+      const chat = row.original.chat
+      const user = chat?.participants?.find((p: any) => 
+        p.user?.type === 'user' || 
+        (p.userId && !chat.participants?.some((p2: any) => p2.user?.type === 'coordinator' && p2.userId === p.userId))
+      )
+      const userAvatar = user?.user?.profilePicture || user?.user?.avatar || ""
+      const userInitials = row.original.User.charAt(0).toUpperCase()
+      
       return (
         <div className="flex items-center gap-3">
           <Avatar className="h-12 w-12 shrink-0">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src={userAvatar} alt={row.original.User} />
+            <AvatarFallback>{userInitials}</AvatarFallback>
           </Avatar>
 
           <div className="flex flex-col justify-center cursor-pointer">
@@ -46,7 +92,7 @@ const userData: ColumnDef<User>[] = [
               {row.original.User}
             </span>
             <span className="text-[12px] text-[#666373]">
-              Barcelona, Spain
+              {user?.user?.email || 'User'}
             </span>
           </div>
         </div>
@@ -63,6 +109,12 @@ const userData: ColumnDef<User>[] = [
       </div>
     ),
     cell: ({ row }) => {
+      const chat = row.original.chat
+      const coordinator = chat?.participants?.find((p: any) => 
+        p.user?.type === 'coordinator' || 
+        (p.userId && chat.participants?.some((p2: any) => p2.user?.type === 'user' && p2.userId !== p.userId))
+      )
+      
       return (
         <div className="flex items-center gap-3">
           <div className="flex flex-col justify-center cursor-pointer">
@@ -70,7 +122,7 @@ const userData: ColumnDef<User>[] = [
               {row.original.Coordinator}
             </span>
             <span className="text-[12px] text-[#666373]">
-              maria.r@email.com
+              {coordinator?.user?.email || 'Coordinator'}
             </span>
           </div>
         </div>
@@ -131,12 +183,17 @@ const userData: ColumnDef<User>[] = [
       </div>
     ),
     cell: ({ row }) => {
+      const isOpen = row.original.Status === 'Open'
       return (
-        <Button
-          className='cursor-pointer rounded-full bg-[#35FF62]/10 text-[#077B21] border border-[#077B21] hover:bg-[#35FF62]/20 px-8 py-5'
+        <Badge 
+          className={`rounded-full px-3 py-1 ${
+            isOpen 
+              ? "bg-[#1DBA4C]/10 border border-[#1DBA4C] text-[#1DBA4C]" 
+              : "bg-[#BA1D1D]/10 border border-[#BA1D1D] text-[#BA1D1D]"
+          }`}
         >
           {row.original.Status}
-        </Button>
+        </Badge>
       )
     }
   },
@@ -144,25 +201,38 @@ const userData: ColumnDef<User>[] = [
     accessorKey: 'Actions',
     enableColumnFilter: true,
     enableSorting: true,
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="flex gap-2">
-          <Dialog>
-            <DialogTrigger>
-              <Button className="cursor-pointer px-4 h-10 rounded-full">View Message</Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button 
+                onClick={() => {
+                  setSelectedChat(row.original.chat)
+                  setIsDialogOpen(true)
+                }}
+                className="cursor-pointer px-4 h-10 rounded-full"
+              >
+                View Message
+              </Button>
             </DialogTrigger>
-            <MessageModal />
+            <MessageModal chat={selectedChat || row.original.chat} />
           </Dialog>
           <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] hover:text-[#9C0000] font-bold">Close</Button>
         </div>
       )
     }
-
   },
 ]
 
-const ChatManagement = () => {
-  const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <LoaderIcon className="animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <>
       <div className="bg-[#FFFFFF] mt-3 rounded-[25px] px-5 py-5">
@@ -195,7 +265,7 @@ const ChatManagement = () => {
         onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
       />
       <div className="bg-white rounded-[25px] mt-3">
-        <ReusableTable data={data} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
+        <ReusableTable data={tableData} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
       </div>
 
     </>

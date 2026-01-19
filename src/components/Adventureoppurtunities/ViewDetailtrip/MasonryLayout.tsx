@@ -14,7 +14,8 @@ import ApplicationForm from "./ApplicationForm";
 
 const MasonryLayout = ({ trip }: { trip: any }) => {
   const navigate = useNavigate();
-  const data = trip?.trip[0]
+  // Extract trip data - handle both direct trip object and nested structure
+  const data = trip?.trip?.[0] || trip?.trip || trip;
   const galleryImg = data?.galleryImages
   return (
     <>
