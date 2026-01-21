@@ -2,7 +2,7 @@ import Achievement from "@/components/userDashboard/Achievement/Achievement"
 import AlertError from "@/components/userDashboard/Alert/Alert"
 import Carousel from "@/components/userDashboard/Carousel/Carousel"
 import UserProfile from "@/components/userDashboard/profile/userprofile"
-import ReviewReminder from "@/components/userDashboard/ReviewReminder/ReviewReminder"
+// import ReviewReminder from "@/components/userDashboard/ReviewReminder/ReviewReminder"
 import Stats from "@/components/userDashboard/Stats/Stats"
 import UpcomingAdventures from "@/components/userDashboard/upcomingAdventures/UpcomingAdventures"
 

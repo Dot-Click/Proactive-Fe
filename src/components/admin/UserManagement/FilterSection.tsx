@@ -1,33 +1,116 @@
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import ReusableTable from "@/Table/ReusableTable"
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import ReusableTable from "@/Table/ReusableTable";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import Modal from "./Modal";
 import TableHeader from "@/Table/TableHeader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState } from "react";
+import { UseGetAllUser } from "@/hooks/getUserhook";
+import { useUpdateUserStatus } from "@/hooks/updateUserStatushook";
+import { useMemo, useState } from "react";
 
 type User = {
   id: string;
-  name: string;
+  firstName?: string;
+  lastName?: string;
+  nickName?: string;
   email: string;
-  trips: number;
-  Membership: string;
+  avatar?: string | null;
+  phoneNumber?: string;
+  address?: string;
+  dob?: string;
+  gender?: string;
+  provider?: string;
+  emailVerified?: boolean;
+  userRoles?: string;
+  lastActive?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  coordinatorDetailsId?: string | null;
+  userStatus?: string;
 };
 
-const data: User[] = [
-  { id: '#123', name: 'John Doe', email: 'john@gmail.com', trips: 5, Membership: 'GOLD MEMBER' },
-  { id: '#123', name: 'John Doe', email: 'john@gmail.com', trips: 5, Membership: 'GOLD MEMBER' },
-  { id: '#123', name: 'John Doe', email: 'john@gmail.com', trips: 5, Membership: 'GOLD MEMBER' },
-  { id: '#123', name: 'John Doe', email: 'john@gmail.com', trips: 5, Membership: 'GOLD MEMBER' },
-  { id: '#123', name: 'John Doe', email: 'john@gmail.com', trips: 5, Membership: 'GOLD MEMBER' },
+const getInitials = (value?: string) => {
+  if (!value) return "?";
+  const parts = value.trim().split(/\s+/);
+  if (parts.length === 0) return "?";
+  return (
+    parts
+      .map((part) => part[0]?.toUpperCase() ?? "")
+      .join("")
+      .slice(0, 2) || "?"
+  );
+};
 
-]
+const getDisplayName = (user: User) => {
+  const composedName = [user.firstName, user.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  return user.nickName || composedName || "Unknown User";
+};
 
-const userData: ColumnDef<User>[] = [
+const getShortId = (id: string, index: number) => {
+  if (!id) return `#${index + 1}`;
+  return id.length > 8 ? `${id.slice(0, 8)}...` : id;
+};
+
+// const formatDate = (value?: string | null) => {
+//   if (!value) return "—";
+//   const parsed = new Date(value);
+//   if (Number.isNaN(parsed.getTime())) return "—";
+//   return parsed.toLocaleDateString();
+// };
+
+const StatusCell = ({ row }: { row: any }) => {
+  const { mutate } = useUpdateUserStatus();
+  // Default to lower case "active"
+  const status = row.original.userStatus || "active";
+  const isActive = status === "active";
+
+  return (
+    <div className="flex justify-center items-center">
+      <Select
+        value={status}
+        onValueChange={(val) =>
+          mutate({ userId: row.original.id, status: val })
+        }
+      >
+        <SelectTrigger
+          className={`${
+            isActive
+              ? "text-[#077B21] bg-[#35FF62]/10 border-[#077B21]"
+              : "text-[#D14343] bg-[#D14343]/10 border-[#D14343]"
+          } font-bold w-[120px] rounded-full text-[13px] px-4 py-4 border gap-1`}
+        >
+          <SelectValue placeholder="Status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="active" className="font-bold">
+              Active
+            </SelectItem>
+            <SelectItem value="inactive" className="font-bold">
+              Inactive
+            </SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
+  );
+};
+
+const userColumns: ColumnDef<User>[] = [
   {
-    accessorKey: 'id',
+    accessorKey: "id",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -35,15 +118,10 @@ const userData: ColumnDef<User>[] = [
         <h1>ID</h1>
       </div>
     ),
-    cell: ({ row }) => {
-      return (
-        <span>{row.original.id}</span>
-      )
-    }
+    cell: ({ row }) => <span>{getShortId(row.original.id, row.index)}</span>,
   },
   {
-    accessorKey: 'name',
-    // header: 'Name',
+    accessorKey: "nickName",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -52,73 +130,50 @@ const userData: ColumnDef<User>[] = [
       </div>
     ),
     cell: ({ row }) => {
+      const name = getDisplayName(row.original);
       return (
         <div className="flex items-center gap-2 pl-6">
           <Avatar className="h-12 w-12">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src={row.original.avatar ?? undefined} alt={name} />
+            <AvatarFallback>{getInitials(name)}</AvatarFallback>
           </Avatar>
-          <span>{row.original.name}</span>
+          <span>{name}</span>
         </div>
-      )
-    }
+      );
+    },
   },
   {
-    accessorKey: 'email',
+    accessorKey: "email",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
-      <div className="">
+      <div>
         <h1>Email</h1>
       </div>
     ),
-    cell: ({ row }) => {
-      return (
-        <div className="pr-2">
-          <span>{row.original.email}</span>
-        </div>
-      )
-    }
+    cell: ({ row }) => (
+      <div className="pr-2">
+        <span>{row.original.email}</span>
+      </div>
+    ),
   },
   {
-    accessorKey: 'trips',
+    accessorKey: "phoneNumber",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
       <div className="text-start">
-        <h1>Trips</h1>
+        <h1>Phone</h1>
       </div>
     ),
     cell: ({ row }) => (
       <div className="pl-4">
-        <span>{row.original.trips}</span>
-      </div>
-    )
-  },
-  {
-    accessorKey: 'Membership',
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div className="text-center">
-        <h1>Membership</h1>
+        <span>{row.original.phoneNumber || "—"}</span>
       </div>
     ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex justify-center">
-          <Button
-            className="bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full
-          px-4 py-5 font-semibold"
-          >
-            {row.original.Membership}
-          </Button>
-        </div>
-      )
-    }
   },
   {
-    accessorKey: 'Status',
+    accessorKey: "status",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -126,50 +181,47 @@ const userData: ColumnDef<User>[] = [
         <h1>Status</h1>
       </div>
     ),
-    cell: () => {
-      return (
-        <div className="flex justify-center items-center">
-          <Select>
-            <SelectTrigger className="text-[#077B21] font-bold w-[100px] rounded-full text-[13px] px-4 py-4 bg-[#35FF62]/10 border border-[#077B21] gap-1">
-              <SelectValue placeholder="Select" className="text-[#077B21] cursor-pointer" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="Active" className="font-bold">Active</SelectItem>
-                <SelectItem value="DeActive" className="font-bold">DeActive</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-      )
-    }
+    /* @ts-ignore */
+    cell: ({ row }) => <StatusCell row={row} />,
   },
   {
-    accessorKey: 'Actions',
+    accessorKey: "actions",
     header: () => (
       <div>
         <h1>Actions</h1>
       </div>
     ),
-    cell: () => {
+    cell: ({ row }) => {
+      const userId = row.original.id;
+
       return (
         <div>
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="hover:bg-[#000000] cursor-pointer rounded-full
-                    px-8 py-6 font-semibold">View Detail</Button>
+              <Button className="hover:bg-[#000000] cursor-pointer rounded-full px-8 py-6 font-semibold">
+                View Detail
+              </Button>
             </DialogTrigger>
-            <Modal />
+            <Modal userId={userId} />
           </Dialog>
         </div>
-      )
-    }
-
+      );
+    },
   },
-]
+];
 
 const FilterSection = () => {
-  const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+  const { data: getAllUser, isLoading, isError } = UseGetAllUser();
+  const [columnsMenu, setColumnsMenu] = useState<{
+    items: { id: string; label?: string; checked: boolean }[];
+    toggle: (id: string, v: boolean) => void;
+  } | null>(null);
+
+  const users = useMemo(
+    () => (Array.isArray(getAllUser) ? getAllUser : []),
+    [getAllUser],
+  );
+
   return (
     <>
       <TableHeader
@@ -179,14 +231,28 @@ const FilterSection = () => {
         showFilter={false}
       />
       <div className="bg-white rounded-[25px] mt-3 overflow-x-auto">
-        <ReusableTable
-          columns={userData}
-          data={data}
-          onExposeColumns={(payload) => setColumnsMenu(payload)}
-        />
+        {isError ? (
+          <div className="flex items-center justify-center px-4 py-6">
+            <span className="text-[#D14343] font-semibold text-[16px]">
+              Failed to load users.
+            </span>
+          </div>
+        ) : isLoading ? (
+          <div className="flex items-center justify-center px-4 py-6">
+            <span className="text-[#221E33] font-semibold text-[16px]">
+              Loading users...
+            </span>
+          </div>
+        ) : (
+          <ReusableTable
+            columns={userColumns}
+            data={users}
+            onExposeColumns={(payload) => setColumnsMenu(payload)}
+          />
+        )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default FilterSection
+export default FilterSection;
