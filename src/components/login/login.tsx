@@ -13,6 +13,7 @@ import google from "../../assets/google.png"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import { useLoginUser } from "@/hooks/UseLoginhook"
+import { useGoogleSignup } from "@/hooks/useGoogleSignup"
 
 const LoginSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -36,6 +37,7 @@ const Login = () => {
     });
     const navigate = useNavigate()
     const loginUserMutation = useLoginUser()
+    const { mutate, isPending } = useGoogleSignup();
     const onSubmit = async (val: z.infer<typeof LoginSchema>) => {
         const { email, Password } = val
         try {
@@ -161,9 +163,9 @@ const Login = () => {
                             </Form>
 
                             <div className="mt-4">
-                                <Button className="bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#221E33] font-bold hover:scale-105 w-full rounded-full py-6 cursor-pointer transition-all delay-150 duration-200 ease-in flex items-center justify-center gap-2">
+                                <Button onClick={() => mutate()} disabled={isPending} className="bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#221E33] font-bold hover:scale-105 w-full rounded-full py-6 cursor-pointer transition-all delay-150 duration-200 ease-in flex items-center justify-center gap-2">
                                     <img src={google} alt="google" />
-                                    Sign In with Google
+                                    {isPending ? "..." : "Continue with Google"}
                                 </Button>
                             </div>
 

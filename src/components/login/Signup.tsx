@@ -29,6 +29,7 @@ import { ChevronDownIcon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
 import { toast } from "sonner";
 import { useCreateUser } from "@/hooks/UserRegisterhook";
+import { useGoogleSignup } from "@/hooks/useGoogleSignup";
 
 const allowedGenders = ["Male", "Female", "Other"];
 
@@ -75,6 +76,7 @@ const Signup = () => {
     const [open, setOpen] = useState(false)
     const [date, setDate] = useState<Date | undefined>(undefined)
     const createUserMutation = useCreateUser();
+    const { mutate, isPending } = useGoogleSignup();
 
     const onSubmit = async (val: z.infer<typeof SignupSchema>) => {
         const {
@@ -89,7 +91,7 @@ const Signup = () => {
             Password,
         } = val;
         try {
-          const response = await createUserMutation.mutateAsync({
+            const response = await createUserMutation.mutateAsync({
                 FirstName,
                 LastName,
                 NickName,
@@ -100,7 +102,7 @@ const Signup = () => {
                 email,
                 Password,
             })
-            if(response.data.user.role === "user"){
+            if (response.data.user.role === "user") {
                 navigate("/login")
             }
             toast.success("Account Created Successfully")
@@ -133,7 +135,7 @@ const Signup = () => {
 
                         <div className="flex flex-col justify-center items-center">
                             <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text text-3xl font-bold px-8">
-                                Welcome Back 
+                                Welcome Back
                             </h1>
                             <p className="text-[#221E33] text-[14px] mt-2">
                                 Sign up to continue your adventure journey
@@ -380,9 +382,9 @@ const Signup = () => {
                             </Form>
 
                             <div className="mt-4">
-                                <Button className="bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#221E33] font-bold hover:scale-105 w-full rounded-full py-6 cursor-pointer transition-all delay-150 duration-200 ease-in flex items-center justify-center gap-2">
+                                <Button onClick={() => mutate()} disabled={isPending} className="bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#221E33] font-bold hover:scale-105 w-full rounded-full py-6 cursor-pointer transition-all delay-150 duration-200 ease-in flex items-center justify-center gap-2">
                                     <img src={google} alt="google" />
-                                    Sign In with Google
+                                    {isPending ? "..." : "Continue with Google"}
                                 </Button>
                             </div>
 
