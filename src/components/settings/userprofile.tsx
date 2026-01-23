@@ -3,8 +3,11 @@ import { Badge } from "../ui/badge"
 import goldmember from "../../assets/goldmember.png"
 import email from "../../assets/email.png"
 import calender from "../../assets/calenderblack.png"
-
+import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
 const Userprofile = () => {
+
+    const { data: userData } = UsegetCurrentUser();
+    const user = userData?.data?.user;
     return (
         <div className="">
             <div className="lg:w-80 border border-[#D9D9D9] bg-[#FAFAFA] rounded-[20px] flex flex-col">
@@ -16,7 +19,7 @@ const Userprofile = () => {
                     </Avatar>
 
                     <div className="flex flex-col justify-center items-center mt-4">
-                        <span className="text-[#141E20] font-semibold text-lg">Will Bettelheim</span>
+                        <span className="text-[#141E20] font-semibold text-lg">{user?.FirstName} {user?.LastName}</span>
                     </div>
 
                     <div className="mt-4">
@@ -31,15 +34,15 @@ const Userprofile = () => {
                     <div className="flex flex-col gap-4 px-4 py-4">
                         <div className="flex items-center gap-2">
                             <span className="text-[#303030] font-bold">@</span>
-                            <span className="text-[#666373] text-[12px]">mr_will</span>
+                            <span className="text-[#666373] text-[12px]">{user?.NickName}</span>
                         </div>
                         <div className="flex gap-2 items-center">
                             <img src={email} alt="email" />
-                            <span className="text-[#666373] text-[12px]">willbettelhiem@gmail.com</span>
+                            <span className="text-[#666373] text-[12px]">{user?.email}</span>
                         </div>
                         <div className="flex gap-2 items-center">
                             <img src={calender} alt="calender" />
-                            <span className="text-[#666373] text-[12px]">Member since March 2024</span>
+                            <span className="text-[#666373] text-[12px]">Member since {user?.createdAt}</span>
                         </div>
                     </div>
                 </div>

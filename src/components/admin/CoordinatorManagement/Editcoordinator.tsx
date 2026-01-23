@@ -670,7 +670,7 @@ const Editcoordinator = () => {
     const [profile, setProfile] = useState("");
 
     // Use the hook to fetch coordinator data
-    const { data: apiResponse, isLoading, isError } = useGetCoordinator(id as string);
+    const { data: apiResponse} = useGetCoordinator(id as string);
 
     // Log the API response to console
     useEffect(() => {

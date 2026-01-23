@@ -59,7 +59,7 @@ const CoordinatorStates = () => {
                                     <p className="text-sm ">{stat.name}</p>
                                     <p className="text-[30px] font-bold bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text">{stat.value}</p>
                                     <div className="flex items-center gap-2 mt-2">
-                                        <Badge className={`text-sm  rounded-full px-3 py-1 ${stat.percentageChange.startsWith('+') ? 'text-[#1DBA4C] bg-[#00FF4D]/10 border border-[#1DBA4C]' : 'text-[#BA1D1D] border border-[#BA1D1D] bg-[#FF0000]/10'}`}>{stat.percentageChange}</Badge>
+                                        <Badge className={`text-sm  rounded-full px-3 py-1 ${stat.percentageChange ? 'text-[#1DBA4C] bg-[#00FF4D]/10 border border-[#1DBA4C]' : 'text-[#BA1D1D] border border-[#BA1D1D] bg-[#FF0000]/10'}`}>{stat.percentageChange}</Badge>
                                         <span className="text-[#666373] text-[12px]">from last month</span>
                                     </div>
                                 </div>
