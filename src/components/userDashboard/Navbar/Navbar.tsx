@@ -161,8 +161,8 @@ const Navbar = ({ role }: NavbarProps) => {
           </DropdownMenu>
 
           <div className="flex items-center gap-2 lg:gap-3">
-            <Avatar className="w-10 h-10 lg:w-16 lg:h-16">
-              <AvatarImage src="https://github.com/shadcn.png" />
+            <Avatar className="w-10 h-10 lg:w-16 lg:h-16 bg-red-500">
+              <AvatarImage src={user?.data?.user?.avatar}/>
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="hidden lg:flex flex-col">

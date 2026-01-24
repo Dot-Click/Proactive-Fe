@@ -15,14 +15,6 @@ const ReusableTable = <TData,>({ columns, data, onExposeColumns }: TableProps<TD
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
-    //  data length 0 how show no data found
-    if (data?.length === 0) {
-        return (
-            <div className="flex items-center justify-center px-4 py-6 rounded-[20px] transition-all duration-300">
-                <span className="text-[#221E33] font-semibold text-[16px] text-center">No Data Found</span>
-            </div>
-        );
-    }
     const table = useReactTable({
         data,
         columns,
@@ -64,6 +56,15 @@ const ReusableTable = <TData,>({ columns, data, onExposeColumns }: TableProps<TD
         lastExposeKeyRef.current = exposeKey
         onExposeColumns({ items, toggle })
     }, [onExposeColumns, columnVisibility, toggle, table])
+
+    //  data length 0 how show no data found
+    if (data?.length === 0) {
+        return (
+            <div className="flex items-center justify-center px-4 py-6 rounded-[20px] transition-all duration-300">
+                <span className="text-[#221E33] font-semibold text-[16px] text-center">No Data Found</span>
+            </div>
+        );
+    }
 
     return (
         <>

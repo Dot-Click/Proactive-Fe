@@ -5,19 +5,23 @@ import goldmember from "../../../assets/goldmember.png"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
+import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
 const UserProfile = () => {
+    const { data: userData } = UsegetCurrentUser();
+    const user = userData?.data?.user;
+    console.log(user);
     return (
         <>
             <div className="mt-6 border border-[#D9D9D9] bg-[#F0F5FC] rounded-[20px] flex flex-col ">
                 <div className="px-16 py-6 flex flex-col items-center">
                     <Avatar className="w-16 h-16 border border-[#D9D9D9]">
-                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarImage src={user?.avatar} />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
 
                     <div className="flex flex-col justify-center items-center mt-4">
-                        <span className="text-[#141E20] font-semibold text-lg">Will Bettelheim</span>
-                        <span className="text-[#332A2A] text-[12px]">willbettelhiem@gmail.com</span>
+                        <span className="text-[#141E20] font-semibold text-lg">{user?.FirstName} {user?.LastName}</span>
+                        <span className="text-[#332A2A] text-[12px]">{user?.email}</span>
                     </div>
 
                     <div className="mt-4">

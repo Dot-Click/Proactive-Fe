@@ -14,7 +14,7 @@ const Userprofile = () => {
                 <div className="px-16 py-6 flex flex-col items-center">
 
                     <Avatar className="w-16 h-16 border border-[#D9D9D9]">
-                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarImage src={user?.avatar} />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
 
