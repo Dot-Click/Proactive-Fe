@@ -46,7 +46,6 @@ import ResetPassword from "./components/login/ResetPassword";
 
 function App() {
   return (
-    <BrowserRouter>
       <Routes>
 
         <Route path="/login" element={<LoginPage />} />
@@ -105,7 +104,6 @@ function App() {
         </Route>
 
       </Routes>
-    </BrowserRouter>
   );
 }
 

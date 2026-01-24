@@ -1,18 +1,25 @@
-import api from "@/config/axios";
+import { supabase } from "@/config/supabase";
 import { useMutation } from "@tanstack/react-query";
 
+const googleSignup = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        
+        options: {
+            redirectTo: `${window.location.origin}/`,
+            queryParams: {
+                prompt: "select_account",
+                access_type: "offline",
+            },
+        },
+    });
 
-
-const getGoogleOAuthUrl = async (): Promise<{ url: string }> => {
-    const res = await api.post("/api/auth/google-signup");
-    return res.data.data;
+    if (error) throw error;
+    return data;
 };
 
 export const useGoogleSignup = () => {
     return useMutation({
-        mutationFn: getGoogleOAuthUrl,
-        onSuccess: ({ url }) => {
-            window.location.assign(url);
-        }
+        mutationFn: googleSignup,
     });
 };
