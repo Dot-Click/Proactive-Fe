@@ -12,13 +12,14 @@ export interface CoordinatorData {
   certification: string;
   experience: number;
   coordinatorType: string;
-  accessLevel: string;
+  accessLvl: string;
   profilePicture: string | null;
 }
 
 const getCoordinator = async (id: string): Promise<CoordinatorData> => {
   // Matches your requested flow: response.data.data
   const response = await api.get(`/api/admin/coordinator/${id}`);
+  console.log(response.data)
   return response.data.data;
 };
 
