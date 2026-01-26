@@ -5,8 +5,8 @@ import ReusableTable from "@/Table/ReusableTable";
 import TableHeader from "@/Table/TableHeader";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
-import Mountain from "../../../assets/Mountain.png"
-import Explorer from "../../../assets/Explorer.png"
+import Mountain from "../../../assets/Mountain.png";
+import Explorer from "../../../assets/Explorer.png";
 import { Progress } from "@/components/ui/progress";
 import Achievementlibrary from "./Achievementlibrary";
 import { UsegetallAchievements } from "@/hooks/getallAchievementhook";
@@ -20,17 +20,41 @@ type User = {
 };
 
 const data: User[] = [
-  { Name: 'Alex Thompson', Trips: 'Wild Weekend Barcelona', AdventurePoints: 10, LevelProgress: 'Gold Explorer' },
-  { Name: 'Alex Thompson', Trips: 'Wild Weekend Barcelona', AdventurePoints: 10, LevelProgress: 'Gold Explorer' },
-  { Name: 'Alex Thompson', Trips: 'Wild Weekend Barcelona', AdventurePoints: 10, LevelProgress: 'Gold Explorer' },
-  { Name: 'Alex Thompson', Trips: 'Wild Weekend Barcelona', AdventurePoints: 10, LevelProgress: 'Gold Explorer' },
-  { Name: 'Alex Thompson', Trips: 'Wild Weekend Barcelona', AdventurePoints: 10, LevelProgress: 'Gold Explorer' },
-
-]
+  {
+    Name: "Alex Thompson",
+    Trips: "Wild Weekend Barcelona",
+    AdventurePoints: 10,
+    LevelProgress: "Gold Explorer",
+  },
+  {
+    Name: "Alex Thompson",
+    Trips: "Wild Weekend Barcelona",
+    AdventurePoints: 10,
+    LevelProgress: "Gold Explorer",
+  },
+  {
+    Name: "Alex Thompson",
+    Trips: "Wild Weekend Barcelona",
+    AdventurePoints: 10,
+    LevelProgress: "Gold Explorer",
+  },
+  {
+    Name: "Alex Thompson",
+    Trips: "Wild Weekend Barcelona",
+    AdventurePoints: 10,
+    LevelProgress: "Gold Explorer",
+  },
+  {
+    Name: "Alex Thompson",
+    Trips: "Wild Weekend Barcelona",
+    AdventurePoints: 10,
+    LevelProgress: "Gold Explorer",
+  },
+];
 
 const userData: ColumnDef<User>[] = [
   {
-    accessorKey: 'Name',
+    accessorKey: "Name",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -52,11 +76,11 @@ const userData: ColumnDef<User>[] = [
             {/* <span className="text-xs text-[#8a8698]">alex@example.com</span> */}
           </div>
         </div>
-      )
-    }
+      );
+    },
   },
   {
-    accessorKey: 'Trips',
+    accessorKey: "Trips",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -74,11 +98,11 @@ const userData: ColumnDef<User>[] = [
             {/* <span className="text-xs text-[#8a8698]">Barcelona, Spain</span> */}
           </div>
         </div>
-      )
-    }
+      );
+    },
   },
   {
-    accessorKey: 'AdventurePoints',
+    accessorKey: "AdventurePoints",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -89,13 +113,15 @@ const userData: ColumnDef<User>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex flex-col w-30">
-          <div className="font-semibold text-[#666373] text-[14px] text-center">{row.original.AdventurePoints}</div>
+          <div className="font-semibold text-[#666373] text-[14px] text-center">
+            {row.original.AdventurePoints}
+          </div>
         </div>
-      )
-    }
+      );
+    },
   },
   {
-    accessorKey: 'LevelProgress',
+    accessorKey: "LevelProgress",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -108,14 +134,17 @@ const userData: ColumnDef<User>[] = [
         <div className="flex flex-col gap-1">
           <span>{row.original.LevelProgress}</span>
           <span className="text-[12px] text-[#666373]">
-            <Progress value={80} className="[&>div]:bg-[#16A34A] lg:w-[100%] w-[150px]" />
+            <Progress
+              value={80}
+              className="[&>div]:bg-[#16A34A] lg:w-[100%] w-[150px]"
+            />
           </span>
         </div>
       </div>
-    )
+    ),
   },
   {
-    accessorKey: 'BadgesEarned',
+    accessorKey: "BadgesEarned",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -139,11 +168,11 @@ const userData: ColumnDef<User>[] = [
             </div>
           </Badge>
         </div>
-      )
-    }
+      );
+    },
   },
   {
-    accessorKey: 'Actions',
+    accessorKey: "Actions",
     header: () => (
       <div>
         <h1>Actions</h1>
@@ -152,22 +181,21 @@ const userData: ColumnDef<User>[] = [
     cell: () => {
       return (
         <div className="flex gap-2">
-          <Button
-            className="rounded-full text-md px-8 py-5 cursor-pointer"
-          >
+          <Button className="rounded-full text-md px-8 py-5 cursor-pointer">
             Manage
           </Button>
         </div>
-      )
-    }
-
+      );
+    },
   },
-]
+];
 
 const AchievementControl = () => {
-  const { isLoading, isError } = UsegetallAchievements();
-  // console.log(Achievement);
-  const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+  const { data: achievements, isLoading, isError } = UsegetallAchievements();
+  const [columnsMenu, setColumnsMenu] = useState<{
+    items: { id: string; label?: string; checked: boolean }[];
+    toggle: (id: string, v: boolean) => void;
+  } | null>(null);
   if (isLoading) {
     return (
       <div className="w-full flex items-center justify-center py-10">
@@ -204,10 +232,10 @@ const AchievementControl = () => {
         />
       </div>
       <div>
-        <Achievementlibrary />
+        <Achievementlibrary achievements={achievements ?? []} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AchievementControl
+export default AchievementControl;
