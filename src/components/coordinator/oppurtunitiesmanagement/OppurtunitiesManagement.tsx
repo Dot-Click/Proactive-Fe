@@ -4,27 +4,23 @@ import ReusableTable from "@/Table/ReusableTable";
 import TableHeader from "@/Table/TableHeader";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
+import { UsegetTrips } from "@/hooks/gettriphook";
+import { LoaderIcon } from "lucide-react";
 
-type User = {
-  TripName: string;
-  Category: string;
-  Dates: string;
-  Participants: number;
-  Status: string;
+type Trip = {
+  id: string;
+  name: string;
+  category: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+  coverImage: string;
+  description: string;
 };
 
-const data: User[] = [
-  { TripName: 'Wild Weekend Barcelona', Category: 'Weekend', Dates: '10–12 Sep 2025', Participants: 5, Status: 'Open' },
-  { TripName: 'Wild Weekend Barcelona', Category: 'Weekend', Dates: '10–12 Sep 2025', Participants: 5, Status: 'Open' },
-  { TripName: 'Wild Weekend Barcelona', Category: 'Weekend', Dates: '10–12 Sep 2025', Participants: 5, Status: 'Open' },
-  { TripName: 'Wild Weekend Barcelona', Category: 'Weekend', Dates: '10–12 Sep 2025', Participants: 5, Status: 'Open' },
-  { TripName: 'Wild Weekend Barcelona', Category: 'Weekend', Dates: '10–12 Sep 2025', Participants: 5, Status: 'Open' },
-
-]
-
-const userData: ColumnDef<User>[] = [
+const columns: ColumnDef<Trip>[] = [
   {
-    accessorKey: 'Trip Name',
+    accessorKey: "name",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -32,26 +28,23 @@ const userData: ColumnDef<User>[] = [
         <h1>Trip Name</h1>
       </div>
     ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center gap-3">
-          <Avatar className="h-10 w-10">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>SL</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col">
-            <span className="font-medium text-sm text-[#3b3745] text-nowrap">
-              {row.original.TripName}
-            </span>
-            <span className="text-xs text-[#8a8698]">Barcelona, Spain</span>
-          </div>
+    cell: ({ row }) => (
+      <div className="flex items-center gap-3">
+        <Avatar className="h-10 w-10">
+          <AvatarImage src={row.original.coverImage || "https://github.com/shadcn.png"} alt="cover" />
+          <AvatarFallback>TR</AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col">
+          <span className="font-medium text-sm text-[#3b3745] text-nowrap">
+            {row.original.name}
+          </span>
+          <span className="text-xs text-[#8a8698] line-clamp-1">{row.original.description.slice(0,50)}</span>
         </div>
-      )
-    }
+      </div>
+    )
   },
   {
-    accessorKey: 'Category',
-    // header: 'Name',
+    accessorKey: "category",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -59,54 +52,34 @@ const userData: ColumnDef<User>[] = [
         <h1>Category</h1>
       </div>
     ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center gap-2 pl-6 w-40">
-          <Button
-            className="bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full
-          px-4 py-5 font-semibold"
-          >
-            {row.original.Category}
-          </Button>
-        </div>
-      )
-    }
-  },
-  {
-    accessorKey: 'Dates',
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div className="">
-        <h1>Dates</h1>
-      </div>
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex flex-col w-30">
-          <div className="font-semibold text-[#666373] text-[14px]">{row.original.Dates}</div>
-          <span className="text-[#666373] text-[12px]">8/16 joined</span>
-        </div>
-      )
-    }
-  },
-  {
-    accessorKey: 'Participants',
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div className="text-start">
-        <h1>Participants</h1>
-      </div>
-    ),
     cell: ({ row }) => (
-      <div className="pl-8 w-30">
-        <span>{row.original.Participants}</span>
+      <div className="flex items-center gap-2 pl-6 w-40">
+        <Button className="bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full px-4 py-5 font-semibold">
+          {row.original.category}
+        </Button>
       </div>
     )
   },
   {
-    accessorKey: 'Status',
+    accessorKey: "dates",
+    header: () => (
+      <div>
+        <h1>Dates</h1>
+      </div>
+    ),
+    cell: ({ row }) => {
+      const s = new Date(row.original.startDate);
+      const e = new Date(row.original.endDate);
+      const fmt = (d: Date) => d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+      return (
+        <div className="flex flex-col w-30">
+          <div className="font-semibold text-[#666373] text-[14px]">{`${fmt(s)} – ${fmt(e)}`}</div>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
@@ -114,52 +87,56 @@ const userData: ColumnDef<User>[] = [
         <h1>Status</h1>
       </div>
     ),
-    cell: ({ row }) => {
-      return (
-        <div className="w-30">
-          <Button className="bg-[#077B21]/10 hover:bg-[#077B21]/20 border border-[#077B21] cursor-pointer px-8 h-10 rounded-full text-[#077B21] font-bold">
-            {row.original.Status}
-          </Button>
-        </div>
-      )
-    }
+    cell: ({ row }) => (
+      <div className="w-30">
+        <Button className="bg-[#077B21]/10 hover:bg-[#077B21]/20 border border-[#077B21] cursor-pointer px-8 h-10 rounded-full text-[#077B21] font-bold">
+          {row.original.status}
+        </Button>
+      </div>
+    )
   },
   {
-    accessorKey: 'Actions',
+    accessorKey: "actions",
     header: () => (
       <div>
         <h1>Actions</h1>
       </div>
     ),
-    cell: () => {
-      return (
-        <div className="flex gap-2">
-          <Button
-            className="rounded-full text-md px-10 py-5 cursor-pointer"
-          >
-            View
-          </Button>
-          <Button
-            className="rounded-full bg-white hover:bg-[#f0ebeb] text-[#666373] border border-[#666373] text-md px-10 py-5 cursor-pointer"
-          >
-            Edit
-          </Button>
-        </div>
-      )
-    }
-
-  },
-]
+    cell: () => (
+      <div className="flex gap-2">
+        <Button className="rounded-full text-md px-10 py-5 cursor-pointer">
+          View
+        </Button>
+        <Button className="rounded-full bg-white hover:bg-[#f0ebeb] text-[#666373] border border-[#666373] text-md px-10 py-5 cursor-pointer">
+          Edit
+        </Button>
+      </div>
+    )
+  }
+];
 
 const OppurtunitiesManagement = () => {
-  const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+  const { data: trip, isLoading, isError } = UsegetTrips();
+  const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null);
+
+  if (isError) {
+    return <div>Error loading trips.</div>;
+  }
+  if (isLoading) {
+    return (
+      <div className="w-full flex items-center justify-center py-10">
+        <LoaderIcon className="animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="lg:mt-5">
       <TableHeader
         showSearch
         showFilter={false}
         showSort
-        searchPlaceholder="Search Message"
+        searchPlaceholder="Search Trips"
         showAddButton={true}
         addButtonLabel="Add New Trip"
         url="/coordinator-dashboard/add-new-trip"
@@ -169,13 +146,13 @@ const OppurtunitiesManagement = () => {
       />
       <div className="bg-white rounded-[25px] mt-3 overflow-x-auto">
         <ReusableTable
-          columns={userData}
-          data={data}
+          columns={columns}
+          data={trip?.trips ?? []}
           onExposeColumns={(payload) => setColumnsMenu(payload)}
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default OppurtunitiesManagement

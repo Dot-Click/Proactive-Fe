@@ -48,7 +48,7 @@ const userData: ColumnDef<trip>[] = [
               {row.original.name}
             </span>
             <span className="text-[12px] text-[#666373] line-clamp-2">
-              {row.original.description}
+              {row.original.description.slice(0, 50)}
             </span>
           </div>
         </div>

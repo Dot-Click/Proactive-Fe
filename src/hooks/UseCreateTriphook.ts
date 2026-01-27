@@ -4,24 +4,34 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const mutationFunction = async (formData: FormData) => {
-    const res = await api.post("/api/trips", formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    });
-    console.log(res)
-    return res.data;
+  const res = await api.post("/api/trips/", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
 };
 
-export const UseCreateTrip = () => {
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
-    return useMutation({
-        mutationFn: mutationFunction,
-        onSuccess: (response) => {
-            console.log(response)
-            const msg = response?.message ?? response?.data?.message ?? "Trips";
-            toast.success(msg);
-            navigate("/dashboard/trip-management");
-            queryClient.invalidateQueries({ queryKey: ["trips"] });
-        },
-    });
+export const UseCreateTrip = (redirectPath = "/dashboard/trip-management") => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: mutationFunction,
+    onSuccess: (response) => {
+      const msg =
+        response?.message ??
+        response?.data?.message ??
+        "Trip created successfully";
+      toast.success(msg);
+      navigate(redirectPath);
+      queryClient.invalidateQueries({ queryKey: ["trips"] });
+    },
+    onError: (error: any) => {
+      const errorMsg =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to create trip";
+      console.error("Trip creation error:", error);
+      toast.error(errorMsg);
+    },
+  });
 };
