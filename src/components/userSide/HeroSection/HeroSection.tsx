@@ -16,6 +16,8 @@ import contact from "../../../assets/Contact.png"
 import faq from "../../../assets/FAQ.png"
 import type { JSX } from "react";
 import type React from "react";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import PaymentModal from "@/components/userDashboard/Alert/PaymentModal";
 
 interface HeroContent {
   image: React.ReactNode;
@@ -25,6 +27,7 @@ interface HeroContent {
   buttons?: {
     text: string;
     className: string;
+    openModal?: boolean;
   }[];
   downloadimg?: string;
   CTA?: string | JSX.Element;
@@ -150,6 +153,7 @@ const heroData: Record<string, HeroContent> = {
     ),
     imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]"
   },
+
   "/erasmus-plus": {
     image: (
       <>
@@ -172,6 +176,7 @@ const heroData: Record<string, HeroContent> = {
     imageClass: 'sm:h-[60vh] lg:h-[60vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
+
   "/internal-events": {
     image: (
       <>
@@ -194,6 +199,7 @@ const heroData: Record<string, HeroContent> = {
     imageClass: 'sm:h-[60vh] lg:h-[60vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
+
   "/about": {
     image: (
       <>
@@ -216,6 +222,7 @@ const heroData: Record<string, HeroContent> = {
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
+
   "/member": {
     image: (
       <>
@@ -241,12 +248,13 @@ const heroData: Record<string, HeroContent> = {
       [
         {
           text: 'Join Now for €50',
-          className:
-            "lg:mt-4 md:mt-0 mt-30 bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
+          className: "lg:mt-4 md:mt-0 mt-30 bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
+          openModal: true,
         },
       ]
     )
   },
+
   "/travel-coordinator": {
     image: (
       <>
@@ -269,6 +277,7 @@ const heroData: Record<string, HeroContent> = {
     imageClass: 'sm:h-[38vh] lg:h-[40vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
+
   "/advantages": {
     image: (
       <>
@@ -283,6 +292,7 @@ const heroData: Record<string, HeroContent> = {
     imageClass: 'sm:h-[38vh] lg:h-[66vh] md:h-[28vh]',
     downloadimg: downloadimg,
   },
+
   "/contact": {
     image: (
       <>
@@ -302,6 +312,7 @@ const heroData: Record<string, HeroContent> = {
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
     // downloadimg: downloadimg
   },
+
   "/faq": {
     image: (
       <>
@@ -323,6 +334,7 @@ const heroData: Record<string, HeroContent> = {
   },
 
 };
+
 const HeroSection = () => {
   const location = useLocation();
   const path = location.pathname;
@@ -341,11 +353,22 @@ const HeroSection = () => {
         <p className="text-xs md:text-lg lg:mt-4">{hero.subtitle}</p>
         {hero.buttons && (
           <div className="flex md:flex-row gap-4 md:mt-4 mt-2">
-            {hero.buttons.map((button, index) => (
-              <button key={index} className={button.className}>
-                {button.text}
-              </button>
-            ))}
+            {hero.buttons.map((button, index) =>
+              button.openModal ? (
+                <Dialog key={index}>
+                  <DialogTrigger asChild>
+                    <button className={button.className}>
+                      {button.text}
+                    </button>
+                  </DialogTrigger>
+                  <PaymentModal />
+                </Dialog>
+              ) : (
+                <button key={index} className={button.className}>
+                  {button.text}
+                </button>
+              )
+            )}
           </div>
         )}
         {hero.downloadimg && (

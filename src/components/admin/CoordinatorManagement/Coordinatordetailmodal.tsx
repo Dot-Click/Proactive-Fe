@@ -211,10 +211,10 @@ const CoordinatorData = [
     { Name: 'Repeat Customers', Number: '60%' },
 ]
 
-const Coordinatordetailmodal = ({ coordinatorId }: { coordinatorId: string }) => {
+const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string, role: string }) => {
     const navigate = useNavigate()
     const { data, isLoading, isError } = UsegetCoordinatorbyId(coordinatorId);
-    
+
     // Accessing the nested coordinator object from your API response structure
     const coordinator = data?.coordinator;
 
@@ -244,7 +244,7 @@ const Coordinatordetailmodal = ({ coordinatorId }: { coordinatorId: string }) =>
                 <DialogHeader>
                     <DialogTitle className="font-bold text-[24px]">Coordinator Details</DialogTitle>
                 </DialogHeader>
-                
+
                 <div className="grid gap-4">
                     {/* Header Info Section */}
                     <div className="flex lg:flex-row lg:items-center justify-between gap-3 bg-[#FAFAFE] md:px-6 px-4 py-6 rounded-[16px] mt-5">
@@ -312,7 +312,7 @@ const Coordinatordetailmodal = ({ coordinatorId }: { coordinatorId: string }) =>
                             <h1 className="text-[#221E33] font-medium text-[18px] m-5">Professional Information</h1>
                             <div className="border-b border-[#EDEDED]" />
                             <div className="px-5 py-4 flex flex-col gap-5">
-                                
+
                                 <div className="flex flex-col gap-2">
                                     <span className="text-[#666373] text-sm">Specialties:</span>
                                     <div className="flex flex-wrap gap-2">
@@ -383,18 +383,22 @@ const Coordinatordetailmodal = ({ coordinatorId }: { coordinatorId: string }) =>
                     <DialogClose asChild>
                         <Button className="w-full md:w-auto rounded-full bg-[#E0DDDD] hover:bg-[#c7c1c1] cursor-pointer text-[#606066] h-12 px-10 font-bold">Go Back</Button>
                     </DialogClose>
-                    <DialogFooter className="w-full md:w-auto">
-                        <div className="flex md:flex-row flex-col gap-4 w-full md:w-auto">
-                            <Button 
-                                onClick={() => navigate(`/dashboard/edit-coordinator/${coordinatorId}`)} 
-                                className="w-full md:w-auto font-bold rounded-full bg-[#0DAC87] hover:bg-[#09a07d] cursor-pointer h-12 px-10"
-                            >
-                                Edit Profile
-                            </Button>
-                            <Button className="w-full md:w-auto font-bold rounded-full bg-[#000000] cursor-pointer h-12 px-10">Send Email</Button>
-                            <Button variant={'outline'} className="w-full md:w-auto cursor-pointer font-bold rounded-full h-12 px-10 border border-[#9C0000] text-[#9C0000] hover:text-[#9C0000]">Block User</Button>
-                        </div>
-                    </DialogFooter>
+                    {
+                        role === "user" ? null : (
+                            <DialogFooter className="w-full md:w-auto">
+                                <div className="flex md:flex-row flex-col gap-4 w-full md:w-auto">
+                                    <Button
+                                        onClick={() => navigate(`/dashboard/edit-coordinator/${coordinatorId}`)}
+                                        className="w-full md:w-auto font-bold rounded-full bg-[#0DAC87] hover:bg-[#09a07d] cursor-pointer h-12 px-10"
+                                    >
+                                        Edit Profile
+                                    </Button>
+                                    <Button className="w-full md:w-auto font-bold rounded-full bg-[#000000] cursor-pointer h-12 px-10">Send Email</Button>
+                                    <Button variant={'outline'} className="w-full md:w-auto cursor-pointer font-bold rounded-full h-12 px-10 border border-[#9C0000] text-[#9C0000] hover:text-[#9C0000]">Block User</Button>
+                                </div>
+                            </DialogFooter>
+                        )
+                    }
                 </div>
             </DialogContent>
         </div>

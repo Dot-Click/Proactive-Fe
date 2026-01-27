@@ -223,7 +223,10 @@ const Coordinatorinfo = () => {
                                         </DialogTrigger>
                                         {
                                             selectedId &&
-                                            <Coordinatordetailmodal coordinatorId={selectedId} />
+                                            <Coordinatordetailmodal 
+                                            coordinatorId={selectedId} 
+                                            role="admin"
+                                            />
                                         }
                                     </Dialog>
                                 </div>
