@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import type { TripFormType } from "./tripschema";
 
 const Mediaprice = () => {
-  const { control, setValue, getValues } =
+  const { control, setValue, getValues, formState } =
     useFormContext<TripFormType>();
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>(Array(8).fill(""));
   const [videoPreview, setVideoPreview] = useState("");
@@ -160,6 +160,9 @@ const Mediaprice = () => {
             </div>
           ))}
         </div>
+        {formState.errors.GalleryImages && (
+          <FormMessage className="mt-2">{formState.errors.GalleryImages.message}</FormMessage>
+        )}
       </div>
       <FormField
         control={control}

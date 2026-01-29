@@ -3,42 +3,47 @@ import { z } from "zod";
 export const tripSchema = z.object({
   // Step 1 – Basic Info
   type: z.string().min(1, "Trip type is required"),
-  title: z.string().min(3, "Trip title is required"),
-  description: z.string().min(10, "Description min 10 characters"),
+  title: z.string().min(3, "Trip title must be at least 3 characters"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
   coverImage: z.any().optional(),
   location: z.string().min(1, "Location is required"),
   mapCoordinates: z.string().optional(),
-  startDate: z.date({
-    message: "Select Start Date",
-  }),
-  endDate: z.date({
-    message: "Select End Date",
-  }),
+  startDate: z.date().refine(
+    (date) => date instanceof Date,
+    "Start date is required"
+  ),
+  endDate: z.date().refine(
+    (date) => date instanceof Date,
+    "End date is required"
+  ),
   duration: z.string().optional(),
 
   // Step 2 – Trip Details
-  LongDescription: z.string().min(20, "Long Description min 20 characters"),
-  GroupSize: z.string().min(1),
-  rhythm: z.string(),
-  SportsLevel: z.string(),
+  LongDescription: z.string().min(20, "Long description must be at least 20 characters"),
+  GroupSize: z.string().min(1, "Group size is required"),
+  rhythm: z.string().min(1, "Rhythm is required"),
+  SportsLevel: z.string().min(1, "Sports level is required"),
 
   // Step 3 – Included
-  included: z.array(z.string()).min(1, "Select at least one item"),
-  notIncluded: z.array(z.string()),
+  included: z.array(z.string()).min(1, "Select at least one included item"),
+  notIncluded: z.array(z.string()).min(1, "Select at least one not-included item"),
 
   // Step 4 – Coordinator
-  CoordinatorName: z.string(),
-  CoordinatorRole: z.string(),
-  CoordinatorBio: z.string(),
+  CoordinatorName: z.string().min(1, "Coordinator name is required"),
+  CoordinatorRole: z.string().min(1, "Coordinator role is required"),
+  CoordinatorBio: z.string().min(1, "Coordinator bio is required"),
   CoordinatorInstagram: z.string().optional(),
   CoordinatorLinkedin: z.string().optional(),
-  CoordinatorPhoto: z.any().nullable(),
+  CoordinatorPhoto: z.any().nullable().refine(
+    (file) => file !== null && file !== undefined,
+    "Coordinator photo is required"
+  ),
 
   // Step 5 – Media & Price
   PromotionalVideo: z.any().optional(),
-  GalleryImages: z.array(z.any()).min(1),
-  BestPrice: z.string().min(1, "Best Price is required"),
-  FinalPrice: z.string().min(1, "Final Price is required"),
+  GalleryImages: z.array(z.any()).min(1, "Upload at least 1 gallery image"),
+  BestPrice: z.string().min(1, "Best price message is required"),
+  FinalPrice: z.string().min(1, "Final price is required"),
 });
 
 export type TripFormType = z.infer<typeof tripSchema>;

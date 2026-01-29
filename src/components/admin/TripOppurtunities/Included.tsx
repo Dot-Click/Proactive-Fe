@@ -6,6 +6,7 @@ import included3 from "../../../assets/included3.png";
 import included4 from "../../../assets/included4.png";
 import included5 from "../../../assets/included5.png";
 import { Controller, useFormContext } from "react-hook-form";
+import { FormMessage } from "@/components/ui/form";
 import clsx from "clsx";
 import { useState } from "react";
 import type { TripFormType } from "./tripschema";
@@ -116,7 +117,7 @@ const Included = () => {
   // };
   const [ShowIncludedItems, setShowIncludedItems] = useState<boolean>(true);
   const [ShownotIncludedItems, setShowNotIncludedItems] = useState<boolean>(true);
-  const { control } = useFormContext<TripFormType>();
+  const { control, formState } = useFormContext<TripFormType>();
 
   return (
     <form className="">
@@ -137,24 +138,29 @@ const Included = () => {
             <Controller
               name="included"
               control={control}
-              render={({ field }) => (
-                <div className="grid grid-cols-3 gap-4">
-                  {INCLUDED_ITEMS.map((item) => (
-                    <SelectCard
-                      key={item.id}
-                      selected={field.value.includes(item.id)}
-                      onClick={() =>
-                        field.onChange(
-                          field.value.includes(item.id)
-                            ? field.value.filter((i) => i !== item.id)
-                            : [...field.value, item.id]
-                        )
-                      }
-                      icon={item.icon}
-                      title={item.title}
-                      desc={item.desc}
-                    />
-                  ))}
+              render={({ field, fieldState }) => (
+                <div>
+                  <div className="grid grid-cols-3 gap-4">
+                    {INCLUDED_ITEMS.map((item) => (
+                      <SelectCard
+                        key={item.id}
+                        selected={field.value.includes(item.id)}
+                        onClick={() =>
+                          field.onChange(
+                            field.value.includes(item.id)
+                              ? field.value.filter((i) => i !== item.id)
+                              : [...field.value, item.id]
+                          )
+                        }
+                        icon={item.icon}
+                        title={item.title}
+                        desc={item.desc}
+                      />
+                    ))}
+                  </div>
+                  {fieldState.error && (
+                    <FormMessage className="mt-2">{fieldState.error.message}</FormMessage>
+                  )}
                 </div>
               )}
             />
@@ -179,24 +185,29 @@ const Included = () => {
             <Controller
               name="notIncluded"
               control={control}
-              render={({ field }) => (
-                <div className="grid grid-cols-3 gap-4">
-                  {NOT_INCLUDED_ITEMS.map((item) => (
-                    <SelectCard
-                      key={item.id}
-                      selected={field.value.includes(item.id)}
-                      onClick={() =>
-                        field.onChange(
-                          field.value.includes(item.id)
-                            ? field.value.filter((i) => i !== item.id)
-                            : [...field.value, item.id]
-                        )
-                      }
-                      icon={item.icon}
-                      title={item.title}
-                      desc={item.desc}
-                    />
-                  ))}
+              render={({ field, fieldState }) => (
+                <div>
+                  <div className="grid grid-cols-3 gap-4">
+                    {NOT_INCLUDED_ITEMS.map((item) => (
+                      <SelectCard
+                        key={item.id}
+                        selected={field.value.includes(item.id)}
+                        onClick={() =>
+                          field.onChange(
+                            field.value.includes(item.id)
+                              ? field.value.filter((i) => i !== item.id)
+                              : [...field.value, item.id]
+                          )
+                        }
+                        icon={item.icon}
+                        title={item.title}
+                        desc={item.desc}
+                      />
+                    ))}
+                  </div>
+                  {fieldState.error && (
+                    <FormMessage className="mt-2">{fieldState.error.message}</FormMessage>
+                  )}
                 </div>
               )}
             />
