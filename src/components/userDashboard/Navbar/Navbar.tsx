@@ -20,6 +20,9 @@ import DrawerBar from "@/components/Drawer";
 import { useLogoutUser } from "@/hooks/Uselogouthook";
 import { toast } from "sonner";
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
+import { FaCheckDouble } from "react-icons/fa";
+import { UsegetNotifications } from "@/hooks/getNotificationhook";
+import { useMarkAsReadNotification } from "@/hooks/MarkAsReadNotification";
 
 interface NavbarProps {
   role: string
@@ -28,10 +31,12 @@ const Navbar = ({ role }: NavbarProps) => {
   const DrawerItems = role === "user-dashboard"
     ? UserDashboardDrawerItems
     : [];
-
+  const { data: notifications, isLoading: notificationsLoading } = UsegetNotifications()
+  const markAsRead = useMarkAsReadNotification();
   const location = useLocation();
   const [show, setShow] = useState(true);
   const [open, setOpen] = useState(false);
+  const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const Logoutmutation = useLogoutUser();
   const { data: user } = UsegetCurrentUser();
@@ -83,7 +88,7 @@ const Navbar = ({ role }: NavbarProps) => {
             <DropdownMenuTrigger asChild>
               <div className="cursor-pointer relative bg-[#F2FBF9] rounded-full w-10 h-10 lg:w-14 lg:h-14 flex items-center justify-center md:mt-1">
                 <Badge className="font-bold absolute left-6 bottom-6 lg:left-7 lg:bottom-8 bg-[#000000] text-[9px] md:text-[10px] text-white rounded-full w-4 h-4 md:w-5 md:h-5 flex items-center justify-center">
-                  3
+                  {notifications?.filter((n: any) => !n.read).length || '0'}
                 </Badge>
                 <img src={Notification} alt="Notification" />
               </div>
@@ -97,8 +102,16 @@ const Navbar = ({ role }: NavbarProps) => {
                   </span>
                   <div className="flex items-center gap-1">
                     <RiCheckDoubleLine color="#000000" size={20} />
-                    <span className="underline text-[#060A14] font-semibold">
-                      Mark all as read
+                    <span 
+                      onClick={() => {
+                        const unreadIds = notifications?.filter((n: any) => !n.read).map((n: any) => n.id as string) || [];
+                        if (unreadIds && unreadIds.length > 0) {
+                          markAsRead.mutate(unreadIds);
+                        }
+                      }} 
+                      className="underline cursor-pointer text-[#060A14] font-semibold"
+                    >
+                      {notificationsLoading ? "Loading..." : "Mark all as read"}
                     </span>
                   </div>
                 </div>
@@ -128,24 +141,25 @@ const Navbar = ({ role }: NavbarProps) => {
               <div className="border-b border-[#D9D9D9] -mt-[16px]" />
 
               {/* Notification Item */}
-              <div className="px-2 py-2">
+              {(show ? notifications : notifications?.filter((n: any) => !n.read))?.map((notification: any) => (
+                <div className="px-2 py-2">
                 <div className="bg-[#F4F4F4] rounded-[10px] px-4 py-3">
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-[12px]">
-                      Application Approved
+                      {notification.title}
                     </span>
                     <div className="w-2 h-2 bg-[#0DAC87] rounded-full" />
                   </div>
 
                   <div className="flex flex-col items-start gap-4 mt-2">
                     <span className="text-[#787878] text-[12px]">
-                      Your application for Wild Trip: Egypt has been approved!
-                      You can now proceed with payment
+                      {notification.description.split("with payment.")[0] + "with payment."}
                     </span>
-
-                    <Button
+                    {notification.type === "trip" && notification.title === "Application approved" && <Button
                       onClick={(e) => {
                         e.stopPropagation();
+                        const tripId = notification.description.split("with trip id ")[1];
+                        setSelectedTripId(tripId);
                         setDropdownOpen(false);
                         setOpen(true);
                       }}
@@ -153,9 +167,19 @@ const Navbar = ({ role }: NavbarProps) => {
                     >
                       Pay Now
                     </Button>
+                    }
+                    <FaCheckDouble
+                      className={`cursor-pointer ${notification.read ? "text-blue-500" : "text-gray-400"
+                        }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        markAsRead.mutate(notification.id);
+                      }}
+                    />  
                   </div>
                 </div>
               </div>
+              ))}
 
             </DropdownMenuContent>
           </DropdownMenu>
@@ -214,8 +238,11 @@ const Navbar = ({ role }: NavbarProps) => {
 
       </div>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <PayNow />
+      <Dialog open={open} onOpenChange={(val) => {
+        setOpen(val);
+        if (!val) setSelectedTripId(null);
+      }}>
+        <PayNow tripId={selectedTripId} />
       </Dialog>
 
     </>

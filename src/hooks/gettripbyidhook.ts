@@ -12,5 +12,6 @@ export const UsegetTripbyid = (id: string) => {
         queryKey: ["trips", id],
         queryFn: () => getTripbyid(id),
         staleTime: 60 * 3 * 1000,
+        enabled: !!id,
     });
 };

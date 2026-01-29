@@ -5,7 +5,6 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import proactivefavicon from "../../../assets/sidebaricon/favicon.png"
-import trip from "../../../assets/trip1.png"
 import { FaLocationDot } from "react-icons/fa6"
 import calender from "../../../assets/calenderblack.png"
 import { useState } from "react"
@@ -24,7 +23,8 @@ import {
   CardCvcElement,
 } from '@stripe/react-stripe-js'
 import { loadStripe } from "@stripe/stripe-js"
-import { toast } from "sonner"
+
+import { UsegetTripbyid } from "@/hooks/gettripbyidhook"
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -34,7 +34,7 @@ const PaymentSchema = z.object({
 
 type PaymentSchemaType = z.infer<typeof PaymentSchema>;
 
-const CheckoutForm = ({ onSuccess }: { onSuccess: (paymentMethodId: string) => void }) => {
+const CheckoutForm = ({ onSuccess, amount }: { onSuccess: (paymentMethodId: string) => void, amount: number }) => {
     const stripe = useStripe();
     const elements = useElements();
     const form = useForm<PaymentSchemaType>({
@@ -158,7 +158,7 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: (paymentMethodId: string) => v
                         disabled={!stripe || !elements || processing}
                         className="bg-[#0DAC87] hover:bg-[#11a180] hover:scale-105 cursor-pointer w-full rounded-full py-6 font-semibold transition-all"
                     >
-                        {processing ? 'Processing...' : 'Pay €950 Now'}
+                        {processing ? 'Processing...' : `Pay €${amount} Now`}
                     </Button>
                 </div>
             </form>
@@ -166,22 +166,29 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: (paymentMethodId: string) => v
     );
 };
 
-const PayNow = () => {
+interface PayNowProps {
+    tripId: string | null;
+}
+
+const PayNow = ({ tripId }: PayNowProps) => {
+    const { data: tripResponse, isLoading } = UsegetTripbyid(tripId || "");
     const { mutateAsync } = UsePayment();
+    const trip = tripResponse?.trip?.[0] || tripResponse?.trip || tripResponse;
 
     const handlePaymentSuccess = async (paymentMethodId: string) => {
         try {
             await mutateAsync({
                 payment_method_id: paymentMethodId,
-                amount: 950,
+                amount: trip?.price || 950,
+                trip_id: tripId,
                 currency: 'eur',
             });
-            toast.success("Amount Pay Successfully")
-            console.log('Payment successful!');
         } catch (error) {
             console.error('Payment failed:', error);
         }
     };
+
+    if (isLoading) return <div>Loading...</div>;
 
     return (
         <DialogContent className="sm:max-w-[600px] bg-[#FAFAFA] overflow-y-auto max-h-[90vh]">
@@ -191,25 +198,27 @@ const PayNow = () => {
                 </DialogTitle>
                 
                 <div className="bg-[#FFFFFF] rounded-[15px] px-4 py-4 mt-12 flex lg:flex-row flex-col gap-3 items-center">
-                    <img src={trip} alt="trip" className="h-20 w-22 rounded-[10px]" />
+                    <img src={trip?.coverImage || trip} alt="trip" className="h-20 w-22 rounded-[10px]" />
                     <div className="flex flex-col gap-2">
                         <h4 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-xl">
-                            Wild Weekend Barcelona
+                            {trip?.name || "Wild Weekend Barcelona"}
                         </h4>
                         <div className="flex items-center justify-center lg:justify-start gap-4">
                             <div className="flex items-center gap-1">
                                 <FaLocationDot size={14} color="#332A2A" />
-                                <span className="text-[#332A2A] font-medium text-[10px]">Barcelona, Spain</span>
+                                <span className="text-[#332A2A] font-medium text-[10px]">{trip?.location || "Barcelona, Spain"}</span>
                             </div>
                             <div className="flex items-center gap-1">
                                 <img src={calender} alt="calender" className="text-[#332A2A]" />
-                                <span className="text-[#332A2A] font-medium text-[10px]">05 to 08 August</span>
+                                <span className="text-[#332A2A] font-medium text-[10px]">
+                                    {trip?.startDate ? new Date(trip.startDate).toLocaleDateString() : "05"} to {trip?.endDate ? new Date(trip.endDate).toLocaleDateString() : "08 August"}
+                                </span>
                             </div>
                         </div>
                     </div>
                     <div className="flex flex-1 justify-end">
                         <h4 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-xl">
-                            €950.00
+                            €{trip?.perHeadPrice || "950.00"}
                         </h4>
                     </div>
                 </div>
@@ -218,7 +227,7 @@ const PayNow = () => {
                     <div>
                         <span className="text-[#000000] font-bold text-lg mb-6 block">Payment Info</span>
                         <Elements stripe={stripePromise}>
-                            <CheckoutForm onSuccess={handlePaymentSuccess} />
+                            <CheckoutForm onSuccess={handlePaymentSuccess} amount={trip?.price || 950} />
                         </Elements>
                     </div>
                 </div>

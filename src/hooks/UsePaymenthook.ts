@@ -1,4 +1,5 @@
 import api from "@/config/axios";
+import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 
@@ -11,8 +12,14 @@ export const UsePayment = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: mutationFunction,
-        onSuccess: () => {
+        onSuccess: (response) => {
             queryClient.invalidateQueries({ queryKey: ["payment"] });
+            const message = response?.message
+            toast.success(message)
         },
+        onError: (error: any) => {
+            const errorMessage = error?.response?.data?.message || "Failed to pay amount";
+            toast.error(errorMessage);
+        }
     });
 };
