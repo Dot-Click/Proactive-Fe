@@ -13,44 +13,30 @@ import { UsegetallAchievements } from "@/hooks/getallAchievementhook";
 import { LoaderIcon } from "lucide-react";
 
 type User = {
+  id: string;
   Name: string;
   Trips: string;
   AdventurePoints: number;
   LevelProgress: string;
+  badges: string;
+  avatar: string;
+  userEmail: string;
 };
 
-const data: User[] = [
-  {
-    Name: "Alex Thompson",
-    Trips: "Wild Weekend Barcelona",
-    AdventurePoints: 10,
-    LevelProgress: "Gold Explorer",
-  },
-  {
-    Name: "Alex Thompson",
-    Trips: "Wild Weekend Barcelona",
-    AdventurePoints: 10,
-    LevelProgress: "Gold Explorer",
-  },
-  {
-    Name: "Alex Thompson",
-    Trips: "Wild Weekend Barcelona",
-    AdventurePoints: 10,
-    LevelProgress: "Gold Explorer",
-  },
-  {
-    Name: "Alex Thompson",
-    Trips: "Wild Weekend Barcelona",
-    AdventurePoints: 10,
-    LevelProgress: "Gold Explorer",
-  },
-  {
-    Name: "Alex Thompson",
-    Trips: "Wild Weekend Barcelona",
-    AdventurePoints: 10,
-    LevelProgress: "Gold Explorer",
-  },
-];
+const transformAchievementData = (achievements: any[]): User[] => {
+  return achievements.map((achievement) => ({
+    id: achievement.id,
+    Name: `${achievement.user.firstName} ${achievement.user.lastName}`,
+    Trips: achievement.trip.title,
+    AdventurePoints: achievement.points,
+    LevelProgress: achievement.level,
+    badges: achievement.badges,
+    avatar: achievement.user.avatar,
+    userEmail: achievement.user.email,
+  }));
+};
+
+const data: User[] = [];
 
 const userData: ColumnDef<User>[] = [
   {
@@ -66,14 +52,20 @@ const userData: ColumnDef<User>[] = [
       return (
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>SL</AvatarFallback>
+            <AvatarImage src={row.original.avatar} alt={row.original.Name} />
+            <AvatarFallback>
+              {row.original.Name.split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
             <span className="font-medium text-sm text-[#3b3745] text-nowrap">
               {row.original.Name}
             </span>
-            {/* <span className="text-xs text-[#8a8698]">alex@example.com</span> */}
+            <span className="text-xs text-[#8a8698]">
+              {row.original.userEmail}
+            </span>
           </div>
         </div>
       );
@@ -152,19 +144,45 @@ const userData: ColumnDef<User>[] = [
         <h1>Badges Earned</h1>
       </div>
     ),
-    cell: () => {
+    cell: ({ row }) => {
+      const getBadgeIcon = (badgeName: string) => {
+        if (badgeName.toLowerCase().includes("mountain")) return Mountain;
+        if (badgeName.toLowerCase().includes("explorer")) return Explorer;
+        return Mountain;
+      };
+
+      const getBadgeColor = (badgeName: string) => {
+        if (badgeName.toLowerCase().includes("mountain"))
+          return {
+            bg: "bg-[#FAFAFE]",
+            border: "border-[#0DAC87]",
+            text: "text-[#0DAC87]",
+          };
+        if (badgeName.toLowerCase().includes("explorer"))
+          return {
+            bg: "bg-[#FAFAFE]",
+            border: "border-[#DDAC24]",
+            text: "text-[#DDAC24]",
+          };
+        return {
+          bg: "bg-[#FAFAFE]",
+          border: "border-[#0DAC87]",
+          text: "text-[#0DAC87]",
+        };
+      };
+
+      const colors = getBadgeColor(row.original.badges);
       return (
         <div className="flex gap-3 w-60">
-          <Badge className="bg-[#FAFAFE] border border-[#0DAC87] px-3 py-2">
+          <Badge className={`${colors.bg} border ${colors.border} px-3 py-2`}>
             <div className="flex gap-2 items-center">
-              <img src={Mountain} alt="Mountain" />
-              <span className="text-[#0DAC87] font-bold">Mountain Climber</span>
-            </div>
-          </Badge>
-          <Badge className="bg-[#FAFAFE] border border-[#DDAC24] px-3 py-2">
-            <div className="flex gap-2 items-center">
-              <img src={Explorer} alt="Explorer" />
-              <span className="text-[#DDAC24] font-bold">Explorer</span>
+              <img
+                src={getBadgeIcon(row.original.badges)}
+                alt={row.original.badges}
+              />
+              <span className={`${colors.text} font-bold`}>
+                {row.original.badges}
+              </span>
             </div>
           </Badge>
         </div>
@@ -227,7 +245,7 @@ const AchievementControl = () => {
       <div className="bg-white rounded-[25px] mt-3 overflow-x-auto">
         <ReusableTable
           columns={userData}
-          data={data}
+          data={transformAchievementData(achievements || [])}
           onExposeColumns={(payload) => setColumnsMenu(payload)}
         />
       </div>

@@ -132,6 +132,7 @@ const Setting = () => {
                         <Input
                           placeholder="Coordinator@proactivefuture.com"
                           {...field}
+                          disabled={true}
                           className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                         />
                       </FormControl>
