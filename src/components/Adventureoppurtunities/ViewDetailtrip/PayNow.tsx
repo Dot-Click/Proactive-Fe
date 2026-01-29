@@ -179,7 +179,7 @@ const PayNow = ({ tripId }: PayNowProps) => {
         try {
             await mutateAsync({
                 payment_method_id: paymentMethodId,
-                amount: trip?.price || 950,
+                amount: trip?.perHeadPrice || 950,
                 trip_id: tripId,
                 currency: 'eur',
             });
@@ -227,7 +227,7 @@ const PayNow = ({ tripId }: PayNowProps) => {
                     <div>
                         <span className="text-[#000000] font-bold text-lg mb-6 block">Payment Info</span>
                         <Elements stripe={stripePromise}>
-                            <CheckoutForm onSuccess={handlePaymentSuccess} amount={trip?.price || 950} />
+                            <CheckoutForm onSuccess={handlePaymentSuccess} amount={trip?.perHeadPrice || 950} />
                         </Elements>
                     </div>
                 </div>
