@@ -189,23 +189,23 @@ const userData: ColumnDef<User>[] = [
       );
     },
   },
-  {
-    accessorKey: "Actions",
-    header: () => (
-      <div>
-        <h1>Actions</h1>
-      </div>
-    ),
-    cell: () => {
-      return (
-        <div className="flex gap-2">
-          <Button className="rounded-full text-md px-8 py-5 cursor-pointer">
-            Manage
-          </Button>
-        </div>
-      );
-    },
-  },
+  // {
+  //   accessorKey: "Actions",
+  //   header: () => (
+  //     <div>
+  //       <h1>Actions</h1>
+  //     </div>
+  //   ),
+  //   cell: () => {
+  //     return (
+  //       <div className="flex gap-2">
+  //         <Button className="rounded-full text-md px-8 py-5 cursor-pointer">
+  //           Manage
+  //         </Button>
+  //       </div>
+  //     );
+  //   },
+  // },
 ];
 
 const AchievementControl = () => {
@@ -235,8 +235,8 @@ const AchievementControl = () => {
         showFilter={false}
         showSort
         searchPlaceholder="Search Achievement"
-        showAddButton={true}
-        addButtonLabel="Add New Trip"
+        // showAddButton={true}
+        // addButtonLabel="Add New Trip"
         url="/coordinator-dashboard/add-new-trip"
         showColumns
         columnsMenuItems={columnsMenu?.items ?? []}
