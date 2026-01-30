@@ -4,6 +4,8 @@ import { Icon } from 'leaflet';
 import CustomMarkerIcon from '../../../assets/CustomMarker.png';
 import getintouch from '../../../assets/GetInTouchbg.png';
 import getintouchlayer from '../../../assets/getintouchlayer.png';
+import { useContactInfo } from '@/hooks/getContactInfohook';
+
 const customMarkerIcon = new Icon({
   iconUrl: "" + CustomMarkerIcon,
   iconRetinaUrl: "" + CustomMarkerIcon,
@@ -14,12 +16,23 @@ const customMarkerIcon = new Icon({
   shadowSize: [41, 41]
 });
 
+const DEFAULT_POSITION: [number, number] = [24.86270, 67.07363];
+const DEFAULT_ADDRESS = "123 Adventure Street Brussels, Belgium 1000";
+const DEFAULT_PHONE = "+32 2 123 4567";
+const DEFAULT_EMAIL = "hello@proactiefuture.com";
+
 const ContactMap = () => {
-  const position: [number, number] = [24.86270, 67.07363];
+  const { data } = useContactInfo();
+  const lat = data?.mapLat != null ? parseFloat(data.mapLat) : DEFAULT_POSITION[0];
+  const lng = data?.mapLng != null ? parseFloat(data.mapLng) : DEFAULT_POSITION[1];
+  const position: [number, number] = [Number.isFinite(lat) ? lat : DEFAULT_POSITION[0], Number.isFinite(lng) ? lng : DEFAULT_POSITION[1]];
+  const address = data?.contactAddress ?? DEFAULT_ADDRESS;
+  const phone = data?.contactPhone ?? DEFAULT_PHONE;
+  const email = data?.contactEmail ?? DEFAULT_EMAIL;
 
   return (
     <div className="mb-10 lg:mt-0 md:mt-10 flex flex-col lg:flex-row justify-center items-center py-10 px-6 rounded-3xl overflow-hidden max-w-6xl mx-auto bg-linear-to-r from-[#E4FAF7]/18 to-[#E4FAF7] shadow-lg">
-      <div className="w-full lg:w-1/2 text-white  rounded-t-3xl md:rounded-l-3xl md:rounded-t-none relative ">
+      <div className="w-full lg:w-1/2 text-white rounded-t-3xl md:rounded-l-3xl md:rounded-t-none relative ">
         {/* Background Pattern */}
         <div className="absolute inset-0">
           <img src={getintouch} alt="getintouch" className='' />
@@ -39,13 +52,18 @@ const ContactMap = () => {
             <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-5 tracking-wider">Contact Info</h3>
             <div className="space-y-3 sm:space-y-4">
               <p className="text-base sm:text-xl flex items-center font-semibold tracking-wider">
-                <i className="mr-3 sm:mr-4 text-xl sm:text-2xl "></i>123 Adventure Street Brussels, <br /> Belgium 1000
+                <i className="mr-3 sm:mr-4 text-xl sm:text-2xl "></i>
+                {address.includes(", ") ? (
+                  <>{(address.split(", ")[0])}, <br /> {address.split(", ").slice(1).join(", ")}</>
+                ) : (
+                  address
+                )}
               </p>
               <p className="text-base sm:text-xl flex items-center font-semibold tracking-wider">
-                <i className="mr-3 sm:mr-4 text-xl sm:text-2xl "></i>+32 2 123 4567
+                <i className="mr-3 sm:mr-4 text-xl sm:text-2xl "></i>{phone}
               </p>
               <p className="text-base sm:text-xl flex items-center font-semibold tracking-wider">
-                <i className="mr-3 sm:mr-4 text-xl sm:text-2xl "></i>hello@proactiefuture.com
+                <i className="mr-3 sm:mr-4 text-xl sm:text-2xl "></i>{email}
               </p>
             </div>
           </div>
@@ -69,7 +87,7 @@ const ContactMap = () => {
           <ZoomControl position="topright" />
 
           <Marker position={position} icon={customMarkerIcon}>
-            <Popup>123 Adventure Street Brussels, Belgium 1000</Popup>
+            <Popup>{address}</Popup>
           </Marker>
         </MapContainer>
       </div>

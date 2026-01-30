@@ -117,7 +117,7 @@ const Included = () => {
   // };
   const [ShowIncludedItems, setShowIncludedItems] = useState<boolean>(true);
   const [ShownotIncludedItems, setShowNotIncludedItems] = useState<boolean>(true);
-  const { control, formState } = useFormContext<TripFormType>();
+  const { control } = useFormContext<TripFormType>();
 
   return (
     <form className="">

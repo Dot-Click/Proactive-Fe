@@ -4,21 +4,22 @@ import Trips from "./Trips";
 import Notification from "./Notification";
 import Security from "./Security";
 import AddFAQ from "./AddFAQ";
+import Contact from "./Contact";
 
 const Setting = () => {
   const [activeTab, setActiveTab] = useState("General");
 
-  const tabs = ["General", "Trips", "Notifications", "Security & Data", "Add FAQ"];
+  const tabs = ["General", "Contact", "Trips", "Notifications", "Security & Data", "Add FAQ"];
 
   return (
-    <>
-      <div className="bg-white border border-[#D9D9D9] px-4 py-2 rounded-full lg:w-fit mt-4">
-        <div className="flex flex-wrap lg:justify-start justify-center gap-2">
+    <div className="w-full">
+      <div className="bg-white border border-[#D9D9D9] px-4 py-2 rounded-full lg:w-fit mt-4 overflow-x-auto">
+        <div className="flex flex-nowrap lg:justify-start justify-start gap-2 min-w-0">
           {tabs.map((tab) => (
             <div
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex items-center text-[10px] md:text-[16px] px-6 py-2 rounded-full cursor-pointer transition-colors ${activeTab === tab
+              className={`flex items-center shrink-0 text-[10px] md:text-[16px] px-4 md:px-6 py-2 rounded-full cursor-pointer transition-colors ${activeTab === tab
                 ? "bg-[#221E33] text-white"
                 : "bg-[#F3F3F3] text-black"
                 }`}
@@ -28,12 +29,15 @@ const Setting = () => {
           ))}
         </div>
       </div>
-      {activeTab === 'General' && <General />}
-      {activeTab === 'Trips' && <Trips />}
-      {activeTab === 'Notifications' && <Notification />}
-      {activeTab === 'Security & Data' && <Security />}
-      {activeTab === 'Add FAQ' && <AddFAQ />}
-    </>
+      <div className="w-full min-h-[400px] mt-4">
+        {activeTab === "General" && <General />}
+        {activeTab === "Contact" && <Contact />}
+        {activeTab === "Trips" && <Trips />}
+        {activeTab === "Notifications" && <Notification />}
+        {activeTab === "Security & Data" && <Security />}
+        {activeTab === "Add FAQ" && <AddFAQ />}
+      </div>
+    </div>
   );
 }
 

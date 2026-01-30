@@ -36,7 +36,7 @@ const transformAchievementData = (achievements: any[]): User[] => {
   }));
 };
 
-const data: User[] = [];
+// const data: User[] = [];
 
 const userData: ColumnDef<User>[] = [
   {

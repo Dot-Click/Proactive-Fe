@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button"
 import openoppurtunitiesbg from "../../../assets/openoppurtunitiesbg.png"
+import { useNavigate } from "react-router-dom"
 const JoinOurStory = () => {
+const navigate = useNavigate()
     return (
         <div className="relative w-full">
             <img
@@ -20,7 +22,7 @@ const JoinOurStory = () => {
                     <Button className="hover:scale-105 transition-all duration-300 bg-[#FFFFFF] hover:bg-[#f7f1f1] cursor-pointer text-[#03664F] font-semibold rounded-full px-6 py-5">
                         Start Your Journey
                     </Button>
-                    <Button variant={'ghost'} className="hover:scale-105 transition-all duration-300 hover:bg-[#f7f1f1] text-[#FFFFFF] cursor-pointer border border-[#FFFFFF] rounded-full px-6 py-5">
+                    <Button onClick={() => navigate('/contact')} variant={'ghost'} className="hover:scale-105 transition-all duration-300 hover:bg-[#f7f1f1] text-[#FFFFFF] cursor-pointer border border-[#FFFFFF] rounded-full px-6 py-5">
                         Contact Us
                     </Button>
                 </div>
