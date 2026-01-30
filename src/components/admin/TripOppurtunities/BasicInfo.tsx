@@ -20,6 +20,21 @@ const BasicInfo = () => {
     const { data, isLoading, isError } = UsegetCategory()
     const startDateCal = watch("startDate");
     const endDateCal = watch("endDate");
+    const coverImageValue = watch("coverImage");
+
+    // Sync local date state from form (so edit mode shows loaded start/end dates)
+    useEffect(() => {
+        if (startDateCal) {
+            const d = new Date(startDateCal);
+            if (!isNaN(d.getTime())) setStartDate(d);
+        }
+    }, [startDateCal]);
+    useEffect(() => {
+        if (endDateCal) {
+            const d = new Date(endDateCal);
+            if (!isNaN(d.getTime())) setendDate(d);
+        }
+    }, [endDateCal]);
 
     useEffect(() => {
         if (startDateCal && endDateCal) {
@@ -37,6 +52,13 @@ const BasicInfo = () => {
             setValue("duration", "");
         }
     }, [startDateCal, endDateCal, setValue]);
+
+    // Handle cover image URL preview (for edit mode)
+    useEffect(() => {
+        if (coverImageValue && typeof coverImageValue === "string") {
+            setProfile(coverImageValue);
+        }
+    }, [coverImageValue]);
 
     const HandleuploadProfile = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -73,7 +95,7 @@ const BasicInfo = () => {
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                            value={field.value ?? ""}
                                         >
                                             <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
                                                 <SelectValue placeholder="Select Category" />
@@ -192,7 +214,7 @@ const BasicInfo = () => {
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                            value={field.value ?? ""}
                                         >
                                             <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
                                                 <SelectValue placeholder="e.g, Barcelona,Spain" />
@@ -251,7 +273,7 @@ const BasicInfo = () => {
                                                     id="date"
                                                     className="justify-between font-normal bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                                                 >
-                                                    {startDate ? startDate.toLocaleDateString() : "mm/dd/yy"}
+                                                    {(startDate ?? (field.value ? new Date(field.value) : null))?.toLocaleDateString() ?? "mm/dd/yy"}
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-auto overflow-hidden p-4" align="end">
@@ -288,7 +310,7 @@ const BasicInfo = () => {
                                                     id="date"
                                                     className="justify-between font-normal bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                                                 >
-                                                    {endDate ? endDate.toLocaleDateString() : "mm/dd/yy"}
+                                                    {(endDate ?? (field.value ? new Date(field.value) : null))?.toLocaleDateString() ?? "mm/dd/yy"}
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-auto overflow-hidden p-4" align="end">

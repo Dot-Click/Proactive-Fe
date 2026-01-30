@@ -14,6 +14,8 @@ import CoordinatorLayout from "./Layout/coordinator.layout";
 import CoordinatorDashboard from "./pages/coordinator/CoordinatorDashboard";
 import AddCoordinatortripPage from "./pages/coordinator/AddCoordinatortrip.page";
 import OppurtunitiesManagementPage from "./pages/coordinator/OppurtunitiesManagement.page";
+import EditTripPage from "./pages/coordinator/EditTrip.page";
+import ViewTripPage from "./pages/coordinator/ViewTrip.page";
 import ApplicantsReviewPage from "./pages/coordinator/ApplicantsReview.page";
 import AchievementControlPage from "./pages/coordinator/AchievementControl.page";
 import ChatUserPage from "./pages/coordinator/ChatUser.page";
@@ -73,6 +75,8 @@ function App() {
           <Route index element={<CoordinatorDashboard />} />
           <Route path="/coordinator-dashboard/add-new-trip" element={<AddCoordinatortripPage />} />
           <Route path="/coordinator-dashboard/oppurtunities-management" element={<OppurtunitiesManagementPage />} />
+          <Route path="/coordinator-dashboard/edit-trip/:id" element={<EditTripPage />} />
+          <Route path="/coordinator-dashboard/view-trip/:id" element={<ViewTripPage />} />
           <Route path="/coordinator-dashboard/applicants-review" element={<ApplicantsReviewPage />} />
           <Route path="/coordinator-dashboard/achievements-control" element={<AchievementControlPage />} />
           <Route path="/coordinator-dashboard/chat-users" element={<ChatUserPage />} />

@@ -5,17 +5,16 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
-import MessageCoordinator from "./MessageCoordinator"
+// import { useState } from "react"
+// import MessageCoordinator from "./MessageCoordinator"
 
 interface CoordinatordetailProps {
     trip?: any
 }
 
 const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
-    const [selectedCoordinator, setSelectedCoordinator] = useState<any>(null)
-    const [isMessageOpen, setIsMessageOpen] = useState(false)
+    // const [selectedCoordinator, setSelectedCoordinator] = useState<any>(null)
+    // const [isMessageOpen, setIsMessageOpen] = useState(false)
 
     // Extract coordinators from trip data - check multiple possible paths
     const tripData = trip?.trip?.[0] || trip?.trip || trip;
@@ -28,15 +27,15 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
         ? coordinators.filter((coord: any) => coord && (coord.fullName || coord.CoordinatorName || coord.id || coord._id))
         : [];
 
-    const handleMessageClick = (coordinator: any) => {
-        // Ensure coordinator object has id for MessageCoordinator component
-        const coordinatorWithId = {
-            ...coordinator,
-            id: coordinator.id || coordinator._id || coordinator.coordinatorId
-        }
-        setSelectedCoordinator(coordinatorWithId)
-        setIsMessageOpen(true)
-    }
+    // const handleMessageClick = (coordinator: any) => {
+    //     // Ensure coordinator object has id for MessageCoordinator component
+    //     const coordinatorWithId = {
+    //         ...coordinator,
+    //         id: coordinator.id || coordinator._id || coordinator.coordinatorId
+    //     }
+    //     setSelectedCoordinator(coordinatorWithId)
+    //     setIsMessageOpen(true)
+    // }
 
     if (displayCoordinators.length === 0) {
         return null
@@ -53,7 +52,7 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
                         const coordinatorEmail = coordinator.email || coordinator.CoordinatorEmail || ""
                         const coordinatorImage = coordinator.profilePicture || coordinator.CoordinatorPhoto || "https://github.com/shadcn.png"
                         const coordinatorBio = coordinator.bio || coordinator.CoordinatorBio || "No bio available."
-                        const coordinatorId = coordinator.id || coordinator._id
+                        // const coordinatorId = coordinator.id || coordinator._id
 
                         return (
                             <div key={index} className="border border-[#C1C1C1] bg-[#F9F9F9] rounded-[10px] px-3 py-5">
@@ -73,7 +72,7 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
                                     <h4 className="text-[#332A2A] font-semibold text-sm">About Coordinator</h4>
                                     <span className="text-[#332A2A] text-[12px]">{coordinatorBio}</span>
                                 </div>
-                                <div className="pt-4">
+                                {/* <div className="pt-4">
                                     <Button
                                         onClick={() => handleMessageClick(coordinator)}
                                         disabled={!coordinatorId}
@@ -81,7 +80,7 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
                                     >
                                         Message Coordinator
                                     </Button>
-                                </div>
+                                </div> */}
                             </div>
                         )
                     })}
@@ -89,7 +88,7 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
             </div>
             <img src={zigzagbottom} alt="zigzagbottom" className="py-4" />
 
-            {selectedCoordinator && (
+            {/* {selectedCoordinator && (
                 <MessageCoordinator
                     coordinator={selectedCoordinator}
                     tripId={tripData?.id || tripData?._id || trip?.id || trip?._id}
@@ -97,7 +96,7 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
                     open={isMessageOpen}
                     onOpenChange={setIsMessageOpen}
                 />
-            )}
+            )} */}
         </>
     )
 }

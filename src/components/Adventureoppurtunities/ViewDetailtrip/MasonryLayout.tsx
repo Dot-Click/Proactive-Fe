@@ -12,24 +12,37 @@ import star from "../../../assets/sidebaricon/star.png"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ApplicationForm from "./ApplicationForm";
 
-const MasonryLayout = ({ trip }: { trip: any }) => {
+type MasonryLayoutProps = {
+  trip: any;
+  backUrl?: string;
+  backLabel?: string;
+  showApplyButton?: boolean;
+  headerAction?: React.ReactNode;
+};
+
+const MasonryLayout = ({ trip, backUrl = "/user-dashboard/adventure-oppurtunities", backLabel = "Back", showApplyButton = true, headerAction }: MasonryLayoutProps) => {
   const navigate = useNavigate();
   // Extract trip data - handle both direct trip object and nested structure
   const data = trip?.trip?.[0] || trip?.trip || trip;
-  const galleryImg = data?.galleryImages
+  const galleryImg = data?.galleryImages;
+  const getImageUrl = (item: any) =>
+    typeof item === "string" ? item : item?.url ?? "";
   return (
     <>
       <div className="px-4 sm:px-16 py-4">
-        <Button onClick={() => navigate("/user-dashboard/adventure-oppurtunities")} className="bg-[#EDEDED] text-[#000000] rounded-[10px] cursor-pointer hover:bg-[#d8d2d2] font-semibold">
-          <TbArrowBackUp className="font-bold" />
-          Back
-        </Button>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <Button onClick={() => navigate(backUrl)} className="bg-[#EDEDED] text-[#000000] rounded-[10px] cursor-pointer hover:bg-[#d8d2d2] font-semibold">
+            <TbArrowBackUp className="font-bold" />
+            {backLabel}
+          </Button>
+          {headerAction != null ? headerAction : null}
+        </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 py-6">
           {galleryImg?.length > 0 ? (
-            galleryImg.map((img: string, index: number) => (
+            galleryImg.map((img: any, index: number) => (
               <img
                 key={index}
-                src={img}
+                src={getImageUrl(img)}
                 className="w-full h-[250px] object-fill rounded-[20px]"
                 alt={`gallery-${index}`}
               />
@@ -64,12 +77,14 @@ const MasonryLayout = ({ trip }: { trip: any }) => {
               </div>
             </div>
           </div>
-          <Dialog>
-            <DialogTrigger>
-              <Button className="flex justify-center bg-[#0DAC87] hover:bg-[#119b7b] cursor-pointer rounded-full px-8 py-5">Join This Adventure</Button>
-            </DialogTrigger>
-            <ApplicationForm />
-          </Dialog>
+          {showApplyButton && (
+            <Dialog>
+              <DialogTrigger>
+                <Button className="flex justify-center bg-[#0DAC87] hover:bg-[#119b7b] cursor-pointer rounded-full px-8 py-5">Join This Adventure</Button>
+              </DialogTrigger>
+              <ApplicationForm />
+            </Dialog>
+          )}
         </div>
         <div>
         </div>

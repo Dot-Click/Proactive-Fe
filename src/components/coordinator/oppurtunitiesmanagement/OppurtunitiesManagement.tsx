@@ -5,7 +5,9 @@ import TableHeader from "@/Table/TableHeader";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { UsegetTrips } from "@/hooks/gettriphook";
+import { UseSearchTrips } from "@/hooks/searchTripshook";
 import { LoaderIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 type Trip = {
   id: string;
@@ -18,7 +20,10 @@ type Trip = {
   description: string;
 };
 
-const columns: ColumnDef<Trip>[] = [
+const OppurtunitiesManagement = () => {
+  const navigate = useNavigate();
+  
+  const columns: ColumnDef<Trip>[] = [
   {
     accessorKey: "name",
     enableColumnFilter: true,
@@ -31,17 +36,22 @@ const columns: ColumnDef<Trip>[] = [
     cell: ({ row }) => (
       <div className="flex items-center gap-3">
         <Avatar className="h-10 w-10">
-          <AvatarImage src={row.original.coverImage || "https://github.com/shadcn.png"} alt="cover" />
+          <AvatarImage
+            src={row.original.coverImage || "https://github.com/shadcn.png"}
+            alt="cover"
+          />
           <AvatarFallback>TR</AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
           <span className="font-medium text-sm text-[#3b3745] text-nowrap">
             {row.original.name}
           </span>
-          <span className="text-xs text-[#8a8698] line-clamp-1">{row.original.description.slice(0,50)}</span>
+          <span className="text-xs text-[#8a8698] line-clamp-1">
+            {row.original.description.slice(0, 50)}
+          </span>
         </div>
       </div>
-    )
+    ),
   },
   {
     accessorKey: "category",
@@ -58,7 +68,7 @@ const columns: ColumnDef<Trip>[] = [
           {row.original.category}
         </Button>
       </div>
-    )
+    ),
   },
   {
     accessorKey: "dates",
@@ -70,7 +80,12 @@ const columns: ColumnDef<Trip>[] = [
     cell: ({ row }) => {
       const s = new Date(row.original.startDate);
       const e = new Date(row.original.endDate);
-      const fmt = (d: Date) => d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+      const fmt = (d: Date) =>
+        d.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
       return (
         <div className="flex flex-col w-30">
           <div className="font-semibold text-[#666373] text-[14px]">{`${fmt(s)} – ${fmt(e)}`}</div>
@@ -93,7 +108,7 @@ const columns: ColumnDef<Trip>[] = [
           {row.original.status}
         </Button>
       </div>
-    )
+    ),
   },
   {
     accessorKey: "actions",
@@ -102,27 +117,46 @@ const columns: ColumnDef<Trip>[] = [
         <h1>Actions</h1>
       </div>
     ),
-    cell: () => (
+    cell: ({ row }) => (
       <div className="flex gap-2">
-        <Button className="rounded-full text-md px-10 py-5 cursor-pointer">
+        <Button
+          onClick={() => navigate(`/coordinator-dashboard/view-trip/${row.original.id}`)}
+          className="rounded-full text-md px-10 py-5 cursor-pointer"
+        >
           View
         </Button>
-        <Button className="rounded-full bg-white hover:bg-[#f0ebeb] text-[#666373] border border-[#666373] text-md px-10 py-5 cursor-pointer">
+        <Button 
+          onClick={() => navigate(`/coordinator-dashboard/edit-trip/${row.original.id}`)}
+          className="rounded-full bg-white hover:bg-[#f0ebeb] text-[#666373] border border-[#666373] text-md px-10 py-5 cursor-pointer"
+        >
           Edit
         </Button>
       </div>
-    )
-  }
-];
-
-const OppurtunitiesManagement = () => {
+    ),
+  },
+  ];
+  const [searchQuery, setSearchQuery] = useState("");
   const { data: trip, isLoading, isError } = UsegetTrips();
-  const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null);
+  const { data: searchData, isLoading: searchLoading } =
+    UseSearchTrips(searchQuery);
+  console.log("searchData", searchData);
+  const [columnsMenu, setColumnsMenu] = useState<{
+    items: { id: string; label?: string; checked: boolean }[];
+    toggle: (id: string, v: boolean) => void;
+  } | null>(null);
 
-  if (isError) {
+  // Use search results if search query exists, otherwise use all trips
+  const displayData = searchQuery
+    ? (searchData?.trips ?? [])
+    : (trip?.trips ?? []);
+
+  // Only show initial loading state, not during search
+  const isInitialLoading = !searchQuery && isLoading;
+
+  if (isError && !searchQuery) {
     return <div>Error loading trips.</div>;
   }
-  if (isLoading) {
+  if (isInitialLoading) {
     return (
       <div className="w-full flex items-center justify-center py-10">
         <LoaderIcon className="animate-spin" />
@@ -143,11 +177,17 @@ const OppurtunitiesManagement = () => {
         showColumns
         columnsMenuItems={columnsMenu?.items ?? []}
         onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
+        onSearch={(query) => setSearchQuery(query)}
       />
-      <div className="bg-white rounded-[25px] mt-3 overflow-x-auto">
+      <div className="bg-white rounded-[25px] mt-3 overflow-x-auto relative">
+        {searchLoading && (
+          <div className="absolute inset-0 bg-white/50 flex items-center justify-center rounded-[25px] z-10">
+            <LoaderIcon className="animate-spin" size={24} />
+          </div>
+        )}
         <ReusableTable
           columns={columns}
-          data={trip?.trips ?? []}
+          data={displayData}
           onExposeColumns={(payload) => setColumnsMenu(payload)}
         />
       </div>
@@ -155,4 +195,4 @@ const OppurtunitiesManagement = () => {
   );
 };
 
-export default OppurtunitiesManagement
+export default OppurtunitiesManagement;

@@ -18,16 +18,27 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { UsegetCoordinator } from "@/hooks/getCoordinatorhook";
 import { Upload } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import type { TripFormType } from "./tripschema";
 
 const Coordinator = () => {
+  const { control, setValue, watch } = useFormContext<TripFormType>();
+  const coordinatorNameValue = watch("CoordinatorName");
+  const coordinatorPhotoValue = watch("CoordinatorPhoto");
   const [profile, setProfile] = useState("");
   const [show, setShow] = useState(false);
+  const hasAutoExpanded = useRef(false);
   const { data } = UsegetCoordinator();
-  console.log(data);
-  const { control, setValue } = useFormContext<TripFormType>();
+
+  // Auto-expand coordinator section once when editing with existing coordinator data
+  useEffect(() => {
+    if (coordinatorNameValue && !hasAutoExpanded.current) {
+      hasAutoExpanded.current = true;
+      setShow(true);
+    }
+  }, [coordinatorNameValue]);
+
   const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -38,6 +49,13 @@ const Coordinator = () => {
       setValue("CoordinatorPhoto", null);
     }
   };
+
+  // Handle coordinator photo URL preview (for edit mode)
+  useEffect(() => {
+    if (coordinatorPhotoValue && typeof coordinatorPhotoValue === "string") {
+      setProfile(coordinatorPhotoValue);
+    }
+  }, [coordinatorPhotoValue]);
 
   return (
     <div>
@@ -73,7 +91,7 @@ const Coordinator = () => {
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value}
                       >
                         <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
                           <SelectValue placeholder="Select Coordinator" />

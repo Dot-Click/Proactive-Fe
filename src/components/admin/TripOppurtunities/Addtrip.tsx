@@ -12,7 +12,7 @@ import Reviewsave from "./Reviewsave";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import arrowBack from "@/assets/sidebaricon/arrow.png";
-import Template from "@/assets/sidebaricon/template.png";
+// import Template from "@/assets/sidebaricon/template.png";
 import { Progress } from "@/components/ui/progress";
 import { UseCreateTrip } from "@/hooks/UseCreateTriphook";
 
@@ -187,10 +187,10 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
             <span className="text-[#221E33] font-semibold text-[18px]">
               Add New Trip
             </span>
-            <div className="flex items-center border border-[#000000] gap-2 px-5 py-3 rounded-[12px]">
+            {/* <div className="flex items-center border border-[#000000] gap-2 px-5 py-3 rounded-[12px]">
               <img src={Template} alt="Template" className="h-4" />
               <span className="text-[#221E33] font-medium">Use Template</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

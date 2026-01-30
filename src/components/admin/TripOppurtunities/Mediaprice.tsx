@@ -1,16 +1,30 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Video } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import gallery from "@/assets/sidebaricon/gallery.png"
 import { Input } from "@/components/ui/input";
 import type { TripFormType } from "./tripschema";
 
+const GALLERY_SLOTS = 8;
+
+function getGalleryItemPreviewUrl(item: unknown): string {
+  if (item == null) return "";
+  if (typeof item === "string") return item;
+  if (item instanceof File) return URL.createObjectURL(item);
+  if (typeof item === "object" && item !== null && "url" in item && typeof (item as { url: string }).url === "string")
+    return (item as { url: string }).url;
+  return "";
+}
+
 const Mediaprice = () => {
-  const { control, setValue, getValues, formState } =
+  const { control, setValue, getValues, formState, watch } =
     useFormContext<TripFormType>();
-  const [galleryPreviews, setGalleryPreviews] = useState<string[]>(Array(8).fill(""));
+  const [galleryPreviews, setGalleryPreviews] = useState<string[]>(Array(GALLERY_SLOTS).fill(""));
+  const galleryPreviewsRef = useRef<string[]>([]);
   const [videoPreview, setVideoPreview] = useState("");
+  const promotionalVideoValue = watch("PromotionalVideo");
+  const galleryImagesValue = watch("GalleryImages");
 
   const handleUploadVideo = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -43,41 +57,67 @@ const Mediaprice = () => {
         const file = event.target.files?.[0];
         if (!file) return;
 
-        // preview
-        setGalleryPreviews((prev) => {
-          const next = [...prev];
-          if (next[index]) URL.revokeObjectURL(next[index]);
-          next[index] = URL.createObjectURL(file);
-          return next;
-        });
-
-        // 🔒 SAFE FORM VALUE
         const rawImages = getValues("GalleryImages");
-        const currentImages = Array.isArray(rawImages)
-          ? rawImages
-          : [];
-
+        const currentImages = Array.isArray(rawImages) ? rawImages : [];
         const updatedImages = [...currentImages];
         updatedImages[index] = file;
+        while (updatedImages.length < GALLERY_SLOTS) updatedImages.push(undefined as any);
+        const newValue = updatedImages.slice(0, GALLERY_SLOTS);
 
-        setValue(
-          "GalleryImages",
-          updatedImages.filter(Boolean),
-          { shouldValidate: true }
-        );
+        setValue("GalleryImages", newValue, { shouldValidate: true });
+        event.target.value = ""; // allow re-uploading same file
       };
+
+  // Handle promotional video URL preview (for edit mode)
+  useEffect(() => {
+    if (promotionalVideoValue && typeof promotionalVideoValue === "string") {
+      setVideoPreview(promotionalVideoValue);
+    }
+  }, [promotionalVideoValue]);
+
+  // Derive gallery previews from form value: show both existing URLs and new File uploads (as blob URLs).
+  // Revoke previous blob URLs to avoid leaks when value changes.
+  useEffect(() => {
+    galleryPreviewsRef.current.forEach((url) => {
+      if (url && url.startsWith("blob:")) URL.revokeObjectURL(url);
+    });
+
+    if (!galleryImagesValue || !Array.isArray(galleryImagesValue)) {
+      galleryPreviewsRef.current = Array(GALLERY_SLOTS).fill("");
+      setGalleryPreviews(Array(GALLERY_SLOTS).fill(""));
+      return;
+    }
+
+    const previews: string[] = [];
+    for (let i = 0; i < GALLERY_SLOTS; i++) {
+      const item = galleryImagesValue[i];
+      previews.push(getGalleryItemPreviewUrl(item));
+    }
+    galleryPreviewsRef.current = previews;
+    setGalleryPreviews(previews);
+
+    return () => {
+      previews.forEach((url) => {
+        if (url && url.startsWith("blob:")) URL.revokeObjectURL(url);
+      });
+    };
+  }, [galleryImagesValue]);
 
   // ================= CLEANUP =================
   useEffect(() => {
     return () => {
-      if (videoPreview) URL.revokeObjectURL(videoPreview);
+      if (videoPreview && videoPreview.startsWith("blob:")) {
+        URL.revokeObjectURL(videoPreview);
+      }
     };
   }, [videoPreview]);
 
   useEffect(() => {
     return () => {
       galleryPreviews.forEach((url) => {
-        if (url) URL.revokeObjectURL(url);
+        if (url && url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
       });
     };
   }, [galleryPreviews]);
@@ -131,7 +171,7 @@ const Mediaprice = () => {
       <div className="mt-6">
         <FormLabel className="text-[#242E2F] font-semibold">Gallery Images</FormLabel>
         <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 mt-3">
-          {Array.from({ length: 8 }).map((_, i) => (
+          {Array.from({ length: GALLERY_SLOTS }).map((_, i) => (
             <div
               key={i}
               className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#A19AAF] rounded-[10px]"
