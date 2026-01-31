@@ -1,40 +1,51 @@
 import { Search } from "lucide-react"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import list from "../../../../assets/list.png"
 import grid from "../../../../assets/grid.png"
 import { BsFillGrid3X3GapFill } from "react-icons/bs"
 import { FaList } from "react-icons/fa"
+import { UsegetTrips } from "@/hooks/gettriphook"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 
 
 interface SearchbarProps {
     view: string;
     setView: React.Dispatch<React.SetStateAction<string>>;
+    searchQuery: string;
+    setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+    category: string;
+    setCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Searchbar = ({ view, setView }: SearchbarProps) => {
+const Searchbar = ({ view, setView, searchQuery, setSearchQuery, category, setCategory }: SearchbarProps) => {
+const { data } = UsegetTrips();
+const rawCategories = data?.trips?.map((trip: any) => trip.category) ?? [];
+const categories = Array.from(new Set(rawCategories)).filter(Boolean);
     return (
-        <div className="bg-[#FAFAFA] px-4 sm:px-16 py-6 ">
-            <div className="flex md:flex-row flex-col items-center lg:gap-4 md:gap-6 gap-4 lg:justify-start md:justify-between justify-center">
+        <div className="bg-[#FAFAFA] px-4 sm:px-16 py-6 mt-6">
+            <div className="flex lg:flex-row flex-col items-center gap-4">
                 <div className="relative">
                     <Search color="#666373" size={20} className="absolute left-4 top-1/2 -translate-y-1/2" />
                     <Input
                         placeholder="Search Place"
                         type="text"
-                        className="lg:w-235 border border-[#EFEFEF] bg-[#FFFFFF] rounded-[10px] py-5 pl-12 placeholder:text-[#666373]"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="lg:w-220 border border-[#EFEFEF] bg-[#FFFFFF] rounded-[10px] py-5 pl-12 placeholder:text-[#666373]"
                     />
                 </div>
-                <Select>
+                <Select value={category || undefined} onValueChange={(v) => setCategory(v || "")}>
                     <SelectTrigger className="lg:w-[150px] data-[placeholder]:text-[#666373] py-5 px-4 rounded-[10px] bg-[#EDEDED]">
                         <SelectValue placeholder="All Category" className="placeholder:text-[#666373]" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
                             <SelectLabel>Select Category</SelectLabel>
-                            <SelectItem value="Wild Weekend">Wild Weekend</SelectItem>
-                            <SelectItem value="Wild Trip">Wild Trip</SelectItem>
-                            <SelectItem value="Erasmus+">Erasmus+</SelectItem>
+                            <SelectItem value="">All Category</SelectItem>
+                            {categories?.map((cat: any) => (
+                                <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                            ))}
                         </SelectGroup>
                     </SelectContent>
                 </Select>

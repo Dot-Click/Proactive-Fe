@@ -7,14 +7,24 @@ import { useState } from "react"
 
 const OpenOppurtunitiesPage = () => {
   const [view, setView] = useState("list")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [category, setCategory] = useState("")
+
   return (
     <div>
       <div className="lg:pt-0 md:pt-20">
-      <Searchbar view={view} setView={setView} />
+        <Searchbar
+          view={view}
+          setView={setView}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          category={category}
+          setCategory={setCategory}
+        />
       </div>
       <Tabs />
       <Showtrips view={view} />
-      <Upcomingtrips />
+      <Upcomingtrips searchQuery={searchQuery} setSearchQuery={setSearchQuery} category={category} />
       <Pastadventures />
     </div>
   )

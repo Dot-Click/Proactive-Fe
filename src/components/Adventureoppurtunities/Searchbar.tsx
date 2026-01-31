@@ -5,6 +5,7 @@ import list from "../../assets/list.png"
 import grid from "../../assets/grid.png"
 import { BsFillGrid3X3GapFill } from "react-icons/bs"
 import { FaList } from "react-icons/fa"
+import { UsegetTrips } from "@/hooks/gettriphook"
 
 
 
@@ -14,6 +15,8 @@ interface SearchbarProps {
 }
 
 const Searchbar = ({ view, setView }: SearchbarProps) => {
+const { data } = UsegetTrips();
+const categories = data?.trips?.map((trip: any) => trip.category);
     return (
         <div className="bg-[#FAFAFA] px-4 sm:px-16 py-6 mt-6">
             <div className="flex lg:flex-row flex-col items-center gap-4">
@@ -22,7 +25,7 @@ const Searchbar = ({ view, setView }: SearchbarProps) => {
                     <Input
                         placeholder="Search Place"
                         type="text"
-                        className="lg:w-235 border border-[#EFEFEF] bg-[#FFFFFF] rounded-[10px] py-5 pl-12 placeholder:text-[#666373]"
+                        className="lg:w-220 border border-[#EFEFEF] bg-[#FFFFFF] rounded-[10px] py-5 pl-12 placeholder:text-[#666373]"
                     />
                 </div>
                 <Select>
@@ -32,9 +35,9 @@ const Searchbar = ({ view, setView }: SearchbarProps) => {
                     <SelectContent>
                         <SelectGroup>
                             <SelectLabel>Select Category</SelectLabel>
-                            <SelectItem value="Wild Weekend">Wild Weekend</SelectItem>
-                            <SelectItem value="Wild Trip">Wild Trip</SelectItem>
-                            <SelectItem value="Erasmus+">Erasmus+</SelectItem>
+                            {categories.map((category: any) => (
+                                <SelectItem key={category} value={category}>{category}</SelectItem>
+                            ))}
                         </SelectGroup>
                     </SelectContent>
                 </Select>

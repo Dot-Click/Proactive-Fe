@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import proactive from "../../../assets/proactive-logo.png";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
@@ -14,6 +14,7 @@ import { UserSideDrawerItems } from "@/components/DrawerItems";
 import { BsTelegram, BsWhatsapp } from "react-icons/bs";
 
 const UserSideNavbar = ({ role }: { role: string }) => {
+    const location = useLocation();
     const DrawerItems = role === "UserSide"
         ? UserSideDrawerItems
         : [];
@@ -46,7 +47,7 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                         </span>
                     </Link>
                     <div
-                        className="bg-[#000000] rounded-full px-4 py-2 text-white font-semibold">
+                        className={`rounded-full px-4 py-2 font-semibold ${location.pathname === "/what-we-do" ? "bg-[#0DAC87] text-white" : "bg-[#000000] text-white"}`}>
                         <span className="flex items-center gap-1">
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="cursor-pointer">
@@ -56,6 +57,10 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                                     </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="bg-[#FFFFFF]/95 flex flex-col justify-center items-center px-4 mt-4">
+                                    <Link to="/what-we-do">
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Overview</DropdownMenuItem>
+                                    </Link>
+                                    <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to="/wild-weekend">
                                         <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Weekend</DropdownMenuItem>
                                     </Link>

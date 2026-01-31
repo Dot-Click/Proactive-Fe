@@ -40,6 +40,7 @@ export const UserDashboardDrawerItems = [
 export const UserSideDrawerItems = [
     { label: "Dashboard", href: "/" },
     { label: "Open Opportunities", href: "/open-oppurtunities" },
+    { label: "What We Do", href: "/what-we-do" },
     { label: "Wild Weekend", href: "/wild-weekend"},
     { label: "Wild Trip", href: "/wild-trip" },
     { label: "Erasmus+", href: "/erasmus-plus"},

@@ -110,6 +110,30 @@ const heroData: Record<string, HeroContent> = {
     imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
   },
 
+  "/what-we-do": {
+    image: (
+      <>
+        <div className="relative">
+          <img src={oppHero} alt="What We Do" className="relative" />
+          <img
+            src={lightgreenshadow}
+            alt="lightgreenshadow"
+            className="absolute inset-0 z-0"
+          />
+        </div>
+      </>
+    ),
+    title: (
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">What We Do</h1>
+    ),
+    subtitle: (
+      <span className="text-[10px] md:text-[16px]">
+        Transformative experiences that connect people with adventure and culture
+      </span>
+    ),
+    imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
+  },
+
   "/wild-weekend": {
     image: (
       <>
@@ -330,7 +354,51 @@ const heroData: Record<string, HeroContent> = {
       <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">Frequently Asked Questions</h1>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
-    // downloadimg: downloadimg
+  },
+
+  "/privacy-policy": {
+    image: (
+      <>
+        <div className="relative">
+          <img src={faq} alt="Privacy" className="relative" />
+          <img src={lightgreenshadow} alt="" className="absolute inset-0 z-0" />
+        </div>
+      </>
+    ),
+    title: (
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">Privacy Policy</h1>
+    ),
+    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
+  },
+
+  "/terms": {
+    image: (
+      <>
+        <div className="relative">
+          <img src={faq} alt="Terms" className="relative" />
+          <img src={lightgreenshadow} alt="" className="absolute inset-0 z-0" />
+        </div>
+      </>
+    ),
+    title: (
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">Terms of Services</h1>
+    ),
+    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
+  },
+
+  "/cookie-policy": {
+    image: (
+      <>
+        <div className="relative">
+          <img src={faq} alt="Cookie Policy" className="relative" />
+          <img src={lightgreenshadow} alt="" className="absolute inset-0 z-0" />
+        </div>
+      </>
+    ),
+    title: (
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">Cookie Policy</h1>
+    ),
+    imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
   },
 
 };

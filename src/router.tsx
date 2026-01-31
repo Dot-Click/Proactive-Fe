@@ -31,6 +31,7 @@ import UserSettingPage from "./pages/settings/Setting.page";
 import UserSidelayout from "./Layout/userSide.layout";
 import HomePage from "./pages/userSide/home.page";
 import OpenOppurtunitiesPage from "./pages/userSide/openoppurtunities.page";
+import WhatWeDoPage from "./pages/userSide/WhatWeDo.page";
 import WildweekendPage from "./pages/userSide/Wildweekend.page";
 import WildtripPage from "./pages/userSide/Wildtrip.page";
 import ErasmusPage from "./pages/userSide/Erasmus.page";
@@ -41,6 +42,9 @@ import TravelCoordinatorPage from "./pages/userSide/TravelCoordinator.page";
 import BenefitPage from "./pages/userSide/Benefit.page";
 import ContactPage from "./pages/userSide/Contact.page";
 import FaqPage from "./pages/userSide/Faq.page";
+import PrivacyPolicyPage from "./pages/userSide/PrivacyPolicy.page";
+import TermsPage from "./pages/userSide/Terms.page";
+import CookiePolicyPage from "./pages/userSide/CookiePolicy.page";
 import VerifyEmail from "./components/login/VerifyEmail";
 import ResetPassword from "./components/login/ResetPassword";
 
@@ -95,6 +99,7 @@ function App() {
         <Route path="/" element={<UserSidelayout />}>
           <Route index element={<HomePage />} />
           <Route path="/open-oppurtunities" element={<OpenOppurtunitiesPage />} />
+          <Route path="/what-we-do" element={<WhatWeDoPage />} />
           <Route path="/wild-weekend" element={<WildweekendPage />} />
           <Route path="/wild-trip" element={<WildtripPage />} />
           <Route path="/erasmus-plus" element={<ErasmusPage />} />
@@ -105,6 +110,9 @@ function App() {
           <Route path="/advantages" element={<BenefitPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/faq" element={<FaqPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/cookie-policy" element={<CookiePolicyPage />} />
         </Route>
 
       </Routes>

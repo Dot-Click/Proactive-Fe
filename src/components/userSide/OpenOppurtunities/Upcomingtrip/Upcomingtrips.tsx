@@ -1,7 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { UsegetOpenTrips, type OpenTrip } from "@/hooks/getOpenTripshook";
+import { LoaderIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { FaLocationDot } from "react-icons/fa6";
 
 const WEEKDAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
 
+interface UpcomingtripsProps {
+    searchQuery: string;
+    setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+    category: string;
+}
 type CalendarCell = {
     dayNumber: number | null;
     isCurrentMonth: boolean;
@@ -30,25 +39,60 @@ function buildMonthGrid(daysInMonth: number, startDayIndexMondayBased: number): 
     return { weeks, totalCells };
 }
 
-const Upcomingtrips = () => {
+/** Returns true if trip overlaps any of the given dates (YYYY-MM-DD). */
+function tripOverlapsDates(trip: OpenTrip, selectedDates: string[]): boolean {
+    if (selectedDates.length === 0) return true;
+    const start = new Date(trip.startDate);
+    const end = new Date(trip.endDate);
+    start.setHours(0, 0, 0, 0);
+    end.setHours(23, 59, 59, 999);
+    for (const dStr of selectedDates) {
+        const d = new Date(dStr);
+        d.setHours(0, 0, 0, 0);
+        const t = d.getTime();
+        if (t >= start.getTime() && t <= end.getTime()) return true;
+    }
+    return false;
+}
+
+/** Returns true if trip name/location matches search query (case-insensitive). */
+function tripMatchesSearch(trip: OpenTrip, query: string): boolean {
+    if (!query.trim()) return true;
+    const q = query.trim().toLowerCase();
+    const name = (trip.name || trip.title || "").toLowerCase();
+    const location = (trip.location || "").toLowerCase();
+    return name.includes(q) || location.includes(q);
+}
+
+/** Returns true if trip matches category filter. */
+function tripMatchesCategory(trip: OpenTrip, category: string): boolean {
+    if (!category.trim()) return true;
+    return (trip.category || "").toLowerCase() === category.trim().toLowerCase();
+}
+
+const Upcomingtrips = ({ searchQuery, setSearchQuery, category }: UpcomingtripsProps) => {
+    const navigate = useNavigate();
     const [viewDate, setViewDate] = useState(() => {
         const d = new Date();
         return new Date(d.getFullYear(), d.getMonth(), 1);
     });
 
+    const { data, isLoading } = UsegetOpenTrips();
+    const allTrips = data?.trips ?? [];
+
     const year = viewDate.getFullYear();
-    const monthIndex = viewDate.getMonth(); // 0-11
+    const monthIndex = viewDate.getMonth();
 
     const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
-    const firstDaySundayBased = new Date(year, monthIndex, 1).getDay(); // 0=Sun ... 6=Sat
-    const startDayIndex = (firstDaySundayBased + 6) % 7; // convert to Monday=0
+    const firstDaySundayBased = new Date(year, monthIndex, 1).getDay();
+    const startDayIndex = (firstDaySundayBased + 6) % 7;
     const { weeks, totalCells } = buildMonthGrid(daysInMonth, startDayIndex);
 
     const monthTitle = new Intl.DateTimeFormat(undefined, { month: "short", year: "numeric" }).format(viewDate);
 
-    // function goToPrevMonth() {
-    //     setViewDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
-    // }
+    function goToPrevMonth() {
+        setViewDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
+    }
     function goToNextMonth() {
         setViewDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1));
     }
@@ -71,12 +115,27 @@ const Upcomingtrips = () => {
 
     const secondWeekend = getSecondWeekendDays();
 
-    // Right-calendar date selection state (per visible month)
     const [selectedDays, setSelectedDays] = useState<number[]>([]);
 
     useEffect(() => {
         setSelectedDays([]);
     }, [year, monthIndex]);
+
+    const selectedDates = useMemo(() => {
+        return selectedDays.map((day) => {
+            const d = new Date(year, monthIndex, day);
+            return d.toISOString().slice(0, 10);
+        });
+    }, [year, monthIndex, selectedDays]);
+
+    const filteredTrips = useMemo(() => {
+        return allTrips.filter(
+            (trip: OpenTrip) =>
+                tripMatchesSearch(trip, searchQuery) &&
+                tripMatchesCategory(trip, category) &&
+                tripOverlapsDates(trip, selectedDates)
+        );
+    }, [allTrips, searchQuery, category, selectedDates]);
 
     function toggleSelected(day: number | null | undefined) {
         if (!day) return;
@@ -97,7 +156,7 @@ const Upcomingtrips = () => {
                         <div className="flex items-center justify-between mb-3">
                             <div className="text-4xl font-bold text-[#221E33]">{monthTitle}</div>
                             <div className="flex items-center gap-1">
-                                <button aria-label="Next month" onClick={goToNextMonth} className="w-6 h-6 grid place-items-center rounded-full bg-[#666373] hover:bg-[#595763] text-[#FFFFFF] cursor-pointer">
+                                <button aria-label="Previous month" onClick={goToPrevMonth} className="w-6 h-6 grid place-items-center rounded-full bg-[#666373] hover:bg-[#595763] text-[#FFFFFF] cursor-pointer">
                                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                                 </button>
                                 <button aria-label="Next month" onClick={goToNextMonth} className="w-6 h-6 grid place-items-center rounded-full bg-[#666373] hover:bg-[#595763] text-[#FFFFFF] cursor-pointer">
@@ -128,8 +187,6 @@ const Upcomingtrips = () => {
                                     </>
                                 );
                             })}
-                            <div className="w-2 h-2 border-b border-[#666373]" />
-
                         </div>
                     </div>
 
@@ -139,6 +196,8 @@ const Upcomingtrips = () => {
                             <path d="m21 21-3.5-3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
                         </svg>
                         <input
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full pl-10 pr-3 py-2 bg-white rounded-[12px] shadow-sm placeholder-[#A0A3AD] text-sm text-[#221E33] outline-none"
                             placeholder="Search Place"
                         />
@@ -191,6 +250,55 @@ const Upcomingtrips = () => {
                             })}
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {/* Filtered trips list (search + date wise) - full width below calendar */}
+            <div className="mt-8 w-full">
+                <div className="bg-white rounded-2xl p-4 sm:p-6">
+                    <h5 className="text-[#221E33] font-bold text-lg mb-3">
+                        {searchQuery.trim() || selectedDays.length > 0
+                            ? `Trips matching your selection (${filteredTrips.length})`
+                            : "All upcoming trips"}
+                    </h5>
+                    {isLoading ? (
+                        <div className="flex items-center justify-center py-10">
+                            <LoaderIcon className="animate-spin h-8 w-8 text-[#0DAC87]" />
+                        </div>
+                    ) : filteredTrips.length === 0 ? (
+                        <p className="text-[#666373] text-sm py-4">
+                            {allTrips.length === 0
+                                ? "No upcoming trips at the moment."
+                                : "No trips match your search or selected dates. Try a different place or pick other dates."}
+                        </p>
+                    ) : (
+                        <ul className="space-y-3 max-h-80 overflow-y-auto">
+                            {filteredTrips.map((trip: OpenTrip) => (
+                                <li
+                                    key={trip.id}
+                                    onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)}
+                                    className="flex items-center gap-3 p-3 rounded-xl border border-[#ECECF1] hover:bg-[#F6F8FD] cursor-pointer transition-colors"
+                                >
+                                    <img
+                                        src={trip.coverImage || ""}
+                                        alt={trip.name || trip.title}
+                                        className="h-14 w-14 rounded-lg object-cover shrink-0 bg-[#ECECF1]"
+                                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                                    />
+                                    <div className="min-w-0 flex-1">
+                                        <p className="font-semibold text-[#221E33] truncate">{trip.name || trip.title}</p>
+                                        <div className="flex items-center gap-1.5 text-[#666373] text-sm">
+                                            <FaLocationDot className="shrink-0" />
+                                            <span className="truncate">{trip.location}</span>
+                                        </div>
+                                    </div>
+                                    <span className="text-[#666373] text-sm shrink-0">
+                                        {trip.startDate ? new Date(trip.startDate).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : ""}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
             </div>
         </div>
