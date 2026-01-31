@@ -9,6 +9,7 @@ import Explorer from "../../../assets/Explorer.png";
 import { Progress } from "@/components/ui/progress";
 import Achievementlibrary from "./Achievementlibrary";
 import { UsegetallAchievements } from "@/hooks/getallAchievementhook";
+import { UseSearchAchievements } from "@/hooks/searchAchievementshook";
 import { LoaderIcon } from "lucide-react";
 
 type User = {
@@ -144,20 +145,24 @@ const userData: ColumnDef<User>[] = [
       </div>
     ),
     cell: ({ row }) => {
-      const getBadgeIcon = (badgeName: string) => {
-        if (badgeName.toLowerCase().includes("mountain")) return Mountain;
-        if (badgeName.toLowerCase().includes("explorer")) return Explorer;
+      const badgeName = row.original.badges ?? "Achievement";
+
+      const getBadgeIcon = (name: string) => {
+        const lower = name?.toLowerCase() ?? "";
+        if (lower.includes("mountain")) return Mountain;
+        if (lower.includes("explorer")) return Explorer;
         return Mountain;
       };
 
-      const getBadgeColor = (badgeName: string) => {
-        if (badgeName.toLowerCase().includes("mountain"))
+      const getBadgeColor = (name: string) => {
+        const lower = name?.toLowerCase() ?? "";
+        if (lower.includes("mountain"))
           return {
             bg: "bg-[#FAFAFE]",
             border: "border-[#0DAC87]",
             text: "text-[#0DAC87]",
           };
-        if (badgeName.toLowerCase().includes("explorer"))
+        if (lower.includes("explorer"))
           return {
             bg: "bg-[#FAFAFE]",
             border: "border-[#DDAC24]",
@@ -170,18 +175,13 @@ const userData: ColumnDef<User>[] = [
         };
       };
 
-      const colors = getBadgeColor(row.original.badges);
+      const colors = getBadgeColor(badgeName);
       return (
         <div className="flex gap-3 w-60">
           <Badge className={`${colors.bg} border ${colors.border} px-3 py-2`}>
             <div className="flex gap-2 items-center">
-              <img
-                src={getBadgeIcon(row.original.badges)}
-                alt={row.original.badges}
-              />
-              <span className={`${colors.text} font-bold`}>
-                {row.original.badges}
-              </span>
+              <img src={getBadgeIcon(badgeName)} alt={badgeName} />
+              <span className={`${colors.text} font-bold`}>{badgeName}</span>
             </div>
           </Badge>
         </div>
@@ -208,25 +208,40 @@ const userData: ColumnDef<User>[] = [
 ];
 
 const AchievementControl = () => {
-  const { data: achievements, isLoading, isError } = UsegetallAchievements();
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data: allAchievements, isLoading, isError } = UsegetallAchievements();
+  const { data: searchData, isLoading: searchLoading } =
+    UseSearchAchievements(searchQuery);
+
   const [columnsMenu, setColumnsMenu] = useState<{
     items: { id: string; label?: string; checked: boolean }[];
     toggle: (id: string, v: boolean) => void;
   } | null>(null);
-  if (isLoading) {
-    return (
-      <div className="w-full flex items-center justify-center py-10">
-        <LoaderIcon className="animate-spin" />
-      </div>
-    );
-  }
-  if (isError) {
+
+  // Use search results if search query exists, otherwise use all achievements
+  const displayData = searchQuery.trim()
+    ? transformAchievementData(searchData?.achievements ?? [])
+    : transformAchievementData(allAchievements || []);
+
+  // Only show initial loading state, not during search
+  const isInitialLoading = !searchQuery.trim() && isLoading;
+
+  if (isError && !searchQuery.trim()) {
     return (
       <div className="w-full flex items-center justify-center py-10">
         <span className="text-red-500">Error loading data.</span>
       </div>
     );
   }
+
+  if (isInitialLoading) {
+    return (
+      <div className="w-full flex items-center justify-center py-10">
+        <LoaderIcon className="animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="lg:mt-5">
       <TableHeader
@@ -234,6 +249,8 @@ const AchievementControl = () => {
         showFilter={false}
         showSort
         searchPlaceholder="Search Achievement"
+        searchValue={searchQuery}
+        onSearch={(query) => setSearchQuery(query)}
         // showAddButton={true}
         // addButtonLabel="Add New Trip"
         url="/coordinator-dashboard/add-new-trip"
@@ -241,15 +258,20 @@ const AchievementControl = () => {
         columnsMenuItems={columnsMenu?.items ?? []}
         onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
       />
-      <div className="bg-white rounded-[25px] mt-3 overflow-x-auto">
+      <div className="bg-white rounded-[25px] mt-3 overflow-x-auto relative">
+        {searchLoading && (
+          <div className="absolute inset-0 bg-white/50 flex items-center justify-center rounded-[25px] z-10">
+            <LoaderIcon className="animate-spin" size={24} />
+          </div>
+        )}
         <ReusableTable
           columns={userData}
-          data={transformAchievementData(achievements || [])}
+          data={displayData}
           onExposeColumns={(payload) => setColumnsMenu(payload)}
         />
       </div>
       <div>
-        <Achievementlibrary achievements={achievements ?? []} />
+        <Achievementlibrary achievements={allAchievements ?? []} />
       </div>
     </div>
   );

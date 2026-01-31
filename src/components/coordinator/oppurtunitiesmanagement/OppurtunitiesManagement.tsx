@@ -139,8 +139,7 @@ const OppurtunitiesManagement = () => {
   const { data: trip, isLoading, isError } = UsegetTrips();
   const { data: searchData, isLoading: searchLoading } =
     UseSearchTrips(searchQuery);
-  console.log("searchData", searchData);
-  const [columnsMenu, setColumnsMenu] = useState<{
+   const [columnsMenu, setColumnsMenu] = useState<{
     items: { id: string; label?: string; checked: boolean }[];
     toggle: (id: string, v: boolean) => void;
   } | null>(null);
@@ -171,6 +170,7 @@ const OppurtunitiesManagement = () => {
         showFilter={false}
         showSort
         searchPlaceholder="Search Trips"
+        searchValue={searchQuery}
         showAddButton={true}
         addButtonLabel="Add New Trip"
         url="/coordinator-dashboard/add-new-trip"

@@ -21,8 +21,7 @@ import { LoaderIcon } from "lucide-react";
 const EditTrip = ({ backUrl }: { backUrl: string }) => {
   const { id } = useParams<{ id: string }>();
   const { data: tripData, isLoading, isError } = UsegetTripbyid(id || "");
-  console.log('tripData', tripData);
-  const navigate = useNavigate();
+   const navigate = useNavigate();
 
   const methods = useForm<TripFormType>({
     resolver: zodResolver(tripSchema),

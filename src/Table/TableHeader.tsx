@@ -1,4 +1,4 @@
-import {  Funnel, Search } from "lucide-react";
+import { Funnel, Search } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -27,6 +27,7 @@ interface TableToolbarProps {
   addButtonLabel?: string;
   addButtonIcon?: React.ReactNode;
   searchPlaceholder?: string;
+  searchValue?: string;
   limitOptions?: number[];
   defaultLimit?: number;
   onSearch?: (value: string) => void;
@@ -54,6 +55,7 @@ const TableHeader: React.FC<TableToolbarProps> = ({
   addButtonLabel = "Add New",
   addButtonIcon,
   searchPlaceholder = "Search...",
+  searchValue,
   url,
   columnsMenuItems,
   onColumnMenuToggle,
@@ -68,7 +70,10 @@ const TableHeader: React.FC<TableToolbarProps> = ({
   return (
     <div className="bg-white px-4 py-8 rounded-lg shadow-sm mt-3">
       {showSearch && (
-        <div className="flex lg:flex-row flex-col justify-between gap-4">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="flex lg:flex-row flex-col justify-between gap-4"
+        >
           <div className="relative">
             <Search
               size={24}
@@ -78,10 +83,8 @@ const TableHeader: React.FC<TableToolbarProps> = ({
             <input
               type="text"
               placeholder={searchPlaceholder}
-              onChange={(e) => {
-                e.preventDefault();
-                onSearch?.(e.target.value);
-              }}
+              {...(searchValue !== undefined && { value: searchValue })}
+              onChange={(e) => onSearch?.(e.target.value)}
               className="placeholder:text-[#666373] lg:w-[600px] w-full pl-10 pr-3 px-3 py-3 border border-[#EFEFEF] bg-[#FAFAFE] outline-none rounded-[10px]"
             />
           </div>
@@ -102,7 +105,7 @@ const TableHeader: React.FC<TableToolbarProps> = ({
                 {addButtonLabel}
               </Button>
             ))}
-        </div>
+        </form>
       )}
       <div className="flex md:flex-row flex-col justify-between items-center mt-8 gap-4">
         <div className="flex items-center gap-4">
