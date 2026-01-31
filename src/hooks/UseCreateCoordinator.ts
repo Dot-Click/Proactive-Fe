@@ -1,6 +1,5 @@
 import api from "@/config/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { AxiosResponse } from "axios";
 
 
 export interface CoordinatorData {
