@@ -14,6 +14,7 @@ import Modal from "./Modal";
 import TableHeader from "@/Table/TableHeader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UseGetAllUser } from "@/hooks/getUserhook";
+import { UseSearchUsers } from "@/hooks/searchUserhook";
 import { useUpdateUserStatus } from "@/hooks/updateUserStatushook";
 import { useMemo, useState } from "react";
 
@@ -216,19 +217,28 @@ const FilterSection = () => {
     items: { id: string; label?: string; checked: boolean }[];
     toggle: (id: string, v: boolean) => void;
   } | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data: searchResults, isLoading: isSearchLoading } = UseSearchUsers(searchQuery);
 
-  const users = useMemo(
-    () => (Array.isArray(getAllUser) ? getAllUser : []),
-    [getAllUser],
-  );
+  const users = useMemo(() => {
+    // If search query is active, use search results
+    if (searchQuery && searchQuery.trim().length > 0) {
+      return Array.isArray(searchResults) ? searchResults : [];
+    }
+    // Otherwise use all users
+    return Array.isArray(getAllUser) ? getAllUser : [];
+  }, [searchQuery, searchResults, getAllUser]);
 
   return (
     <>
       <TableHeader
+        showSearch
         showColumns
         columnsMenuItems={columnsMenu?.items ?? []}
         onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
         showFilter={false}
+        searchPlaceholder="Search users by name or email"
+        onSearch={(query) => setSearchQuery(query)}
       />
       <div className="bg-white rounded-[25px] mt-3 overflow-x-auto">
         {isError ? (
@@ -237,7 +247,7 @@ const FilterSection = () => {
               Failed to load users.
             </span>
           </div>
-        ) : isLoading ? (
+        ) : isLoading || isSearchLoading ? (
           <div className="flex items-center justify-center px-4 py-6">
             <span className="text-[#221E33] font-semibold text-[16px]">
               Loading users...

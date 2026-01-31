@@ -1,7 +1,7 @@
 import { Switch } from "@/components/ui/switch"
 import message from "@/assets/sidebaricon/message.png"
-import TableHeader from "@/Table/TableHeader"
-import { Download } from "lucide-react"
+// import TableHeader from "@/Table/TableHeader"
+// import { Download } from "lucide-react"
 import ReusableTable from "@/Table/ReusableTable"
 import type { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
@@ -24,7 +24,7 @@ type ChatData = {
 };
 
 const ChatManagement = () => {
-  const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+  const [, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
   const [selectedChat, setSelectedChat] = useState<any>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { data: chatsData, isLoading } = Usegetchat()
@@ -251,19 +251,19 @@ const ChatManagement = () => {
           <span className="text-[12px] text-[#221E33]/50">All user-coordinator chats are securely stored. Admins can monitor conversations, disable the chat widget, or step in when needed. Chat widget is currently enabled - users can start new conversations.</span>
         </div>
       </div>
-      <TableHeader
+      {/* <TableHeader
         showSearch
         showFilter={false}
         showSort
         searchPlaceholder="Search Message"
         showAddButton={true}
-        addButtonLabel="Export"
-        addButtonIcon={<Download />}
+        // addButtonLabel="Export"
+        // addButtonIcon={<Download />}
         url=""
         showColumns
         columnsMenuItems={columnsMenu?.items ?? []}
         onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
-      />
+      /> */}
       <div className="bg-white rounded-[25px] mt-3">
         <ReusableTable data={tableData} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
       </div>

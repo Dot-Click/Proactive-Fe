@@ -8,6 +8,7 @@ import Coordinatordetailmodal from "./Coordinatordetailmodal"
 import { UsegetCoordinator, type Coordinator } from "@/hooks/getCoordinatorhook"
 import { useState } from "react"
 import { UseupdateCoordinatorStatus } from "@/hooks/updatecoordinatorstatushook"
+import { UseSearchCoordinators } from "@/hooks/searchCoordinatorhook"
 import { toast } from "sonner"
 
 
@@ -97,6 +98,12 @@ const Coordinatorinfo = () => {
     const { mutateAsync } = UseupdateCoordinatorStatus();
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [open, setOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const { data: searchResults, isLoading: searchLoading } = UseSearchCoordinators(searchQuery);
+    
+    // Use search results if query exists, otherwise use all coordinators
+    const displayData = searchQuery ? searchResults : data?.coordinators || [];
+    const displayLoading = searchQuery ? searchLoading : isLoading;
     if (isError) {
         return <div>Error loading membership data.</div>;
     }
@@ -126,13 +133,19 @@ const Coordinatorinfo = () => {
                     searchPlaceholder="Search Coordinators"
                     showAddButton
                     url="/dashboard/add-new-coordinator"
+                    onSearch={setSearchQuery}
                 />
                 <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 mt-3">
-                    {data?.coordinators?.length === 0 ? (
+                    {displayLoading && (
+                        <div className="w-full flex items-center justify-center py-10">
+                            <LoaderIcon className="animate-spin" />
+                        </div>
+                    )}
+                    {!displayLoading && displayData?.length === 0 ? (
                         <div className="bg-white border border-[#E0E1E2] px-4 py-6 rounded-[20px] shadow-sm hover:shadow-md transition-all duration-300">
                             <span className="text-[#221E33] font-semibold text-[16px]">No Coordinators Found</span>
                         </div>
-                    ) : data?.coordinators?.map((user: Coordinator, i: number) => (
+                    ) : !displayLoading && displayData?.map((user: Coordinator, i: number) => (
                         <div
                             key={i}
                             className="bg-white border border-[#E0E1E2] px-4 py-6 rounded-[20px] shadow-sm hover:shadow-md transition-all duration-300"

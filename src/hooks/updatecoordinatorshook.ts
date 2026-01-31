@@ -112,13 +112,27 @@ export const useUpdateCoordinator = (id: string) => {
           console.log(`${key}:`, value);
         }
       }
-      
-      const response = await api.patch(`/api/coordinator/updateSettings/${id}`, formData, {
-        headers: { 
-          "Content-Type": "multipart/form-data" 
-        }
+      // Use fetch to send multipart/form-data so boundary is handled automatically
+      const url = `${api.defaults.baseURL}/api/admin/coordinator/${id}`;
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(url, {
+        method: "PATCH",
+        body: formData,
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        credentials: "include",
       });
-      return response.data;
+
+      const payload = await res.json().catch(() => null);
+      if (!res.ok) {
+        const err: any = new Error("Update coordinator failed");
+        err.response = { status: res.status, data: payload };
+        // eslint-disable-next-line no-console
+        console.error("Update coordinator API error:", err.response || err);
+        throw err;
+      }
+
+      return payload;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["coordinator", id] });

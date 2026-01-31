@@ -1,6 +1,16 @@
 import api from "@/config/axios";
 import { useQuery  } from "@tanstack/react-query";
 
+export interface CoordinatorStats {
+    totalTrips: number;
+    completedTrips: number;
+    totalRevenue: number;
+    repeatCustomers: number;
+    successRate: number;
+    customerSatisfaction: number;
+    overallPerformance: number;
+}
+
 export interface Coordinator {
     coordinator:{
         accessLvl: string;
@@ -11,10 +21,18 @@ export interface Coordinator {
         languages: string[];
         phoneNumber: string;
         profilePicture: string;
+        totalAmount: number;
         specialities: string[];
         type: string;
         yearsOfExperience: number;
         location: string;
+        totalTrips?: number;
+        completedTrips?: number;
+        totalRevenue?: number;
+        repeatCustomers?: number;
+        successRate?: number;
+        customerSatisfaction?: number;
+        overallPerformance?: number;
     }
 }
 

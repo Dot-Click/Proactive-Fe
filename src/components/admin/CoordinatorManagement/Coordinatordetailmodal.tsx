@@ -203,12 +203,12 @@ import { useNavigate } from "react-router-dom"
 import { UsegetCoordinatorbyId } from "@/hooks/getCoordinatorhookid"
 import { LoaderIcon } from "lucide-react"
 
-// Static labels for stats (values can be made dynamic if API provides them later)
-const CoordinatorData = [
-    { Name: 'Total Trips Led', Number: '03' },
-    { Name: 'Active Trips', Number: '0' },
-    { Name: 'Success Rate', Number: '89%' },
-    { Name: 'Repeat Customers', Number: '60%' },
+// Helper function to format stats with dynamic values
+const formatStats = (coordinator: any) => [
+    { Name: 'Total Trips Led', Number: coordinator?.totalTrips?.toString() || '0' },
+    { Name: 'Completed Trips', Number: coordinator?.completedTrips?.toString() || '0' },
+    { Name: 'Success Rate', Number: `${Math.round(coordinator?.successRate ?? 0)}%` },
+    { Name: 'Repeat Customers', Number: coordinator?.repeatCustomers?.toString() || '0' },
 ]
 
 const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string, role: string }) => {
@@ -287,14 +287,14 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
                         </div>
 
                         <div className="flex flex-col text-center lg:items-end">
-                            <span className="font-bold text-[30px] bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">€897</span>
+                            <span className="font-bold text-[30px] bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">€{coordinator?.totalRevenue ?? 0}</span>
                             <span className="text-[#666373] text-[14px]">Total Revenue</span>
                         </div>
                     </div>
 
                     {/* Stats Grid */}
                     <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
-                        {CoordinatorData.map((item, i) => (
+                        {formatStats(coordinator).map((item, i) => (
                             <div key={i} className="flex flex-col items-center rounded-[12px] px-5 py-6 bg-[#FAFAFE] hover:shadow-sm transition-all">
                                 <span className="font-bold text-[30px] bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">{item.Number}</span>
                                 <span className="text-[#666373] text-sm">{item.Name}</span>
@@ -355,23 +355,23 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
                                 <div>
                                     <div className="flex justify-between mb-2 text-sm">
                                         <span className="text-[#666373]">Overall Performance</span>
-                                        <span className="font-semibold">88%</span>
+                                        <span className="font-semibold">{Math.round(coordinator?.overallPerformance ?? 0)}%</span>
                                     </div>
-                                    <Progress value={88} className="h-2" />
+                                    <Progress value={Math.round(coordinator?.overallPerformance ?? 0)} className="h-2" />
                                 </div>
                                 <div>
                                     <div className="flex justify-between mb-2 text-sm">
                                         <span className="text-[#666373]">Success Rate</span>
-                                        <span className="font-semibold">95%</span>
+                                        <span className="font-semibold">{Math.round(coordinator?.successRate ?? 0)}%</span>
                                     </div>
-                                    <Progress value={95} className="h-2" />
+                                    <Progress value={Math.round(coordinator?.successRate ?? 0)} className="h-2" />
                                 </div>
                                 <div>
                                     <div className="flex justify-between mb-2 text-sm">
                                         <span className="text-[#666373]">Customer Satisfaction</span>
-                                        <span className="font-semibold">4.7/5.0</span>
+                                        <span className="font-semibold">{(coordinator?.customerSatisfaction ?? 0).toFixed(2)}/5.0</span>
                                     </div>
-                                    <Progress value={94} className="h-2" />
+                                    <Progress value={(coordinator?.customerSatisfaction ?? 0) * 20} className="h-2" />
                                 </div>
                             </div>
                         </div>

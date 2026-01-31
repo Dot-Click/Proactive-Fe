@@ -74,10 +74,10 @@ const formSchema = z
       .refine((val) => /[0-9]/.test(val), "Confirm Password must contain at least one number")
       .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), "Confirm Password must contain at least one special character"),
     profilePicture: z
-      .instanceof(File, { message: "Profile picture is required" })
-      .refine((file) => file.size <= 5 * 1024 * 1024, "File must be less than 5MB")
+      .instanceof(File).optional().nullable()
+      .refine((file) => !file || file.size <= 5 * 1024 * 1024, "File must be less than 5MB")
       .refine(
-        (file) => ["image/jpeg", "image/png"].includes(file.type),
+        (file) => !file || ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
         "Only JPEG or PNG files are allowed"
       )
   })
@@ -104,7 +104,7 @@ const AddnewCoordinator = () => {
       accessLvl: "",
       password: "",
       confirmPassword: "",
-      profilePicture: undefined,
+      profilePicture: null,
     },
   });
 
@@ -120,41 +120,73 @@ const AddnewCoordinator = () => {
       form.setValue("profilePicture", file);
     }
   };
-  const CreateCoordinatorMutation = useCreateCoordinator();
+  const CreateCoordinatorMutation:any = useCreateCoordinator();
   const onSubmit = async (val: z.infer<typeof formSchema>) => {
-    if (!profileFile) {
-      toast.error("Please upload a profile picture");
-      return;
-    }
     const formData = new FormData();
-    formData.append("fullName", val.fullName);
+    
+    // Create coordinatorDetails object as required by API
+    const coordinatorDetails = {
+      fullName: val.fullName,
+      phoneNumber: val.phoneNumber,
+      bio: val.bio,
+      certificateLvl: val.certificateLvl,
+      yearsOfExperience: val.yearsOfExperience,
+      type: val.type,
+      accessLvl: val.accessLvl,
+      specialities: val.specialities,
+      languages: val.languages,
+      ...(val.location && { location: val.location })
+    };
+    
+    formData.append("coordinatorDetails", JSON.stringify(coordinatorDetails));
     formData.append("email", val.email);
+    formData.append("password", val.password);
+    
+    // Only append profile picture if it exists
+    if (profileFile) {
+      formData.append("prof_pic", profileFile);
+    }
+
+    // Also append individual fields — some backends validate multipart fields directly
+    formData.append("fullName", val.fullName);
     formData.append("phoneNumber", val.phoneNumber);
     formData.append("bio", val.bio);
     formData.append("certificateLvl", val.certificateLvl);
     formData.append("yearsOfExperience", String(val.yearsOfExperience));
     formData.append("type", val.type);
     formData.append("accessLvl", val.accessLvl);
-
-    if (val.location) {
-      formData.append("location", val.location);
-    }
+    if (val.location) formData.append("location", val.location);
     formData.append("specialities", JSON.stringify(val.specialities));
     formData.append("languages", JSON.stringify(val.languages));
 
-    formData.append("password", val.password);
-    formData.append("prof_pic", profileFile);
-
-
+    // Debug: preview form data values (non-file parts) so we can see what's sent
     try {
-      await CreateCoordinatorMutation.mutateAsync(formData);
+      const preview: Record<string, any> = {};
+      formData.forEach((value, key) => {
+        if (value instanceof File) {
+          preview[key] = { name: value.name, size: value.size, type: value.type };
+        } else {
+          preview[key] = value;
+        }
+      });
+      // eslint-disable-next-line no-console
+      console.debug("CreateCoordinator submit preview:", preview);
+
+      const response = await CreateCoordinatorMutation.mutateAsync(formData);
+      // eslint-disable-next-line no-console
+      console.debug("CreateCoordinator response:", response);
       toast.success("Coordinator added successfully");
       form.reset();
       setProfileFile(undefined);
       setProfilePreview("");
     } catch (err: any) {
-      const message = err?.response?.data?.message || "Something went wrong";
-      toast.error(message);
+      // Log full error to console for debugging
+      // eslint-disable-next-line no-console
+      console.error("CreateCoordinator failed:", err);
+      const status = err?.response?.status;
+      const data = err?.response?.data;
+      const message = data?.message || data || err?.message || "Something went wrong";
+      toast.error(`Error${status ? ` (${status})` : ""}: ${message}`);
     }
 
   };
@@ -643,12 +675,22 @@ const AddnewCoordinator = () => {
 
             <div className="flex justify-end mt-20 px-8 pb-6">
               <Button
-                type="submit"
+                type="button"
+                onClick={() => {
+                  // Ensure we always call react-hook-form's submit handler and log the click
+                  // Provide an onInvalid handler so validation errors are surfaced to console/toast
+                  // eslint-disable-next-line no-console
+                  console.debug("Save Coordinator clicked");
+                  const onInvalid = (errors: any) => {
+                    // eslint-disable-next-line no-console
+                    console.debug("Validation errors:", errors);
+                    toast.error("Please fix highlighted validation errors");
+                  };
+                  form.handleSubmit(onSubmit, onInvalid)();
+                }}
                 className="rounded-full px-8 py-6 font-medium cursor-pointer"
               >
-                {
-                  CreateCoordinatorMutation.isPending ? "Adding..." : "Save Coordinator"
-                }
+                {CreateCoordinatorMutation.isLoading ? "Adding..." : "Save Coordinator"}
 
               </Button>
             </div>

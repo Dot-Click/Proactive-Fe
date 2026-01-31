@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UsegetTrips } from "@/hooks/gettriphook";
+import { UseSearchTrips } from "@/hooks/searchTripshook";
 import { UseupdateRejectedtripStatus } from "@/hooks/updatetripRejectedstatushook";
 import { Useupdatetripstatus } from "@/hooks/updatetripstatushook";
 import ReusableTable from "@/Table/ReusableTable";
@@ -215,17 +216,22 @@ const userData: ColumnDef<trip>[] = [
 const Tripoppurtunities = () => {
   const { data: trip, isLoading, isError } = UsegetTrips();
   const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data: searchResults, isLoading: isSearchLoading } = UseSearchTrips(searchQuery);
 
   if (isError) {
     return <div>Error loading membership data.</div>;
   }
-  if (isLoading) {
+  if (isLoading || isSearchLoading) {
     return (
       <div className="w-full flex items-center justify-center py-10">
         <LoaderIcon className="animate-spin" />
       </div>
     )
   }
+
+  // Use search results if available, otherwise use all trips
+  const displayData = searchQuery && searchResults?.trips ? searchResults.trips : trip?.trips ?? [];
 
   return (
     <div>
@@ -234,15 +240,16 @@ const Tripoppurtunities = () => {
         showFilter={false}
         showSort
         searchPlaceholder="Search Trips"
-        showAddButton={true}
-        addButtonLabel="Add New Trip"
+        // showAddButton={true}
+        // addButtonLabel="Add New Trip"
         url='/dashboard/add-new-trip'
         showColumns
         columnsMenuItems={columnsMenu?.items ?? []}
         onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
+        onSearch={(query) => setSearchQuery(query)}
       />
       <div className="bg-white rounded-[25px] mt-3">
-        <ReusableTable data={trip?.trips ?? []} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
+        <ReusableTable data={displayData} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
       </div>
 
     </div>
