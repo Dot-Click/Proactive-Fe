@@ -25,7 +25,7 @@ const formSchema = z.object({
   name: z.string().min(1, "Location name is required"),
 });
 
-const Location = () => {
+const Locations = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingLocation, setEditingLocation] = useState<Location | null>(null);
   
@@ -317,4 +317,4 @@ const Location = () => {
   );
 };
 
-export default Location;
+export default Locations;

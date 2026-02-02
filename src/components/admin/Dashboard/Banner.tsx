@@ -4,7 +4,7 @@ import bannericon from "@/assets/sidebaricon/bannericon.png";
 import useGetBanner from "@/hooks/useGetBanner";
 
 const Banner = () => {
-  const { banner, isLoading, uploadBanner, isUploading } = useGetBanner();
+  const { banner, uploadBanner, isUploading } = useGetBanner();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import api from '../../../config/axios';
 
@@ -130,7 +130,7 @@ const Tripcategories = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, value }) => `${value}%`}
+                  label={({  value }) => `${value}%`}
                   outerRadius="85%"
                   innerRadius="40%"
                   paddingAngle={1}

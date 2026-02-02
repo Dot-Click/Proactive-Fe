@@ -5,7 +5,7 @@ import Notification from "./Notification";
 import Security from "./Security";
 import AddFAQ from "./AddFAQ";
 import Contact from "./Contact";
-import Location from "./Location";
+import  Locations  from "./Location";
 
 const Setting = () => {
   const [activeTab, setActiveTab] = useState("General");
@@ -37,7 +37,7 @@ const Setting = () => {
         {activeTab === "Notifications" && <Notification />}
         {activeTab === "Security & Data" && <Security />}
         {activeTab === "Add FAQ" && <AddFAQ />}
-        {activeTab === "Locations" && <Location />}
+        {activeTab === "Locations" && <Locations />}
       </div>
     </div>
   );

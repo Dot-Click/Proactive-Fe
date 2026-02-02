@@ -4,7 +4,7 @@ import { UsegetPayment } from "@/hooks/getPaymenthook";
 import ReusableTable from "@/Table/ReusableTable"
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
-import { Download, LoaderIcon } from "lucide-react"
+import {  LoaderIcon } from "lucide-react"
 import { useState } from "react";
 
 type User = {
