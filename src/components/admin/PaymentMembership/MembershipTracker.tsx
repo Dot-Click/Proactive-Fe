@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import ReusableTable from "@/Table/ReusableTable"
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
-import { Download, LoaderIcon } from "lucide-react"
+import { Download, LoaderIcon, FileText } from "lucide-react"
 import TotalUsers from "@/assets/sidebaricon/totalusers.png"
 import Coordinator from "@/assets/sidebaricon/coordinators.png"
 import ActiveTrips from "@/assets/sidebaricon/activetrips.png"
@@ -10,14 +10,11 @@ import CloseTrips from "@/assets/sidebaricon/closetrips.png"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import { UsegetPayment } from "@/hooks/getPaymenthook";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 // import { Badge } from "@/components/ui/badge";
 
 type User = any;
-
-// const data: User[] = [
-//     { User: 'Sarah L.', Membershiptype: 'Gold', StartDate: '2024-01-15', ExpiryDate: '2024-12-31', Status: 'Active' },
-//     { User: 'Sarah L.', Membershiptype: 'Gold', StartDate: '2024-01-15', ExpiryDate: '2024-12-31', Status: 'Active' },
-// ]
 
 const userData: ColumnDef<User>[] = [
     {
@@ -82,15 +79,12 @@ const userData: ColumnDef<User>[] = [
             return (
                 <div className="flex flex-col justify-center cursor-pointer pl-2">
                     <span className="font-semibold text-[14px] text-[#666373]">
-                        {new Date(row.original.createdAt).toLocaleString("en-US", {
+                        {row.original.createdAt ? new Date(row.original.createdAt).toLocaleString("en-US", {
                             month: "short",
                             day: "2-digit",
                             year: "numeric",
-                        }) || 'N/A'}
+                        }) : 'N/A'}
                     </span>
-                    {/* <span className="text-[12px] text-[#666373]">
-                        Source: Trip Payment
-                    </span> */}
                 </div>
             )
         }
@@ -105,18 +99,19 @@ const userData: ColumnDef<User>[] = [
             </div>
         ),
         cell: ({ row }) => {
-            const daysLeft = Math.ceil((new Date(row.original.membershipExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+            const expiryDate = row.original.membershipExpiry;
+            const daysLeft = expiryDate ? Math.ceil((new Date(expiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0;
             return (
                 <div className="flex flex-col justify-center cursor-pointer ">
                     <span className="font-semibold text-[14px] text-[#666373]">
-                        {new Date(row.original.membershipExpiry).toLocaleString("en-US", {
+                        {expiryDate ? new Date(expiryDate).toLocaleString("en-US", {
                             month: "short",
                             day: "2-digit",
                             year: "numeric",
-                        }) || 'N/A'}
+                        }) : 'N/A'}
                     </span>
                     <span className="text-[12px] text-[#666373]">
-                        {daysLeft} days left
+                        {expiryDate ? `${daysLeft} days left` : 'N/A'}
                     </span>
                 </div>
             )
@@ -153,49 +148,262 @@ const userData: ColumnDef<User>[] = [
                 </div>
             )
         }
-
     },
 ]
-
 
 const MembershipTracker = () => {
     const { data: MembershipData, isLoading, isError } = UsegetPayment();
     const membershipPaymentsData = MembershipData?.membershipPayments?.payments;
     const membershipPaymentsStats = MembershipData?.membershipPayments?.keyStates;
+    const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null);
+    const [exportLoading, setExportLoading] = useState(false);
+    const [exportType, setExportType] = useState<'pdf' | 'csv' | null>(null);
+
     const stats = [
         {
             id: 1,
             name: 'Total Active Memberships',
-            value: isLoading ? 'Loading...' : membershipPaymentsStats?.totalActiveMemberships || '0',
+            value: isLoading ? 'Loading...' : membershipPaymentsStats?.totalActiveMemberships,
             icon: TotalUsers,
             change: '+5%',
         },
         {
             id: 2,
             name: 'Expiring Soon',
-            value: isLoading ? 'Loading...' : membershipPaymentsStats?.expiringSoon || '0',
+            value: isLoading ? 'Loading...' : membershipPaymentsStats?.expiringSoon,
             icon: Coordinator,
             change: '+10%'
         },
         {
             id: 3,
             name: 'Average Duration',
-            value: isLoading ? 'Loading...' : membershipPaymentsStats?.averageDuration || '0',
+            value: isLoading ? 'Loading...' : membershipPaymentsStats?.averageDuration,
             icon: ActiveTrips,
             change: '+8%'
         },
         {
             id: 4,
             name: 'Monthly Renewals',
-            value: isLoading ? 'Loading...' : membershipPaymentsStats?.monthlyRenewals || '0',
+            value: isLoading ? 'Loading...' : membershipPaymentsStats?.monthlyRenewals,
             icon: CloseTrips,
             change: '-12%'
         }
-    ]
-    const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+    ];
+
+    // Function to export membership data to PDF
+    const handleExportToPDF = () => {
+        if (!membershipPaymentsData?.length) {
+            alert("No membership data to export");
+            return;
+        }
+
+        setExportLoading(true);
+        setExportType('pdf');
+
+        try {
+            const doc = new jsPDF("landscape", "pt", "a4");
+            
+            // Add title
+            doc.setFontSize(20);
+            doc.setTextColor(34, 30, 51); // #221E33 color
+            doc.text("Membership Report", doc.internal.pageSize.width / 2, 40, {
+                align: "center",
+            });
+
+            // Add export info
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text(
+                `Exported: ${new Date().toLocaleDateString()} | Total Memberships: ${membershipPaymentsData.length}`,
+                doc.internal.pageSize.width / 2,
+                60,
+                { align: "center" }
+            );
+
+            // Add summary stats
+            doc.setFontSize(12);
+            doc.setTextColor(34, 30, 51);
+            doc.text("Summary Statistics", 20, 90);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(80, 80, 80);
+            stats.forEach((stat, index) => {
+                const yPos = 110 + (index * 20);
+                doc.text(`${stat.name}: ${stat.value}`, 20, yPos);
+            });
+
+            // Prepare table data
+            const tableData = membershipPaymentsData.map(
+                (member: any, index: number) => {
+                    const user = member.user;
+                    const displayName = user
+                        ? user.firstName || user.nickName
+                            ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
+                            : user.email
+                        : "Unknown";
+                    const email = user?.email || "";
+                    const membershipType = member.membershipType || "N/A";
+                    const startDate = member.createdAt
+                        ? new Date(member.createdAt).toLocaleDateString()
+                        : "N/A";
+                    const expiryDate = member.membershipExpiry
+                        ? new Date(member.membershipExpiry).toLocaleDateString()
+                        : "N/A";
+                    const daysLeft = member.membershipExpiry ? 
+                        Math.ceil((new Date(member.membershipExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0;
+                    const status = member.status || "N/A";
+
+                    return [
+                        (index + 1).toString(),
+                        displayName,
+                        email,
+                        membershipType,
+                        startDate,
+                        expiryDate,
+                        `${daysLeft} days left`,
+                        status,
+                    ];
+                }
+            );
+
+            // Define table columns
+            const tableColumns = [
+                "#",
+                "User Name",
+                "Email",
+                "Membership Type",
+                "Start Date",
+                "Expiry Date",
+                "Days Left",
+                "Status",
+            ];
+
+            // Add autoTable
+            autoTable(doc, {
+                head: [tableColumns],
+                body: tableData,
+                startY: 200,
+                theme: "striped",
+                headStyles: {
+                    fillColor: [34, 30, 51], // #221E33 color
+                    textColor: 255,
+                    fontSize: 10,
+                    fontStyle: "bold",
+                    halign: "center",
+                },
+                bodyStyles: {
+                    fontSize: 9,
+                    textColor: [80, 80, 80],
+                    halign: "left",
+                },
+                alternateRowStyles: {
+                    fillColor: [246, 246, 255], // #F6F6FF color
+                },
+                margin: { left: 20, right: 20 },
+                styles: {
+                    overflow: "linebreak",
+                    cellPadding: 5,
+                },
+                columnStyles: {
+                    3: { fillColor: [253, 139, 58] } // #FD8B3A color for membership type column
+                },
+                didDrawPage: function (data) {
+                    // Add page number
+                    const pageCount = doc.getNumberOfPages();
+                    doc.setFontSize(9);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text(
+                        `Page ${data.pageNumber} of ${pageCount}`,
+                        doc.internal.pageSize.width / 2,
+                        doc.internal.pageSize.height - 20,
+                        { align: "center" }
+                    );
+                },
+            });
+
+            // Save the PDF
+            doc.save(`membership-report-${new Date().toISOString().slice(0, 10)}.pdf`);
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            alert("Failed to generate PDF. Please try again.");
+        } finally {
+            setExportLoading(false);
+            setExportType(null);
+        }
+    };
+
+    // Function to export as CSV
+    const handleExportToCSV = () => {
+        if (!membershipPaymentsData?.length) {
+            alert("No membership data to export");
+            return;
+        }
+
+        setExportLoading(true);
+        setExportType('csv');
+
+        try {
+            const headers = [
+                "User Name",
+                "Email",
+                "Membership Type",
+                "Start Date",
+                "Expiry Date",
+                "Days Left",
+                "Status",
+                "Created At"
+            ];
+
+            const csvData = membershipPaymentsData.map((member: any) => {
+                const user = member.user;
+                const displayName = user
+                    ? user.firstName || user.nickName
+                        ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
+                        : user.email
+                    : "Unknown";
+                const expiryDate = member.membershipExpiry;
+                const daysLeft = expiryDate ? 
+                    Math.ceil((new Date(expiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0;
+                
+                return [
+                    `"${displayName}"`,
+                    `"${user?.email || ""}"`,
+                    `"${member.membershipType || "N/A"}"`,
+                    member.createdAt ? new Date(member.createdAt).toLocaleDateString() : "N/A",
+                    expiryDate ? new Date(expiryDate).toLocaleDateString() : "N/A",
+                    daysLeft,
+                    `"${member.status || "N/A"}"`,
+                    member.createdAt ? new Date(member.createdAt).toISOString() : ""
+                ];
+            });
+
+            const csvContent = [
+                headers.join(","),
+                ...csvData.map((row: any) => row.join(",")),
+            ].join("\n");
+
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `membership-data-${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error("Error generating CSV:", error);
+            alert("Failed to generate CSV. Please try again.");
+        } finally {
+            setExportLoading(false);
+            setExportType(null);
+        }
+    };
+
     if (isError) {
         return <div>Error loading membership data.</div>;
     }
+    
     if (isLoading) {
         return (
             <div className="w-full flex items-center justify-center py-10">
@@ -203,6 +411,7 @@ const MembershipTracker = () => {
             </div>
         )
     }
+    
     return (
         <div>
             <div className="px-6 py-4 bg-white rounded-[20px] mt-3">
@@ -226,15 +435,42 @@ const MembershipTracker = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Export Buttons */}
+            <div className="flex justify-end gap-2 mb-3 mt-4">
+                <Button
+                    onClick={handleExportToPDF}
+                    disabled={exportLoading || !membershipPaymentsData?.length}
+                    className="bg-[#221E33] hover:bg-[#2d2742] text-white"
+                >
+                    {exportLoading && exportType === 'pdf' ? (
+                        <LoaderIcon className="h-4 w-4 animate-spin mr-2" />
+                    ) : (
+                        <Download className="h-4 w-4 mr-2" />
+                    )}
+                    Export PDF
+                </Button>
+                
+                <Button
+                    onClick={handleExportToCSV}
+                    disabled={exportLoading || !membershipPaymentsData?.length}
+                    variant="outline"
+                    className="border-[#221E33] text-[#221E33] hover:bg-[#221E33]/10"
+                >
+                    {exportLoading && exportType === 'csv' ? (
+                        <LoaderIcon className="h-4 w-4 animate-spin mr-2" />
+                    ) : (
+                        <FileText className="h-4 w-4 mr-2" />
+                    )}
+                    Export CSV
+                </Button>
+            </div>
+
             <TableHeader
                 showSearch
                 showFilter={false}
                 showSort
                 searchPlaceholder="Search Membership"
-                showAddButton={true}
-                addButtonLabel="Export"
-                addButtonIcon={<Download />}
-                url=""
                 showColumns
                 columnsMenuItems={columnsMenu?.items ?? []}
                 onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
@@ -242,8 +478,6 @@ const MembershipTracker = () => {
             <div className="bg-white rounded-[25px] mt-3">
                 <ReusableTable data={membershipPaymentsData ?? []} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
             </div>
-
-
         </div>
     )
 }

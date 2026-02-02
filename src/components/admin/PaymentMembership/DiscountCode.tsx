@@ -175,10 +175,10 @@ const DiscountCode = () => {
                 showFilter={false}
                 showSort
                 searchPlaceholder="Search Code"
-                showAddButton={true}
-                addButtonLabel="Export"
-                addButtonIcon={<Download />}
-                url=""
+                // showAddButton={true}
+                // addButtonLabel="Export"
+                // addButtonIcon={<Download />}
+                // url=""
                 showColumns
                 columnsMenuItems={columnsMenu?.items ?? []}
                 onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
