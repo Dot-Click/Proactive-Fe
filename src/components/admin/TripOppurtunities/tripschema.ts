@@ -30,7 +30,9 @@ export const tripSchema = z.object({
 
   // Step 4 – Coordinator
   CoordinatorName: z.string().min(1, "Coordinator name is required"),
-  CoordinatorRole: z.string().min(1, "Coordinator role is required"),
+  // TEMP: Coordinator role field hidden – validation commented out
+  // CoordinatorRole: z.string().min(1, "Coordinator role is required"),
+  CoordinatorRole: z.string().optional(),
   CoordinatorBio: z.string().min(1, "Coordinator bio is required"),
   CoordinatorInstagram: z.string().optional(),
   CoordinatorLinkedin: z.string().optional(),

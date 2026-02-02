@@ -112,7 +112,8 @@ const Coordinator = () => {
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* TEMP: Coordinator role field hidden per requirement */}
+              {/* <FormField
                 control={control}
                 name="CoordinatorRole"
                 render={({ field }) => (
@@ -130,7 +131,7 @@ const Coordinator = () => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
             <div className="flex mt-8 gap-3 items-center">
               <Avatar className="w-20 h-20">

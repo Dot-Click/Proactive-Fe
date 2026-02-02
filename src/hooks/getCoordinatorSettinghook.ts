@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export interface CoordinatorSetting {
     id: string;
-    Name: string;
-    Email: string;
+    fullName: string;
+    email: string;
     avatar: string | null;
 }
 

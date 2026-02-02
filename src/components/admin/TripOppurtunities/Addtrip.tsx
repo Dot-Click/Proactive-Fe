@@ -37,7 +37,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       included: [],
       notIncluded: [],
       CoordinatorName: "",
-      CoordinatorRole: "",
+      CoordinatorRole: "", // TEMP: role field hidden in UI, kept for form stability
       CoordinatorBio: "",
       CoordinatorInstagram: "",
       CoordinatorLinkedin: "",
@@ -91,7 +91,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
     if (step === 4) {
       valid = await methods.trigger([
         "CoordinatorName",
-        "CoordinatorRole",
+        // "CoordinatorRole", // TEMP: role field hidden
         "CoordinatorBio",
         "CoordinatorInstagram",
         "CoordinatorLinkedin",
@@ -155,9 +155,10 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
     if (data.CoordinatorName) {
       formData.append("coordinators", data.CoordinatorName);
     }
-    if (data.CoordinatorRole) {
-      formData.append("coordinatorRole", data.CoordinatorRole);
-    }
+    // TEMP: Coordinator role field hidden
+    // if (data.CoordinatorRole) {
+    //   formData.append("coordinatorRole", data.CoordinatorRole);
+    // }
     if (data.CoordinatorBio) {
       formData.append("coordinatorBio", data.CoordinatorBio);
     }

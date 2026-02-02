@@ -1,30 +1,36 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import Camera from "../../../assets/Camera.png"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import Camera from "../../../assets/Camera.png";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import UpdatePassword from "./UpdatePassword";
 import NotificationPreferences from "./NotificationPreferences";
 import { UsegetCoordinatorSetting } from "@/hooks/getCoordinatorSettinghook";
 import { UseupdateCoordinatorSetting } from "@/hooks/updateCoordinatorSettinghook";
 
-const formSchema = z
-  .object({
-    Name: z.string().min(1, {
-      message: "Name is required",
-    }),
-    Email: z.string().email({ message: "Invalid email address" }),
-  })
+const formSchema = z.object({
+  Name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  Email: z.string().email({ message: "Invalid email address" }),
+});
 
 const Setting = () => {
   type FormSchemaType = z.infer<typeof formSchema>;
   const { data: settingsData, isLoading } = UsegetCoordinatorSetting();
   const { mutate: updateSettings, isPending } = UseupdateCoordinatorSetting();
-  
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema) as any,
     defaultValues: {
@@ -40,8 +46,8 @@ const Setting = () => {
   useEffect(() => {
     if (settingsData) {
       form.reset({
-        Name: settingsData.Name || "",
-        Email: settingsData.Email || "",
+        Name: settingsData.fullName || "",
+        Email: settingsData.email || "",
       });
       if (settingsData.avatar) {
         setProfile(settingsData.avatar);
@@ -61,7 +67,7 @@ const Setting = () => {
     const formData = new FormData();
     formData.append("Name", val.Name);
     formData.append("Email", val.Email);
-    
+
     if (profileFile) {
       formData.append("prof_pic", profileFile);
     }
@@ -69,28 +75,40 @@ const Setting = () => {
     updateSettings(formData);
   };
 
-
   return (
     <>
       <div className="bg-white lg:mt-4 rounded-[25px]">
         <div className="bg-[#FAFAFA] px-6 py-6 rounded-tl-[25px] rounded-tr-[25px] font-medium">
-          <span className="bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text">Update Profile</span>
+          <span className="bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text">
+            Update Profile
+          </span>
         </div>
 
         <div className="flex mt-6 gap-3 items-center lg:justify-start justify-center px-6">
           <Avatar className="w-20 h-20">
-            <AvatarImage className="object-cover" src={profile || "https://github.com/shadcn.png"} alt="@shadcn" />
+            <AvatarImage
+              className="object-cover"
+              src={profile || "https://github.com/shadcn.png"}
+              alt="@shadcn"
+            />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <input 
-            onChange={HandleuploadProfile} 
-            type="file" 
-            id="coordinatorphoto" 
-            className="hidden" 
+          <input
+            onChange={HandleuploadProfile}
+            type="file"
+            id="coordinatorphoto"
+            className="hidden"
             accept="image/*"
           />
-          <Button type="button" className="rounded-full w-42" disabled={isLoading}>
-            <label htmlFor="coordinatorphoto" className="flex gap-2 items-center cursor-pointer">
+          <Button
+            type="button"
+            className="rounded-full w-42"
+            disabled={isLoading}
+          >
+            <label
+              htmlFor="coordinatorphoto"
+              className="flex gap-2 items-center cursor-pointer"
+            >
               <img src={Camera} alt="Camera" width={16} />
               Change Photo
             </label>
@@ -141,7 +159,7 @@ const Setting = () => {
                   )}
                 />
               </div>
-              <Button 
+              <Button
                 type="submit"
                 className="mt-4 rounded-full px-6 py-4 bg-[#0DAC87] hover:bg-[#0f9c7b] cursor-pointer"
                 disabled={isPending || isLoading}
@@ -151,13 +169,11 @@ const Setting = () => {
             </form>
           </Form>
         </div>
-
-
       </div>
       <UpdatePassword />
-      <NotificationPreferences/>
+      <NotificationPreferences />
     </>
-  )
-}
+  );
+};
 
-export default Setting
+export default Setting;

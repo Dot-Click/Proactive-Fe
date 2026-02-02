@@ -74,6 +74,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
     if (!tripData) return;
 
     const trip = tripData?.trip || tripData;
+    console.log("Loaded trip data for editing:", trip);
     const coord = trip.coordinator ?? (Array.isArray(trip.coordinators) && trip.coordinators.length > 0 ? trip.coordinators[0] : null);
 
     const includedIds =
@@ -155,7 +156,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
     if (step === 4) {
       valid = await methods.trigger([
         "CoordinatorName",
-        "CoordinatorRole",
+        // "CoordinatorRole", // TEMP: role field hidden
         "CoordinatorBio",
         "CoordinatorInstagram",
         "CoordinatorLinkedin",
@@ -211,7 +212,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         instaLink: data.CoordinatorInstagram || undefined,
         likedinLink: data.CoordinatorLinkedin || undefined,
         coordinators: data.CoordinatorName,
-        coordinatorRole: data.CoordinatorRole,
+        // coordinatorRole: data.CoordinatorRole, // TEMP: role field hidden
         coordinatorBio: data.CoordinatorBio,
         coordinatorInstagram: data.CoordinatorInstagram,
         coordinatorLinkedin: data.CoordinatorLinkedin,

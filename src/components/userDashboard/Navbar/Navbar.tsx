@@ -43,7 +43,6 @@ const Navbar = ({ role }: NavbarProps) => {
   const userData = user?.data?.user;
   const displayName = userData?.role === "coordinator" ? userData?.coordinatorDetails?.fullName : userData?.FirstName || "Admin";
 
-
   const Handlelogout = async () => {
     try {
       await Logoutmutation.mutateAsync()
