@@ -2,8 +2,12 @@
 // import Box from "../../../assets/box.png"
 import Adventureoppurtunitiescard from "./Adventureoppurtunitiescard"
 import box1 from "../../../../assets/box.png"
+import { UsegetTrips } from "@/hooks/gettriphook"
 
 const AdventureOppurtunities = () => {
+    const { data: trip } = UsegetTrips()
+    const tripsData = trip?.trips
+    console.log('tripsData',tripsData)
     return (
         <div className="bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
             <div className="relative flex flex-col lg:gap-8 gap-4 py-20 px-4">
@@ -17,7 +21,7 @@ const AdventureOppurtunities = () => {
                     we have the perfect experience waiting for you.</p>
             </div>
             <div className="px-4 sm:px-16 py-18 flex justify-center items-center">
-                <Adventureoppurtunitiescard />
+                <Adventureoppurtunitiescard trips={tripsData} />
             </div>
         </div>
     )

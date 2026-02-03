@@ -42,6 +42,8 @@ const ViewTripPage = () => {
 
   const trip = data?.trip ?? data;
 
+  console.log('view trip page', trip)
+
   return (
     <div>
       <MasonryLayout
@@ -60,10 +62,10 @@ const ViewTripPage = () => {
       />
       <Locationmeetingpoint trip={trip} />
       {trip.type === "wild weekend" && <SurfaceCamp />}
-      {trip.type === "wild trip" && <Daybyday />}
+      {trip.type === "wild Trip" && <Daybyday />}
       <Includeditem trip={trip} />
       <VideoSection trip={trip} />
-      <Coordinatordetail trip={trip} />
+      {trip.type === "wild Trip" && <Coordinatordetail trip={trip} />}
     </div>
   );
 };

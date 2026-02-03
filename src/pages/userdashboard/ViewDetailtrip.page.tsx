@@ -31,10 +31,10 @@ const ViewDetailTripPage = () => {
       <Locationmeetingpoint trip={trip} />
       <Tripmood />
       {trip.type === "wild weekend" && <SurfaceCamp />}
-      {trip.type === "wild trip" && <Daybyday />}
+      {trip.type === "wild Trip" && <Daybyday />}
       <Includeditem trip={trip} />
       <VideoSection trip={trip} />
-      <Coordinatordetail trip={trip} />
+      {trip.type === "wild Trip" && <Coordinatordetail trip={trip} />}
       <HowItWorks />
       <Faqs />
       <ParticipantsCards />
