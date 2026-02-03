@@ -21,7 +21,7 @@ const AdventureOppurtunities = () => {
                     we have the perfect experience waiting for you.</p>
             </div>
             <div className="px-4 sm:px-16 py-18 flex justify-center items-center">
-                <Adventureoppurtunitiescard trips={tripsData} />
+                <Adventureoppurtunitiescard />
             </div>
         </div>
     )
