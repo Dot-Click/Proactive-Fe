@@ -7,9 +7,9 @@ import location from "../../../../assets/locationwhite.png"
 import Shadowblack from "../../../../assets/blackshadow.png"
 
 const Adventureoppurtunitiescard = () => {
-    // const { data, isLoading } = UsegetTrips();
-    // const navigate = useNavigate();
-    // const trips = data?.trips ?? [];
+    const { data, isLoading } = UsegetTrips();
+    const navigate = useNavigate();
+    const trips = data?.trips ?? [];
 
     // Take only the first 3 trips for display
     const displayTrips = trips.slice(0, 3);
