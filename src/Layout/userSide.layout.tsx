@@ -13,9 +13,9 @@ const UserSidelayout = () => {
 
     return (
         <div className="flex flex-col min-h-screen w-full bg-[#FFFFFF]">
-            <div className="relative lg:h-[500px] h-[180px] shrink-0">
-                <UserSideNavbar role="UserSide"/>
-                <HeroSection/>
+            <div className="relative shrink-0">
+                <UserSideNavbar role="UserSide" />
+                <HeroSection />
             </div>
             <main className="flex-1 min-h-0">
                 <Outlet />

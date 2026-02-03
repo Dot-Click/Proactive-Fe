@@ -118,58 +118,55 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
   );
 
   const onSubmit = async (data: TripFormType) => {
-    const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("description", data.description);
-    formData.append("type", data.type);
-    formData.append("location", data.location);
-    formData.append("duration", data.duration ?? "");
-    formData.append("longDesc", data.LongDescription);
-    formData.append("groupSize", data.GroupSize);
-    formData.append("rhythm", data.rhythm);
-    formData.append("sportLvl", data.SportsLevel);
-    formData.append("bestPriceMsg", data.BestPrice);
-    formData.append("perHeadPrice", data.FinalPrice);
-    if (data.startDate)
-      formData.append("startDate", data.startDate.toISOString());
-    if (data.endDate) formData.append("endDate", data.endDate.toISOString());
-    formData.append(
-      "included",
-      JSON.stringify(data.included.map((item) => item)),
-    );
-    formData.append(
-      "notIncluded",
-      JSON.stringify(data.notIncluded.map((item) => item)),
-    );
-    if (data.coverImage) formData.append("cover_img", data.coverImage as File);
-    if (data.PromotionalVideo)
-      formData.append("promotional_video", data.PromotionalVideo as File);
-    if (data.GalleryImages?.length) {
-      data.GalleryImages.forEach((file: File) => {
-        formData.append("gallery_images", file);
-      });
-    }
-    if (data.CoordinatorPhoto)
-      formData.append("tt_img", data.CoordinatorPhoto as File);
-    // Add coordinator details to FormData
-    if (data.CoordinatorName) {
-      formData.append("coordinators", data.CoordinatorName);
-    }
-    // TEMP: Coordinator role field hidden
-    // if (data.CoordinatorRole) {
-    //   formData.append("coordinatorRole", data.CoordinatorRole);
-    // }
-    if (data.CoordinatorBio) {
-      formData.append("coordinatorBio", data.CoordinatorBio);
-    }
-    if (data.CoordinatorInstagram) {
-      formData.append("coordinatorInstagram", data.CoordinatorInstagram);
-    }
-    if (data.CoordinatorLinkedin) {
-      formData.append("coordinatorLinkedin", data.CoordinatorLinkedin);
-    }
+    try {
+      const formData = new FormData();
 
-    await mutateAsync(formData);
+      // Send all trip fields as one JSON string so backend gets real arrays (fixes "expected array, received string").
+      // Backend must parse: payload = JSON.parse(req.body.payload) and validate payload (see BACKEND_UPDATE_TRIP_FIX.md).
+      const payload = {
+        title: data.title,
+        description: data.description,
+        shortDesc: data.description?.slice(0, 255),
+        type: data.type,
+        location: data.location,
+        mapCoordinates: data.mapCoordinates || undefined,
+        startDate: data.startDate?.toISOString(),
+        endDate: data.endDate?.toISOString(),
+        duration: data.duration,
+        longDesc: data.LongDescription,
+        groupSize: data.GroupSize,
+        rhythm: data.rhythm,
+        sportLvl: data.SportsLevel,
+        included: data.included ?? [],
+        notIncluded: data.notIncluded ?? [],
+        bestPriceMsg: data.BestPrice,
+        perHeadPrice: data.FinalPrice,
+        instaLink: data.CoordinatorInstagram || undefined,
+        likedinLink: data.CoordinatorLinkedin || undefined,
+        coordinators: data.CoordinatorName,
+        // coordinatorRole: data.CoordinatorRole, // TEMP: role field hidden
+        coordinatorBio: data.CoordinatorBio,
+        coordinatorInstagram: data.CoordinatorInstagram,
+        coordinatorLinkedin: data.CoordinatorLinkedin,
+      };
+      formData.append("payload", JSON.stringify(payload));
+
+      if (data.coverImage && data.coverImage instanceof File)
+        formData.append("cover_img", data.coverImage);
+      if (data.PromotionalVideo && data.PromotionalVideo instanceof File)
+        formData.append("promotional_video", data.PromotionalVideo);
+      if (data.GalleryImages?.length) {
+        data.GalleryImages.forEach((file: File) => {
+          if (file instanceof File) formData.append("gallery_images", file);
+        });
+      }
+      if (data.CoordinatorPhoto && data.CoordinatorPhoto instanceof File)
+        formData.append("tt_img", data.CoordinatorPhoto);
+
+      await mutateAsync(formData);
+    } catch (error) {
+      console.error("Error creating trip:", error);
+    }
   };
   return (
     <>
@@ -204,9 +201,8 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
               {steps.map((label, index) => (
                 <span
                   key={index}
-                  className={`text-[12px] font-semibold transition-colors ${
-                    step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
-                  }`}
+                  className={`text-[12px] font-semibold transition-colors ${step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
+                    }`}
                 >
                   {label}
                 </span>

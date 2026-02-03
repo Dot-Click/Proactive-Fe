@@ -6,7 +6,7 @@ import box1 from "../../../../assets/box.png"
 const AdventureOppurtunities = () => {
     return (
         <div className="bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
-            <div className="relative flex flex-col lg:gap-8 gap-4 md:pt-80 sm:pt-60 pt-20 px-4">
+            <div className="relative flex flex-col lg:gap-8 gap-4 py-20 px-4">
                 <h1 className="z-10 text-center lg:text-4xl text-2xl font-bold bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">Adventure Oppurtunities</h1>
                 <img
                     src={box1}
