@@ -264,11 +264,13 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery, category }: UpcomingtripsP
                             <LoaderIcon className="animate-spin h-8 w-8 text-[#0DAC87]" />
                         </div>
                     ) : filteredTrips.length === 0 ? (
-                        <p className="text-[#666373] text-sm py-4">
-                            {allTrips.length === 0
-                                ? "No upcoming trips at the moment."
-                                : "No trips match your search or selected dates. Try a different place or pick other dates."}
-                        </p>
+                        <div className="text-center py-10">
+                            <p className="text-[#666373] text-base font-medium">
+                                {allTrips.length === 0
+                                    ? "More information coming soon."
+                                    : "No trips match your search or selected dates. Try a different place or pick other dates."}
+                            </p>
+                        </div>
                     ) : (
                         <ul className="space-y-3 max-h-80 overflow-y-auto">
                             {filteredTrips.map((trip: OpenTrip, index: number) => (

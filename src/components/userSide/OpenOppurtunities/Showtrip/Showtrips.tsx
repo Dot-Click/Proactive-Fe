@@ -44,6 +44,13 @@ const Showtrips = ({ view }: SearchbarProps) => {
                                         </div>
                                     )
                                 }
+                                {
+                                    !isLoading && (!upcomingtrip || upcomingtrip.length === 0) && (
+                                        <div className="w-full flex items-center justify-center py-20">
+                                            <p className="text-[#666373] text-lg font-medium">More information coming soon.</p>
+                                        </div>
+                                    )
+                                }
                                 <div className="flex flex-col gap-4 mt-5 overflow-x-auto h-150">
                                     {upcomingtrip?.map((trip: any, index: number) => (
                                         <div key={`${trip.id}-${index}`} className="bg-[#FFFFFF] px-4 py-4 rounded-[20px] shadow-md">
@@ -104,6 +111,20 @@ const Showtrips = ({ view }: SearchbarProps) => {
                             </span>
 
                             <div className="border-b border-[#D9D9D9] mt-[16px]" />
+                            {
+                                isLoading && (
+                                    <div className="w-full flex items-center justify-center py-10">
+                                        <LoaderIcon className="animate-spin" />
+                                    </div>
+                                )
+                            }
+                            {
+                                !isLoading && (!upcomingtrip || upcomingtrip.length === 0) && (
+                                    <div className="w-full flex items-center justify-center py-20">
+                                        <p className="text-[#666373] text-lg font-medium">More information coming soon.</p>
+                                    </div>
+                                )
+                            }
 
                             <div className="grid lg:grid-cols-3 gap-4 mt-5 overflow-x-auto h-150">
                                 {upcomingtrip?.map((trip: any, index: number) => (
