@@ -8,6 +8,7 @@ import SurfaceCamp from "@/components/Adventureoppurtunities/ViewDetailtrip/Surf
 import Tripmood from "@/components/Adventureoppurtunities/ViewDetailtrip/Tripmood"
 import VideoSection from "@/components/Adventureoppurtunities/ViewDetailtrip/VideoSection"
 import Faqs from "@/components/Adventureoppurtunities/ViewDetailtrip/Faqs"
+import HowItWorks from "@/components/Adventureoppurtunities/ViewDetailtrip/HowItWorks"
 import { useParams } from "react-router-dom"
 import { UsegetTripbyid } from "@/hooks/gettripbyidhook"
 import { LoaderIcon } from "lucide-react"
@@ -34,6 +35,7 @@ const ViewDetailTripPage = () => {
       <Includeditem trip={trip} />
       <VideoSection trip={trip} />
       <Coordinatordetail trip={trip} />
+      <HowItWorks />
       <Faqs />
       <ParticipantsCards />
     </div>
