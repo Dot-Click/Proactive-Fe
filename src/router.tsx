@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import AdminLayout from "./Layout/admin.layout";
 import DashboardPage from "./pages/admin/Dashboard.page";
 import UserManagementPage from "./pages/admin/UserManagement.page";
@@ -48,74 +49,145 @@ import CookiePolicyPage from "./pages/userSide/CookiePolicy.page";
 import VerifyEmail from "./components/login/VerifyEmail";
 import ResetPassword from "./components/login/ResetPassword";
 
-
-
 function App() {
   return (
-      <Routes>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/forgetPassword" element={<ForgetPassPage />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/forgetPassword" element={<ForgetPassPage />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+      {/* Admin Dashboard */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<DashboardPage />} />
+        <Route
+          path="/dashboard/user-management"
+          element={<UserManagementPage />}
+        />
+        <Route
+          path="/dashboard/coordinator-management"
+          element={<CoordinatorPage />}
+        />
+        <Route
+          path="/dashboard/add-new-coordinator"
+          element={<AddnewcoordinatorPage />}
+        />
+        <Route
+          path="/dashboard/edit-coordinator/:id"
+          element={<EditCoordinatorPage />}
+        />
+        <Route
+          path="/dashboard/trip-management"
+          element={<TripOppurtunitiesPage />}
+        />
+        <Route path="/dashboard/add-new-trip" element={<AddtripPage />} />
+        <Route
+          path="/dashboard/chat-management"
+          element={<ChatManagementPage />}
+        />
+        <Route
+          path="/dashboard/payment-membership"
+          element={<PaymentmembershipPage />}
+        />
+        <Route path="/dashboard/settings" element={<SettingPage />} />
+      </Route>
 
-        {/* Admin Dashboard */}
-        <Route path="/dashboard" element={<AdminLayout />}>
-          <Route index element={<DashboardPage />} />
-          <Route path="/dashboard/user-management" element={<UserManagementPage />} />
-          <Route path="/dashboard/coordinator-management" element={<CoordinatorPage />} />
-          <Route path="/dashboard/add-new-coordinator" element={<AddnewcoordinatorPage />} />
-          <Route path="/dashboard/edit-coordinator/:id" element={<EditCoordinatorPage />} />
-          <Route path="/dashboard/trip-management" element={<TripOppurtunitiesPage />} />
-          <Route path="/dashboard/add-new-trip" element={<AddtripPage />} />
-          <Route path="/dashboard/chat-management" element={<ChatManagementPage />} />
-          <Route path="/dashboard/payment-membership" element={<PaymentmembershipPage />} />
-          <Route path="/dashboard/settings" element={<SettingPage />} />
-        </Route>
+      {/* Coordinator Dashboard */}
+      <Route
+        path="/coordinator-dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["coordinator"]}>
+            <CoordinatorLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<CoordinatorDashboard />} />
+        <Route
+          path="/coordinator-dashboard/add-new-trip"
+          element={<AddCoordinatortripPage />}
+        />
+        <Route
+          path="/coordinator-dashboard/oppurtunities-management"
+          element={<OppurtunitiesManagementPage />}
+        />
+        <Route
+          path="/coordinator-dashboard/edit-trip/:id"
+          element={<EditTripPage />}
+        />
+        <Route
+          path="/coordinator-dashboard/view-trip/:id"
+          element={<ViewTripPage />}
+        />
+        <Route
+          path="/coordinator-dashboard/applicants-review"
+          element={<ApplicantsReviewPage />}
+        />
+        <Route
+          path="/coordinator-dashboard/achievements-control"
+          element={<AchievementControlPage />}
+        />
+        <Route
+          path="/coordinator-dashboard/chat-users"
+          element={<ChatUserPage />}
+        />
+        <Route
+          path="/coordinator-dashboard/settings"
+          element={<CoordinatorSettingPage />}
+        />
+      </Route>
 
-        {/* Coordinator Dashboard */}
-        <Route path="/coordinator-dashboard" element={<CoordinatorLayout />}>
-          <Route index element={<CoordinatorDashboard />} />
-          <Route path="/coordinator-dashboard/add-new-trip" element={<AddCoordinatortripPage />} />
-          <Route path="/coordinator-dashboard/oppurtunities-management" element={<OppurtunitiesManagementPage />} />
-          <Route path="/coordinator-dashboard/edit-trip/:id" element={<EditTripPage />} />
-          <Route path="/coordinator-dashboard/view-trip/:id" element={<ViewTripPage />} />
-          <Route path="/coordinator-dashboard/applicants-review" element={<ApplicantsReviewPage />} />
-          <Route path="/coordinator-dashboard/achievements-control" element={<AchievementControlPage />} />
-          <Route path="/coordinator-dashboard/chat-users" element={<ChatUserPage />} />
-          <Route path="/coordinator-dashboard/settings" element={<CoordinatorSettingPage />} />
-        </Route>
+      {/* User Dashboard */}
+      <Route
+        path="/user-dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["user"]}>
+            <Userlayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<UserdashboardPage />} />
+        <Route
+          path="/user-dashboard/adventure-oppurtunities"
+          element={<AdventureOppurtunitiesPage />}
+        />
+        <Route
+          path="/user-dashboard/viewdetail/:id"
+          element={<ViewDetailTripPage />}
+        />
+        <Route
+          path="/user-dashboard/user-settings"
+          element={<UserSettingPage />}
+        />
+      </Route>
 
-        {/* User Dashboard */}
-        <Route path="/user-dashboard" element={<Userlayout />}>
-          <Route index element={<UserdashboardPage />} />
-          <Route path="/user-dashboard/adventure-oppurtunities" element={<AdventureOppurtunitiesPage />} />
-          <Route path="/user-dashboard/viewdetail/:id" element={<ViewDetailTripPage />} />
-          <Route path="/user-dashboard/user-settings" element={<UserSettingPage />} />
-        </Route>
-
-        {/* Landing Page */}
-        <Route path="/" element={<UserSidelayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="/open-oppurtunities" element={<OpenOppurtunitiesPage />} />
-          <Route path="/what-we-do" element={<WhatWeDoPage />} />
-          <Route path="/wild-weekend" element={<WildweekendPage />} />
-          <Route path="/wild-trip" element={<WildtripPage />} />
-          <Route path="/erasmus-plus" element={<ErasmusPage />} />
-          <Route path="/internal-events" element={<InternaleventsPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/member" element={<BecomeMemberPage />} />
-          <Route path="/travel-coordinator" element={<TravelCoordinatorPage />} />
-          <Route path="/advantages" element={<BenefitPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/faq" element={<FaqPage />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="/cookie-policy" element={<CookiePolicyPage />} />
-        </Route>
-
-      </Routes>
+      {/* Landing Page */}
+      <Route path="/" element={<UserSidelayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="/open-oppurtunities" element={<OpenOppurtunitiesPage />} />
+        <Route path="/what-we-do" element={<WhatWeDoPage />} />
+        <Route path="/wild-weekend" element={<WildweekendPage />} />
+        <Route path="/wild-trip" element={<WildtripPage />} />
+        <Route path="/erasmus-plus" element={<ErasmusPage />} />
+        <Route path="/internal-events" element={<InternaleventsPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/member" element={<BecomeMemberPage />} />
+        <Route path="/travel-coordinator" element={<TravelCoordinatorPage />} />
+        <Route path="/advantages" element={<BenefitPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/faq" element={<FaqPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/cookie-policy" element={<CookiePolicyPage />} />
+      </Route>
+    </Routes>
   );
 }
 
