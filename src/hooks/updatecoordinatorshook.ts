@@ -113,7 +113,7 @@ export const useUpdateCoordinator = (id: string) => {
         }
       }
       // Use fetch to send multipart/form-data so boundary is handled automatically
-      const url = `${api.defaults.baseURL}/api/admin/coordinator/${id}`;
+      const url = `${api.defaults.baseURL}/api/coordinator/updateSettings/${id}`;
       const token = localStorage.getItem("token");
 
       const res = await fetch(url, {
