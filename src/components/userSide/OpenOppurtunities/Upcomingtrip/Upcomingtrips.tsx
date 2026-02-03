@@ -146,7 +146,7 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery, category }: UpcomingtripsP
         <div className="bg-[#F6F8FD] px-4 sm:px-16 py-8">
             <div className="flex flex-col justify-center items-center gap-2">
                 <h4 className="text-center bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold lg:text-4xl">Upcoming Wild Weekends & Trips</h4>
-                <span className="text-center text-[#221E33] text-[12px] lg:text-[14px]">Browse all our upcoming adventures at a glance. See available weekends and trips directly on the <br className="hidden lg:block"/> calendar.</span>
+                <span className="text-center text-[#221E33] text-[12px] lg:text-[14px]">Browse all our upcoming adventures at a glance. See available weekends and trips directly on the <br className="hidden lg:block" /> calendar.</span>
             </div>
 
             <div className="mt-8 flex lg:flex-row flex-col justify-center lg:items-start items-center gap-6">
@@ -180,11 +180,9 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery, category }: UpcomingtripsP
                                 classes += isMuted ? "text-[#A0A3AD]" : "text-[#221E33]";
 
                                 return (
-                                    <>
-                                        <div key={`mini-cell-${idx}`} className={classes}>
-                                            {cell.dayNumber}
-                                        </div>
-                                    </>
+                                    <div key={`mini-cell-${idx}`} className={classes}>
+                                        {cell.dayNumber}
+                                    </div>
                                 );
                             })}
                         </div>
@@ -273,9 +271,9 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery, category }: UpcomingtripsP
                         </p>
                     ) : (
                         <ul className="space-y-3 max-h-80 overflow-y-auto">
-                            {filteredTrips.map((trip: OpenTrip) => (
+                            {filteredTrips.map((trip: OpenTrip, index: number) => (
                                 <li
-                                    key={trip.id}
+                                    key={`${trip.id}-${index}`}
                                     onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)}
                                     className="flex items-center gap-3 p-3 rounded-xl border border-[#ECECF1] hover:bg-[#F6F8FD] cursor-pointer transition-colors"
                                 >

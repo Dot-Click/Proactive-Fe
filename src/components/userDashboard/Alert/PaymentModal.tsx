@@ -15,7 +15,8 @@ import PaymentSuccess from "../../../assets/SuccessPayment.png"
 import { toast } from 'sonner';
 // import { UsegetCurrentUser } from '@/hooks/getCurrentUserhook';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 const PaymentSchema = z.object({
     CardHolder: z.string().min(2, 'Card Holder Name is required'),

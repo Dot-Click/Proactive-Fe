@@ -15,18 +15,19 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { UsePayment } from "@/hooks/UsePaymenthook"
 import {
-  Elements,
-  useStripe,
-  useElements,
-  CardNumberElement,
-  CardExpiryElement,
-  CardCvcElement,
+    Elements,
+    useStripe,
+    useElements,
+    CardNumberElement,
+    CardExpiryElement,
+    CardCvcElement,
 } from '@stripe/react-stripe-js'
 import { loadStripe } from "@stripe/stripe-js"
 
 import { UsegetTripbyid } from "@/hooks/gettripbyidhook"
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 const PaymentSchema = z.object({
     CardHolder: z.string().min(2, 'Card Holder Name is required'),
@@ -59,8 +60,8 @@ const CheckoutForm = ({ onSuccess, amount }: { onSuccess: (paymentMethodId: stri
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card: cardNumber,
-            billing_details: { 
-                name: data.CardHolder 
+            billing_details: {
+                name: data.CardHolder
             },
         });
 
@@ -196,7 +197,7 @@ const PayNow = ({ tripId }: PayNowProps) => {
                 <DialogTitle className="flex justify-center py-4">
                     <img src={proactivefavicon} alt="proactivefavicon" className="h-15" />
                 </DialogTitle>
-                
+
                 <div className="bg-[#FFFFFF] rounded-[15px] px-4 py-4 mt-12 flex lg:flex-row flex-col gap-3 items-center">
                     <img src={trip?.coverImage || trip} alt="trip" className="h-20 w-22 rounded-[10px]" />
                     <div className="flex flex-col gap-2">

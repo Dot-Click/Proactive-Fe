@@ -417,7 +417,7 @@ const HeroSection = () => {
       </div>
       {/* Text */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-        <h1 className="text-xl md:text-4xl font-bold">{hero.title}</h1>
+        <div className="text-xl md:text-4xl font-bold">{hero.title}</div>
         <p className="text-xs md:text-lg lg:mt-4">{hero.subtitle}</p>
         {hero.buttons && (
           <div className="flex md:flex-row gap-4 md:mt-4 mt-2">
