@@ -47,7 +47,7 @@ const TestimonialCard = ({ item, isReview }: { item: ReviewItem | (typeof FALLBA
     const link = isReview ? (item as ReviewItem).link : undefined;
 
     const content = (
-        <div className="w-100 h-full shadow-md flex flex-col gap-6 bg-[#F9F9F9] border border-[#E0D9D9] rounded-[20px] px-10 py-8">
+        <div className="w-full h-full shadow-md flex flex-col gap-6 bg-[#F9F9F9] border border-[#E0D9D9] rounded-[20px] px-10 py-8">
             <span className="text-[#514D4D] font-semibold text-[14px]">{description}</span>
             <img src={bottomimg} alt="" />
             <div className="flex items-center gap-2">
@@ -70,7 +70,7 @@ const TestimonialCard = ({ item, isReview }: { item: ReviewItem | (typeof FALLBA
 
     if (link) {
         return (
-            <a href={link} target="_blank" rel="noopener noreferrer" className="cursor-pointer block">
+            <a href={link} target="_blank" rel="noopener noreferrer" className="cursor-pointer block h-full">
                 {content}
             </a>
         );
@@ -84,15 +84,16 @@ const Testimonial = () => {
     const isReview = !!reviews?.length && !isLoading;
 
     return (
-        <div className="py-4">
-            <Marquee direction="left" pauseOnHover speed={50}>
-                <div className="grid grid-cols-3 gap-3 cursor-pointer">
+        <div className="py-12 px-4 sm:px-16">
+            <Marquee direction="left" pauseOnHover speed={50} gradient={false}>
+                <div className="flex gap-6 lg:gap-10 py-4 px-4 cursor-pointer">
                     {cards.map((item, index) => (
-                        <TestimonialCard
-                            key={isReview ? (item as ReviewItem).link + index : index}
-                            item={item as ReviewItem & (typeof FALLBACK_CARDS)[0]}
-                            isReview={isReview}
-                        />
+                        <div key={isReview ? (item as ReviewItem).link + index : index} className="w-[350px] sm:w-[450px] flex-shrink-0">
+                            <TestimonialCard
+                                item={item as ReviewItem & (typeof FALLBACK_CARDS)[0]}
+                                isReview={isReview}
+                            />
+                        </div>
                     ))}
                 </div>
             </Marquee>

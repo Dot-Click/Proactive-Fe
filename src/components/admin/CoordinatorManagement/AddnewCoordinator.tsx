@@ -120,13 +120,16 @@ const AddnewCoordinator = () => {
       form.setValue("profilePicture", file);
     }
   };
-  const CreateCoordinatorMutation:any = useCreateCoordinator();
+  const CreateCoordinatorMutation: any = useCreateCoordinator();
   const onSubmit = async (val: z.infer<typeof formSchema>) => {
     const formData = new FormData();
-    
-    // Create coordinatorDetails object as required by API
-    const coordinatorDetails = {
+
+    // Send all coordinator fields as one JSON string so backend gets real arrays (fixes "expected array, received string").
+    // Matches the approach used for trips.
+    const payload = {
       fullName: val.fullName,
+      email: val.email,
+      password: val.password,
       phoneNumber: val.phoneNumber,
       bio: val.bio,
       certificateLvl: val.certificateLvl,
@@ -135,29 +138,18 @@ const AddnewCoordinator = () => {
       accessLvl: val.accessLvl,
       specialities: val.specialities,
       languages: val.languages,
-      ...(val.location && { location: val.location })
+      location: val.location || undefined
     };
-    
-    formData.append("coordinatorDetails", JSON.stringify(coordinatorDetails));
-    formData.append("email", val.email);
-    formData.append("password", val.password);
-    
+
+    formData.append("payload", JSON.stringify(payload));
+
     // Only append profile picture if it exists
     if (profileFile) {
       formData.append("prof_pic", profileFile);
     }
 
-    // Also append individual fields — some backends validate multipart fields directly
-    formData.append("fullName", val.fullName);
-    formData.append("phoneNumber", val.phoneNumber);
-    formData.append("bio", val.bio);
-    formData.append("certificateLvl", val.certificateLvl);
-    formData.append("yearsOfExperience", String(val.yearsOfExperience));
-    formData.append("type", val.type);
-    formData.append("accessLvl", val.accessLvl);
-    if (val.location) formData.append("location", val.location);
-    formData.append("specialities", JSON.stringify(val.specialities));
-    formData.append("languages", JSON.stringify(val.languages));
+    // Individual fields are no longer appended to avoid "expected array, received string" errors on arrays
+    // and to keep FormData clean and consistent.
 
     // Debug: preview form data values (non-file parts) so we can see what's sent
     try {

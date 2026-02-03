@@ -129,6 +129,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         shortDesc: data.description?.slice(0, 255),
         type: data.type,
         location: data.location,
+        locationId: data.locationId,
         mapCoordinates: data.mapCoordinates || undefined,
         startDate: data.startDate?.toISOString(),
         endDate: data.endDate?.toISOString(),

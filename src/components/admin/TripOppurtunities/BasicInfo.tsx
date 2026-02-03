@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { UseGetLocations, type Location } from "@/hooks/UseGetLocationhook";
 const BasicInfo = () => {
   const { control, watch, setValue } = useFormContext<TripFormType>();
   const [openStart, setOpenStart] = useState(false);
@@ -34,6 +35,7 @@ const BasicInfo = () => {
   const [endDate, setendDate] = useState<Date | undefined>(undefined);
   const [profile, setProfile] = useState("");
   const { data, isLoading, isError } = UsegetCategory();
+  const { data: locationsData, isLoading: isLocationsLoading } = UseGetLocations();
   const startDateCal = watch("startDate");
   const endDateCal = watch("endDate");
   const coverImageValue = watch("coverImage");
@@ -187,9 +189,8 @@ const BasicInfo = () => {
                         className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
                       >
                         <div
-                          className={`${
-                            profile ? "py-0" : "py-14"
-                          } flex flex-col items-center`}
+                          className={`${profile ? "py-0" : "py-14"
+                            } flex flex-col items-center`}
                         >
                           {profile ? (
                             <img src={profile} alt="profile" />
@@ -212,7 +213,7 @@ const BasicInfo = () => {
             />
             <FormField
               control={control}
-              name="location"
+              name="locationId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold mt-6">
@@ -220,27 +221,29 @@ const BasicInfo = () => {
                   </FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(val) => {
+                        field.onChange(val);
+                        // Find the selected location name and set it in "location" field
+                        const selectedLocation = (locationsData as Location[])?.find(loc => loc.id === val);
+                        if (selectedLocation) {
+                          setValue("location", selectedLocation.name, { shouldValidate: true });
+                        }
+                      }}
                       value={field.value ?? ""}
                     >
                       <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                        <SelectValue placeholder="e.g, Barcelona,Spain" />
+                        <SelectValue placeholder="e.g, Barcelona, Spain" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Hunza Valley">
-                          Hunza Valley
-                        </SelectItem>
-                        <SelectItem value="Skardu">Skardu</SelectItem>
-                        <SelectItem value="Fairy Meadows">
-                          Fairy Meadows
-                        </SelectItem>
-                        <SelectItem value="Swat Valley">Swat Valley</SelectItem>
-                        <SelectItem value="Naran Kaghan">
-                          Naran Kaghan
-                        </SelectItem>
-                        <SelectItem value="Islamabad">Islamabad</SelectItem>
-                        <SelectItem value="Karachi">Karachi</SelectItem>
-                        <SelectItem value="Lahore">Lahore</SelectItem>
+                        {isLocationsLoading && <p className="px-2 py-1">Loading locations...</p>}
+                        {(!locationsData || locationsData.length === 0) && !isLocationsLoading && (
+                          <p className="px-2 py-1 text-sm text-muted-foreground">No locations found</p>
+                        )}
+                        {(locationsData as Location[])?.map((loc) => (
+                          <SelectItem key={loc.id} value={loc.id}>
+                            {loc.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>

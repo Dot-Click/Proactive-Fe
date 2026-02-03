@@ -227,9 +227,16 @@ const PayNow = ({ tripId }: PayNowProps) => {
                 <div className="px-2 py-5">
                     <div>
                         <span className="text-[#000000] font-bold text-lg mb-6 block">Payment Info</span>
-                        <Elements stripe={stripePromise}>
-                            <CheckoutForm onSuccess={handlePaymentSuccess} amount={trip?.perHeadPrice || 950} />
-                        </Elements>
+                        {stripePromise ? (
+                            <Elements stripe={stripePromise}>
+                                <CheckoutForm onSuccess={handlePaymentSuccess} amount={trip?.perHeadPrice || 950} />
+                            </Elements>
+                        ) : (
+                            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-800 text-sm">
+                                <p className="font-semibold">Stripe is not configured.</p>
+                                <p>Please add VITE_STRIPE_PUBLISHABLE_KEY to your environment variables to enable payments.</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </DialogHeader>

@@ -21,7 +21,7 @@ import { LoaderIcon } from "lucide-react";
 const EditTrip = ({ backUrl }: { backUrl: string }) => {
   const { id } = useParams<{ id: string }>();
   const { data: tripData, isLoading, isError } = UsegetTripbyid(id || "");
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const methods = useForm<TripFormType>({
     resolver: zodResolver(tripSchema),
@@ -95,6 +95,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       description: trip.description ?? "",
       coverImage: (trip.coverImage && trip.coverImage !== "" ? trip.coverImage : null) as any,
       location: trip.location ?? "",
+      locationId: trip.locationId ?? "",
       duration: trip.duration ?? "",
       mapCoordinates: trip.mapCoordinates && trip.mapCoordinates !== "" ? trip.mapCoordinates : "",
       startDate: trip.startDate ? (() => { const d = new Date(trip.startDate); return !isNaN(d.getTime()) ? d : undefined; })() : undefined,
@@ -197,6 +198,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         shortDesc: data.description?.slice(0, 255),
         type: data.type,
         location: data.location,
+        locationId: data.locationId,
         mapCoordinates: data.mapCoordinates || undefined,
         startDate: data.startDate?.toISOString(),
         endDate: data.endDate?.toISOString(),
@@ -292,9 +294,8 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
               {steps.map((label, index) => (
                 <span
                   key={index}
-                  className={`text-[12px] font-semibold transition-colors ${
-                    step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
-                  }`}
+                  className={`text-[12px] font-semibold transition-colors ${step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
+                    }`}
                 >
                   {label}
                 </span>
