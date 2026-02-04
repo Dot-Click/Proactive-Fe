@@ -21,7 +21,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
     resolver: zodResolver(tripSchema),
     shouldUnregister: false,
     defaultValues: {
-      type: "",
+      categoryId: "",
       // Days itinerary (shown when trip type is selected)
       daysItinerary: [],
       title: "",
@@ -68,7 +68,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
 
     if (step === 1) {
       valid = await methods.trigger([
-        "type",
+        "categoryId",
         "title",
         "description",
         "location",
@@ -138,7 +138,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         title: data.title,
         description: data.description,
         shortDesc: data.description?.slice(0, 255),
-        type: data.type,
+        categoryId: data.categoryId,
         location: data.location,
         locationId: data.locationId,
         mapCoordinates: data.mapCoordinates || undefined,

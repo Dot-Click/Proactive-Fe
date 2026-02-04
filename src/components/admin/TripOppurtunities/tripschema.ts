@@ -68,7 +68,7 @@ export type DayItineraryType = z.infer<typeof dayItinerarySchema>;
 export const tripSchema = z
   .object({
     // Step 1 – Basic Info
-    type: z.string().min(1, "Trip type is required"),
+    categoryId: z.string().min(1, "Category is required"),
     // Days itinerary - array of days with description and image (shown when trip type is selected)
     daysItinerary: z.array(dayItinerarySchema).optional(),
     title: z.string().min(3, "Trip title must be at least 3 characters"),

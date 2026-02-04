@@ -1,9 +1,14 @@
 import { useFormContext } from "react-hook-form";
 import type { TripFormType } from "./tripschema";
+import { UsegetCategory } from "@/hooks/getCategoryhook";
 
 const Reviewsave = () => {
   const { getValues } = useFormContext<TripFormType>();
   const values = getValues();
+  const { data } = UsegetCategory();
+  const categoryName =
+    data?.categories?.find((c: any) => c.id === values.categoryId)?.name ??
+    values.categoryId;
   return (
     <div className="bg-white px-6 py-6">
       <div className="flex flex-col">
@@ -18,8 +23,8 @@ const Reviewsave = () => {
         <div className="flex flex-col gap-3">
           <h1 className="text-[#221E33] font-bold">Basic Information</h1>
           <div className="flex gap-2">
-            <span className="text-[#221E33] font-bold">Type:</span>
-            <span>{values.type}</span>
+            <span className="text-[#221E33] font-bold">Category:</span>
+            <span>{categoryName}</span>
           </div>
           <div className="flex gap-2">
             <span className="text-[#221E33] font-bold">Title:</span>

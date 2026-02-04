@@ -61,7 +61,7 @@ const BasicInfo = () => {
   const startDateCal = watch("startDate");
   const endDateCal = watch("endDate");
   const coverImageValue = watch("coverImage");
-  const selectedTripType = watch("type");
+  const selectedCategoryId = watch("categoryId");
   const daysItineraryWatch = watch("daysItinerary");
 
   // Close custom dropdown when clicking outside
@@ -215,14 +215,14 @@ const BasicInfo = () => {
         <span className="font-semibold text-[20px]">Basic Information</span>
         <div className="mt-10">
           <div className="grid md:grid-cols-2 gap-4 pb-6">
-            {/* Trip Type - Shadcn (Kept as requested) */}
+            {/* Category - Shadcn */}
             <FormField
               control={control}
-              name="type"
+              name="categoryId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#242E2F] font-semibold">
-                    Trip Type
+                    Category
                   </FormLabel>
                   <FormControl>
                     <Select
@@ -230,7 +230,7 @@ const BasicInfo = () => {
                       value={field.value ?? ""}
                     >
                       <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                        <SelectValue placeholder="Select Category" />
+                        <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
                         {isLoading && <p className="p-2">Loading...</p>}
@@ -240,7 +240,7 @@ const BasicInfo = () => {
                           </p>
                         )}
                         {data?.categories.map((category: any) => (
-                          <SelectItem key={category.id} value={category.name}>
+                          <SelectItem key={category.id} value={category.id}>
                             {category.name}
                           </SelectItem>
                         ))}
@@ -273,8 +273,8 @@ const BasicInfo = () => {
               )}
             />
 
-            {/* Days Itinerary Section - Shown when trip type is selected */}
-            {selectedTripType && (
+            {/* Days Itinerary Section - Shown when category is selected */}
+            {selectedCategoryId && (
               <>
                 {/* Days Itinerary Section */}
                 <div className="md:col-span-2 mt-6">
