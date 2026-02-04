@@ -1,98 +1,3 @@
- 
-// import api from "@/config/axios";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import { toast } from "sonner";
-
-// interface UpdateCoordinatorData {
-//   fullName?: string;
-//   phoneNumber?: string;
-//   bio?: string;
-//   specialities?: string[];
-//   languages?: string[];
-//   certificateLvl?: string;
-//   yearsOfExperience?: number;
-//   type?: string;
-//   accessLvl?: string;
-//   location?: string;
-//   password?: string;
-// }
-
-// const updateCoordinator = async (id: string, data: UpdateCoordinatorData | FormData) => {
-//   const isFormData = data instanceof FormData;
-//   const config = {
-//     headers: isFormData ? { "Content-Type": "multipart/form-data" } : {}
-//   };
-  
-//   const response = await api.patch(`/api/coordinator/updateSettings/${id}`, data, config);
-//   return response.data;
-// };
-
-// export const useUpdateCoordinator = (id: string) => {
-//   const queryClient = useQueryClient();
-  
-//   return useMutation({
-//     mutationKey: ["update-coordinator", id],
-//     mutationFn: (data: UpdateCoordinatorData | FormData) => updateCoordinator(id, data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["coordinator", id] });
-//       queryClient.invalidateQueries({ queryKey: ["coordinators"] });
-//       toast.success("Coordinator updated successfully");
-//     },
-//     onError: (error: any) => {
-//       const errorMessage = error?.response?.data?.message || "Failed to update coordinator";
-//       toast.error(errorMessage);
-//     },
-//   });
-// };
-
-
- 
-// import api from "@/config/axios";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import { toast } from "sonner";
-
-// interface UpdateCoordinatorData {
-//   fullName?: string;
-//   phoneNumber?: string;
-//   bio?: string;
-//   specialities?: string[];
-//   languages?: string[];
-//   certificateLvl?: string;
-//   yearsOfExperience?: number;
-//   type?: string;
-//   accessLvl?: string;
-//   location?: string;
-//   password?: string;
-// }
-
-// const updateCoordinator = async (id: string, data: UpdateCoordinatorData | FormData) => {
-//   const isFormData = data instanceof FormData;
-//   const config = {
-//     headers: isFormData ? { "Content-Type": "multipart/form-data" } : {}
-//   };
-  
-//   const response = await api.patch(`/api/coordinator/updateSettings/${id}`, data, config);
-//   return response.data;
-// };
-
-// export const useUpdateCoordinator = (id: string) => {
-//   const queryClient = useQueryClient();
-  
-//   return useMutation({
-//     mutationKey: ["update-coordinator", id],
-//     mutationFn: (data: UpdateCoordinatorData | FormData) => updateCoordinator(id, data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["coordinator", id] });
-//       queryClient.invalidateQueries({ queryKey: ["coordinators"] });
-//       toast.success("Coordinator updated successfully");
-//     },
-//     onError: (error: any) => {
-//       const errorMessage = error?.response?.data?.message || "Failed to update coordinator";
-//       toast.error(errorMessage);
-//     },
-//   });
-// };
-
 import api from "@/config/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -112,29 +17,20 @@ export const useUpdateCoordinator = (id: string) => {
           console.log(`${key}:`, value);
         }
       }
-      // Use fetch to send multipart/form-data so boundary is handled automatically
-      const url = `${api.defaults.baseURL}/api/coordinator/updateSettings/${id}`;
-      const token = localStorage.getItem("token");
 
-      const res = await fetch(url, {
-        method: "PATCH",
-        body: formData,
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        credentials: "include",
+      // Use axios instead of fetch for consistency with your api config
+      // Axios automatically handles Content-Type for FormData with multipart/form-data
+      const res = await api.patch(`/api/coordinator/updateSettings/${id}`, formData, {
+        headers: {
+          // Don't set Content-Type manually - let axios set it with boundary
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
-      const payload = await res.json().catch(() => null);
-      if (!res.ok) {
-        const err: any = new Error("Update coordinator failed");
-        err.response = { status: res.status, data: payload };
-        // eslint-disable-next-line no-console
-        console.error("Update coordinator API error:", err.response || err);
-        throw err;
-      }
-
-      return payload;
+      return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("=== UPDATE SUCCESS ===", data);
       queryClient.invalidateQueries({ queryKey: ["coordinator", id] });
       queryClient.invalidateQueries({ queryKey: ["coordinators"] });
       toast.success("Coordinator updated successfully");
@@ -146,6 +42,7 @@ export const useUpdateCoordinator = (id: string) => {
       console.error("Error fields:", error?.response?.data?.errors);
       
       const errorMessage = error?.response?.data?.message 
+        || error?.message
         || "Failed to update coordinator";
       toast.error(errorMessage);
     },
