@@ -1,7 +1,10 @@
 import { Form } from "@/components/ui/form";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { tripSchema, type TripFormType } from "@/components/admin/TripOppurtunities/tripschema";
+import {
+  tripSchema,
+  type TripFormType,
+} from "@/components/admin/TripOppurtunities/tripschema";
 import { useState, useEffect } from "react";
 import BasicInfo from "@/components/admin/TripOppurtunities/BasicInfo";
 import TripDetail from "@/components/admin/TripOppurtunities/Tripdetail";
@@ -28,10 +31,13 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
     shouldUnregister: false,
     defaultValues: {
       type: "",
+      // Days itinerary (shown when trip type is selected)
+      daysItinerary: [],
       title: "",
       description: "",
       coverImage: null,
       location: "",
+      locationId: "",
       duration: "",
       mapCoordinates: "",
       startDate: undefined,
@@ -75,31 +81,98 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
 
     const trip = tripData?.trip || tripData;
     console.log("Loaded trip data for editing:", trip);
-    const coord = trip.coordinator ?? (Array.isArray(trip.coordinators) && trip.coordinators.length > 0 ? trip.coordinators[0] : null);
+    const coord =
+      trip.coordinator ??
+      (Array.isArray(trip.coordinators) && trip.coordinators.length > 0
+        ? trip.coordinators[0]
+        : null);
 
     const includedIds =
       trip.included != null && Array.isArray(trip.included)
-        ? trip.included.map((item: any) => (typeof item === "string" ? item : item?.title ?? item?.id ?? "")).filter(Boolean)
+        ? trip.included
+            .map((item: any) =>
+              typeof item === "string" ? item : item?.title ?? item?.id ?? ""
+            )
+            .filter(Boolean)
         : [];
     const notIncludedIds =
       trip.notIncluded != null && Array.isArray(trip.notIncluded)
-        ? trip.notIncluded.map((item: any) => (typeof item === "string" ? item : item?.title ?? item?.id ?? "")).filter(Boolean)
+        ? trip.notIncluded
+            .map((item: any) =>
+              typeof item === "string" ? item : item?.title ?? item?.id ?? ""
+            )
+            .filter(Boolean)
         : [];
 
-    const coordinatorId = coord ? (coord.id ?? coord._id ?? coord.userId) : "";
-    const coordinatorName = coordinatorId || (coord?.fullName ?? coord?.CoordinatorName ?? "");
+    const coordinatorId = coord ? coord.id ?? coord._id ?? coord.userId : "";
+    const coordinatorName =
+      coordinatorId || (coord?.fullName ?? coord?.CoordinatorName ?? "");
+
+    // Map daysItenary (database column name) to daysItinerary (form field name)
+    const daysItineraryData = (() => {
+      // Handle different possible structures of daysItenary from backend
+      const raw = trip.daysItenary || trip.daysItinerary;
+      if (!raw) return [];
+
+      // If it's an array, map it directly
+      if (Array.isArray(raw)) {
+        return raw.map((day: any, index: number) => ({
+          day: day.day ?? index + 1,
+          description: day.description ?? "",
+          image: day.image ?? day.img ?? null,
+          imagePreview: day.image ?? day.img ?? undefined,
+        }));
+      }
+
+      // If it's an object with day keys (day1, day2, etc.), convert to array
+      if (typeof raw === "object") {
+        const days: any[] = [];
+        Object.keys(raw).forEach((key) => {
+          if (key.startsWith("day") && key !== "days") {
+            const dayNum = parseInt(key.replace("day", ""));
+            if (!isNaN(dayNum)) {
+              days[dayNum - 1] = {
+                day: dayNum,
+                description: raw[key]?.description ?? "",
+                image: raw[key]?.img ?? raw[key]?.image ?? null,
+                imagePreview: raw[key]?.img ?? raw[key]?.image ?? undefined,
+              };
+            }
+          }
+        });
+        return days.filter(Boolean);
+      }
+
+      return [];
+    })();
 
     const values: Partial<TripFormType> = {
       type: trip.type ?? "",
+      daysItinerary: daysItineraryData,
       title: trip.title ?? "",
       description: trip.description ?? "",
-      coverImage: (trip.coverImage && trip.coverImage !== "" ? trip.coverImage : null) as any,
+      coverImage: (trip.coverImage && trip.coverImage !== ""
+        ? trip.coverImage
+        : null) as any,
       location: trip.location ?? "",
       locationId: trip.locationId ?? "",
       duration: trip.duration ?? "",
-      mapCoordinates: trip.mapCoordinates && trip.mapCoordinates !== "" ? trip.mapCoordinates : "",
-      startDate: trip.startDate ? (() => { const d = new Date(trip.startDate); return !isNaN(d.getTime()) ? d : undefined; })() : undefined,
-      endDate: trip.endDate ? (() => { const d = new Date(trip.endDate); return !isNaN(d.getTime()) ? d : undefined; })() : undefined,
+      mapCoordinates:
+        trip.mapCoordinates && trip.mapCoordinates !== ""
+          ? trip.mapCoordinates
+          : "",
+      startDate: trip.startDate
+        ? (() => {
+            const d = new Date(trip.startDate);
+            return !isNaN(d.getTime()) ? d : undefined;
+          })()
+        : undefined,
+      endDate: trip.endDate
+        ? (() => {
+            const d = new Date(trip.endDate);
+            return !isNaN(d.getTime()) ? d : undefined;
+          })()
+        : undefined,
       LongDescription: trip.longDesc ?? "",
       GroupSize: trip.groupSize != null ? String(trip.groupSize) : "",
       rhythm: trip.rhythm ?? "",
@@ -109,12 +182,25 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       CoordinatorName: coordinatorName || "",
       CoordinatorRole: coord?.CoordinatorRole ?? coord?.role ?? "",
       CoordinatorBio: coord?.CoordinatorBio ?? coord?.bio ?? "",
-      CoordinatorInstagram: trip.instaLink && trip.instaLink !== "" ? trip.instaLink : (coord?.instagram ?? ""),
-      CoordinatorLinkedin: trip.likedinLink && trip.likedinLink !== "" ? trip.likedinLink : (coord?.linkedin ?? ""),
-      CoordinatorPhoto: (trip.weekendTt && trip.weekendTt !== "" ? trip.weekendTt : coord?.CoordinatorPhoto ?? coord?.profilePicture ?? null) as any,
-      PromotionalVideo: (trip.promotionalVideo && trip.promotionalVideo !== "" ? trip.promotionalVideo : null) as any,
+      CoordinatorInstagram:
+        trip.instaLink && trip.instaLink !== ""
+          ? trip.instaLink
+          : coord?.instagram ?? "",
+      CoordinatorLinkedin:
+        trip.likedinLink && trip.likedinLink !== ""
+          ? trip.likedinLink
+          : coord?.linkedin ?? "",
+      CoordinatorPhoto: (trip.weekendTt && trip.weekendTt !== ""
+        ? trip.weekendTt
+        : coord?.CoordinatorPhoto ?? coord?.profilePicture ?? null) as any,
+      PromotionalVideo: (trip.promotionalVideo && trip.promotionalVideo !== ""
+        ? trip.promotionalVideo
+        : null) as any,
       GalleryImages: (() => {
-        const raw = trip.galleryImages && Array.isArray(trip.galleryImages) ? trip.galleryImages : [];
+        const raw =
+          trip.galleryImages && Array.isArray(trip.galleryImages)
+            ? trip.galleryImages
+            : [];
         const padded = [...raw];
         while (padded.length < 8) padded.push(undefined as any);
         return padded.slice(0, 8) as any;
@@ -190,6 +276,17 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
     try {
       const formData = new FormData();
 
+      // Build daysItinerary data (without image files - those are sent separately)
+      // Keep existing image URLs for days that don't have new file uploads
+      const daysItinerary =
+        data.daysItinerary?.map((day, index) => ({
+          day: index + 1,
+          description: day.description || "",
+          // Keep existing image URL if no new file is being uploaded
+          image:
+            day.image && typeof day.image === "string" ? day.image : undefined,
+        })) || [];
+
       // Send all trip fields as one JSON string so backend gets real arrays (fixes "expected array, received string").
       // Backend must parse: payload = JSON.parse(req.body.payload) and validate payload (see BACKEND_UPDATE_TRIP_FIX.md).
       const payload = {
@@ -218,17 +315,33 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         coordinatorBio: data.CoordinatorBio,
         coordinatorInstagram: data.CoordinatorInstagram,
         coordinatorLinkedin: data.CoordinatorLinkedin,
+        // Days itinerary data
+        daysItinerary: daysItinerary,
       };
       formData.append("payload", JSON.stringify(payload));
 
-      if (data.coverImage && data.coverImage instanceof File) formData.append("cover_img", data.coverImage);
-      if (data.PromotionalVideo && data.PromotionalVideo instanceof File) formData.append("promotional_video", data.PromotionalVideo);
+      if (data.coverImage && data.coverImage instanceof File)
+        formData.append("cover_img", data.coverImage);
+      if (data.PromotionalVideo && data.PromotionalVideo instanceof File)
+        formData.append("promotional_video", data.PromotionalVideo);
       if (data.GalleryImages?.length) {
         data.GalleryImages.forEach((file: File) => {
           if (file instanceof File) formData.append("gallery_images", file);
         });
       }
-      if (data.CoordinatorPhoto && data.CoordinatorPhoto instanceof File) formData.append("tt_img", data.CoordinatorPhoto);
+      if (data.CoordinatorPhoto && data.CoordinatorPhoto instanceof File)
+        formData.append("tt_img", data.CoordinatorPhoto);
+
+      // Append day images if provided (using indexed field names for backend processing)
+      if (data.daysItinerary?.length) {
+        data.daysItinerary.forEach((day, index) => {
+          if (day.image && day.image instanceof File) {
+            formData.append("day_images", day.image);
+            // Also append the index to help backend map images to days
+            formData.append("day_image_indices", index.toString());
+          }
+        });
+      }
 
       await mutateAsync({ id, formData });
       navigate(backUrl || "/coordinator-dashboard/oppurtunities-management");
@@ -251,7 +364,11 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         <div className="text-center">
           <p className="text-red-600">Error loading trip data</p>
           <Button
-            onClick={() => navigate(backUrl || "/coordinator-dashboard/oppurtunities-management")}
+            onClick={() =>
+              navigate(
+                backUrl || "/coordinator-dashboard/oppurtunities-management"
+              )
+            }
             className="mt-4"
           >
             Go Back
@@ -267,7 +384,13 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         <div className="flex flex-col gap-4">
           <div className="flex gap-2 items-center">
             <Button
-              onClick={() => navigate(backUrl ? backUrl : "/coordinator-dashboard/oppurtunities-management")}
+              onClick={() =>
+                navigate(
+                  backUrl
+                    ? backUrl
+                    : "/coordinator-dashboard/oppurtunities-management"
+                )
+              }
               className="text-[#000000] font-bold bg-[#FAFAFA] hover:bg-[#ece7e7] cursor-pointer"
             >
               <img src={arrowBack} alt="arrowBack" className="h-4" />
@@ -288,14 +411,17 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       <div className="bg-white">
         <div className="px-8 py-6">
           <div className="flex flex-col gap-2">
-            <span className="font-semibold">Step {step} of {totalStep}</span>
+            <span className="font-semibold">
+              Step {step} of {totalStep}
+            </span>
             <Progress value={(step / totalStep) * 100} />
             <div className="flex flex-wrap md:justify-between gap-4 mt-2">
               {steps.map((label, index) => (
                 <span
                   key={index}
-                  className={`text-[12px] font-semibold transition-colors ${step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
-                    }`}
+                  className={`text-[12px] font-semibold transition-colors ${
+                    step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
+                  }`}
                 >
                   {label}
                 </span>
@@ -332,7 +458,11 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
                   step === totalStep ? methods.handleSubmit(onSubmit) : next
                 }
                 disabled={isPending}
-                className={`${step === totalStep ? "bg-[#0DAC87] hover:bg-[#0d9e7c]" : "bg-[#000000]"} cursor-pointer rounded-full px-12 py-5 mx-6 my-6 w-full md:w-auto`}
+                className={`${
+                  step === totalStep
+                    ? "bg-[#0DAC87] hover:bg-[#0d9e7c]"
+                    : "bg-[#000000]"
+                } cursor-pointer rounded-full px-12 py-5 mx-6 my-6 w-full md:w-auto`}
               >
                 {step === totalStep
                   ? isPending

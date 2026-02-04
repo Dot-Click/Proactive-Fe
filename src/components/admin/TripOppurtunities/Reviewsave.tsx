@@ -7,12 +7,16 @@ const Reviewsave = () => {
   return (
     <div className="bg-white px-6 py-6">
       <div className="flex flex-col">
-        <span className="text-[#221E33] font-semibold text-[20px]">Review Your Trip</span>
-        <span className="text-[#221E33] font-normal text-[14px]">Check all details before publishing. You can always edit later</span>
+        <span className="text-[#221E33] font-semibold text-[20px]">
+          Review Your Trip
+        </span>
+        <span className="text-[#221E33] font-normal text-[14px]">
+          Check all details before publishing. You can always edit later
+        </span>
       </div>
       <div className="flex flex-col md:flex-row flex-wrap md:gap-18 gap-6 mt-6">
         <div className="flex flex-col gap-3">
-            <h1 className="text-[#221E33] font-bold">Basic Information</h1>
+          <h1 className="text-[#221E33] font-bold">Basic Information</h1>
           <div className="flex gap-2">
             <span className="text-[#221E33] font-bold">Type:</span>
             <span>{values.type}</span>
@@ -36,7 +40,9 @@ const Reviewsave = () => {
         </div>
 
         <div className="flex flex-col gap-3">
-          <h1 className="text-[#221E33] font-bold">Trip Details: {values.description}</h1>
+          <h1 className="text-[#221E33] font-bold">
+            Trip Details: {values.description}
+          </h1>
           <div className="flex gap-2">
             <span className="text-[#221E33] font-bold">Group Size:</span>
             <span>{values.GroupSize}</span>
@@ -60,7 +66,6 @@ const Reviewsave = () => {
         </div>
       </div>
     </div>
-  )
-}
-
-export default Reviewsave
+  );
+};
+export default Reviewsave;

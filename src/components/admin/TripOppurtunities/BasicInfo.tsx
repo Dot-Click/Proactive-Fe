@@ -1,4 +1,4 @@
-import { useFormContext, Controller } from "react-hook-form";
+import { useFormContext, Controller, useFieldArray } from "react-hook-form";
 import type { TripFormType } from "./tripschema";
 import {
   FormControl,
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState, useRef } from "react"; // Added useRef
+import { useEffect, useState, useRef } from "react";
 import { UsegetCategory } from "@/hooks/getCategoryhook";
 import { UseGetLocations } from "@/hooks/UseGetLocationhook";
 import type { Location } from "@/hooks/UseGetLocationhook";
@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Upload, ChevronDown } from "lucide-react"; // Added ChevronDown
+import { Upload, ChevronDown, Plus, Trash2 } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -37,6 +37,19 @@ const BasicInfo = () => {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setendDate] = useState<Date | undefined>(undefined);
   const [profile, setProfile] = useState("");
+  const [dayImagePreviews, setDayImagePreviews] = useState<
+    Record<number, string>
+  >({});
+
+  // Days itinerary field array
+  const {
+    fields: daysFields,
+    append: appendDay,
+    remove: removeDay,
+  } = useFieldArray({
+    control,
+    name: "daysItinerary",
+  });
 
   // Custom Dropdown State
   const [isOpenLocation, setIsOpenLocation] = useState(false);
@@ -48,6 +61,8 @@ const BasicInfo = () => {
   const startDateCal = watch("startDate");
   const endDateCal = watch("endDate");
   const coverImageValue = watch("coverImage");
+  const selectedTripType = watch("type");
+  const daysItineraryWatch = watch("daysItinerary");
 
   // Close custom dropdown when clicking outside
   useEffect(() => {
@@ -99,6 +114,35 @@ const BasicInfo = () => {
     }
   }, [coverImageValue]);
 
+  // Initialize day image previews when editing (when daysItinerary has existing image URLs)
+  useEffect(() => {
+    if (daysItineraryWatch && Array.isArray(daysItineraryWatch)) {
+      const previews: Record<number, string> = {};
+      daysItineraryWatch.forEach((day, index) => {
+        // Check for existing image URL (string) or imagePreview
+        const existingImage = day.image || day.imagePreview;
+        if (existingImage && typeof existingImage === "string") {
+          previews[index] = existingImage;
+        }
+      });
+      // Only update if we have previews to set and they're different
+      if (Object.keys(previews).length > 0) {
+        setDayImagePreviews((prev) => {
+          // Merge with existing previews (local file previews take precedence)
+          const merged = { ...previews };
+          Object.keys(prev).forEach((key) => {
+            const idx = parseInt(key);
+            // Keep local blob URLs (from file uploads) over remote URLs
+            if (prev[idx]?.startsWith("blob:")) {
+              merged[idx] = prev[idx];
+            }
+          });
+          return merged;
+        });
+      }
+    }
+  }, [daysItineraryWatch]);
+
   const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) {
@@ -109,6 +153,60 @@ const BasicInfo = () => {
     const url = URL.createObjectURL(file);
     setProfile(url);
     setValue("coverImage", file, { shouldValidate: true });
+  };
+
+  // Handle day image upload
+  const handleDayImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      setDayImagePreviews((prev) => {
+        const updated = { ...prev };
+        delete updated[index];
+        return updated;
+      });
+      setValue(`daysItinerary.${index}.image`, null);
+      setValue(`daysItinerary.${index}.imagePreview`, "");
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    setDayImagePreviews((prev) => ({ ...prev, [index]: url }));
+    setValue(`daysItinerary.${index}.image`, file, { shouldValidate: true });
+    setValue(`daysItinerary.${index}.imagePreview`, url);
+  };
+
+  // Add a new day to itinerary
+  const handleAddDay = () => {
+    const nextDayNumber = daysFields.length + 1;
+    appendDay({
+      day: nextDayNumber,
+      description: "",
+      image: null,
+      imagePreview: "",
+    });
+  };
+
+  // Remove a day from itinerary
+  const handleRemoveDay = (index: number) => {
+    // Clean up image preview
+    setDayImagePreviews((prev) => {
+      const updated = { ...prev };
+      delete updated[index];
+      // Shift remaining previews
+      const newPreviews: Record<number, string> = {};
+      Object.keys(updated).forEach((key) => {
+        const keyNum = parseInt(key);
+        if (keyNum > index) {
+          newPreviews[keyNum - 1] = updated[keyNum];
+        } else {
+          newPreviews[keyNum] = updated[keyNum];
+        }
+      });
+      return newPreviews;
+    });
+    removeDay(index);
   };
 
   return (
@@ -174,6 +272,147 @@ const BasicInfo = () => {
                 </FormItem>
               )}
             />
+
+            {/* Days Itinerary Section - Shown when trip type is selected */}
+            {selectedTripType && (
+              <>
+                {/* Days Itinerary Section */}
+                <div className="md:col-span-2 mt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <FormLabel className="text-[#242E2F] font-semibold text-[16px]">
+                      Days Itinerary
+                    </FormLabel>
+                    <Button
+                      type="button"
+                      onClick={handleAddDay}
+                      className="bg-[#0DAC87] hover:bg-[#0d9e7c] text-white rounded-full px-4 py-2 flex items-center gap-2"
+                    >
+                      <Plus size={16} />
+                      Add Day
+                    </Button>
+                  </div>
+
+                  {daysFields.length === 0 && (
+                    <div className="bg-[#FAFAFE] border border-dashed border-[#EFEFEF] rounded-[10px] p-6 text-center">
+                      <p className="text-[#666373] text-sm">
+                        No days added yet. Click "Add Day" to create an
+                        itinerary.
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="space-y-4">
+                    {daysFields.map((field, index) => (
+                      <div
+                        key={field.id}
+                        className="bg-[#FAFAFE] border border-[#EFEFEF] rounded-[10px] p-4"
+                      >
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-[#242E2F] font-semibold text-[14px]">
+                            Day {index + 1}
+                          </span>
+                          <Button
+                            type="button"
+                            onClick={() => handleRemoveDay(index)}
+                            variant="ghost"
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2"
+                          >
+                            <Trash2 size={18} />
+                          </Button>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-4">
+                          {/* Day Description */}
+                          <FormField
+                            control={control}
+                            name={`daysItinerary.${index}.description`}
+                            render={({ field }) => (
+                              <FormItem className="md:col-span-1">
+                                <FormLabel className="text-[#242E2F] font-medium text-[13px]">
+                                  Day {index + 1} Description
+                                </FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    placeholder={`Describe activities for Day ${
+                                      index + 1
+                                    }...`}
+                                    {...field}
+                                    value={field.value ?? ""}
+                                    className="bg-white border border-[#EFEFEF] h-28 placeholder:text-[#999] text-sm"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          {/* Day Image */}
+                          <FormField
+                            control={control}
+                            name={`daysItinerary.${index}.image`}
+                            render={() => (
+                              <FormItem className="md:col-span-1">
+                                <FormLabel className="text-[#242E2F] font-medium text-[13px]">
+                                  Day {index + 1} Image
+                                </FormLabel>
+                                <FormControl>
+                                  <div className="bg-white border-[2px] border-dashed border-[#EFEFEF] rounded-[8px]">
+                                    <input
+                                      type="file"
+                                      id={`dayImageUpload-${index}`}
+                                      className="hidden"
+                                      accept="image/*"
+                                      onChange={(e) =>
+                                        handleDayImageUpload(e, index)
+                                      }
+                                    />
+                                    <label
+                                      htmlFor={`dayImageUpload-${index}`}
+                                      className="block cursor-pointer hover:bg-[#f5f5ff] transition-colors duration-200 rounded-[8px]"
+                                    >
+                                      <div
+                                        className={`${
+                                          dayImagePreviews[index]
+                                            ? "py-2"
+                                            : "py-6"
+                                        } flex flex-col items-center`}
+                                      >
+                                        {dayImagePreviews[index] ? (
+                                          <img
+                                            src={dayImagePreviews[index]}
+                                            alt={`Day ${index + 1}`}
+                                            className="max-h-24 object-contain rounded"
+                                          />
+                                        ) : (
+                                          <>
+                                            <Upload
+                                              strokeWidth={1}
+                                              size={28}
+                                              className="text-[#999]"
+                                            />
+                                            <span className="mt-2 text-[#666] text-[12px] text-center">
+                                              Upload image
+                                            </span>
+                                            <span className="text-[10px] text-[#999]">
+                                              PNG, JPG up to 10MB
+                                            </span>
+                                          </>
+                                        )}
+                                      </div>
+                                    </label>
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* Trip Description */}
             <FormField
@@ -294,6 +533,7 @@ const BasicInfo = () => {
                           key={loc.id}
                           onClick={() => {
                             field.onChange(loc.name);
+                            setValue("locationId", loc.id); // Also set locationId
                             setIsOpenLocation(false);
                           }}
                           className="px-4 py-2 hover:bg-[#FAFAFE] cursor-pointer text-[#242E2F] text-sm border-b border-[#f9f9f9] last:border-none"

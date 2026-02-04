@@ -36,15 +36,13 @@
 //   });
 // };
 
-
-
 import api from "@/config/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const mutationFunction = async (formData: FormData) => {
-  // Let axios set the multipart boundary header automatically.
+  // Axios interceptor will auto-remove Content-Type for FormData so boundary is set correctly
   const res = await api.post("/api/trips/", formData);
   return res.data;
 };

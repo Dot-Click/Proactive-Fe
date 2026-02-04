@@ -22,10 +22,13 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
     shouldUnregister: false,
     defaultValues: {
       type: "",
+      // Days itinerary (shown when trip type is selected)
+      daysItinerary: [],
       title: "",
       description: "",
       coverImage: null,
       location: "",
+      locationId: "",
       duration: "",
       mapCoordinates: "",
       startDate: undefined,
@@ -114,12 +117,20 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
   };
   const previous = () => setStep((s) => s - 1);
   const { mutateAsync, isPending } = UseCreateTrip(
-    backUrl || "/dashboard/trip-management",
+    backUrl || "/dashboard/trip-management"
   );
 
   const onSubmit = async (data: TripFormType) => {
     try {
       const formData = new FormData();
+
+      // Build daysItinerary data (without image files - those are sent separately)
+      const daysItinerary =
+        data.daysItinerary?.map((day, index) => ({
+          day: index + 1,
+          description: day.description || "",
+          // image URL will be set by backend after upload
+        })) || [];
 
       // Send all trip fields as one JSON string so backend gets real arrays (fixes "expected array, received string").
       // Backend must parse: payload = JSON.parse(req.body.payload) and validate payload (see BACKEND_UPDATE_TRIP_FIX.md).
@@ -149,6 +160,8 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         coordinatorBio: data.CoordinatorBio,
         coordinatorInstagram: data.CoordinatorInstagram,
         coordinatorLinkedin: data.CoordinatorLinkedin,
+        // Days itinerary data
+        daysItinerary: daysItinerary,
       };
       formData.append("payload", JSON.stringify(payload));
 
@@ -163,6 +176,17 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       }
       if (data.CoordinatorPhoto && data.CoordinatorPhoto instanceof File)
         formData.append("tt_img", data.CoordinatorPhoto);
+
+      // Append day images if provided (using indexed field names for backend processing)
+      if (data.daysItinerary?.length) {
+        data.daysItinerary.forEach((day, index) => {
+          if (day.image && day.image instanceof File) {
+            formData.append("day_images", day.image);
+            // Also append the index to help backend map images to days
+            formData.append("day_image_indices", index.toString());
+          }
+        });
+      }
 
       await mutateAsync(formData);
     } catch (error) {
@@ -202,8 +226,9 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
               {steps.map((label, index) => (
                 <span
                   key={index}
-                  className={`text-[12px] font-semibold transition-colors ${step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
-                    }`}
+                  className={`text-[12px] font-semibold transition-colors ${
+                    step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
+                  }`}
                 >
                   {label}
                 </span>
@@ -239,7 +264,11 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
                 onClick={
                   step === totalStep ? methods.handleSubmit(onSubmit) : next
                 }
-                className={`${step === totalStep ? "bg-[#0DAC87] hover:bg-[#0d9e7c]" : "bg-[#000000]"} cursor-pointer rounded-full px-12 py-5 mx-6 my-6 w-full md:w-auto`}
+                className={`${
+                  step === totalStep
+                    ? "bg-[#0DAC87] hover:bg-[#0d9e7c]"
+                    : "bg-[#000000]"
+                } cursor-pointer rounded-full px-12 py-5 mx-6 my-6 w-full md:w-auto`}
               >
                 {step === totalStep
                   ? isPending
