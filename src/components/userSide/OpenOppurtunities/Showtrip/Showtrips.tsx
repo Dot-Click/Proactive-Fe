@@ -4,12 +4,16 @@ import calender from "../../../../assets/calender.png"
 import star from "../../../../assets/sidebaricon/star.png"
 import { useNavigate } from "react-router-dom";
 import { UsegetOpenTrips } from "@/hooks/getOpenTripshook";
+import { UsegetTrips } from "@/hooks/gettriphook";
 import { LoaderIcon } from "lucide-react";
+import { UseSearchTrips } from "@/hooks/searchTripshook";
+import type { TabId } from "../Tabs/Tabs";
 
-
-
-interface SearchbarProps {
+interface ShowTripsProps {
     view: string;
+    searchQuery: string;
+    category: string;
+    activeTab?: TabId;
 }
 // const trips = [
 //     { id: 1, name: "Wild Weekend Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild weekend", img: trip1 },
@@ -20,10 +24,86 @@ interface SearchbarProps {
 //     { id: 2, name: "Wild trip Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild trip", img: trip3 },
 // ];
 
-const Showtrips = ({ view }: SearchbarProps) => {
+const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTripsProps) => {
     const navigate = useNavigate()
-    const { data, isLoading } = UsegetOpenTrips();
-    const upcomingtrip = data?.trips
+
+    // Backend search (debounced inside hook)
+    const {
+        data: searchData,
+        isLoading: isSearchLoading,
+        isError: isSearchError,
+    } = UseSearchTrips(searchQuery);
+
+    // Open trips (for open/coming-soon tabs)
+    const {
+        data: openTripsData,
+        isLoading: isOpenTripsLoading,
+        isError: isOpenTripsError,
+    } = UsegetOpenTrips();
+
+    // All trips (for all/closed tabs)
+    const {
+        data: allTripsData,
+        isLoading: isAllTripsLoading,
+        isError: isAllTripsError,
+    } = UsegetTrips();
+
+    const hasSearch = !!searchQuery && searchQuery.trim().length > 0;
+    
+    // Use all trips for "all" and "closed" tabs, open trips for "open" and "coming-soon" tabs
+    // This ensures the count matches the displayed data
+    const useAllTrips = activeTab === "all" || activeTab === "closed";
+    const openTrips = openTripsData?.trips ?? [];
+    const allTrips = allTripsData?.trips ?? [];
+    const sourceTrips = useAllTrips ? allTrips : openTrips;
+    
+    // Determine base trips: use search results if search exists, otherwise use source trips
+    let baseTrips = hasSearch ? (searchData?.trips ?? []) : sourceTrips;
+    
+    // If search exists, filter search results to only include trips that are in source trips
+    if (hasSearch) {
+        const sourceTripIds = new Set(sourceTrips.map((trip: any) => trip.id));
+        baseTrips = baseTrips.filter((trip: any) => sourceTripIds.has(trip.id));
+    }
+
+    // Apply tab status filter (backend uses "completed" for closed trips)
+    const statusFilterKey =
+        activeTab === "all"
+            ? undefined
+            : activeTab === "coming-soon"
+            ? "live"
+            : activeTab === "closed"
+            ? "completed"
+            : activeTab;
+
+    const statusFilteredTrips = statusFilterKey
+        ? baseTrips.filter((trip: any) => {
+            const tripStatus = (trip.status || "").toLowerCase();
+            return tripStatus === statusFilterKey.toLowerCase();
+        })
+        : baseTrips;
+
+    // Apply category filter
+    const normalizedCategory = category?.toLowerCase().trim();
+    const filteredTrips = normalizedCategory
+        ? statusFilteredTrips.filter((trip: any) => {
+            const tripCategory =
+                (trip.categoryName ?? trip.category ?? "").toString().toLowerCase().trim();
+            return tripCategory === normalizedCategory;
+        })
+        : statusFilteredTrips;
+
+    const isLoading = hasSearch 
+        ? isSearchLoading 
+        : useAllTrips 
+        ? isAllTripsLoading 
+        : isOpenTripsLoading;
+    const isError = hasSearch 
+        ? isSearchError 
+        : useAllTrips 
+        ? isAllTripsError 
+        : isOpenTripsError;
+    const upcomingtrip = filteredTrips;
     return (
         <>
             <div className="px-4 sm:px-16 py-6 bg-[#FAFAFA]">
@@ -37,22 +117,23 @@ const Showtrips = ({ view }: SearchbarProps) => {
                                 </span>
 
                                 <div className="border-b border-[#D9D9D9] mt-[16px]" />
-                                {
-                                    isLoading && (
-                                        <div className="w-full flex items-center justify-center py-10">
-                                            <LoaderIcon className="animate-spin" />
-                                        </div>
-                                    )
-                                }
-                                {
-                                    !isLoading && (!upcomingtrip || upcomingtrip.length === 0) && (
-                                        <div className="w-full flex items-center justify-center py-20">
-                                            <p className="text-[#666373] text-lg font-medium">More information coming soon.</p>
-                                        </div>
-                                    )
-                                }
-                                <div className="flex flex-col gap-4 mt-5 overflow-x-auto h-150">
-                                    {upcomingtrip?.map((trip: any, index: number) => (
+                                {isLoading && (
+                                    <div className="w-full flex items-center justify-center py-10">
+                                        <LoaderIcon className="animate-spin" />
+                                    </div>
+                                )}
+                                {!isLoading && (!upcomingtrip || upcomingtrip.length === 0) && (
+                                    <div className="w-full flex items-center justify-center py-20">
+                                        <p className="text-[#666373] text-lg font-medium">
+                                            {searchQuery || category 
+                                                ? "No trips found matching your filters." 
+                                                : "More information coming soon."}
+                                        </p>
+                                    </div>
+                                )}
+                                {!isLoading && upcomingtrip && upcomingtrip.length > 0 && (
+                                    <div className="flex flex-col gap-4 mt-5 overflow-x-auto h-150">
+                                        {upcomingtrip.map((trip: any, index: number) => (
                                         <div key={`${trip.id}-${index}`} className="bg-[#FFFFFF] px-4 py-4 rounded-[20px] shadow-md">
                                             <div className="flex lg:flex-row flex-col justify-between items-center gap-4">
                                                 <img src={trip?.coverImage || trip.img} alt="trip1" className="h-30 w-30 rounded-lg" />
@@ -98,9 +179,9 @@ const Showtrips = ({ view }: SearchbarProps) => {
                                                 </div>
                                             </div>
                                         </div>
-                                    ))
-                                    }
-                                </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </>
                     ) : (
@@ -111,23 +192,23 @@ const Showtrips = ({ view }: SearchbarProps) => {
                             </span>
 
                             <div className="border-b border-[#D9D9D9] mt-[16px]" />
-                            {
-                                isLoading && (
-                                    <div className="w-full flex items-center justify-center py-10">
-                                        <LoaderIcon className="animate-spin" />
-                                    </div>
-                                )
-                            }
-                            {
-                                !isLoading && (!upcomingtrip || upcomingtrip.length === 0) && (
-                                    <div className="w-full flex items-center justify-center py-20">
-                                        <p className="text-[#666373] text-lg font-medium">More information coming soon.</p>
-                                    </div>
-                                )
-                            }
-
-                            <div className="grid lg:grid-cols-3 gap-4 mt-5 overflow-x-auto h-150">
-                                {upcomingtrip?.map((trip: any, index: number) => (
+                            {isLoading && (
+                                <div className="w-full flex items-center justify-center py-10">
+                                    <LoaderIcon className="animate-spin" />
+                                </div>
+                            )}
+                            {!isLoading && (!upcomingtrip || upcomingtrip.length === 0) && (
+                                <div className="w-full flex items-center justify-center py-20">
+                                    <p className="text-[#666373] text-lg font-medium">
+                                        {searchQuery || category 
+                                            ? "No trips found matching your filters." 
+                                            : "More information coming soon."}
+                                    </p>
+                                </div>
+                            )}
+                            {!isLoading && upcomingtrip && upcomingtrip.length > 0 && (
+                                <div className="grid lg:grid-cols-3 gap-4 mt-5 overflow-x-auto h-150">
+                                    {upcomingtrip.map((trip: any, index: number) => (
                                     <div key={`${trip.id}-${index}`} className="bg-[#FFFFFF] rounded-[20px] shadow-md h-120">
                                         <div className="flex flex-col justify-between items-start gap-4">
                                             <img src={trip?.coverImage || trip.img} alt="trip1" className="h-35 w-35 object-fill rounded-lg" />
@@ -173,9 +254,9 @@ const Showtrips = ({ view }: SearchbarProps) => {
                                             </div>
                                         </div>
                                     </div>
-                                ))
-                                }
-                            </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     )
                 }

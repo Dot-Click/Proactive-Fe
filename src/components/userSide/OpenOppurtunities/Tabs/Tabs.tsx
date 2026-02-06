@@ -1,16 +1,22 @@
-import { useState } from "react"
+import { UsegetTrips } from "@/hooks/gettriphook"
 
-type TabId = "all" | "open" | "coming-soon" | "closed"
+export type TabId = "all" | "open" | "coming-soon" | "closed"
 
-const tabConfig: { id: TabId; label: string; count: number }[] = [
-    { id: "all", label: "All", count: 3 },
-    { id: "open", label: "Open", count: 2 },
-    { id: "coming-soon", label: "Coming Soon", count: 1 },
-    { id: "closed", label: "Closed", count: 0 },
-]
+interface TabsProps {
+    activeTab: TabId
+    onTabChange: (tab: TabId) => void
+}
 
-const Tabs = () => {
-    const [activeTab, setActiveTab] = useState<TabId>("all")
+const Tabs = ({ activeTab, onTabChange }: TabsProps) => {
+    const { data } = UsegetTrips()
+    const counts = data?.counts ?? { all: 0, open: 0, comingSoon: 0, closed: 0 }
+
+    const tabConfig: { id: TabId; label: string; count: number }[] = [
+        { id: "all", label: "All", count: counts.all },
+        { id: "open", label: "Open", count: counts.open },
+        { id: "coming-soon", label: "Coming Soon", count: counts.comingSoon },
+        { id: "closed", label: "Closed", count: counts.closed },
+    ]
 
     return (
         <>
@@ -25,7 +31,7 @@ const Tabs = () => {
                                     type="button"
                                     role="tab"
                                     aria-selected={isActive}
-                                    onClick={() => setActiveTab(tab.id)}
+                                    onClick={() => onTabChange(tab.id)}
                                     className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-colors cursor-pointer border-none outline-none focus-visible:ring-2 focus-visible:ring-[#0DAC87] focus-visible:ring-offset-2 ${
                                         isActive
                                             ? "bg-[#000000] text-[#FFFFFF]"

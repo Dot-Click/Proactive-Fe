@@ -1,17 +1,20 @@
 import { FaLocationDot } from "react-icons/fa6";
 import { MdArrowOutward } from "react-icons/md";
+import { SearchX, Inbox, LoaderIcon } from "lucide-react";
 // import trip1 from "../../assets/trip1.png"
 import calender from "../../assets/calender.png"
 import star from "../../assets/sidebaricon/star.png"
 import { useNavigate } from "react-router-dom";
-import { UsegetTrips } from "@/hooks/gettriphook";
-import { LoaderIcon } from "lucide-react";
 import { UseSearchTrips } from "@/hooks/searchTripshook";
+import { UsegetOpenTrips } from "@/hooks/getOpenTripshook";
+import { UsegetTrips } from "@/hooks/gettriphook";
+import type { TabId } from "./Tabs";
 
 interface ShowTripsProps {
     view: string;
     searchQuery: string;
     category: string;
+    activeTab?: TabId;
 }
 // const trips = [
 //     { id: 1, name: "Wild Weekend Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild weekend", img: trip1 },
@@ -22,35 +25,107 @@ interface ShowTripsProps {
 //     { id: 2, name: "Wild trip Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild trip", img: trip3 },
 // ];
 
-const Showtrips = ({ view, searchQuery, category }: ShowTripsProps) => {
+const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTripsProps) => {
     const navigate = useNavigate()
 
     // Backend search (debounced inside hook)
     const {
         data: searchData,
         isLoading: isSearchLoading,
+        isError: isSearchError,
     } = UseSearchTrips(searchQuery);
 
-    // All trips (fallback / initial load)
+    // Open trips (for open/coming-soon tabs)
     const {
-        data: allData,
-        isLoading: isAllLoading,
+        data: openTripsData,
+        isLoading: isOpenTripsLoading,
+        isError: isOpenTripsError,
+    } = UsegetOpenTrips();
+
+    // All trips (for closed tab and counts)
+    const {
+        data: allTripsData,
+        isLoading: isAllTripsLoading,
+        isError: isAllTripsError,
     } = UsegetTrips();
 
     const hasSearch = !!searchQuery && searchQuery.trim().length > 0;
-    const baseTrips = hasSearch ? (searchData?.trips ?? []) : (allData?.trips ?? []);
+    
+    // Use all trips for "all" and "closed" tabs, open trips for "open" and "coming-soon" tabs
+    // This ensures the count matches the displayed data
+    const useAllTrips = activeTab === "all" || activeTab === "closed";
+    const openTrips = openTripsData?.trips ?? [];
+    const allTrips = allTripsData?.trips ?? [];
+    const sourceTrips = useAllTrips ? allTrips : openTrips;
+    
+    // Determine base trips: use search results if search exists, otherwise use source trips
+    let baseTrips = hasSearch ? (searchData?.trips ?? []) : sourceTrips;
+    
+    // If search exists, filter search results to only include trips that are in source trips
+    if (hasSearch) {
+        const sourceTripIds = new Set(sourceTrips.map((trip: any) => trip.id));
+        baseTrips = baseTrips.filter((trip: any) => sourceTripIds.has(trip.id));
+    }
 
+    // Apply tab status filter (backend uses "completed" for closed trips)
+    const statusFilterKey =
+        activeTab === "all"
+            ? undefined
+            : activeTab === "coming-soon"
+            ? "live"
+            : activeTab === "closed"
+            ? "completed"
+            : activeTab;
+
+    const statusFilteredTrips = statusFilterKey
+        ? baseTrips.filter((trip: any) => {
+            const tripStatus = (trip.status || "").toLowerCase();
+            return tripStatus === statusFilterKey.toLowerCase();
+        })
+        : baseTrips;
+
+    // Apply category filter
     const normalizedCategory = category?.toLowerCase().trim();
     const filteredTrips = normalizedCategory
-        ? baseTrips.filter((trip: any) => {
+        ? statusFilteredTrips.filter((trip: any) => {
             const tripCategory =
                 (trip.categoryName ?? trip.category ?? "").toString().toLowerCase().trim();
             return tripCategory === normalizedCategory;
         })
-        : baseTrips;
+        : statusFilteredTrips;
 
-    const isLoading = hasSearch ? isSearchLoading : isAllLoading;
+    const isLoading = hasSearch 
+        ? isSearchLoading 
+        : useAllTrips 
+        ? isAllTripsLoading 
+        : isOpenTripsLoading;
+    const isError = hasSearch 
+        ? isSearchError 
+        : useAllTrips 
+        ? isAllTripsError 
+        : isOpenTripsError;
     const upcomingtrip = filteredTrips;
+    
+    // Determine empty state scenarios
+    const hasNoTrips = !isLoading && !isError && upcomingtrip.length === 0;
+    const hasNoDataAtAll = !isLoading && !isError && !hasSearch && !normalizedCategory && activeTab === "all" && (openTrips.length === 0);
+    const hasNoSearchResults = !isLoading && !isError && hasSearch && upcomingtrip.length === 0;
+    const hasNoCategoryResults = !isLoading && !isError && normalizedCategory && statusFilteredTrips.length > 0 && upcomingtrip.length === 0;
+    
+    // Tab-specific empty states (check in order of specificity)
+    const hasNoTabAndSearchResults = !isLoading && !isError && activeTab !== "all" && hasSearch && statusFilteredTrips.length === 0;
+    const hasNoTabAndCategoryResults = !isLoading && !isError && activeTab !== "all" && normalizedCategory && !hasSearch && statusFilteredTrips.length > 0 && upcomingtrip.length === 0;
+    const hasNoTabResults = !isLoading && !isError && activeTab !== "all" && !hasSearch && !normalizedCategory && statusFilteredTrips.length === 0 && baseTrips.length > 0;
+    
+    // Get tab label for messages
+    const getTabLabel = () => {
+        switch (activeTab) {
+            case "open": return "Open";
+            case "coming-soon": return "Coming Soon";
+            case "closed": return "Closed";
+            default: return "";
+        }
+    };
     return (
         <>
             <div className="px-4 sm:px-16 py-6 bg-[#FAFAFA]">
@@ -69,9 +144,109 @@ const Showtrips = ({ view, searchQuery, category }: ShowTripsProps) => {
                                         <LoaderIcon className="animate-spin" />
                                     </div>
                                 )}
-                                <div className="flex flex-col gap-4 mt-5 overflow-x-auto h-150">
-                                    {
-                                        upcomingtrip?.map((trip: any, index: number) => (
+                                {isError && (
+                                    <div className="w-full flex flex-col items-center justify-center py-10">
+                                        <div className="bg-[#FEE2E2] rounded-full p-4 mb-4">
+                                            <Inbox className="h-8 w-8 text-[#DC2626]" />
+                                        </div>
+                                        <p className="text-[#666373] text-sm font-medium">
+                                            Unable to load trips. Please try again later.
+                                        </p>
+                                    </div>
+                                )}
+                                {hasNoTrips && !isLoading && !isError && (
+                                    <div className="w-full flex flex-col items-center justify-center py-10">
+                                        {hasNoTabAndSearchResults ? (
+                                            <>
+                                                <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                    <SearchX className="h-8 w-8 text-[#666373]" />
+                                                </div>
+                                                <p className="text-[#666373] text-sm font-medium mb-1">
+                                                    No {getTabLabel().toLowerCase()} trips found for &quot;{searchQuery}&quot;
+                                                </p>
+                                                <p className="text-[#999999] text-xs">
+                                                    Try adjusting your search terms or selecting a different tab
+                                                </p>
+                                            </>
+                                        ) : hasNoTabAndCategoryResults ? (
+                                            <>
+                                                <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                    <Inbox className="h-8 w-8 text-[#666373]" />
+                                                </div>
+                                                <p className="text-[#666373] text-sm font-medium mb-1">
+                                                    No {getTabLabel().toLowerCase()} trips in this category
+                                                </p>
+                                                <p className="text-[#999999] text-xs">
+                                                    Try selecting a different category or tab
+                                                </p>
+                                            </>
+                                        ) : hasNoTabResults ? (
+                                            <>
+                                                <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                    <Inbox className="h-8 w-8 text-[#666373]" />
+                                                </div>
+                                                <p className="text-[#666373] text-sm font-medium mb-1">
+                                                    No {getTabLabel()} trips available
+                                                </p>
+                                                <p className="text-[#999999] text-xs">
+                                                    Check other tabs or come back later for new {getTabLabel().toLowerCase()} trips
+                                                </p>
+                                            </>
+                                        ) : hasNoSearchResults ? (
+                                            <>
+                                                <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                    <SearchX className="h-8 w-8 text-[#666373]" />
+                                                </div>
+                                                <p className="text-[#666373] text-sm font-medium mb-1">
+                                                    No trips found for &quot;{searchQuery}&quot;
+                                                </p>
+                                                <p className="text-[#999999] text-xs">
+                                                    Try adjusting your search terms or filters
+                                                </p>
+                                            </>
+                                        ) : hasNoCategoryResults ? (
+                                            <>
+                                                <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                    <Inbox className="h-8 w-8 text-[#666373]" />
+                                                </div>
+                                                <p className="text-[#666373] text-sm font-medium mb-1">
+                                                    No trips found in this category
+                                                </p>
+                                                <p className="text-[#999999] text-xs">
+                                                    Try selecting a different category or clearing filters
+                                                </p>
+                                            </>
+                                        ) : hasNoDataAtAll ? (
+                                            <>
+                                                <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                    <Inbox className="h-8 w-8 text-[#666373]" />
+                                                </div>
+                                                <p className="text-[#666373] text-sm font-medium mb-1">
+                                                    No trips available at the moment
+                                                </p>
+                                                <p className="text-[#999999] text-xs">
+                                                    Check back later for new adventures
+                                                </p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                    <Inbox className="h-8 w-8 text-[#666373]" />
+                                                </div>
+                                                <p className="text-[#666373] text-sm font-medium mb-1">
+                                                    No trips match your current filters
+                                                </p>
+                                                <p className="text-[#999999] text-xs">
+                                                    Try adjusting your filters or search terms
+                                                </p>
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+                                {!isLoading && !isError && upcomingtrip.length > 0 && (
+                                    <div className="flex flex-col gap-4 mt-5 overflow-x-auto h-150">
+                                        {
+                                            upcomingtrip?.map((trip: any, index: number) => (
                                             <div key={index} className="bg-[#FFFFFF] px-4 py-4 rounded-[20px] shadow-md">
                                                 <div className="flex lg:flex-row flex-col justify-between items-center gap-4">
                                                     <img src={trip?.coverImage || trip.img} alt="trip1" className="h-30 w-30 rounded-lg" />
@@ -117,9 +292,10 @@ const Showtrips = ({ view, searchQuery, category }: ShowTripsProps) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                        ))
-                                    }
-                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                )}
                             </div>
                         </>
                     ) : (
@@ -130,10 +306,115 @@ const Showtrips = ({ view, searchQuery, category }: ShowTripsProps) => {
                             </span>
 
                             <div className="border-b border-[#D9D9D9] mt-[16px]" />
-
-                            <div className="grid lg:grid-cols-3 gap-4 mt-5 overflow-x-auto h-150">
-                                {
-                                    upcomingtrip?.map((trip: any, index: number) => (
+                            
+                            {isLoading && (
+                                <div className="w-full flex items-center justify-center py-10">
+                                    <LoaderIcon className="animate-spin" />
+                                </div>
+                            )}
+                            {isError && (
+                                <div className="w-full flex flex-col items-center justify-center py-10">
+                                    <div className="bg-[#FEE2E2] rounded-full p-4 mb-4">
+                                        <Inbox className="h-8 w-8 text-[#DC2626]" />
+                                    </div>
+                                    <p className="text-[#666373] text-sm font-medium">
+                                        Unable to load trips. Please try again later.
+                                    </p>
+                                </div>
+                            )}
+                            {hasNoTrips && !isLoading && !isError && (
+                                <div className="w-full flex flex-col items-center justify-center py-10">
+                                    {hasNoTabAndSearchResults ? (
+                                        <>
+                                            <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                <SearchX className="h-8 w-8 text-[#666373]" />
+                                            </div>
+                                            <p className="text-[#666373] text-sm font-medium mb-1">
+                                                No {getTabLabel().toLowerCase()} trips found for &quot;{searchQuery}&quot;
+                                            </p>
+                                            <p className="text-[#999999] text-xs">
+                                                Try adjusting your search terms or selecting a different tab
+                                            </p>
+                                        </>
+                                    ) : hasNoTabAndCategoryResults ? (
+                                        <>
+                                            <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                <Inbox className="h-8 w-8 text-[#666373]" />
+                                            </div>
+                                            <p className="text-[#666373] text-sm font-medium mb-1">
+                                                No {getTabLabel().toLowerCase()} trips in this category
+                                            </p>
+                                            <p className="text-[#999999] text-xs">
+                                                Try selecting a different category or tab
+                                            </p>
+                                        </>
+                                    ) : hasNoTabResults ? (
+                                        <>
+                                            <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                <Inbox className="h-8 w-8 text-[#666373]" />
+                                            </div>
+                                            <p className="text-[#666373] text-sm font-medium mb-1">
+                                                No {getTabLabel()} trips available
+                                            </p>
+                                            <p className="text-[#999999] text-xs">
+                                                Check other tabs or come back later for new {getTabLabel().toLowerCase()} trips
+                                            </p>
+                                        </>
+                                    ) : hasNoSearchResults ? (
+                                        <>
+                                            <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                <SearchX className="h-8 w-8 text-[#666373]" />
+                                            </div>
+                                            <p className="text-[#666373] text-sm font-medium mb-1">
+                                                No trips found for &quot;{searchQuery}&quot;
+                                            </p>
+                                            <p className="text-[#999999] text-xs">
+                                                Try adjusting your search terms or filters
+                                            </p>
+                                        </>
+                                    ) : hasNoCategoryResults ? (
+                                        <>
+                                            <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                <Inbox className="h-8 w-8 text-[#666373]" />
+                                            </div>
+                                            <p className="text-[#666373] text-sm font-medium mb-1">
+                                                No trips found in this category
+                                            </p>
+                                            <p className="text-[#999999] text-xs">
+                                                Try selecting a different category or clearing filters
+                                            </p>
+                                        </>
+                                    ) : hasNoDataAtAll ? (
+                                        <>
+                                            <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                <Inbox className="h-8 w-8 text-[#666373]" />
+                                            </div>
+                                            <p className="text-[#666373] text-sm font-medium mb-1">
+                                                No trips available at the moment
+                                            </p>
+                                            <p className="text-[#999999] text-xs">
+                                                Check back later for new adventures
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                                                <Inbox className="h-8 w-8 text-[#666373]" />
+                                            </div>
+                                            <p className="text-[#666373] text-sm font-medium mb-1">
+                                                No trips match your current filters
+                                            </p>
+                                            <p className="text-[#999999] text-xs">
+                                                Try adjusting your filters or search terms
+                                            </p>
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                            {!isLoading && !isError && upcomingtrip.length > 0 && (
+                                <div className="grid lg:grid-cols-3 gap-4 mt-5 overflow-x-auto h-150">
+                                    {
+                                        upcomingtrip?.map((trip: any, index: number) => (
                                         <div key={index} className="bg-[#FFFFFF] rounded-[20px] shadow-md h-120">
                                             <div className="flex flex-col justify-between items-start gap-4">
                                                 <img src={trip?.coverImage || trip.img} alt="trip1" className="h-35 w-35 object-fill rounded-lg" />
@@ -182,6 +463,7 @@ const Showtrips = ({ view, searchQuery, category }: ShowTripsProps) => {
                                     ))
                                 }
                             </div>
+                            )}
                         </div>
                     )
                 }

@@ -10,7 +10,7 @@ import calenderwhite from "../../assets/calenderwhite.png"
 import { Button } from "../ui/button"
 import { useState, useMemo } from "react"
 import { UsegetPastTrips, type PastTrip } from "@/hooks/getPastTripshook"
-import { LoaderIcon } from "lucide-react"
+import { LoaderIcon, Inbox } from "lucide-react"
 
 const FALLBACK_IMAGES = [
     Pastadventure1, Pastadventure2, Pastadventure3, Pastadventure4,
@@ -46,7 +46,7 @@ type DisplayItem = {
 
 const Pastadventures = () => {
     const [loadmore, setLoadmore] = useState(false)
-    const { data, isLoading } = UsegetPastTrips()
+    const { data, isLoading, isError } = UsegetPastTrips()
     const apiTrips = data?.trips ?? []
 
     const displayItems = useMemo((): DisplayItem[] => {
@@ -82,6 +82,30 @@ const Pastadventures = () => {
             {isLoading ? (
                 <div className="w-full flex items-center justify-center py-16">
                     <LoaderIcon className="animate-spin h-10 w-10 text-[#0DAC87]" />
+                </div>
+            ) : isError ? (
+                <div className="w-full flex flex-col items-center justify-center py-16">
+                    <div className="bg-[#FEE2E2] rounded-full p-4 mb-4">
+                        <Inbox className="h-10 w-10 text-[#DC2626]" />
+                    </div>
+                    <p className="text-[#666373] text-sm font-medium mb-1">
+                        Unable to load past adventures
+                    </p>
+                    <p className="text-[#999999] text-xs">
+                        Please try again later
+                    </p>
+                </div>
+            ) : displayItems.length === 0 && !useFallback ? (
+                <div className="w-full flex flex-col items-center justify-center py-16">
+                    <div className="bg-[#F3F4F6] rounded-full p-4 mb-4">
+                        <Inbox className="h-10 w-10 text-[#666373]" />
+                    </div>
+                    <p className="text-[#666373] text-sm font-medium mb-1">
+                        No past adventures available
+                    </p>
+                    <p className="text-[#999999] text-xs">
+                        Check back later for completed adventures
+                    </p>
                 </div>
             ) : (
                 <>
