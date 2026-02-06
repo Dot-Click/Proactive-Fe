@@ -15,6 +15,11 @@ import arrowBack from "@/assets/sidebaricon/arrow.png";
 // import Template from "@/assets/sidebaricon/template.png";
 import { Progress } from "@/components/ui/progress";
 import { UseCreateTrip } from "@/hooks/UseCreateTriphook";
+import included1 from "@/assets/included1.png";
+import included2 from "@/assets/included2.png";
+import included3 from "@/assets/included3.png";
+import included4 from "@/assets/included4.png";
+import included5 from "@/assets/included5.png";
 
 const AddTrip = ({ backUrl }: { backUrl: string }) => {
   const methods = useForm<TripFormType>({
@@ -132,6 +137,58 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
           // image URL will be set by backend after upload
         })) || [];
 
+      // Lookup tables for included/notIncluded items (matching Included.tsx)
+      // Maps selected IDs to objects with title, description, and image path
+      const INCLUDED_LOOKUP: Record<string, { title: string; description: string; img: string }> = {
+        camp: { title: "3 Nights Camp Stay", description: "Boutique camp accommodation with cozy shared spaces.", img: included1 },
+        breakfast: { title: "Daily Breakfasts", description: "Fresh and healthy breakfasts included throughout the trip", img: included2 },
+        transfer: { title: "Airport Transfers", description: "Arrival & departure transfers for a smooth start & end.", img: included3 },
+        coordinator: { title: "Trip Coordinator", description: "Professional English-speaking coordinator for full guidance.", img: included4 },
+        tour: { title: "Sagrada Familia Tour", description: "Skip-the-line entry with guided experience.", img: included5 },
+      };
+
+      const NOT_INCLUDED_LOOKUP: Record<string, { title: string; description: string; img: string }> = {
+        flight: { title: "International Flights", description: "Flights to/from Barcelona not covered.", img: included1 },
+        insurance: { title: "Travel Insurance", description: "Personal insurance must be arranged separately.", img: included2 },
+        shopping: { title: "Shopping & Souvenirs", description: "Personal purchases not included.", img: included3 },
+      };
+
+      // Transform included IDs to objects with title, description, and img
+      const includedItems = (data.included ?? []).map((id: string) => {
+        const lookup = INCLUDED_LOOKUP[id];
+        if (lookup) {
+          return {
+            title: lookup.title,
+            description: lookup.description,
+            img: lookup.img, // Image path will be handled by backend or can be set if needed
+          };
+        }
+        // Fallback if ID not found in lookup
+        return {
+          title: id,
+          description: "",
+          img: "",
+        };
+      });
+
+      // Transform notIncluded IDs to objects with title, description, and img
+      const notIncludedItems = (data.notIncluded ?? []).map((id: string) => {
+        const lookup = NOT_INCLUDED_LOOKUP[id];
+        if (lookup) {
+          return {
+            title: lookup.title,
+            description: lookup.description,
+            img: lookup.img, // Image path will be handled by backend or can be set if needed
+          };
+        }
+        // Fallback if ID not found in lookup
+        return {
+          title: id,
+          description: "",
+          img: "",
+        };
+      });
+
       // Send all trip fields as one JSON string so backend gets real arrays (fixes "expected array, received string").
       // Backend must parse: payload = JSON.parse(req.body.payload) and validate payload (see BACKEND_UPDATE_TRIP_FIX.md).
       const payload = {
@@ -149,8 +206,8 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         groupSize: data.GroupSize,
         rhythm: data.rhythm,
         sportLvl: data.SportsLevel,
-        included: data.included ?? [],
-        notIncluded: data.notIncluded ?? [],
+        included: includedItems,
+        notIncluded: notIncludedItems,
         bestPriceMsg: data.BestPrice,
         perHeadPrice: data.FinalPrice,
         instaLink: data.CoordinatorInstagram || undefined,

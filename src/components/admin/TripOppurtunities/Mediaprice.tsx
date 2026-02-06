@@ -23,6 +23,7 @@ const Mediaprice = () => {
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>(Array(GALLERY_SLOTS).fill(""));
   const galleryPreviewsRef = useRef<string[]>([]);
   const [videoPreview, setVideoPreview] = useState("");
+  const videoPreviewRef = useRef<string>("");
   const promotionalVideoValue = watch("PromotionalVideo");
   const galleryImagesValue = watch("GalleryImages");
 
@@ -34,6 +35,7 @@ const Mediaprice = () => {
     if (!file) {
       setVideoPreview("");
       setValue("PromotionalVideo", null);
+      event.target.value = ""; // Reset input to allow re-uploading
       return;
     }
 
@@ -41,13 +43,21 @@ const Mediaprice = () => {
     const maxBytes = 100 * 1024 * 1024;
 
     if (!allowedTypes.includes(file.type) || file.size > maxBytes) {
+      event.target.value = ""; // Reset input even on validation failure
       return;
     }
 
+    // Revoke previous blob URL to avoid memory leaks
+    if (videoPreviewRef.current && videoPreviewRef.current.startsWith("blob:")) {
+      URL.revokeObjectURL(videoPreviewRef.current);
+    }
+
     const url = URL.createObjectURL(file);
+    videoPreviewRef.current = url;
     setVideoPreview(url);
 
     setValue("PromotionalVideo", file, { shouldValidate: true });
+    event.target.value = ""; // Reset input to allow re-uploading same file
   };
 
   // ================= GALLERY UPLOAD =================
@@ -69,9 +79,26 @@ const Mediaprice = () => {
       };
 
   // Handle promotional video URL preview (for edit mode)
+  // Also handle when video is cleared (set to null)
   useEffect(() => {
+    // Revoke previous blob URL if exists
+    if (videoPreviewRef.current && videoPreviewRef.current.startsWith("blob:")) {
+      URL.revokeObjectURL(videoPreviewRef.current);
+      videoPreviewRef.current = "";
+    }
+
     if (promotionalVideoValue && typeof promotionalVideoValue === "string") {
+      // Existing video URL from edit mode
+      videoPreviewRef.current = promotionalVideoValue;
       setVideoPreview(promotionalVideoValue);
+    } else if (promotionalVideoValue === null || promotionalVideoValue === undefined) {
+      // Clear preview when video is removed
+      setVideoPreview("");
+    } else if (promotionalVideoValue instanceof File) {
+      // Handle File object (new upload)
+      const url = URL.createObjectURL(promotionalVideoValue);
+      videoPreviewRef.current = url;
+      setVideoPreview(url);
     }
   }, [promotionalVideoValue]);
 
@@ -106,11 +133,11 @@ const Mediaprice = () => {
   // ================= CLEANUP =================
   useEffect(() => {
     return () => {
-      if (videoPreview && videoPreview.startsWith("blob:")) {
-        URL.revokeObjectURL(videoPreview);
+      if (videoPreviewRef.current && videoPreviewRef.current.startsWith("blob:")) {
+        URL.revokeObjectURL(videoPreviewRef.current);
       }
     };
-  }, [videoPreview]);
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -133,7 +160,7 @@ const Mediaprice = () => {
               Promotional Video
             </FormLabel>
             <FormControl>
-              <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#A19AAF] rounded-[10px]">
+              <div className="bg-[#FAFAFE] border-[2.5px] border-dashed border-[#A19AAF] rounded-[10px] relative">
                 <input
                   type="file"
                   accept="video/mp4, video/quicktime"
@@ -147,10 +174,15 @@ const Mediaprice = () => {
                   className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
                 >
                   <div
-                    className={`${videoPreview ? "py-0" : "py-14"} flex flex-col items-center`}
+                    className={`${videoPreview ? "py-0" : "py-14"} flex flex-col items-center relative`}
                   >
                     {videoPreview ? (
-                      <video src={videoPreview} controls className="w-full max-h-80 rounded-[10px]" />
+                      <>
+                        <video src={videoPreview} controls className="w-full max-h-80 rounded-[10px]" />
+                        <div className="absolute top-2 right-2 bg-black/50 text-white px-3 py-1 rounded text-sm">
+                          Click to replace
+                        </div>
+                      </>
                     ) : (
                       <>
                         <Video strokeWidth={1} size={60} stroke="#606066" />
