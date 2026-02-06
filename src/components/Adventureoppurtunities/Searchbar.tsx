@@ -7,16 +7,27 @@ import { BsFillGrid3X3GapFill } from "react-icons/bs"
 import { FaList } from "react-icons/fa"
 import { UsegetTrips } from "@/hooks/gettriphook"
 
-
-
 interface SearchbarProps {
     view: string;
     setView: React.Dispatch<React.SetStateAction<string>>;
+    searchQuery: string;
+    setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+    category: string;
+    setCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Searchbar = ({ view, setView }: SearchbarProps) => {
-const { data } = UsegetTrips();
-const categories = data?.trips?.map((trip: any) => trip.category);
+const Searchbar = ({
+    view,
+    setView,
+    searchQuery,
+    setSearchQuery,
+    category,
+    setCategory,
+}: SearchbarProps) => {
+    const { data } = UsegetTrips();
+    const rawCategories = data?.trips?.map((trip: any) => trip.category) ?? [];
+    const categories = Array.from(new Set(rawCategories)).filter(Boolean);
+
     return (
         <div className="bg-[#FAFAFA] px-4 sm:px-16 py-6 mt-6">
             <div className="flex lg:flex-row flex-col items-center gap-4">
@@ -25,32 +36,54 @@ const categories = data?.trips?.map((trip: any) => trip.category);
                     <Input
                         placeholder="Search Place"
                         type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         className="lg:w-220 border border-[#EFEFEF] bg-[#FFFFFF] rounded-[10px] py-5 pl-12 placeholder:text-[#666373]"
                     />
                 </div>
-                <Select>
+                <Select
+                    value={category || "all"}
+                    onValueChange={(v) => setCategory(v === "all" ? "" : v)}
+                >
                     <SelectTrigger className="lg:w-[150px] data-[placeholder]:text-[#666373] py-5 px-4 rounded-[10px] bg-[#EDEDED]">
                         <SelectValue placeholder="All Category" className="placeholder:text-[#666373]" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
                             <SelectLabel>Select Category</SelectLabel>
-                            {categories.map((category: any) => (
-                                <SelectItem key={category} value={category}>{category}</SelectItem>
+                            <SelectItem value="all">All Category</SelectItem>
+                            {categories.map((cat: any) => (
+                                <SelectItem key={cat} value={cat}>
+                                    {cat}
+                                </SelectItem>
                             ))}
                         </SelectGroup>
                     </SelectContent>
                 </Select>
                 <div className="flex items-center gap-6 bg-[#EDEDED] px-6 py-2 rounded-[10px] cursor-pointer ">
-                    <div className={`${view === "list" ? "border border-[#000000] rounded-[4px] p-1 flex justify-center items-center": ''}`}>
-                        {
-                            view === "list" ? <FaList /> : <img src={list} alt="list" className={"h-4 opacity-28"} onClick={() => setView("list")} />
-                        }
+                    <div className={`${view === "list" ? "border border-[#000000] rounded-[4px] p-1 flex justify-center items-center" : ""}`}>
+                        {view === "list" ? (
+                            <FaList />
+                        ) : (
+                            <img
+                                src={list}
+                                alt="list"
+                                className="h-4 opacity-28"
+                                onClick={() => setView("list")}
+                            />
+                        )}
                     </div>
-                    <div className={`${view === "grid" ? "border border-[#000000] rounded-[4px] p-1 flex justify-center items-center": ''}`}>
-                        {
-                            view === "grid" ? <BsFillGrid3X3GapFill /> : <img src={grid} alt="grid" className={"h-4"} onClick={() => setView("grid")} />
-                        }
+                    <div className={`${view === "grid" ? "border border-[#000000] rounded-[4px] p-1 flex justify-center items-center" : ""}`}>
+                        {view === "grid" ? (
+                            <BsFillGrid3X3GapFill />
+                        ) : (
+                            <img
+                                src={grid}
+                                alt="grid"
+                                className="h-4"
+                                onClick={() => setView("grid")}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

@@ -6,11 +6,12 @@ import star from "../../assets/sidebaricon/star.png"
 import { useNavigate } from "react-router-dom";
 import { UsegetTrips } from "@/hooks/gettriphook";
 import { LoaderIcon } from "lucide-react";
+import { UseSearchTrips } from "@/hooks/searchTripshook";
 
-
-
-interface SearchbarProps {
+interface ShowTripsProps {
     view: string;
+    searchQuery: string;
+    category: string;
 }
 // const trips = [
 //     { id: 1, name: "Wild Weekend Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild weekend", img: trip1 },
@@ -21,10 +22,35 @@ interface SearchbarProps {
 //     { id: 2, name: "Wild trip Barcelona", location: "Barcelona, Spain", Date: "05-08 August", Point: "Plazas disponibles", rating: "4.5 (23)", type: "wild trip", img: trip3 },
 // ];
 
-const Showtrips = ({ view }: SearchbarProps) => {
+const Showtrips = ({ view, searchQuery, category }: ShowTripsProps) => {
     const navigate = useNavigate()
-    const { data, isLoading } = UsegetTrips();
-    const upcomingtrip = data?.trips
+
+    // Backend search (debounced inside hook)
+    const {
+        data: searchData,
+        isLoading: isSearchLoading,
+    } = UseSearchTrips(searchQuery);
+
+    // All trips (fallback / initial load)
+    const {
+        data: allData,
+        isLoading: isAllLoading,
+    } = UsegetTrips();
+
+    const hasSearch = !!searchQuery && searchQuery.trim().length > 0;
+    const baseTrips = hasSearch ? (searchData?.trips ?? []) : (allData?.trips ?? []);
+
+    const normalizedCategory = category?.toLowerCase().trim();
+    const filteredTrips = normalizedCategory
+        ? baseTrips.filter((trip: any) => {
+            const tripCategory =
+                (trip.categoryName ?? trip.category ?? "").toString().toLowerCase().trim();
+            return tripCategory === normalizedCategory;
+        })
+        : baseTrips;
+
+    const isLoading = hasSearch ? isSearchLoading : isAllLoading;
+    const upcomingtrip = filteredTrips;
     return (
         <>
             <div className="px-4 sm:px-16 py-6 bg-[#FAFAFA]">
@@ -38,13 +64,11 @@ const Showtrips = ({ view }: SearchbarProps) => {
                                 </span>
 
                                 <div className="border-b border-[#D9D9D9] mt-[16px]" />
-                                {
-                                isLoading && (
+                                {isLoading && (
                                     <div className="w-full flex items-center justify-center py-10">
                                         <LoaderIcon className="animate-spin" />
                                     </div>
-                                )
-                                }
+                                )}
                                 <div className="flex flex-col gap-4 mt-5 overflow-x-auto h-150">
                                     {
                                         upcomingtrip?.map((trip: any, index: number) => (
