@@ -29,15 +29,17 @@ function normalizeItems(
   return raw.map((item: any) => {
     if (item && typeof item === "object" && (item.title != null || item.id != null)) {
       const id = item.id ?? item.title;
-      const fromLookup = typeof id === "string" ? lookup[id] : undefined;
+      const fromLookup = typeof id === "string" ? lookup[id.toLowerCase()] : undefined;
+      // Use img from item only if it's truthy and not empty, otherwise fall back to lookup or fallback
+      const itemImg = item.img || item.icon;
       return {
         title: item.title ?? fromLookup?.title ?? String(id),
         description: item.description ?? item.desc ?? fromLookup?.description ?? "",
-        img: item.img ?? item.icon ?? fromLookup?.img ?? fallbackImg,
+        img: (itemImg && itemImg.trim() !== "") ? itemImg : (fromLookup?.img ?? fallbackImg),
       };
     }
     const id = typeof item === "string" ? item : String(item);
-    const fromLookup = lookup[id];
+    const fromLookup = lookup[id.toLowerCase()];
     return {
       title: fromLookup?.title ?? id,
       description: fromLookup?.description ?? "",
@@ -50,8 +52,25 @@ const Includeditem = ({ trip }: { trip: any }) => {
     const data = trip?.trip?.[0] || trip?.trip || trip;
     
     // Handle both camelCase and snake_case field names from database
-    const rawIncluded = data?.included ?? data?.Included ?? [];
-    const rawNotIncluded = data?.notIncluded ?? data?.not_included ?? data?.NotIncluded ?? [];
+    // Also handle if included/notIncluded is a JSON string that needs parsing
+    let rawIncluded = data?.included ?? data?.Included ?? [];
+    let rawNotIncluded = data?.notIncluded ?? data?.not_included ?? data?.NotIncluded ?? [];
+    
+    // Parse if they're JSON strings
+    if (typeof rawIncluded === "string") {
+        try {
+            rawIncluded = JSON.parse(rawIncluded);
+        } catch {
+            rawIncluded = [];
+        }
+    }
+    if (typeof rawNotIncluded === "string") {
+        try {
+            rawNotIncluded = JSON.parse(rawNotIncluded);
+        } catch {
+            rawNotIncluded = [];
+        }
+    }
     
     // Normalize so we support both array of IDs (from form) and array of objects
     const IncludedItem = normalizeItems(rawIncluded, INCLUDED_LOOKUP, included1);
