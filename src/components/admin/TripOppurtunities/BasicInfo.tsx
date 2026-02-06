@@ -64,6 +64,33 @@ const BasicInfo = () => {
   const selectedCategoryId = watch("categoryId");
   const daysItineraryWatch = watch("daysItinerary");
 
+  // Check if selected category is "Wild Trips" (case-insensitive)
+  const isWildTripsCategory = selectedCategoryId && data?.categories
+    ? data.categories.some(
+        (cat: any) =>
+          cat.id === selectedCategoryId &&
+          cat.name.toLowerCase().trim() === "wild trips"
+      )
+    : false;
+
+  // Ensure categoryId is properly set when categories load (for edit mode)
+  useEffect(() => {
+    if (data?.categories && selectedCategoryId && !isLoading) {
+      // Check if the current categoryId exists in the loaded categories
+      const categoryExists = data.categories.some(
+        (cat: any) => cat.id === selectedCategoryId
+      );
+      // If categoryId doesn't exist in categories, log for debugging but don't clear it
+      // The Select component will handle displaying it once categories are loaded
+      if (!categoryExists && selectedCategoryId) {
+        console.warn(
+          `Category ID ${selectedCategoryId} not found in loaded categories. Available categories:`,
+          data.categories.map((c: any) => ({ id: c.id, name: c.name }))
+        );
+      }
+    }
+  }, [data?.categories, selectedCategoryId, isLoading]);
+
   // Close custom dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -219,37 +246,57 @@ const BasicInfo = () => {
             <FormField
               control={control}
               name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[#242E2F] font-semibold">
-                    Category
-                  </FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value ?? ""}
-                    >
-                      <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {isLoading && <p className="p-2">Loading...</p>}
-                        {isError && (
-                          <p className="p-2 text-red-500">
-                            Something went wrong
-                          </p>
-                        )}
-                        {data?.categories.map((category: any) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                // Get current value from form - always use the form value
+                const currentValue = field.value ?? "";
+
+                // Always use the form value - Radix Select will display it once categories load
+                // Using empty string for undefined/null values (Radix Select requirement)
+                const selectValue = currentValue || "";
+
+                return (
+                  <FormItem>
+                    <FormLabel className="text-[#242E2F] font-semibold">
+                      Category
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={selectValue}
+                        key={`category-select-${data?.categories?.length || 0}-${currentValue}`}
+                      >
+                        <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {isLoading && <p className="p-2">Loading...</p>}
+                          {isError && (
+                            <p className="p-2 text-red-500">
+                              Something went wrong
+                            </p>
+                          )}
+                          {!isLoading &&
+                            !isError &&
+                            data?.categories &&
+                            data.categories.length === 0 && (
+                              <p className="p-2 text-gray-500">
+                                No categories available
+                              </p>
+                            )}
+                          {!isLoading &&
+                            !isError &&
+                            data?.categories?.map((category: any) => (
+                              <SelectItem key={category.id} value={category.id}>
+                                {category.name}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
 
             {/* Trip Title */}
@@ -273,8 +320,8 @@ const BasicInfo = () => {
               )}
             />
 
-            {/* Days Itinerary Section - Shown when category is selected */}
-            {selectedCategoryId && (
+            {/* Days Itinerary Section - Shown only when "Wild Trips" category is selected */}
+            {isWildTripsCategory && (
               <>
                 {/* Days Itinerary Section */}
                 <div className="md:col-span-2 mt-6">

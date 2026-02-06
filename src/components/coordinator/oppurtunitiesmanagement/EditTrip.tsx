@@ -30,8 +30,8 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
     resolver: zodResolver(tripSchema),
     shouldUnregister: false,
     defaultValues: {
-      type: "",
-      // Days itinerary (shown when trip type is selected)
+      categoryId: "",
+      // Days itinerary (shown when category is selected)
       daysItinerary: [],
       title: "",
       description: "",
@@ -147,7 +147,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
     })();
 
     const values: Partial<TripFormType> = {
-      type: trip.type ?? "",
+      categoryId: trip.categoryId ?? "",
       daysItinerary: daysItineraryData,
       title: trip.title ?? "",
       description: trip.description ?? "",
@@ -217,7 +217,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
 
     if (step === 1) {
       valid = await methods.trigger([
-        "type",
+        "categoryId",
         "title",
         "description",
         "location",
@@ -293,7 +293,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         title: data.title,
         description: data.description,
         shortDesc: data.description?.slice(0, 255),
-        type: data.type,
+        categoryId: data.categoryId,
         location: data.location,
         locationId: data.locationId,
         mapCoordinates: data.mapCoordinates || undefined,
