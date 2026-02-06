@@ -31,12 +31,13 @@ const ViewDetailTripPage = () => {
   const trip: any = data?.trip || data;
 
   // Resolve category name using new categoryId relation (fallback to legacy fields)
+  // Backend now returns categoryName directly, but we still check categoriesData as fallback
   const resolvedCategoryName =
+    trip?.categoryName ??
+    trip?.category ??
     categoriesData?.categories?.find((c: any) => c.id === trip?.categoryId)
       ?.name ??
     trip?.type ??
-    trip?.category ??
-    trip?.categoryName ??
     "";
 
   // Normalized category/type name based on new trips flow (categories)
@@ -54,7 +55,7 @@ const ViewDetailTripPage = () => {
       <Locationmeetingpoint trip={trip} />
       <Tripmood />
       {isWildWeekend && <SurfaceCamp />}
-      {isWildTrips && <Daybyday />}
+      {isWildTrips && <Daybyday trip={trip} />}
       <Includeditem trip={trip} />
       <VideoSection trip={trip} />
       {isWildTrips && <Coordinatordetail trip={trip} />}
