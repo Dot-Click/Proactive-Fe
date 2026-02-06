@@ -136,6 +136,7 @@ const OppurtunitiesManagement = () => {
   },
   ];
   const [searchQuery, setSearchQuery] = useState("");
+  const [pageSize, setPageSize] = useState<number>(10);
   const { data: trip, isLoading, isError } = UsegetTrips();
   const { data: searchData, isLoading: searchLoading } =
     UseSearchTrips(searchQuery);
@@ -178,6 +179,9 @@ const OppurtunitiesManagement = () => {
         columnsMenuItems={columnsMenu?.items ?? []}
         onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
         onSearch={(query) => setSearchQuery(query)}
+        defaultLimit={pageSize}
+        limitOptions={[5, 10, 20, 30, 50]}
+        onLimitChange={(limit) => setPageSize(limit)}
       />
       <div className="bg-white rounded-[25px] mt-3 overflow-x-auto relative">
         {searchLoading && (
@@ -189,6 +193,8 @@ const OppurtunitiesManagement = () => {
           columns={columns}
           data={displayData}
           onExposeColumns={(payload) => setColumnsMenu(payload)}
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         />
       </div>
     </div>

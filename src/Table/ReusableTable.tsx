@@ -1,5 +1,5 @@
-import React, { useCallback, useRef, useState } from 'react'
-import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, getPaginationRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState, type VisibilityState } from '@tanstack/react-table'
+import React, { useCallback, useRef, useState, useEffect } from 'react'
+import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, getPaginationRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState, type VisibilityState, type PaginationState } from '@tanstack/react-table'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { cn } from '@/lib/utils';
 
@@ -7,14 +7,28 @@ type TableProps<TData> = {
     columns: ColumnDef<TData, any>[];
     data: TData[];
     onExposeColumns?: (payload: { items: Array<{ id: string; label?: string; checked: boolean; disabled?: boolean }>; toggle: (id: string, value: boolean) => void }) => void;
+    pageSize?: number;
+    onPageSizeChange?: (pageSize: number) => void;
 }
 
-const ReusableTable = <TData,>({ columns, data, onExposeColumns }: TableProps<TData>) => {
+const ReusableTable = <TData,>({ columns, data, onExposeColumns, pageSize: externalPageSize, onPageSizeChange }: TableProps<TData>) => {
 
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
+    const [pagination, setPagination] = useState<PaginationState>({
+        pageIndex: 0,
+        pageSize: externalPageSize ?? 10,
+    })
+
+    // Update pagination when external pageSize changes
+    useEffect(() => {
+        if (externalPageSize !== undefined) {
+            setPagination(prev => ({ ...prev, pageSize: externalPageSize, pageIndex: 0 }))
+        }
+    }, [externalPageSize])
+
     const table = useReactTable({
         data,
         columns,
@@ -27,11 +41,20 @@ const ReusableTable = <TData,>({ columns, data, onExposeColumns }: TableProps<TD
             columnFilters,
             columnVisibility,
             rowSelection,
+            pagination,
         },
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
+        onPaginationChange: (updater) => {
+            const newPagination = typeof updater === 'function' ? updater(pagination) : updater
+            setPagination(newPagination)
+            if (onPageSizeChange && newPagination.pageSize !== pagination.pageSize) {
+                onPageSizeChange(newPagination.pageSize)
+            }
+        },
+        manualPagination: false,
     })
 
     const lastExposeKeyRef = useRef<string | null>(null)

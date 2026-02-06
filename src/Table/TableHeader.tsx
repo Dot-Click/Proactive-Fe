@@ -60,11 +60,11 @@ const TableHeader: React.FC<TableToolbarProps> = ({
   columnsMenuItems,
   onColumnMenuToggle,
   onSearch,
-  // limitOptions = [5, 10, 20, 30, 50],
-  // defaultLimit = 5,
+  limitOptions = [5, 10, 20, 30, 50],
+  defaultLimit = 10,
   // onSortClick,
   // onFilterClick,
-  // onLimitChange,
+  onLimitChange,
   // onAddClick,
 }) => {
   return (
@@ -110,20 +110,26 @@ const TableHeader: React.FC<TableToolbarProps> = ({
       <div className="flex md:flex-row flex-col justify-between items-center mt-8 gap-4">
         <div className="flex items-center gap-4">
           <span className="text-[#666373] text-[18px]">Showing</span>
-          <Select>
+          <Select
+            value={defaultLimit?.toString() || "10"}
+            onValueChange={(value) => {
+              const limit = parseInt(value, 10)
+              onLimitChange?.(limit)
+            }}
+          >
             <SelectTrigger
               size="sm"
               className="w-[66px] px-2 py-1 bg-[#E8E8E8] font-medium text-[17px] rounded-[8px] h-auto"
             >
-              <SelectValue placeholder="05" />
+              <SelectValue placeholder={defaultLimit?.toString() || "10"} />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="20">20</SelectItem>
-                <SelectItem value="30">30</SelectItem>
-                <SelectItem value="40">40</SelectItem>
-                <SelectItem value="50">50</SelectItem>
+                {(limitOptions || [5, 10, 20, 30, 50]).map((limit) => (
+                  <SelectItem key={limit} value={limit.toString()}>
+                    {limit}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
