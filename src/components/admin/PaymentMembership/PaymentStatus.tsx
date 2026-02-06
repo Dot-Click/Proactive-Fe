@@ -158,6 +158,7 @@ const userData: ColumnDef<User>[] = [
 const PaymentStatus = () => {
   const { data: paymentData, isLoading, isError } = UsegetPayment();
   const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+  const [pageSize, setPageSize] = useState<number>(10);
   const [exportLoading, setExportLoading] = useState(false);
   const [exportType, setExportType] = useState<'pdf' | 'csv' | null>(null);
 
@@ -391,10 +392,19 @@ const PaymentStatus = () => {
       showColumns
       columnsMenuItems={columnsMenu?.items ?? []}
       onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
+      defaultLimit={pageSize}
+      limitOptions={[5, 10, 20, 30, 50]}
+      onLimitChange={(limit) => setPageSize(limit)}
     />
     
     <div className="bg-white rounded-[25px] mt-3">
-      <ReusableTable data={paymentData?.tripPayments ?? []} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
+      <ReusableTable 
+        data={paymentData?.tripPayments ?? []} 
+        columns={userData} 
+        onExposeColumns={(payload) => setColumnsMenu(payload)}
+        pageSize={pageSize}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+      />
     </div>
   </div>
 )

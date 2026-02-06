@@ -218,6 +218,7 @@ const FilterSection = () => {
     toggle: (id: string, v: boolean) => void;
   } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [pageSize, setPageSize] = useState<number>(10);
   const { data: searchResults, isLoading: isSearchLoading } = UseSearchUsers(searchQuery);
 
   const users = useMemo(() => {
@@ -239,6 +240,9 @@ const FilterSection = () => {
         showFilter={false}
         searchPlaceholder="Search users by name or email"
         onSearch={(query) => setSearchQuery(query)}
+        defaultLimit={pageSize}
+        limitOptions={[5, 10, 20, 30, 50]}
+        onLimitChange={(limit) => setPageSize(limit)}
       />
       <div className="bg-white rounded-[25px] mt-3 overflow-x-auto">
         {isError ? (
@@ -258,6 +262,8 @@ const FilterSection = () => {
             columns={userColumns}
             data={users}
             onExposeColumns={(payload) => setColumnsMenu(payload)}
+            pageSize={pageSize}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           />
         )}
       </div>

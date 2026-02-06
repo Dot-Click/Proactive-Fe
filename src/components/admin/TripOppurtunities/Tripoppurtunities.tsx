@@ -217,6 +217,7 @@ const Tripoppurtunities = () => {
   const { data: trip, isLoading, isError } = UsegetTrips();
   const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
   const [searchQuery, setSearchQuery] = useState("");
+  const [pageSize, setPageSize] = useState<number>(10);
   const { data: searchResults, isLoading: isSearchLoading } = UseSearchTrips(searchQuery);
 
   if (isError) {
@@ -247,9 +248,18 @@ const Tripoppurtunities = () => {
         columnsMenuItems={columnsMenu?.items ?? []}
         onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
         onSearch={(query) => setSearchQuery(query)}
+        defaultLimit={pageSize}
+        limitOptions={[5, 10, 20, 30, 50]}
+        onLimitChange={(limit) => setPageSize(limit)}
       />
       <div className="bg-white rounded-[25px] mt-3">
-        <ReusableTable data={displayData} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
+        <ReusableTable 
+          data={displayData} 
+          columns={userData} 
+          onExposeColumns={(payload) => setColumnsMenu(payload)}
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        />
       </div>
 
     </div>

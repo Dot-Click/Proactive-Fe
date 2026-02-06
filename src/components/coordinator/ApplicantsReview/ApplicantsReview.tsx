@@ -2,10 +2,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ReusableTable from "@/Table/ReusableTable";
+import TableHeader from "@/Table/TableHeader";
 import { UsegetallApplication } from "@/hooks/getallApplication";
 import { useUpdateApplicationStatus } from "@/hooks/updateApplicationStatus";
 import type { ColumnDef } from "@tanstack/react-table";
 import { LoaderIcon } from "lucide-react";
+import { useState } from "react";
 import ApplicantsVideo from "./ApplicantsVideo";
 import play from "../../../assets/play.png";
 
@@ -191,6 +193,11 @@ const ActionButtons = ({
 
 const ApplicantsReview = () => {
   const { data: applicationdata, isLoading, isError } = UsegetallApplication();
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [columnsMenu, setColumnsMenu] = useState<{
+    items: { id: string; label?: string; checked: boolean }[];
+    toggle: (id: string, v: boolean) => void;
+  } | null>(null);
 
   return (
     <>
@@ -201,7 +208,26 @@ const ApplicantsReview = () => {
           </div>
         )}
         {isError && <p className="text-red-500">Error loading data.</p>}
-        <ReusableTable columns={userData} data={applicationdata ?? []} />
+        <TableHeader
+          showSearch={false}
+          showFilter={false}
+          showSort={false}
+          showColumns
+          columnsMenuItems={columnsMenu?.items ?? []}
+          onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
+          defaultLimit={pageSize}
+          limitOptions={[5, 10, 20, 30, 50]}
+          onLimitChange={(limit) => setPageSize(limit)}
+        />
+        <div className="bg-white rounded-[25px] mt-3">
+          <ReusableTable 
+            columns={userData} 
+            data={applicationdata ?? []}
+            onExposeColumns={(payload) => setColumnsMenu(payload)}
+            pageSize={pageSize}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          />
+        </div>
       </div>
     </>
   );

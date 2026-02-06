@@ -305,6 +305,7 @@ const ChatManagement = () => {
   const [, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
   const [selectedChat, setSelectedChat] = useState<any>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [pageSize, setPageSize] = useState<number>(10);
   const [exportLoading, setExportLoading] = useState(false);
   const [exportType, setExportType] = useState<'pdf' | 'csv' | null>(null);
   
@@ -772,10 +773,18 @@ const ChatManagement = () => {
         showFilter={false}
         showSort
         searchPlaceholder="Search Message"
-  
+        defaultLimit={pageSize}
+        limitOptions={[5, 10, 20, 30, 50]}
+        onLimitChange={(limit) => setPageSize(limit)}
       />
       <div className="bg-white rounded-[25px] mt-3">
-        <ReusableTable data={tableData} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
+        <ReusableTable 
+          data={tableData} 
+          columns={userData} 
+          onExposeColumns={(payload) => setColumnsMenu(payload)}
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        />
       </div>
     </>
   )

@@ -158,6 +158,7 @@ const userData: ColumnDef<User>[] = [
 const DiscountCode = () => {
     const { data: DiscountData, isLoading, isError } = UsegetPayment();
     const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
+    const [pageSize, setPageSize] = useState<number>(10);
     if (isError) {
         return <div>Error loading discount data.</div>;
     }
@@ -182,9 +183,18 @@ const DiscountCode = () => {
                 showColumns
                 columnsMenuItems={columnsMenu?.items ?? []}
                 onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
+                defaultLimit={pageSize}
+                limitOptions={[5, 10, 20, 30, 50]}
+                onLimitChange={(limit) => setPageSize(limit)}
             />
             <div className="bg-white rounded-[25px] mt-3">
-                <ReusableTable data={DiscountData.discounts ?? []} columns={userData} onExposeColumns={(payload) => setColumnsMenu(payload)} />
+                <ReusableTable 
+                    data={DiscountData.discounts ?? []} 
+                    columns={userData} 
+                    onExposeColumns={(payload) => setColumnsMenu(payload)}
+                    pageSize={pageSize}
+                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                />
             </div>
 
         </div>

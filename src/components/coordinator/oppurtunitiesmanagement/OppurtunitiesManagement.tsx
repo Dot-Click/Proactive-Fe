@@ -22,133 +22,137 @@ type Trip = {
 
 const OppurtunitiesManagement = () => {
   const navigate = useNavigate();
-  
+
   const columns: ColumnDef<Trip>[] = [
-  {
-    accessorKey: "name",
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div className="pl-6">
-        <h1>Trip Name</h1>
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center gap-3">
-        <Avatar className="h-10 w-10">
-          <AvatarImage
-            src={row.original.coverImage || "https://github.com/shadcn.png"}
-            alt="cover"
-          />
-          <AvatarFallback>TR</AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col">
-          <span className="font-medium text-sm text-[#3b3745] text-nowrap">
-            {row.original.name}
-          </span>
-          <span className="text-xs text-[#8a8698] line-clamp-1">
-            {row.original.description.slice(0, 50)}
-          </span>
+    {
+      accessorKey: "name",
+      enableColumnFilter: true,
+      enableSorting: true,
+      header: () => (
+        <div className="pl-6">
+          <h1>Trip Name</h1>
         </div>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "category",
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div className="pl-8">
-        <h1>Category</h1>
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 pl-6 w-40">
-        <Button className="bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full px-4 py-5 font-semibold">
-          {row.original.category}
-        </Button>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "dates",
-    header: () => (
-      <div>
-        <h1>Dates</h1>
-      </div>
-    ),
-    cell: ({ row }) => {
-      const s = new Date(row.original.startDate);
-      const e = new Date(row.original.endDate);
-      const fmt = (d: Date) =>
-        d.toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
-      return (
-        <div className="flex flex-col w-30">
-          <div className="font-semibold text-[#666373] text-[14px]">{`${fmt(s)} – ${fmt(e)}`}</div>
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center gap-3">
+          <Avatar className="h-10 w-10">
+            <AvatarImage
+              src={row.original.coverImage || "https://github.com/shadcn.png"}
+              alt="cover"
+            />
+            <AvatarFallback>TR</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <span className="font-medium text-sm text-[#3b3745] text-nowrap">
+              {row.original.name}
+            </span>
+            <span className="text-xs text-[#8a8698] line-clamp-1">
+              {row.original.description.slice(0, 50)}
+            </span>
+          </div>
         </div>
-      );
+      ),
     },
-  },
-  {
-    accessorKey: "status",
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div className="pl-4">
-        <h1>Status</h1>
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="w-30">
-        <Button className="bg-[#077B21]/10 hover:bg-[#077B21]/20 border border-[#077B21] cursor-pointer px-8 h-10 rounded-full text-[#077B21] font-bold">
-          {row.original.status}
-        </Button>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "actions",
-    header: () => (
-      <div>
-        <h1>Actions</h1>
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="flex gap-2">
-        <Button
-          onClick={() => navigate(`/coordinator-dashboard/view-trip/${row.original.id}`)}
-          className="rounded-full text-md px-10 py-5 cursor-pointer"
-        >
-          View
-        </Button>
-        <Button 
-          onClick={() => navigate(`/coordinator-dashboard/edit-trip/${row.original.id}`)}
-          className="rounded-full bg-white hover:bg-[#f0ebeb] text-[#666373] border border-[#666373] text-md px-10 py-5 cursor-pointer"
-        >
-          Edit
-        </Button>
-      </div>
-    ),
-  },
+    {
+      accessorKey: "category",
+      enableColumnFilter: true,
+      enableSorting: true,
+      header: () => (
+        <div className="pl-8">
+          <h1>Category</h1>
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2 pl-6 w-40">
+          <Button className="bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full px-4 py-5 font-semibold">
+            {row.original.category}
+          </Button>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "dates",
+      header: () => (
+        <div>
+          <h1>Dates</h1>
+        </div>
+      ),
+      cell: ({ row }) => {
+        const s = new Date(row.original.startDate);
+        const e = new Date(row.original.endDate);
+        const fmt = (d: Date) =>
+          d.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        return (
+          <div className="flex flex-col w-30">
+            <div className="font-semibold text-[#666373] text-[14px]">{`${fmt(
+              s
+            )} – ${fmt(e)}`}</div>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "status",
+      enableColumnFilter: true,
+      enableSorting: true,
+      header: () => (
+        <div className="pl-4">
+          <h1>Status</h1>
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="w-30">
+          <Button className="bg-[#077B21]/10 hover:bg-[#077B21]/20 border border-[#077B21] cursor-pointer px-8 h-10 rounded-full text-[#077B21] font-bold">
+            {row.original.status}
+          </Button>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "actions",
+      header: () => (
+        <div>
+          <h1>Actions</h1>
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="flex gap-2">
+          <Button
+            onClick={() =>
+              navigate(`/coordinator-dashboard/view-trip/${row.original.id}`)
+            }
+            className="rounded-full text-md px-10 py-5 cursor-pointer"
+          >
+            View
+          </Button>
+          <Button
+            onClick={() =>
+              navigate(`/coordinator-dashboard/edit-trip/${row.original.id}`)
+            }
+            className="rounded-full bg-white hover:bg-[#f0ebeb] text-[#666373] border border-[#666373] text-md px-10 py-5 cursor-pointer"
+          >
+            Edit
+          </Button>
+        </div>
+      ),
+    },
   ];
   const [searchQuery, setSearchQuery] = useState("");
   const [pageSize, setPageSize] = useState<number>(10);
   const { data: trip, isLoading, isError } = UsegetTrips();
   const { data: searchData, isLoading: searchLoading } =
     UseSearchTrips(searchQuery);
-   const [columnsMenu, setColumnsMenu] = useState<{
+  const [columnsMenu, setColumnsMenu] = useState<{
     items: { id: string; label?: string; checked: boolean }[];
     toggle: (id: string, v: boolean) => void;
   } | null>(null);
 
   // Use search results if search query exists, otherwise use all trips
-  const displayData = searchQuery
-    ? (searchData?.trips ?? [])
-    : (trip?.trips ?? []);
+  const displayData = searchQuery ? searchData?.trips ?? [] : trip?.trips ?? [];
 
   // Only show initial loading state, not during search
   const isInitialLoading = !searchQuery && isLoading;
