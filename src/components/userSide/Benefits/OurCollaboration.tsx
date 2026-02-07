@@ -5,7 +5,7 @@ import OurCollabrationCard from "./OurCollabrationCard"
 const OurCollaboration = () => {
     return (
         <>
-        <div className="flex justify-center items-start pt-10 ">
+        <div className="flex justify-center items-start pt-50 ">
         <img src={advantsges} alt="advantsges" className="mr-100 h-25 lg:flex hidden"/>
         </div>
         <div className="md:py-80 py-60">
