@@ -474,6 +474,64 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
         userType: coordinator.userType || 'coordinator' // Default to coordinator if not specified
     };
 
+    // User-facing popup: biografia, aventuras locas, idiomas, botón aventuras realizadas
+    if (role === "user") {
+        const crazyAdventures = (coordinator as any).crazyAdventures ?? coordinator.specialities;
+        const aventurasText = Array.isArray(crazyAdventures)
+            ? crazyAdventures.join(", ")
+            : typeof crazyAdventures === "string"
+            ? crazyAdventures
+            : "—";
+        const idiomasText =
+            Array.isArray(coordinator.languages) && coordinator.languages.length > 0
+                ? coordinator.languages.join(", ")
+                : "—";
+
+        return (
+            <DialogContent className="sm:max-w-[520px] max-h-[90vh] border-[6px] border-[#E3E3E3] rounded-[20px] overflow-y-auto">
+                <DialogHeader>
+                    <DialogTitle className="font-bold text-[22px] text-[#221E33]">
+                        {coordinator.fullName}
+                    </DialogTitle>
+                </DialogHeader>
+                <div className="mt-4 flex flex-col gap-5">
+                    <div>
+                        <h3 className="mb-1.5 text-sm font-semibold text-[#666373]">Biografía</h3>
+                        <p className="text-[15px] leading-relaxed text-[#221E33]">
+                            {coordinator.bio || "—"}
+                        </p>
+                    </div>
+                    <div>
+                        <h3 className="mb-1.5 text-sm font-semibold text-[#666373]">Aventuras locas</h3>
+                        <p className="text-[15px] leading-relaxed text-[#221E33]">{aventurasText}</p>
+                    </div>
+                    <div>
+                        <h3 className="mb-1.5 text-sm font-semibold text-[#666373]">Idiomas</h3>
+                        <p className="text-[15px] leading-relaxed text-[#221E33]">{idiomasText}</p>
+                    </div>
+                    <div className="mt-2">
+                        <Button
+                            onClick={() => navigate("/open-oppurtunities")}
+                            className="w-full rounded-full bg-[#0DAC87] hover:bg-[#09a07d] font-bold h-12 px-6"
+                        >
+                            Aventuras realizadas
+                        </Button>
+                    </div>
+                </div>
+                <div className="mt-6 flex justify-center">
+                    <DialogClose asChild>
+                        <Button
+                            variant="outline"
+                            className="rounded-full bg-[#E0DDDD] hover:bg-[#c7c1c1] text-[#606066] h-11 px-8 font-bold"
+                        >
+                            Cerrar
+                        </Button>
+                    </DialogClose>
+                </div>
+            </DialogContent>
+        );
+    }
+
     return (
         <>
             <DialogContent className="sm:max-w-[880px] max-h-[90vh] border-[6px] border-[#E3E3E3] rounded-[20px] overflow-y-auto">

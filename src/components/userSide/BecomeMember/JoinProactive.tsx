@@ -112,11 +112,11 @@ const JoinProactive = () => {
                 {/* Curved Path Connector */}
                 {!isLast && (
                   <div
-                    className={`absolute top-[65%] h-[140%] w-1/2 border-[20px] border-transparent z-0 hidden lg:block
+                    className={`absolute top-[65%] h-[140%] w-1/2 border-[25px] border-transparent z-0 hidden lg:block
                     ${
                       isEven
-                        ? "left-1/2 -translate-x-[7px] border-t-[#EEF2F9] border-r-[#EEF2F9] rounded-tr-[120px]"
-                        : "right-1/2 translate-x-[7px] border-t-[#EEF2F9] border-l-[#EEF2F9] rounded-tl-[120px]"
+                        ? "left-1/2 -translate-x-[120px] border-t-[#EEF2F9] border-r-[#EEF2F9] rounded-tr-[120px]"
+                        : "right-1/2 translate-x-[120px] border-t-[#EEF2F9] border-l-[#EEF2F9] rounded-tl-[120px]"
                     }`}
                   />
                 )}

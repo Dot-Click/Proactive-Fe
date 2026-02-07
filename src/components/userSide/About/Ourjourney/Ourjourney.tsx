@@ -89,11 +89,11 @@ const OurJourney = () => {
                 {/* Curved Path Logic */}
                 {!isLast && (
                   <div
-                    className={`absolute top-[65%] h-[135%] w-1/2 border-[12px] border-transparent z-0
+                    className={`absolute top-[65%] h-[135%] w-1/2 border-[25px] border-transparent z-0
                     ${
                       isEven
-                        ? "left-1/2 -translate-x-[6px] border-t-[#F1F5F9] border-r-[#F1F5F9] rounded-tr-[100px]"
-                        : "right-1/2 translate-x-[6px] border-t-[#F1F5F9] border-l-[#F1F5F9] rounded-tl-[100px]"
+                        ? "left-1/2 -translate-x-[120px] border-t-[#F1F5F9] border-r-[#F1F5F9] rounded-tr-[100px]"
+                        : "right-1/2 translate-x-[120px] border-t-[#F1F5F9] border-l-[#F1F5F9] rounded-tl-[100px]"
                     }`}
                   />
                 )}
@@ -104,7 +104,7 @@ const OurJourney = () => {
                   <div className="absolute -top-2 left-[-15px] z-20 w-16 h-16 lg:w-20 lg:h-20">
                     {/* Background Circle (The darker shadow part) */}
                     <div
-                      className="absolute inset-0 rounded-full translate-x-1.5 translate-y-1"
+                      className="absolute inset-0 rounded-full translate-x-2 -translate-y-2"
                       style={{ backgroundColor: item.shadowColor }}
                     />
                     {/* Foreground Circle (The main year part) */}
