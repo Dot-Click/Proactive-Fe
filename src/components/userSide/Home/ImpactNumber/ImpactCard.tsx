@@ -1,8 +1,7 @@
-import impact1 from "../../../../assets/impact1.png"
 import impact2 from "../../../../assets/impact2.png"
-import impact3 from "../../../../assets/impact3.png"
 import impact4 from "../../../../assets/impact4.png"
 import CountUp from 'react-countup';
+import { Tent, Users } from 'lucide-react';
 
 const ImpactCard = () => {
   return (
@@ -48,7 +47,7 @@ const ImpactCard = () => {
     <div className="grid lg:grid-cols-4 grid-cols-2 lg:gap-6 gap-4 lg:mt-30 mt-6">
       <div className="lg:w-[240px] mx-auto lg:px-8 lg:py-8 px-2 py-2 rounded-[20px] bg-gradient-to-b from-[#058B78] to-[#29C8B1] border border-[#FFFFFF]">
         <div className="flex flex-col items-center gap-10">
-          <img src={impact1} alt="impact1" className="h-12" />
+          <Tent className="h-12 w-12 text-white" strokeWidth={2} aria-hidden />
           <div className="flex flex-col lg:gap-2 justify-center items-center">
             <h4 className="text-[#FFFFFF] font-bold lg:text-4xl"><CountUp start={0} end={2500} delay={0} separator="">
               {({ countUpRef }) => (
@@ -84,7 +83,7 @@ const ImpactCard = () => {
 
       <div className="lg:w-[240px] mx-auto lg:px-8 lg:py-8 px-3 py-2 rounded-[20px] bg-gradient-to-b from-[#058B78] to-[#29C8B1] border border-[#FFFFFF]">
         <div className="flex flex-col items-center gap-10">
-          <img src={impact3} alt="impact3" className="h-12 " />
+          <Users className="h-12 w-12 text-white" strokeWidth={2} aria-hidden />
           <div className="flex flex-col lg:gap-2 justify-center items-center">
             <h4 className="text-[#FFFFFF] font-bold lg:text-4xl"><CountUp start={0} end={50} delay={0} separator="">
               {({ countUpRef }) => (

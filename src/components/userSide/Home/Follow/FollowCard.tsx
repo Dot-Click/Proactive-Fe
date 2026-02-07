@@ -9,7 +9,7 @@ const PLACEHOLDER_IMAGES = [momentscard1, momentscard2, momentscard3]
 
 const FollowCard = () => {
     const { data, isLoading } = useInstagramInfo()
-    const posts = data?.posts ?? []
+    const posts = data?.posts?.slice(0,9) ?? []
 
     if (isLoading || posts.length === 0) {
         return (
@@ -41,7 +41,7 @@ const FollowCard = () => {
                         alt={post.caption?.slice(0, 80) ?? "Instagram post"}
                         className="h-120 w-90 object-cover w-full group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 flex justify-center items-center mb-12 z-10 bg-black/20 group-hover:bg-black/30 transition-colors">
+                    <div className="absolute inset-0 flex justify-center items-center mb-12 h-full z-10 bg-black/20 group-hover:bg-black/30 transition-colors">
                         <img src={Play} alt="Play" className="h-10 cursor-pointer" />
                     </div>
                 </a>

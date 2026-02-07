@@ -16,6 +16,7 @@ const getReviews = async (): Promise<ReviewItem[]> => {
   const response = await api.get<{ data: ReviewsResponse }>(
     "/api/user/reviews"
   );
+  console.log('response review', response);
   const data = response.data.data;
   return data?.reviews ?? [];
 };

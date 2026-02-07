@@ -80,6 +80,7 @@ const TestimonialCard = ({ item, isReview }: { item: ReviewItem | (typeof FALLBA
 
 const Testimonial = () => {
     const { data: reviews, isLoading } = useReviews();
+    console.log('reviews', reviews);
     const cards = reviews?.length ? reviews : FALLBACK_CARDS;
     const isReview = !!reviews?.length && !isLoading;
 
