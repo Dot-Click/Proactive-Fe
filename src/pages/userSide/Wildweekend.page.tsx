@@ -1,4 +1,6 @@
 import Exploretrips from "@/components/userSide/WildWeekend/Explore/Exploretrips"
+import JoinExplorers from "@/components/userSide/WildWeekend/JoinExplorers/JoinExplorers"
+import WhatIncluded from "@/components/userSide/WildWeekend/WhatIncluded/WhatIncluded"
 import ConnectStranger from "@/components/userSide/WildWeekend/ConnectStranger/ConnectStranger"
 import WildWeekendCard from "@/components/userSide/WildWeekend/WildWeekendCard/WildWeekendCard"
 import WonderPeople from "@/components/userSide/WildWeekend/WonderPeople/WonderPeople"
@@ -12,6 +14,8 @@ const WildweekendPage = () => {
       <WonderPeople/>
       <ConnectStranger/>
       <Exploretrips/>
+      <JoinExplorers/>
+      <WhatIncluded/>
       <OurMerchant/>
       <OpenOppurtunities/>
     </div>

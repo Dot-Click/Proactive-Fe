@@ -51,15 +51,17 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                         <span className="flex items-center gap-1">
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="cursor-pointer">
+                                    <Link to="/what-we-do">
                                     <div className="flex gap-1 items-center text-nowrap">
                                         What We Do
                                         <ChevronDown className='w-4 h-4' />
                                     </div>
+                                    </Link>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="bg-[#FFFFFF]/95 flex flex-col justify-center items-center px-4 mt-4">
-                                    <Link to="/what-we-do">
+                                    {/* <Link to="/what-we-do">
                                         <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Overview</DropdownMenuItem>
-                                    </Link>
+                                    </Link> */}
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to="/wild-weekend">
                                         <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Weekend</DropdownMenuItem>
