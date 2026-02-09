@@ -10,6 +10,9 @@ interface UpdateUserProfileData {
     phoneNumber?: string;
     dob?: string;
     gender?: string;
+    emergencyContact?: string;
+    dni?: string;
+    dietaryRestrictions?: string;
 }
 
 const updateUserProfile = async (data: UpdateUserProfileData) => {
@@ -28,8 +31,30 @@ export const UseUpdateUserProfile = () => {
             toast.success(message);
         },
         onError: (error: any) => {
-            const errorMessage = error?.response?.data?.message || "Failed to update profile";
-            toast.error(errorMessage);
+            // Handle validation errors with field-specific messages
+            const responseData = error?.response?.data;
+            
+            if (responseData?.errors) {
+                // Extract first validation error for display
+                const firstErrorKey = Object.keys(responseData.errors)[0];
+                const firstError = responseData.errors[firstErrorKey];
+                const fieldName = firstErrorKey
+                    .replace(/([A-Z])/g, " $1")
+                    .replace(/^./, (str) => str.toUpperCase())
+                    .trim();
+                
+                if (Array.isArray(firstError) && firstError.length > 0) {
+                    toast.error(`${fieldName}: ${firstError[0]}`);
+                } else {
+                    toast.error(responseData?.message || "Please check your input and try again.");
+                }
+            } else {
+                // Handle other errors
+                const errorMessage = responseData?.message || 
+                    error?.message || 
+                    "Unable to update your profile. Please try again.";
+                toast.error(errorMessage);
+            }
         },
     });
 };

@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState, useEffect } from 'react'
 import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, getPaginationRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState, type VisibilityState, type PaginationState } from '@tanstack/react-table'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { cn } from '@/lib/utils';
+import { TablePagination } from './TablePagination';
 
 type TableProps<TData> = {
     columns: ColumnDef<TData, any>[];
@@ -91,7 +92,7 @@ const ReusableTable = <TData,>({ columns, data, onExposeColumns, pageSize: exter
 
     return (
         <>
-            <div className='bg-white rounded-[25px]'>
+            <div className='bg-white rounded-[25px] flex flex-col'>
                 <div className="w-full overflow-x-auto">
                     <Table className="border-separate border-spacing-y-0 border-spacing-x-0 w-full min-w-[900px]">
                         <TableHeader className="bg-[#FAFAFA] hover:bg-[#FAFAFA] sticky top-0 z-10">
@@ -164,6 +165,10 @@ const ReusableTable = <TData,>({ columns, data, onExposeColumns, pageSize: exter
                             </TableRow>
                         </TableBody>
                     </Table>
+                </div>
+                {/* Pagination UI */}
+                <div className="border-t border-[#EFEFEF] mt-auto">
+                    <TablePagination table={table} />
                 </div>
             </div>
         </>
