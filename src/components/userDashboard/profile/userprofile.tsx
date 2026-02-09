@@ -6,22 +6,83 @@ import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
+
 const UserProfile = () => {
     const { data: userData } = UsegetCurrentUser();
     const user = userData?.data?.user;
-    console.log(user);
+
+    // Format member since date nicely
+    const formatMemberSince = (dateString: string | null | undefined): string => {
+        if (!dateString) return "Member";
+        
+        try {
+            const date = new Date(dateString);
+            const options: Intl.DateTimeFormatOptions = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            return `Member since ${date.toLocaleDateString('en-US', options)}`;
+        } catch (error) {
+            return "Member";
+        }
+    };
+
+    // Get full name, prioritizing FirstName + LastName
+    const getFullName = (): string => {
+        const firstName = user?.FirstName || "";
+        const lastName = user?.LastName || "";
+        const fullName = `${firstName} ${lastName}`.trim();
+        
+        // Fallback to nickname only if no first/last name available
+        if (!fullName && user?.NickName) {
+            return user.NickName;
+        }
+        
+        return fullName || "User";
+    };
+
+    // Get avatar URL - prioritize Google avatar, then regular avatar, then fallback
+    const getAvatarUrl = (): string | undefined => {
+        // Google login sets avatar in user.avatar, so it should already be there
+        // But we can also check if provider is google and use the avatar directly
+        if (user?.avatar) {
+            return user.avatar;
+        }
+        return undefined;
+    };
+
+    // Get avatar fallback initials from full name
+    const getAvatarInitials = (): string => {
+        const fullName = getFullName();
+        if (!fullName || fullName === "User") return "U";
+        
+        const parts = fullName.trim().split(" ");
+        if (parts.length >= 2) {
+            return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+        }
+        return fullName[0].toUpperCase();
+    };
+
     return (
         <>
             <div className="mt-6 border border-[#D9D9D9] bg-[#F0F5FC] rounded-[20px] flex flex-col ">
                 <div className="px-16 py-6 flex flex-col items-center">
                     <Avatar className="w-16 h-16 border border-[#D9D9D9]">
-                        <AvatarImage src={user?.avatar} />
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarImage src={getAvatarUrl()} alt={getFullName()} />
+                        <AvatarFallback className="bg-[#D9D9D9] text-[#141E20] font-semibold">
+                            {getAvatarInitials()}
+                        </AvatarFallback>
                     </Avatar>
 
                     <div className="flex flex-col justify-center items-center mt-4">
-                        <span className="text-[#141E20] font-semibold text-lg">{user?.FirstName} {user?.LastName}</span>
+                        <span className="text-[#141E20] font-semibold text-lg">{getFullName()}</span>
                         <span className="text-[#332A2A] text-[12px]">{user?.email}</span>
+                        {user?.createdAt && (
+                            <span className="text-[#666373] text-[11px] mt-1">
+                                {formatMemberSince(user.createdAt)}
+                            </span>
+                        )}
                     </div>
 
                     <div className="mt-4">
