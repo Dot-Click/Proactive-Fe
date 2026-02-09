@@ -1,4 +1,3 @@
-import React from "react";
 import box1 from "../../../../assets/box.png";
 
 const MILESTONES = [

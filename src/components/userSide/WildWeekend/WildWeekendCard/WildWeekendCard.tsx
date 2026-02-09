@@ -3,9 +3,9 @@ import { MapPin, Plane, UserCheck, Users, Globe } from "lucide-react";
 
 // Exact colors from the image
 const ACCENT_COLOR = "#D63384"; // The pink/magenta used for icons
-const TEXT_DARK = "#1A1A1A"; // Heavy black for titles
-const TEXT_GRAY = "#4A5568"; // Balanced gray for descriptions
-const DIVIDER_COLOR = "#EDF2F7"; // Very light gray for vertical lines
+// const TEXT_DARK = "#1A1A1A"; // Heavy black for titles
+// const TEXT_GRAY = "#4A5568"; // Balanced gray for descriptions
+// const DIVIDER_COLOR = "#EDF2F7"; // Very light gray for vertical lines
 
 const STEPS = [
   {
