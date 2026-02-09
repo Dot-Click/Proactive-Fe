@@ -47,6 +47,9 @@ const SignupSchema = z.object({
         }, "DOB must be a valid date"),
     Gender: z.enum(allowedGenders, "Gender must be Male, Female, or Other"),
     Address: z.string().min(1, "Address is required"),
+    EmergencyContact: z.string().max(100, "Emergency contact must be less than 100 characters").optional(),
+    DNI: z.string().max(50, "DNI must be less than 50 characters").optional(),
+    DietRestrictions: z.string().max(200, "Diet restrictions must be less than 200 characters").optional(),
     email: z.string().email("Invalid email address"),
     Password: z.string()
         .min(8, "Password must be at least 8 characters long")
@@ -68,6 +71,9 @@ const Signup = () => {
             DOB: "",
             Gender: "",
             Address: "",
+            EmergencyContact: "",
+            DNI: "",
+            DietRestrictions: "",
             email: "",
             Password: "",
         },
@@ -87,6 +93,9 @@ const Signup = () => {
             DOB,
             Gender,
             Address,
+            EmergencyContact,
+            DNI,
+            DietRestrictions,
             email,
             Password,
         } = val;
@@ -99,6 +108,9 @@ const Signup = () => {
                 DOB,
                 Gender,
                 Address,
+                EmergencyContact: EmergencyContact || undefined,
+                DNI: DNI || undefined,
+                DietRestrictions: DietRestrictions || undefined,
                 email,
                 Password,
             })
@@ -107,8 +119,29 @@ const Signup = () => {
             }
             toast.success("Account Created Successfully")
         } catch (error: any) {
-            const message = error?.response?.data?.message || "Error creating user";
-            toast.error(message)
+            const responseData = error?.response?.data;
+            
+            // Handle validation errors with field-specific messages
+            if (responseData?.errors) {
+                const firstErrorKey = Object.keys(responseData.errors)[0];
+                const firstError = responseData.errors[firstErrorKey];
+                const fieldName = firstErrorKey
+                    .replace(/([A-Z])/g, " $1")
+                    .replace(/^./, (str) => str.toUpperCase())
+                    .trim();
+                
+                if (Array.isArray(firstError) && firstError.length > 0) {
+                    toast.error(`${fieldName}: ${firstError[0]}`);
+                } else {
+                    toast.error(responseData?.message || "Please check your input and try again.");
+                }
+            } else {
+                // Handle other errors
+                const errorMessage = responseData?.message || 
+                    error?.message || 
+                    "Unable to create your account. Please try again.";
+                toast.error(errorMessage);
+            }
         }
     };
 
@@ -322,19 +355,39 @@ const Signup = () => {
                                                 )}
                                             />
                                         </div>
+                                        <FormField
+                                            control={form.control}
+                                            name="Address"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="text-[#242E2F] font-semibold">
+                                                        Address
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            type="Address"
+                                                            placeholder="Enter your Address"
+                                                            {...field}
+                                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <FormField
                                                 control={form.control}
-                                                name="Address"
+                                                name="EmergencyContact"
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="text-[#242E2F] font-semibold">
-                                                            Address
+                                                            Emergency Contact
                                                         </FormLabel>
                                                         <FormControl>
                                                             <Input
-                                                                type="Address"
-                                                                placeholder="Enter your Address"
+                                                                type="text"
+                                                                placeholder="Enter emergency contact"
                                                                 {...field}
                                                                 className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
                                                             />
@@ -345,16 +398,16 @@ const Signup = () => {
                                             />
                                             <FormField
                                                 control={form.control}
-                                                name="Password"
+                                                name="DNI"
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="text-[#242E2F] font-semibold">
-                                                            Password
+                                                            DNI
                                                         </FormLabel>
                                                         <FormControl>
                                                             <Input
-                                                                type="password"
-                                                                placeholder="Enter your password"
+                                                                type="text"
+                                                                placeholder="Enter your DNI"
                                                                 {...field}
                                                                 className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
                                                             />
@@ -364,6 +417,46 @@ const Signup = () => {
                                                 )}
                                             />
                                         </div>
+                                        <FormField
+                                            control={form.control}
+                                            name="DietRestrictions"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="text-[#242E2F] font-semibold">
+                                                        Diet Restrictions
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Enter any diet restrictions (optional)"
+                                                            {...field}
+                                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        <FormField
+                                            control={form.control}
+                                            name="Password"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="text-[#242E2F] font-semibold">
+                                                        Password
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            type="password"
+                                                            placeholder="Enter your password"
+                                                            {...field}
+                                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
                                     </div>
                                     <div className="mt-8">
                                         <Button className="bg-[#0DAC87] hover:bg-[#11a180] hover:scale-105 w-full rounded-full py-6 cursor-pointer font-semibold transition-all delay-150 duration-200 ease-in">

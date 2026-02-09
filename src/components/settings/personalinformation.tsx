@@ -10,16 +10,37 @@ import { UseUpdateUserProfile } from "@/hooks/UseUpdateUserProfilehook";
 
 const formSchema = z.object({
     firstName: z.string().min(1, {
-        message: "First Name is required",
+        message: "First name is required",
+    }).max(100, {
+        message: "First name must be less than 100 characters",
     }),
     lastName: z.string().min(1, {
-        message: "Last Name is required",
+        message: "Last name is required",
+    }).max(100, {
+        message: "Last name must be less than 100 characters",
     }),
-    nickName: z.string().optional(),
+    nickName: z.string().max(200, {
+        message: "Nick name must be less than 200 characters",
+    }).optional(),
     dob: z.string().optional(),
-    address: z.string().optional(),
-    phoneNumber: z.string().optional(),
-    gender: z.string().optional(),
+    address: z.string().max(500, {
+        message: "Address must be less than 500 characters",
+    }).optional(),
+    phoneNumber: z.string().max(20, {
+        message: "Phone number must be less than 20 characters",
+    }).optional(),
+    gender: z.string().max(20, {
+        message: "Gender must be less than 20 characters",
+    }).optional(),
+    emergencyContact: z.string().max(100, {
+        message: "Emergency contact must be less than 100 characters",
+    }).optional(),
+    dni: z.string().max(50, {
+        message: "DNI must be less than 50 characters",
+    }).optional(),
+    dietaryRestrictions: z.string().max(200, {
+        message: "Diet restrictions must be less than 200 characters",
+    }).optional(),
 });
 
 const Personalinformation = () => {
@@ -40,6 +61,9 @@ const Personalinformation = () => {
             address: "",
             phoneNumber: "",
             gender: "",
+            emergencyContact: "",
+            dni: "",
+            dietaryRestrictions: "",
         },
     });
 
@@ -53,6 +77,9 @@ const Personalinformation = () => {
                 address: user.Address || "",
                 phoneNumber: user.PhoneNumber || "",
                 gender: user.Gender || "",
+                emergencyContact: user.EmergencyContact || "",
+                dni: user.DNI || "",
+                dietaryRestrictions: user.DietRestrictions || "",
             });
         }
     }, [user, form]);
@@ -67,6 +94,9 @@ const Personalinformation = () => {
                 address: val.address,
                 phoneNumber: val.phoneNumber,
                 gender: val.gender,
+                emergencyContact: val.emergencyContact || undefined,
+                dni: val.dni || undefined,
+                dietaryRestrictions: val.dietaryRestrictions || undefined,
             },
             {
                 onSuccess: () => {
@@ -156,6 +186,24 @@ const Personalinformation = () => {
                                     <span className="text-[#332A2A] font-semibold">Gender</span>
                                     <span className="text-[#666373] text-[14px]">
                                         {user?.Gender || "Not provided"}
+                                    </span>
+                                </div>
+                                <div className="flex flex-col gap-3">
+                                    <span className="text-[#332A2A] font-semibold">Emergency Contact</span>
+                                    <span className="text-[#666373] text-[14px]">
+                                        {user?.EmergencyContact || "Not provided"}
+                                    </span>
+                                </div>
+                                <div className="flex flex-col gap-3">
+                                    <span className="text-[#332A2A] font-semibold">DNI</span>
+                                    <span className="text-[#666373] text-[14px]">
+                                        {user?.DNI || "Not provided"}
+                                    </span>
+                                </div>
+                                <div className="flex flex-col gap-3">
+                                    <span className="text-[#332A2A] font-semibold">Diet Restrictions</span>
+                                    <span className="text-[#666373] text-[14px]">
+                                        {user?.DietRestrictions || "Not provided"}
                                     </span>
                                 </div>
                             </div>
@@ -291,6 +339,63 @@ const Personalinformation = () => {
                                                 <FormControl>
                                                     <Input
                                                         placeholder="123 Adventure St, San Francisco, CA 94102"
+                                                        {...field}
+                                                        className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="emergencyContact"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-[#242E2F] font-semibold">
+                                                    Emergency Contact
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="+1 (555) 987-6543"
+                                                        {...field}
+                                                        className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="dni"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-[#242E2F] font-semibold">
+                                                    DNI
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="12345678A"
+                                                        {...field}
+                                                        className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="dietaryRestrictions"
+                                        render={({ field }) => (
+                                            <FormItem className="md:col-span-2">
+                                                <FormLabel className="text-[#242E2F] font-semibold">
+                                                    Diet Restrictions
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="e.g., Vegetarian, Vegan, Gluten-free"
                                                         {...field}
                                                         className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                                                     />
