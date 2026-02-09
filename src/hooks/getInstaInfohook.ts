@@ -1,4 +1,5 @@
-import api from "@/config/axios";
+
+   import api from "@/config/axios";
 import { useQuery } from "@tanstack/react-query";
 
 export interface InstagramUser {

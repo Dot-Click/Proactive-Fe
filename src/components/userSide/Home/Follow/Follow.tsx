@@ -1,4 +1,7 @@
-// import { Button } from "@/components/ui/button"
+
+
+
+  // import { Button } from "@/components/ui/button"
 // import Instagram from "../../../../assets/Instagram.png"
 // import Instagram2 from "../../../../assets/Instagram2.png"
 // import FollowCard from "./FollowCard"
@@ -95,3 +98,9 @@ const Follow = () => {
 }
 
 export default Follow
+
+
+
+
+
+
