@@ -4,7 +4,10 @@ import Fellowexplorer1 from "../../../assets/Fellowexplorer1.png"
 import Fellowexplorer2 from "../../../assets/Fellowexplorer2.png"
 import Fellowexplorer3 from "../../../assets/Fellowexplorer3.png"
 import Fellowexplorer4 from "../../../assets/Fellowexplorer4.png"
+import { useTranslation } from "react-i18next"
+
 const FellowExplorer = () => {
+    const { t } = useTranslation();
     return (
         <div className="flex lg:flex-row flex-col justify-center lg:items-start items-center lg:py-60 md:py-12 lg:mb-0 mb-20 gap-12">
             <div className="relative">
@@ -13,9 +16,7 @@ const FellowExplorer = () => {
             <div className="flex flex-col gap-8">
                 <div className="relative">
                     <h1 className="text-center lg:text-start lg:mt-10 bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text 
-                                  font-bold lg:text-4xl relative z-10">
-                        More than guides — they're <br /> fellow explorers
-                    </h1>
+                                  font-bold lg:text-4xl relative z-10" dangerouslySetInnerHTML={{ __html: t('travelCoordinator.fellowExplorer.title').replace(/\n/g, '<br />') }} />
                     <img
                         src={box2}
                         alt="box2"
@@ -27,29 +28,29 @@ const FellowExplorer = () => {
                     <div className="flex flex-col lg:flex-row lg:items-start items-center gap-4">
                         <img src={Fellowexplorer1} alt="Fellowexplorer1" className="h-6" />
                         <div className="flex flex-col gap-2">
-                            <h1 className="text-center lg:text-start">Passionate Travelers</h1>
-                            <p className="text-center lg:text-start">Our coordinators have explored the world themselves and <br className="md:flex hidden" /> bring authentic experiences to every trip they lead.</p>
+                            <h1 className="text-center lg:text-start">{t('travelCoordinator.fellowExplorer.passionateTravelers')}</h1>
+                            <p className="text-center lg:text-start" dangerouslySetInnerHTML={{ __html: t('travelCoordinator.fellowExplorer.passionateTravelersDesc').replace(/\n/g, '<br className="md:flex hidden" />') }} />
                         </div>
                     </div>
                     <div className="flex flex-col lg:flex-row lg:items-start items-center gap-4">
                         <img src={Fellowexplorer2} alt="Fellowexplorer2" className="h-6" />
                         <div className="flex flex-col gap-2">
-                            <h1 className="text-center lg:text-start">Passionate Travelers</h1>
-                            <p className="text-center lg:text-start">Our coordinators have explored the world themselves and <br className="md:flex hidden" /> bring authentic experiences to every trip they lead.</p>
+                            <h1 className="text-center lg:text-start">{t('travelCoordinator.fellowExplorer.passionateTravelers')}</h1>
+                            <p className="text-center lg:text-start" dangerouslySetInnerHTML={{ __html: t('travelCoordinator.fellowExplorer.passionateTravelersDesc').replace(/\n/g, '<br className="md:flex hidden" />') }} />
                         </div>
                     </div>
                     <div className="flex flex-col lg:flex-row lg:items-start items-center gap-4">
                         <img src={Fellowexplorer3} alt="Fellowexplorer3" className="h-6" />
                         <div className="flex flex-col gap-2">
-                            <h1 className="text-center lg:text-start">Passionate Travelers</h1>
-                            <p className="text-center lg:text-start">Our coordinators have explored the world themselves and <br className="md:flex hidden" /> bring authentic experiences to every trip they lead.</p>
+                            <h1 className="text-center lg:text-start">{t('travelCoordinator.fellowExplorer.passionateTravelers')}</h1>
+                            <p className="text-center lg:text-start" dangerouslySetInnerHTML={{ __html: t('travelCoordinator.fellowExplorer.passionateTravelersDesc').replace(/\n/g, '<br className="md:flex hidden" />') }} />
                         </div>
                     </div>
                     <div className="flex flex-col lg:flex-row lg:items-start items-center gap-4">
                         <img src={Fellowexplorer4} alt="Fellowexplorer4" className="h-6" />
                         <div className="flex flex-col gap-2">
-                            <h1 className="text-center lg:text-start">Passionate Travelers</h1>
-                            <p className="text-center lg:text-start">Our coordinators have explored the world themselves and <br className="md:flex hidden" /> bring authentic experiences to every trip they lead.</p>
+                            <h1 className="text-center lg:text-start">{t('travelCoordinator.fellowExplorer.passionateTravelers')}</h1>
+                            <p className="text-center lg:text-start" dangerouslySetInnerHTML={{ __html: t('travelCoordinator.fellowExplorer.passionateTravelersDesc').replace(/\n/g, '<br className="md:flex hidden" />') }} />
                         </div>
                     </div>
                     <div

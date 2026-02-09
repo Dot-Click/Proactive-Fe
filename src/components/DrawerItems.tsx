@@ -37,18 +37,20 @@ export const UserDashboardDrawerItems = [
     { label: "Opportunities", href: "/user-dashboard/adventure-oppurtunities" },
 ];
 
+// Note: DrawerItems will be translated in the component that uses them
+// This keeps the structure but labels will be translated dynamically
 export const UserSideDrawerItems = [
-    { label: "Dashboard", href: "/" },
-    { label: "Open Opportunities", href: "/open-oppurtunities" },
-    { label: "What We Do", href: "/what-we-do" },
-    { label: "Wild Weekend", href: "/wild-weekend"},
-    { label: "Wild Trip", href: "/wild-trip" },
-    { label: "Erasmus+", href: "/erasmus-plus"},
-    { label: "Internal Events", href: "/internal-events"},
-    { label: "About Us", href: "/about"},
-    { label: "Become a Member", href: "/member"},
-    { label: "Coordinators", href: "/travel-coordinator"},
-    { label: "Benefits", href: "/advantages"},
-    { label: "Contact", href: "/contact"},
-    { label: "FAQ", href: "/faq"},
+    { label: "drawer.dashboard", href: "/" },
+    { label: "drawer.openOpportunities", href: "/open-oppurtunities" },
+    { label: "drawer.whatWeDo", href: "/what-we-do" },
+    { label: "drawer.wildWeekend", href: "/wild-weekend"},
+    { label: "drawer.wildTrip", href: "/wild-trip" },
+    { label: "drawer.erasmusPlus", href: "/erasmus-plus"},
+    { label: "drawer.internalEvents", href: "/internal-events"},
+    { label: "drawer.aboutUs", href: "/about"},
+    { label: "drawer.becomeMember", href: "/member"},
+    { label: "drawer.coordinators", href: "/travel-coordinator"},
+    { label: "drawer.benefits", href: "/advantages"},
+    { label: "drawer.contact", href: "/contact"},
+    { label: "drawer.faq", href: "/faq"},
 ];

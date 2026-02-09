@@ -476,6 +476,7 @@ import type { JSX } from "react";
 import type React from "react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import PaymentModal from "@/components/userDashboard/Alert/PaymentModal";
+import { useTranslation } from "react-i18next";
 
 interface HeroContent {
   image: React.ReactNode;
@@ -490,7 +491,8 @@ interface HeroContent {
   downloadimg?: string;
   CTA?: string | JSX.Element;
 }
-const heroData: Record<string, HeroContent> = {
+
+const getHeroData = (t: (key: string) => string): Record<string, HeroContent> => ({
   "/": {
     image: (
       <div className="bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
@@ -503,11 +505,11 @@ const heroData: Record<string, HeroContent> = {
     title: (
       <div className="flex flex-wrap justify-center items-center lg:mt-2 md:mt-[240px]  sm:mt-[50px] mt-[290px]">
         <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap lg:mt-12 ">
-          Your Next
+          {t('hero.yourNext')}
         </span>
         <div className="flex items-center justify-center">
           <span className="text-[14px] lg:text-8xl md:text-4xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
-            ADV
+            {t('hero.adventure').split(' ')[0]}
           </span>
           <span className="text-[14px] lg:text-8xl md:text-4xl font-extrabold text-stroke md:mb-8">
             E
@@ -520,26 +522,22 @@ const heroData: Record<string, HeroContent> = {
           </span>
         </div>
         <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap lg:mt-12">
-          Awaits
+          {t('hero.awaits')}
         </span>
       </div>
     ),
     subtitle: (
-      <span className="text-[12px] md:text-lg">
-        Discover extraordinary experiences,<br className="lg:block hidden" />
-        connect with fellow adventurers, and create memories that last a
-        lifetime with Proactive Future.
-      </span>
+      <span className="text-[12px] md:text-lg" dangerouslySetInnerHTML={{ __html: t('hero.subtitle').replace(/\n/g, '<br className="lg:block hidden" />') }} />
     ),
     imageClass: "sm:h-[70vh] lg:h-[100vh] md:h-[30vh]",
     buttons: [
       {
-        text: "Join the Adventure",
+        text: t('hero.joinAdventure'),
         className:
           "bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-4 py-2 md:py-3 md:px-7 font-medium text-sm md:text-base",
       },
       {
-        text: "Get to Know Us",
+        text: t('hero.getToKnowUs'),
         className:
           "bg-[#FFFFFF] hover:bg-[#e7d9d9] cursor-pointer rounded-full px-4 py-3 md:py-3 md:px-7 text-[#000000] font-medium text-sm lg:text-base",
       },
@@ -562,11 +560,11 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">Open Opportunities</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">{t('hero.openOpportunitiesTitle')}</h1>
     ),
     subtitle: (
       <span className="text-[10px] md:text-[16px]">
-        Discover amazing destinations and join our community of adventurers
+        {t('hero.openOpportunitiesSubtitle')}
       </span>
     ),
     imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
@@ -586,11 +584,11 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">What We Do</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">{t('hero.whatWeDoTitle')}</h1>
     ),
     subtitle: (
       <span className="text-[10px] md:text-[16px]">
-        Transformative experiences that connect people with adventure and culture
+        {t('hero.whatWeDoSubtitle')}
       </span>
     ),
     imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
@@ -610,10 +608,10 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">Wild Weekend</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">{t('hero.wildWeekendTitle')}</h1>
     ),
     subtitle: (
-      <span className="text-[10px] md:text-[16px]">Your escape into nature, connection, and unforgettable memories</span>
+      <span className="text-[10px] md:text-[16px]">{t('hero.wildWeekendSubtitle')}</span>
     ),
     imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
   },
@@ -632,10 +630,10 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30 ">Wild Trip</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30 ">{t('hero.wildTripTitle')}</h1>
     ),
     subtitle: (
-      <span>From deserts to glaciers – trips that change your perspective.</span>
+      <span>{t('hero.wildTripSubtitle')}</span>
     ),
     imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]"
   },
@@ -654,10 +652,10 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">Erasmus +</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">{t('hero.erasmusPlusTitle')}</h1>
     ),
     subtitle: (
-      <span>Discover, connect, and learn with Erasmus+ journeys.</span>
+      <span>{t('hero.erasmusPlusSubtitle')}</span>
     ),
     imageClass: 'sm:h-[60vh] lg:h-[60vh] md:h-[20vh]',
     // downloadimg: downloadimg
@@ -700,10 +698,10 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">About US</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">{t('hero.aboutUsTitle')}</h1>
     ),
     subtitle: (
-      <span className="text-[10px] lg:text-xl">Discover extraordinary experiences, <br className="lg:flex hidden" /> connect with fellow adventurers, and create memories that last a lifetime with Proactive Future.</span>
+      <span className="text-[10px] lg:text-xl" dangerouslySetInnerHTML={{ __html: t('hero.aboutUsSubtitle').replace(/\n/g, '<br className="lg:flex hidden" />') }} />
     ),
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
     // downloadimg: downloadimg
@@ -723,17 +721,17 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-10">Become a Member</h1>
+      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-10">{t('hero.becomeMemberTitle')}</h1>
     ),
     subtitle: (
-      <span className="text-[12px] md:flex hidden">Unlock exclusive benefits and join our travel community of adventurous souls exploring the world together.</span>
+      <span className="text-[12px] md:flex hidden">{t('hero.becomeMemberSubtitle')}</span>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[60vh] md:h-[20vh]',
     // downloadimg: downloadimg
     buttons: (
       [
         {
-          text: 'Join Now for €50',
+          text: t('hero.joinNowFor'),
           className: "lg:mt-4 md:mt-0 mt-30 bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
           openModal: true,
         },
@@ -755,10 +753,10 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-30 md:mt-0 mt-30">Our Travel Coordinators</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-30 md:mt-0 mt-30">{t('hero.travelCoordinatorTitle')}</h1>
     ),
     subtitle: (
-      <span className="lg:text-[16px] text-[10px]">The passionate travelers who turn every trip into an unforgettable journey</span>
+      <span className="lg:text-[16px] text-[10px]">{t('hero.travelCoordinatorSubtitle')}</span>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[40vh] md:h-[20vh]',
     // downloadimg: downloadimg
@@ -773,7 +771,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className=" bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] md:text-7xl text-nowrap lg:mt-50 mt-50">Advantages</h1>
+      <h1 className=" bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] md:text-7xl text-nowrap lg:mt-50 mt-50">{t('hero.advantagesTitle')}</h1>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[66vh] md:h-[28vh]',
     downloadimg: downloadimg,
@@ -793,7 +791,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-40">Contact</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-40">{t('hero.contactTitle')}</h1>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
     // downloadimg: downloadimg
@@ -813,7 +811,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">Frequently Asked Questions</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">{t('hero.faqTitle')}</h1>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
   },
@@ -828,7 +826,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">Privacy Policy</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">{t('hero.privacyPolicyTitle')}</h1>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
   },
@@ -843,7 +841,7 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">Terms of Services</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">{t('hero.termsTitle')}</h1>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
   },
@@ -858,17 +856,18 @@ const heroData: Record<string, HeroContent> = {
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">Cookie Policy</h1>
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">{t('hero.cookiePolicyTitle')}</h1>
     ),
     imageClass: 'sm:h-[38vh] lg:h-[50vh] md:h-[20vh]',
   },
 
-};
+});
 
 const HeroSection = () => {
   const location = useLocation();
+  const { t } = useTranslation();
   const path = location.pathname;
-  const hero = heroData[path];
+  const hero = getHeroData(t)[path];
 
   if (!hero) return null;
 

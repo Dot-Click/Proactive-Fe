@@ -12,6 +12,7 @@ import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { useContactInfo } from "@/hooks/getContactInfohook";
 import { useSubscribeNewsletter } from "@/hooks/subscribeNewsletterhook";
+import { useTranslation } from "react-i18next";
 
 const SOCIAL_LINKS = {
   facebook: "https://www.facebook.com/",
@@ -21,6 +22,7 @@ const SOCIAL_LINKS = {
 };
 
 const Footer = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const { data: contactInfo, isLoading: contactLoading } = useContactInfo();
   const subscribeMutation = useSubscribeNewsletter();
@@ -47,11 +49,7 @@ console.log(contactInfo);
       <div className="relative z-10 max-w-5xl mx-auto lg:py-20 px-4 lg:px-10 py-12 grid grid-cols-1 lg:grid-cols-4 gap-4">
         <div className="flex flex-col gap-8 relative z-10 text-white">
           <img src={FooterLogo} alt="FooterLogo" className="w-40" />
-          <span className="leading-relaxed text-[13px] font-medium text-nowrap">
-            Creating unforgettable adventures <br /> and connecting travelers
-            worldwide. <br /> Your journey to extraordinary <br /> experiences
-            starts here.
-          </span>
+          <span className="leading-relaxed text-[13px] font-medium text-nowrap" dangerouslySetInnerHTML={{ __html: t('footer.tagline').replace(/\n/g, '<br />') }} />
           <div className="flex gap-4 text-xl">
             <a
               href={SOCIAL_LINKS.facebook}
@@ -93,60 +91,60 @@ console.log(contactInfo);
         </div>
 
         <div className="lg:ml-8">
-          <span className="text-[#0DAC87] text-xl font-bold">Quick Links</span>
+          <span className="text-[#0DAC87] text-xl font-bold">{t('footer.quickLinks')}</span>
           <div className="flex flex-col gap-4 lg:mt-12 mt-4 text-white">
             <Link
               to="/about"
               className="font-medium hover:text-[#0DAC87] cursor-pointer transition-all duration-300 ease-in"
             >
-              About Us
+              {t('navbar.aboutUs')}
             </Link>
             <Link
               to="/what-we-do"
               className="font-medium hover:text-[#0DAC87] cursor-pointer transition-all duration-300 ease-in"
             >
-              Who We Are
+              {t('footer.whoWeAre')}
             </Link>
             <Link
               to="/travel-coordinator"
               className="font-medium hover:text-[#0DAC87] cursor-pointer transition-all duration-300 ease-in"
             >
-              Coordinators
+              {t('navbar.coordinators')}
             </Link>
             <Link
               to="/advantages"
               className="font-medium hover:text-[#0DAC87] cursor-pointer transition-all duration-300 ease-in"
             >
-              Member Benefits
+              {t('footer.memberBenefits')}
             </Link>
             <Link
               to="/contact"
               className="font-medium hover:text-[#0DAC87] cursor-pointer transition-all duration-300 ease-in"
             >
-              Contact
+              {t('navbar.contact')}
             </Link>
             <Link
               to="/faq"
               className="font-medium hover:text-[#0DAC87] cursor-pointer transition-all duration-300 ease-in"
             >
-              FAQ
+              {t('navbar.faq')}
             </Link>
           </div>
         </div>
 
         <div>
-          <span className="text-[#0DAC87] text-xl font-bold">Contact Info</span>
+          <span className="text-[#0DAC87] text-xl font-bold">{t('footer.contactInfo')}</span>
           <div className="lg:mt-12 mt-4 flex flex-col gap-6">
             <div className="flex gap-4">
               <FaLocationDot className="mt-1 shrink-0" size={20} color="#0DAC87" />
               <span className="text-white text-[14px]">
-                {contactLoading ? "Loading..." : address}
+                {contactLoading ? t('common.loading') : address}
               </span>
             </div>
             <div className="flex gap-4">
               <FaPhoneAlt size={20} color="#0DAC87" className="shrink-0" />
               <span className="text-white text-[14px]">
-                {contactLoading ? "Loading..." : phone}
+                {contactLoading ? t('common.loading') : phone}
               </span>
             </div>
             <div className="flex gap-4">
@@ -155,25 +153,24 @@ console.log(contactInfo);
                 href={`mailto:${emailContact}`}
                 className="text-white text-[14px] hover:text-[#0DAC87] transition-colors"
               >
-                {contactLoading ? "Loading..." : emailContact}
+                {contactLoading ? t('common.loading') : emailContact}
               </a>
             </div>
           </div>
         </div>
 
         <div>
-          <span className="text-[#0DAC87] text-xl font-bold">Stay Updated</span>
+          <span className="text-[#0DAC87] text-xl font-bold">{t('footer.stayUpdated')}</span>
           <div className="lg:mt-11 mt-4 flex flex-col gap-6">
             <span className="text-[12px] text-white font-medium">
-              Subscribe to our newsletter for the latest adventures and exclusive
-              offers.
+              {t('footer.newsletterText')}
             </span>
             <form onSubmit={handleSubscribe} className="flex flex-col gap-4">
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your Email Address"
+                placeholder={t('footer.emailPlaceholder')}
                 required
                 disabled={subscribeMutation.isPending}
                 className="border border-[#364153] rounded-full py-6 px-4 placeholder:text-[#FFFFFF52] lg:w-70"
@@ -183,7 +180,7 @@ console.log(contactInfo);
                 disabled={subscribeMutation.isPending}
                 className="hover:scale-105 transition-all duration-300 rounded-full lg:w-70 py-6 bg-[#0DAC87] hover:bg-[#109e7d] cursor-pointer text-white font-bold disabled:opacity-70"
               >
-                {subscribeMutation.isPending ? "Subscribing..." : "Subscribe"}
+                {subscribeMutation.isPending ? t('footer.subscribing') : t('footer.subscribe')}
               </Button>
             </form>
           </div>
@@ -194,26 +191,26 @@ console.log(contactInfo);
         <Separator className="border-[#364153] bg-[#364153] mx-auto px-4" />
         <div className="text-[#FFFFFF] flex flex-col lg:flex-row lg:justify-between items-center lg:mt-6 py-4">
           <span className="text-[12px]">
-            © 2025 Proactive Future. All rights reserved.
+            {t('footer.copyright')}
           </span>
           <div className="flex gap-6">
             <Link
               to="/privacy-policy"
               className="text-[12px] hover:text-[#0DAC87] transition-colors"
             >
-              Privacy Policy
+              {t('footer.privacyPolicy')}
             </Link>
             <Link
               to="/terms"
               className="text-[12px] hover:text-[#0DAC87] transition-colors"
             >
-              Terms of Services
+              {t('footer.termsOfServices')}
             </Link>
             <Link
               to="/cookie-policy"
               className="text-[12px] hover:text-[#0DAC87] transition-colors"
             >
-              Cookie Policy
+              {t('footer.cookiePolicy')}
             </Link>
           </div>
         </div>

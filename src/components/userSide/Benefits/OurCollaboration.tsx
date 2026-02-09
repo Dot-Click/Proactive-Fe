@@ -1,8 +1,10 @@
 import box2 from "../../../assets/box2.png"
 import advantsges from "../../../assets/advatages.png"
 import OurCollabrationCard from "./OurCollabrationCard"
+import { useTranslation } from "react-i18next"
 
 const OurCollaboration = () => {
+    const { t } = useTranslation();
     return (
         <>
         <div className="flex justify-center items-start pt-50 ">
@@ -13,7 +15,7 @@ const OurCollaboration = () => {
                 <div className="relative">
                     <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text 
                   font-bold lg:text-4xl relative z-10">
-                        Our Collaborations
+                        {t('benefits.ourCollaborations.title')}
                     </h1>
                     <img
                         src={box2}

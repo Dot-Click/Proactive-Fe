@@ -2,8 +2,10 @@ import Coordinatordetailmodal from "@/components/admin/CoordinatorManagement/Coo
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { UsegetCoordinator } from "@/hooks/getCoordinatorhook";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const MeetCoordinator = () => {
+  const { t } = useTranslation();
   const { data: coordinatorData } = UsegetCoordinator();
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -13,12 +15,9 @@ const MeetCoordinator = () => {
       {/* Header */}
       <div className="flex flex-col gap-4 justify-center items-center">
         <h1 className="text-center bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-4xl">
-          Meet Our Coordinators
+          {t('travelCoordinator.meetCoordinator.title')}
         </h1>
-        <p className="text-center text-[#221E33]">
-          Get to know the amazing people who make every Proactive Future
-          adventure unforgettable
-        </p>
+        <p className="text-center text-[#221E33]" dangerouslySetInnerHTML={{ __html: t('travelCoordinator.meetCoordinator.subtitle').replace(/\n/g, '<br />') }} />
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>

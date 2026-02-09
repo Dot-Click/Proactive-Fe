@@ -1,7 +1,10 @@
 import setting from "../../../../assets/setting.png"
 import connect1 from "../../../../assets/connect1.png"
 import connect2 from "../../../../assets/connect2.png"
+import { useTranslation } from "react-i18next";
+
 const ConnectStranger = () => {
+    const { t } = useTranslation();
     return (
         <div className="relative ">
             <div className="bg-black lg:h-[90vh] h-[100vh]"></div>
@@ -11,36 +14,36 @@ const ConnectStranger = () => {
                     <div className="flex gap-3">
                         <img src={setting} alt="setting" className="h-4 mt-2" />
                         <div className="flex flex-col">
-                            <h4 className="text-[#FFFFFF] font-bold text-xl">Conectar con extrañas</h4>
-                            <p className="text-[#BCBCBC] text-[12px]">Cansado de una sociedad en la que cada <br /> vez es más difícil conectar con las personas que nos <br /> rodean, esta experiencia es perfecta para <br /> abrirse a conocer gente maravillosa <br /> y crear recuerdos compartidos únicos.</p>
+                            <h4 className="text-[#FFFFFF] font-bold text-xl">{t('wildWeekend.connectStranger.title1')}</h4>
+                            <p className="text-[#BCBCBC] text-[12px]" dangerouslySetInnerHTML={{ __html: t('wildWeekend.connectStranger.desc1').replace(/\n/g, '<br />') }} />
                         </div>
                     </div>
                     <div className="flex gap-3">
                         <img src={setting} alt="setting" className="h-4 mt-2" />
                         <div className="flex flex-col">
-                            <h4 className="text-[#FFFFFF] font-bold text-xl">Conectar con extrañas</h4>
-                            <p className="text-[#BCBCBC] text-[12px]">Los fines de semana de Wild Weekends <br /> se preparan con esmero y cariño, <br /> cuidando cada detalle para ofrecer aventuras <br /> increíbles y vivir al máximo el evento. <br /> ¡Siempre con buena onda! ;)</p>
+                            <h4 className="text-[#FFFFFF] font-bold text-xl">{t('wildWeekend.connectStranger.title2')}</h4>
+                            <p className="text-[#BCBCBC] text-[12px]" dangerouslySetInnerHTML={{ __html: t('wildWeekend.connectStranger.desc2').replace(/\n/g, '<br />') }} />
                         </div>
                     </div>
                     <div className="flex gap-3">
                         <img src={setting} alt="setting" className="h-4 mt-2" />
                         <div className="flex flex-col">
-                            <h4 className="text-[#FFFFFF] font-bold text-xl">Aventura</h4>
-                            <p className="text-[#BCBCBC] text-[12px]">Como dijeron en un fin de semana salvaje: <br />  "prepárense para todo", eso es lo mejor: <br /> mucha aventura, superación personal y  <br /> risas, ¿listos?</p>
+                            <h4 className="text-[#FFFFFF] font-bold text-xl">{t('wildWeekend.connectStranger.title3')}</h4>
+                            <p className="text-[#BCBCBC] text-[12px]" dangerouslySetInnerHTML={{ __html: t('wildWeekend.connectStranger.desc3').replace(/\n/g, '<br />') }} />
                         </div>
                     </div>
                     <div className="flex gap-3">
                         <img src={setting} alt="setting" className="h-4 mt-2" />
                         <div className="flex flex-col">
-                            <h4 className="text-[#FFFFFF] font-bold text-xl">Coordinadora 24/7</h4>
-                            <p className="text-[#BCBCBC] text-[12px]">Varios miembros del equipo de Proactive Future <br /> coordinarán el Wild Weekend para garantizar <br /> que todo transcurra de la forma más fluida <br /> posible.</p>
+                            <h4 className="text-[#FFFFFF] font-bold text-xl">{t('wildWeekend.connectStranger.title4')}</h4>
+                            <p className="text-[#BCBCBC] text-[12px]" dangerouslySetInnerHTML={{ __html: t('wildWeekend.connectStranger.desc4').replace(/\n/g, '<br />') }} />
                         </div>
                     </div>
                     <div className="flex gap-3">
                         <img src={setting} alt="setting" className="h-4 mt-2" />
                         <div className="flex flex-col">
-                            <h4 className="text-[#FFFFFF] font-bold text-xl">Precio muy bajo</h4>
-                            <p className="text-[#BCBCBC] text-[12px]">Compara precios en línea y verás que, <br /> con todo incluido, ningún otro precio  <br />  se acerca a estos. Nuestro objetivo  <br />  es que sean asequibles.</p>
+                            <h4 className="text-[#FFFFFF] font-bold text-xl">{t('wildWeekend.connectStranger.title5')}</h4>
+                            <p className="text-[#BCBCBC] text-[12px]" dangerouslySetInnerHTML={{ __html: t('wildWeekend.connectStranger.desc5').replace(/\n/g, '<br />') }} />
                         </div>
                     </div>
 

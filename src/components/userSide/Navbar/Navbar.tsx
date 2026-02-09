@@ -12,9 +12,12 @@ import {
 import DrawerBar from "@/components/Drawer";
 import { UserSideDrawerItems } from "@/components/DrawerItems";
 import { BsTelegram, BsWhatsapp } from "react-icons/bs";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 
 const UserSideNavbar = ({ role }: { role: string }) => {
     const location = useLocation();
+    const { t } = useTranslation();
     const DrawerItems = role === "UserSide"
         ? UserSideDrawerItems
         : [];
@@ -32,7 +35,7 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                                 : ""
                                 }`}
                         >
-                            Home
+                            {t('navbar.home')}
                         </span>
                     </Link>
                     <Link to="/open-oppurtunities">
@@ -43,7 +46,7 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                                 : ""
                                 }`}
                         >
-                            Open Opportunities
+                            {t('navbar.openOpportunities')}
                         </span>
                     </Link>
                     <div
@@ -53,30 +56,27 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                                 <DropdownMenuTrigger className="cursor-pointer">
                                     <Link to="/what-we-do">
                                     <div className="flex gap-1 items-center text-nowrap">
-                                        What We Do
+                                        {t('navbar.whatWeDo')}
                                         <ChevronDown className='w-4 h-4' />
                                     </div>
                                     </Link>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="bg-[#FFFFFF]/95 flex flex-col justify-center items-center px-4 mt-4">
-                                    {/* <Link to="/what-we-do">
-                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Overview</DropdownMenuItem>
-                                    </Link> */}
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to="/wild-weekend">
-                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Weekend</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">{t('navbar.wildWeekend')}</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/wild-trip'}>
-                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Wild Trip</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">{t('navbar.wildTrip')}</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/erasmus-plus'}>
-                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Erasmus+</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">{t('navbar.erasmusPlus')}</DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuSeparator className="my-1 w-full border-t border-[#CECECE]" />
                                     <Link to={'/internal-events'}>
-                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">Internal Events</DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-[#332A2A]">{t('navbar.internalEvents')}</DropdownMenuItem>
                                     </Link>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -88,7 +88,7 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="cursor-pointer">
                                     <div className="flex gap-1 items-center">
-                                        <span>Info</span>
+                                        <span>{t('navbar.info')}</span>
                                         <ChevronDown className="w-4 h-4" />
                                     </div>
                                 </DropdownMenuTrigger>
@@ -98,41 +98,41 @@ const UserSideNavbar = ({ role }: { role: string }) => {
 
                                         {/*  Info */}
                                         <div className="flex flex-col min-w-[160px]">
-                                            <span className="text-xs font-semibold text-gray-400 mb-2">INFO</span>
+                                            <span className="text-xs font-semibold text-gray-400 mb-2">{t('navbar.info').toUpperCase()}</span>
 
                                             <Link to="/about">
                                                 <DropdownMenuItem className="cursor-pointer text-[#332A2A]">
-                                                    About Us
+                                                    {t('navbar.aboutUs')}
                                                 </DropdownMenuItem>
                                             </Link>
 
                                             <Link to="/member">
                                                 <DropdownMenuItem className="cursor-pointer text-[#332A2A]">
-                                                    Become a Member
+                                                    {t('navbar.becomeMember')}
                                                 </DropdownMenuItem>
                                             </Link>
 
                                             <Link to="/travel-coordinator">
                                                 <DropdownMenuItem className="cursor-pointer text-[#332A2A]">
-                                                    Coordinators
+                                                    {t('navbar.coordinators')}
                                                 </DropdownMenuItem>
                                             </Link>
 
                                             <Link to="/advantages">
                                                 <DropdownMenuItem className="cursor-pointer text-[#332A2A]">
-                                                    Benefits
+                                                    {t('navbar.benefits')}
                                                 </DropdownMenuItem>
                                             </Link>
 
                                             <Link to="/contact">
                                                 <DropdownMenuItem className="cursor-pointer text-[#332A2A]">
-                                                    Contact
+                                                    {t('navbar.contact')}
                                                 </DropdownMenuItem>
                                             </Link>
 
                                             <Link to="/faq">
                                                 <DropdownMenuItem className="cursor-pointer text-[#332A2A]">
-                                                    FAQ
+                                                    {t('navbar.faq')}
                                                 </DropdownMenuItem>
                                             </Link>
                                         </div>
@@ -140,7 +140,7 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                                         {/* Community */}       
                                         <div className="flex flex-col min-w-[180px]">
                                             <span className="text-xs font-semibold text-gray-400 mb-2">
-                                                COMMUNITY
+                                                {t('navbar.community')}
                                             </span>
 
                                             <a
@@ -149,7 +149,7 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                                                 rel="noopener noreferrer"
                                             >
                                                 <DropdownMenuItem className="cursor-pointer text-[#332A2A]">
-                                                    <BsWhatsapp className="w-4 h-4" /> Comunidad de WhatsApp
+                                                    <BsWhatsapp className="w-4 h-4" /> {t('navbar.whatsappCommunity')}
                                                 </DropdownMenuItem>
                                             </a>
 
@@ -159,7 +159,7 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                                                 rel="noopener noreferrer"
                                             >
                                                 <DropdownMenuItem className="cursor-pointer text-[#332A2A]">
-                                                    <BsTelegram className="w-4 h-4" /> Difusión en Telegram
+                                                    <BsTelegram className="w-4 h-4" /> {t('navbar.telegramBroadcast')}
                                                 </DropdownMenuItem>
                                             </a>
                                         </div>
@@ -173,11 +173,13 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                 </div>
 
                 <div className="lg:flex hidden items-center gap-4">
-                    <Button onClick={() => navigate("/login")} className="bg-light text-black hover:bg-[#c5e4dc] cursor-pointer px-7 py-6 font-bold rounded-full">Log In</Button>
-                    <Button onClick={() => navigate("/signup")} className="bg-[#0DAC87] hover:bg-[#0fa17f] border border-[#FFFFFF]/64 cursor-pointer px-7 py-6 font-bold rounded-full">Join Now</Button>
+                    <LanguageSwitcher />
+                    <Button onClick={() => navigate("/login")} className="bg-light text-black hover:bg-[#c5e4dc] cursor-pointer px-7 py-6 font-bold rounded-full">{t('navbar.logIn')}</Button>
+                    <Button onClick={() => navigate("/signup")} className="bg-[#0DAC87] hover:bg-[#0fa17f] border border-[#FFFFFF]/64 cursor-pointer px-7 py-6 font-bold rounded-full">{t('navbar.joinNow')}</Button>
                 </div>
 
-                <div className="lg:hidden flex">
+                <div className="lg:hidden flex items-center gap-3">
+                    <LanguageSwitcher />
                     <DrawerBar items={DrawerItems} />
                 </div>
 

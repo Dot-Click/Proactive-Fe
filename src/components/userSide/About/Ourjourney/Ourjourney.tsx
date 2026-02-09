@@ -1,56 +1,54 @@
 import box1 from "../../../../assets/box.png";
+import { useTranslation } from "react-i18next";
 
-const MILESTONES = [
+const getMilestones = (t: (key: string) => string) => [
   {
     year: "2019",
-    title: "The Beginning",
-    description:
-      "Founded by a group of former Erasmus students who wanted to continue the magic of cultural exchange.",
+    title: t('journey.milestones.2019.title'),
+    description: t('journey.milestones.2019.description'),
     color: "#2DD4BF", // Brighter Teal
     shadowColor: "#14B8A6", // Darker Teal for the 3D effect
   },
   {
     year: "2020",
-    title: "Digital Pivot",
-    description:
-      "Adapted to virtual exchanges and built our online community during challenging times.",
+    title: t('journey.milestones.2020.title'),
+    description: t('journey.milestones.2020.description'),
     color: "#FACC15",
     shadowColor: "#CA8A04",
   },
   {
     year: "2021",
-    title: "Wild Weekends Launch",
-    description:
-      "Introduced short-format adventures perfect for busy young professionals.",
+    title: t('journey.milestones.2021.title'),
+    description: t('journey.milestones.2021.description'),
     color: "#A3E635",
     shadowColor: "#65A30D",
   },
   {
     year: "2022",
-    title: "Expansion",
-    description: "Reached 1,000+ participants across 20 European countries.",
+    title: t('journey.milestones.2022.title'),
+    description: t('journey.milestones.2022.description'),
     color: "#F87171",
     shadowColor: "#DC2626",
   },
   {
     year: "2023",
-    title: "Recognition",
-    description:
-      "Awarded 'Best Youth Travel Organization' by European Travel Association.",
+    title: t('journey.milestones.2023.title'),
+    description: t('journey.milestones.2023.description'),
     color: "#34D399",
     shadowColor: "#059669",
   },
   {
     year: "2024",
-    title: "Growth",
-    description:
-      "Welcomed our 2,500th member and launched Wild Trip adventures.",
+    title: t('journey.milestones.2024.title'),
+    description: t('journey.milestones.2024.description'),
     color: "#A78BFA",
     shadowColor: "#7C3AED",
   },
 ] as const;
 
 const OurJourney = () => {
+  const { t } = useTranslation();
+  const MILESTONES = getMilestones(t);
   return (
     <section className="w-full bg-white py-16 lg:py-24 overflow-hidden">
       {/* Header Section */}
@@ -59,7 +57,7 @@ const OurJourney = () => {
           className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text 
                        font-bold text-4xl lg:text-5xl relative z-10"
         >
-          Our Journey
+          {t('journey.title')}
         </h1>
         <img
           src={box1}
@@ -67,7 +65,7 @@ const OurJourney = () => {
           className="w-28 h-28 absolute top-4 left-[52%] opacity-30 lg:flex hidden z-0 pointer-events-none"
         />
         <p className="z-10 text-gray-400 font-medium text-center">
-          From a small idea to a Europe-wide community
+          {t('journey.subtitle')}
         </p>
       </div>
 

@@ -1,57 +1,52 @@
 import React from "react";
 import { MapPin, Plane, UserCheck, Users, Globe } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Exact colors from the image
 const ACCENT_COLOR = "#D63384"; // The pink/magenta used for icons
-// const TEXT_DARK = "#1A1A1A"; // Heavy black for titles
-// const TEXT_GRAY = "#4A5568"; // Balanced gray for descriptions
-// const DIVIDER_COLOR = "#EDF2F7"; // Very light gray for vertical lines
 
-const STEPS = [
+const getSteps = (t: (key: string) => string) => [
   {
     icon: MapPin,
-    title: "Elige tu destino",
-    description:
-      "Descubre nuestras próximas salidas en grupo, puedes elegir por destino, mes o tipo de viaje. Estamos seguros de que tenemos ese viaje con el que llevas tiempo soñando.",
+    title: t('wildWeekend.chooseDestination'),
+    description: t('wildWeekend.chooseDestinationDesc'),
     emoji: "🌍",
   },
   {
     icon: Plane,
-    title: "Reserva tus vuelos",
-    description:
-      "Cuando recibas un email de que tu viaje está 'Confirmado', ¡querrá decir que es oficial, nos vamos de viaje! No incluimos los vuelos, así que tienes total libertad de elección.",
+    title: t('wildWeekend.bookFlights'),
+    description: t('wildWeekend.bookFlightsDesc'),
     emoji: "✈️",
   },
   {
     icon: UserCheck,
-    title: "Coordinador experto",
-    description:
-      "En nuestro viaje nos acompañará un coordinador, es un compañero de aventuras más que se encarga de la logística y organización del viaje.",
+    title: t('wildWeekend.expertCoordinator'),
+    description: t('wildWeekend.expertCoordinatorDesc'),
     emoji: "🚩",
   },
   {
     icon: Users,
-    title: "Grupos de edades similares",
-    description:
-      "El grupo de viaje estará formado por gente de tu edad (25-35 y 35-45 años). De esta manera compartirás la experiencia con gente afin a ti y a tus intereses.",
+    title: t('wildWeekend.similarAgeGroups'),
+    description: t('wildWeekend.similarAgeGroupsDesc'),
     emoji: "",
   },
   {
     icon: Globe,
-    title: "¡Disfruta del mejor viaje en grupo!",
-    description:
-      "Conecta con tus nuevos amigos, explora el destino que hayas elegido y emociónate viviendo la experiencia de tu vida, te aseguramos que será inolvidable.",
+    title: t('wildWeekend.enjoyBestTrip'),
+    description: t('wildWeekend.enjoyBestTripDesc'),
     emoji: "💗",
   },
 ];
 
 const WildWeekendCard = () => {
+  const { t } = useTranslation();
+  const STEPS = getSteps(t);
   return (
     <section className="w-full px-4 py-16 lg:py-24">
       <div className="mx-auto max-w-[1280px]">
         {/* Main Section Header */}
         <h2 className="mb-12 text-center text-[32px] font-bold text-[#2D3748] lg:mb-16">
-          ¿Cómo funciona?
+          {t('wildWeekend.howItWorks')}
         </h2>
 
         {/* The Single Content Card - Exactly as per image_01ba18.png */}

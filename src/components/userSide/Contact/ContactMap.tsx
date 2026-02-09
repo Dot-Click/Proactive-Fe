@@ -5,6 +5,7 @@ import CustomMarkerIcon from '../../../assets/CustomMarker.png';
 import getintouch from '../../../assets/GetInTouchbg.png';
 import getintouchlayer from '../../../assets/getintouchlayer.png';
 import { useContactInfo } from '@/hooks/getContactInfohook';
+import { useTranslation } from 'react-i18next';
 
 const customMarkerIcon = new Icon({
   iconUrl: "" + CustomMarkerIcon,
@@ -22,6 +23,7 @@ const DEFAULT_PHONE = "+32 2 123 4567";
 const DEFAULT_EMAIL = "hello@proactiefuture.com";
 
 const ContactMap = () => {
+  const { t } = useTranslation();
   const { data } = useContactInfo();
   const lat = data?.mapLat != null ? parseFloat(data.mapLat) : DEFAULT_POSITION[0];
   const lng = data?.mapLng != null ? parseFloat(data.mapLng) : DEFAULT_POSITION[1];
@@ -43,13 +45,13 @@ const ContactMap = () => {
 
         <div className="relative z-10">
           <div className="flex flex-col px-10 py-15">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-4 tracking-wider">Where is <br className="lg:flex hidden" /> the team?</h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-4 tracking-wider" dangerouslySetInnerHTML={{ __html: t('contact.whereIsTeam').replace(/\n/g, '<br className="lg:flex hidden" />') }} />
           </div>
           <div className='border-b border-[#FFFFFF]/61 w-100'></div>
           <div className="py-20 px-8">
-            <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold mb-4 sm:mb-6 tracking-wider">Get In Touch</h1>
-            <p className="text-base sm:text-lg mb-6 sm:mb-8 font-semibold tracking-wider">Have a question or idea in mind? <br /> We're here to listen and help you <br /> every step of the way.</p>
-            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-5 tracking-wider">Contact Info</h3>
+            <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold mb-4 sm:mb-6 tracking-wider">{t('contact.getInTouch')}</h1>
+            <p className="text-base sm:text-lg mb-6 sm:mb-8 font-semibold tracking-wider" dangerouslySetInnerHTML={{ __html: t('contact.questionOrIdea').replace(/\n/g, '<br />') }} />
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-5 tracking-wider">{t('contact.contactInfo')}</h3>
             <div className="space-y-3 sm:space-y-4">
               <p className="text-base sm:text-xl flex items-center font-semibold tracking-wider">
                 <i className="mr-3 sm:mr-4 text-xl sm:text-2xl "></i>

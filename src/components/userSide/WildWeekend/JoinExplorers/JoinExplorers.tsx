@@ -1,8 +1,10 @@
 import Explore1 from "../../../../assets/Explore1.png";
+import { useTranslation } from "react-i18next";
 
 const JOIN_WHATSAPP_URL = "https://chat.whatsapp.com/";
 
 const JoinExplorers = () => {
+  const { t } = useTranslation();
   return (
     <section className="bg-white w-full py-12 lg:py-20 overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-16">
@@ -29,17 +31,15 @@ const JoinExplorers = () => {
           {/* Right: Text Content */}
           <div className="w-full lg:w-[45%] flex flex-col gap-6 lg:pl-4">
             <h2 className="text-[2.5rem] lg:text-[3.5rem] font-bold leading-[1.1] text-[#E53E3E]">
-              Somos una familia de exploradores. ¿Te vienes?
+              {t('wildWeekend.joinExplorers.title')}
             </h2>
 
             <div className="flex flex-col gap-4 text-gray-700 text-lg lg:text-xl">
               <p className="leading-relaxed">
-                Huakai se caracteriza por muchas cosas, pero sobre todo por
-                crear nuevos lazos a raíz de experiencias únicas.
+                {t('wildWeekend.joinExplorers.desc1')}
               </p>
               <p className="leading-relaxed">
-                ¡Forma parte de nuestro grupo de Facebook y conoce a otros
-                viajeros como tú!
+                {t('wildWeekend.joinExplorers.desc2')}
               </p>
             </div>
 
@@ -54,7 +54,7 @@ const JoinExplorers = () => {
                     "linear-gradient(90deg, #E53E3E 0%, #6B21A8 100%)",
                 }}
               >
-                ¡Quiero unirme!
+                {t('wildWeekend.joinExplorers.button')}
               </a>
             </div>
           </div>

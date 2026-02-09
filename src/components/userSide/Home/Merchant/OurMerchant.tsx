@@ -52,6 +52,7 @@ import Marquee from 'react-fast-marquee';
 import { FaStar } from 'react-icons/fa';
 // 1. Import the hook and the type from your hook file
 import { useReviews, type ReviewItem } from "@/hooks/getReviewshook";
+import { useTranslation } from "react-i18next";
 
 // --- Types ---
 interface Testimonial {
@@ -166,6 +167,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 };
 
 export default function TestimonialSection() {
+  const { t } = useTranslation();
   // 2. Call the hook to get reviews
   const { data: apiReviews, isLoading } = useReviews();
 
@@ -192,10 +194,10 @@ export default function TestimonialSection() {
     <section className="py-12 md:py-20 bg-slate-50 overflow-hidden">
       <div className="container mx-auto px-4 mb-10 md:mb-16 text-center">
         <h2 className="text-2xl md:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
-          What Our Users Say
+          {t('testimonials.title')}
         </h2>
         <p className="text-slate-500 text-sm md:text-base max-w-xl mx-auto">
-          {isLoading ? "Loading community feedback..." : "Continuous feedback helps us build a better platform."}
+          {isLoading ? t('testimonials.loadingFeedback') : t('testimonials.subtitle')}
         </p>
       </div>
 

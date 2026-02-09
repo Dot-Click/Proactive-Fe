@@ -340,7 +340,7 @@ const Coordinatorinfo = () => {
                         displayData.map((user: Coordinator) => (
                             <div
                                 key={user.id}
-                                className="bg-white border border-[#E0E1E2] px-4 py-6 rounded-[20px] shadow-sm hover:shadow-md transition-all duration-300"
+                                className="bg-white border border-[#E0E1E2] px-4 py-6 rounded-[20px] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full"
                             >
                                 {/* Top Section */}
                                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start items-center mt-2">
@@ -410,6 +410,9 @@ const Coordinatorinfo = () => {
                                     </div>
                                 </div>
 
+                                {/* Spacer to push buttons to bottom */}
+                                <div className="flex-1"></div>
+
                                 {/* Buttons */}
                                 <div className="mt-6 grid lg:grid-cols-2 gap-3">
                                     <Dialog open={open && selectedId === user.id} onOpenChange={(val) => { setOpen(val); if(!val) setSelectedId(null); }}>
@@ -433,8 +436,8 @@ const Coordinatorinfo = () => {
                                         variant="outline"
                                         className={`cursor-pointer w-full h-11 rounded-full border font-semibold text-[14px] transition ${
                                             user.isActive 
-                                            ? "border-[#9C0000] text-[#9C0000] hover:bg-[#FFF0F0]" 
-                                            : "border-green-600 text-green-600 hover:bg-green-50"
+                                                ? "border-[#9C0000] text-[#9C0000] hover:bg-[#FFF0F0]" 
+                                                : "border-green-600 text-green-600 hover:bg-green-50"
                                         }`}
                                     >
                                         {user.isActive ? "Block" : "Unblock"}

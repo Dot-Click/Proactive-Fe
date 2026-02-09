@@ -8,6 +8,8 @@ import {
 import { Link } from "react-router-dom";
 import Proactivelogo from "@/assets/proactive-logo.png";
 import Country from "@/assets/sidebaricon/country.png"
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./userSide/LanguageSwitcher/LanguageSwitcher";
 
 // const DrawerItems = [
 //     { label: "Dashboard", href: "/dashboard", Icon: Dashboard },
@@ -24,6 +26,7 @@ interface Itemsprops {
 }
 
 const DrawerBar = ({ items }: Itemsprops) => {
+    const { t } = useTranslation();
     return (
         <div>
             <Drawer direction="left">
@@ -37,30 +40,32 @@ const DrawerBar = ({ items }: Itemsprops) => {
                                 <img src={Proactivelogo} alt="Proactivelogo" className="w-30 h-10" />
                             </span>
                             <DrawerClose asChild>
-                                <button className="text-sm px-2 py-1 rounded-md border">Close</button>
+                                <button className="text-sm px-2 py-1 rounded-md border">{t('drawer.close')}</button>
                             </DrawerClose>
                         </div>
                         <nav className="flex-1 overflow-auto p-4">
                             <div className="flex flex-col gap-1">
                                 {items.map((item) => (
-                                    <DrawerClose asChild key={item.label}>
+                                    <DrawerClose asChild key={item.href}>
                                         <Link to={item.href} className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-[#F5F6FA]">
                                             {
                                                 item.Icon ? (
-                                                    <img src={item.Icon ? item.Icon : ''} alt={item.label ? item.label : ''} className={`w-5 h-5 ${item.label === 'Dashboard' ? 'brightness-0 invert-[0.6]' : ''}`} />
+                                                    <img src={item.Icon ? item.Icon : ''} alt={item.label ? item.label : ''} className={`w-5 h-5 ${item.label === 'drawer.dashboard' || item.label === 'Dashboard' ? 'brightness-0 invert-[0.6]' : ''}`} />
                                                 ) :
                                                     (
                                                         <div className="w-5 h-5" />
                                                     )
                                             }
-                                            <span className="text-[#221E33] text-sm font-medium">{item.label}</span>
+                                            <span className="text-[#221E33] text-sm font-medium">
+                                                {item.label.startsWith('drawer.') ? t(item.label) : item.label}
+                                            </span>
                                         </Link>
                                     </DrawerClose>
                                 ))}
                             </div>
-                            {/* Country icon */}
-                            <div className="hidden lg:flex bg-[#FFFFFF] rounded-full w-12 h-12 lg:w-14 lg:h-14 items-center justify-center md:mt-1 cursor-pointer">
-                                <img src={Country} alt="Country" />
+                            {/* Language Switcher */}
+                            <div className="mt-4 flex justify-center">
+                                <LanguageSwitcher />
                             </div>
                         </nav>
                     </div>

@@ -1,12 +1,15 @@
 import WonderPeoplebg from "../../../../assets/WonderPeoplebg.png"
 import SomeMemoriesCard from "./SomeMemoriesCard"
+import { useTranslation } from "react-i18next"
+
 const SomeMemories = () => {
+    const { t } = useTranslation();
     return (
         <div className="relative">
             <img src={WonderPeoplebg} alt="WonderPeoplebg" className="lg:h-350 h-800 w-full" />
             <div className="bg-black absolute inset-0 opacity-80 lg:h-350 h-800" ></div>
             <div className="absolute inset-0">
-                <h1 className="text-white font-bold lg:text-3xl lg:py-20 py-10 text-center">Some Memories</h1>
+                <h1 className="text-white font-bold lg:text-3xl lg:py-20 py-10 text-center">{t('internalEvents.someMemories.title')}</h1>
                 <div className="flex items-center justify-center">
                     <SomeMemoriesCard />
                 </div>

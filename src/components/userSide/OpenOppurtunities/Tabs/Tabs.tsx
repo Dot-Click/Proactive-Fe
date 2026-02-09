@@ -1,4 +1,5 @@
 import { UsegetTrips } from "@/hooks/gettriphook"
+import { useTranslation } from "react-i18next"
 
 export type TabId = "all" | "open" | "coming-soon" | "closed"
 
@@ -8,14 +9,15 @@ interface TabsProps {
 }
 
 const Tabs = ({ activeTab, onTabChange }: TabsProps) => {
+    const { t } = useTranslation();
     const { data } = UsegetTrips()
     const counts = data?.counts ?? { all: 0, open: 0, comingSoon: 0, closed: 0 }
 
     const tabConfig: { id: TabId; label: string; count: number }[] = [
-        { id: "all", label: "All", count: counts.all },
-        { id: "open", label: "Open", count: counts.open },
-        { id: "coming-soon", label: "Coming Soon", count: counts.comingSoon },
-        { id: "closed", label: "Closed", count: counts.closed },
+        { id: "all", label: t('openOpportunities.all'), count: counts.all },
+        { id: "open", label: t('openOpportunities.open'), count: counts.open },
+        { id: "coming-soon", label: t('openOpportunities.comingSoon'), count: counts.comingSoon },
+        { id: "closed", label: t('openOpportunities.closed'), count: counts.closed },
     ]
 
     return (

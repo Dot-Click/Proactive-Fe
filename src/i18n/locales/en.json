@@ -1,0 +1,373 @@
+{
+  "navbar": {
+    "home": "Home",
+    "openOpportunities": "Open Opportunities",
+    "whatWeDo": "What We Do",
+    "wildWeekend": "Wild Weekend",
+    "wildTrip": "Wild Trip",
+    "erasmusPlus": "Erasmus+",
+    "internalEvents": "Internal Events",
+    "info": "Info",
+    "aboutUs": "About Us",
+    "becomeMember": "Become a Member",
+    "coordinators": "Coordinators",
+    "benefits": "Benefits",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "community": "COMMUNITY",
+    "whatsappCommunity": "WhatsApp Community",
+    "telegramBroadcast": "Telegram Broadcast",
+    "logIn": "Log In",
+    "joinNow": "Join Now"
+  },
+  "hero": {
+    "yourNext": "Your Next",
+    "adventure": "ADVENTURE",
+    "awaits": "Awaits",
+    "subtitle": "Discover extraordinary experiences,\nconnect with fellow adventurers, and create memories that last a lifetime with Proactive Future.",
+    "joinAdventure": "Join the Adventure",
+    "getToKnowUs": "Get to Know Us",
+    "openOpportunitiesTitle": "Open Opportunities",
+    "openOpportunitiesSubtitle": "Discover amazing destinations and join our community of adventurers",
+    "whatWeDoTitle": "What We Do",
+    "whatWeDoSubtitle": "Transformative experiences that connect people with adventure and culture",
+    "wildWeekendTitle": "Wild Weekend",
+    "wildWeekendSubtitle": "Your escape into nature, connection, and unforgettable memories",
+    "wildTripTitle": "Wild Trip",
+    "wildTripSubtitle": "From deserts to glaciers – trips that change your perspective.",
+    "erasmusPlusTitle": "Erasmus +",
+    "erasmusPlusSubtitle": "Discover, connect, and learn with Erasmus+ journeys.",
+    "internalEventsTitle": "Internal events",
+    "internalEventsSubtitle": "Building connections, sharing moments, growing together.",
+    "aboutUsTitle": "About US",
+    "aboutUsSubtitle": "Discover extraordinary experiences,\nconnect with fellow adventurers, and create memories that last a lifetime with Proactive Future.",
+    "becomeMemberTitle": "Become a Member",
+    "becomeMemberSubtitle": "Unlock exclusive benefits and join our travel community of adventurous souls exploring the world together.",
+    "joinNowFor": "Join Now for €50",
+    "travelCoordinatorTitle": "Our Travel Coordinators",
+    "travelCoordinatorSubtitle": "The passionate travelers who turn every trip into an unforgettable journey",
+    "advantagesTitle": "Advantages",
+    "contactTitle": "Contact",
+    "faqTitle": "Frequently Asked Questions",
+    "privacyPolicyTitle": "Privacy Policy",
+    "termsTitle": "Terms of Services",
+    "cookiePolicyTitle": "Cookie Policy"
+  },
+  "home": {
+    "adventureOpportunities": "Adventure Oppurtunities",
+    "adventureOpportunitiesSubtitle": "Choose your path to adventure. Whether you're looking for a quick escape or an extended journey, we have the perfect experience waiting for you.",
+    "adventureMoments": "Adventure Moments",
+    "whatWeDo": "What We Do",
+    "whatWeDoSubtitle": "We create transformative experiences that connect people with adventure and culture",
+    "impactNumbers": "Our Impact in Numbers"
+  },
+  "footer": {
+    "tagline": "Creating unforgettable adventures\nand connecting travelers\nworldwide.\nYour journey to extraordinary\nexperiences starts here.",
+    "quickLinks": "Quick Links",
+    "whoWeAre": "Who We Are",
+    "memberBenefits": "Member Benefits",
+    "contactInfo": "Contact Info",
+    "stayUpdated": "Stay Updated",
+    "newsletterText": "Subscribe to our newsletter for the latest adventures and exclusive offers.",
+    "emailPlaceholder": "Your Email Address",
+    "subscribe": "Subscribe",
+    "subscribing": "Subscribing...",
+    "copyright": "© 2025 Proactive Future. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfServices": "Terms of Services",
+    "cookiePolicy": "Cookie Policy"
+  },
+  "about": {
+    "ourMission": "Our Mission",
+    "missionText1": "To create a vibrant community where young\nEuropeans can discover new cultures, build\nlasting friendships, and develop into global\ncitizens through carefully crafted travel\nexperiences.",
+    "missionText2": "We believe that travel has the power to break\ndown barriers, build bridges between cultures,\nand inspire the next generation of European\nleaders."
+  },
+  "becomeMember": {
+    "whyJoin": "Why Join Proactive?",
+    "whyJoinSubtitle": "Unlock a world of exclusive travel opportunities and connect with like-minded adventurers",
+    "accessExclusiveTrips": "Access to Exclusive Trips",
+    "accessExclusiveTripsDesc": "Get priority access to limited Wild Trips, Wild Weekends, and Erasmus+ programs before they're released to the public.",
+    "memberDiscounts": "Member Discounts",
+    "memberDiscountsDesc": "Enjoy exclusive discounts on all Wild Trips & Weekends, plus special offers on accommodation and activities.",
+    "earlyAccess": "Early Access",
+    "earlyAccessDesc": "Be the first to know about new destinations and opportunities. Book your spot before anyone else.",
+    "exclusiveCommunities": "Exclusive Communities",
+    "exclusiveCommunitiesDesc": "Join our members-only WhatsApp and Telegram groups to connect with fellow travelers and coordinators.",
+    "freeCoordinatorSupport": "Free Coordinator Support",
+    "freeCoordinatorSupportDesc": "Get personalized travel advice and support from our experienced coordinators at no extra cost.",
+    "validity": "365 Days Valid",
+    "validityDesc": "Your membership is valid for a full year from the date of purchase, giving you maximum flexibility."
+  },
+  "wildWeekend": {
+    "howItWorks": "How It Works",
+    "chooseDestination": "Choose Your Destination",
+    "chooseDestinationDesc": "Discover our upcoming group departures, you can choose by destination, month or type of trip. We're sure we have that trip you've been dreaming of.",
+    "bookFlights": "Book Your Flights",
+    "bookFlightsDesc": "When you receive an email that your trip is 'Confirmed', it means it's official, we're going on a trip! We don't include flights, so you have complete freedom of choice.",
+    "expertCoordinator": "Expert Coordinator",
+    "expertCoordinatorDesc": "A coordinator will accompany us on our trip, they're another adventure companion who takes care of the logistics and organization of the trip.",
+    "similarAgeGroups": "Similar Age Groups",
+    "similarAgeGroupsDesc": "The travel group will be made up of people your age (25-35 and 35-45 years old). This way you'll share the experience with people similar to you and your interests.",
+    "enjoyBestTrip": "Enjoy the Best Group Trip!",
+    "enjoyBestTripDesc": "Connect with your new friends, explore the destination you've chosen and get excited living the experience of your life, we guarantee it will be unforgettable.",
+    "wonderPeople": {
+      "title": "Wonderful people who have experienced it tell you about it."
+    },
+    "connectStranger": {
+      "title1": "Connect with Strangers",
+      "desc1": "Tired of a society where it's increasingly difficult to connect with the people around us, this experience is perfect for opening up to meet wonderful people and create unique shared memories.",
+      "title2": "Connect with Strangers",
+      "desc2": "Wild Weekend weekends are prepared with care and affection, taking care of every detail to offer incredible adventures and live the event to the fullest. Always with good vibes! ;)",
+      "title3": "Adventure",
+      "desc3": "As they said in a wild weekend: \"prepare for everything\", that's the best: lots of adventure, personal growth and laughs, ready?",
+      "title4": "24/7 Coordinator",
+      "desc4": "Several members of the Proactive Future team will coordinate the Wild Weekend to ensure everything runs as smoothly as possible.",
+      "title5": "Very Low Price",
+      "desc5": "Compare prices online and you'll see that, with everything included, no other price comes close to these. Our goal is to make them affordable."
+    },
+    "exploreTrips": {
+      "title": "Explore some of our Wild Weekends to get a better idea."
+    },
+    "joinExplorers": {
+      "title": "We are a family of explorers. Are you coming?",
+      "desc1": "Huakai is characterized by many things, but above all by creating new bonds from unique experiences.",
+      "desc2": "Join our Facebook group and meet other travelers like you!",
+      "button": "I Want to Join!"
+    },
+    "whatIncluded": {
+      "title": "What does a trip with Proactive Future include?",
+      "sharedAccommodation": "Shared accommodation",
+      "meals": "Meals (breakfast, lunch and dinner)",
+      "transport": "Transportation to activities",
+      "activities": "Participation in all activities",
+      "coordinatorTeam": "Coordinator team",
+      "everything": "Basically from when you're with us: EVERYTHING."
+    },
+    "openOpportunities": {
+      "title": "Opportunities open!",
+      "subtitle": "It's never been easier to meet new people, live experiences that last forever, and feel a passion for life that's too much to contain. Are you in?",
+      "startJourney": "Start Your Journey",
+      "contactUs": "Contact Us"
+    }
+  },
+  "openOpportunities": {
+    "all": "All",
+    "open": "Open",
+    "comingSoon": "Coming Soon",
+    "closed": "Closed",
+    "searchPlace": "Search Place",
+    "allCategory": "All Category",
+    "selectCategory": "Select Category"
+  },
+  "faq": {
+    "noFaqsFound": "No FAQs Found"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "noData": "No data available"
+  },
+  "pages": {
+    "terms": {
+      "title": "Terms of Services",
+      "content": "This page will contain the Terms of Services for Proactive Future. Content coming soon."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "content": "This page will contain the Privacy Policy for Proactive Future. Content coming soon."
+    },
+    "cookie": {
+      "title": "Cookie Policy",
+      "content": "This page will contain the Cookie Policy for Proactive Future. Content coming soon."
+    }
+  },
+  "drawer": {
+    "close": "Close",
+    "dashboard": "Dashboard",
+    "openOpportunities": "Open Opportunities",
+    "whatWeDo": "What We Do",
+    "wildWeekend": "Wild Weekend",
+    "wildTrip": "Wild Trip",
+    "erasmusPlus": "Erasmus+",
+    "internalEvents": "Internal Events",
+    "aboutUs": "About Us",
+    "becomeMember": "Become a Member",
+    "coordinators": "Coordinators",
+    "benefits": "Benefits",
+    "contact": "Contact",
+    "faq": "FAQ"
+  },
+  "follow": {
+    "title": "Follow Our Journey",
+    "subtitle": "Get inspired by real adventures from our community. Follow @{{username}} for daily\ndoses of wanderlust!",
+    "followButton": "Follow @{{username}}"
+  },
+  "testimonials": {
+    "title": "What Our Users Say",
+    "subtitle": "Continuous feedback helps us build a better platform.",
+    "loadingFeedback": "Loading community feedback..."
+  },
+  "journey": {
+    "title": "Our Journey",
+    "subtitle": "From a small idea to a Europe-wide community",
+    "milestones": {
+      "2019": {
+        "title": "The Beginning",
+        "description": "Founded by a group of former Erasmus students who wanted to continue the magic of cultural exchange."
+      },
+      "2020": {
+        "title": "Digital Pivot",
+        "description": "Adapted to virtual exchanges and built our online community during challenging times."
+      },
+      "2021": {
+        "title": "Wild Weekends Launch",
+        "description": "Introduced short-format adventures perfect for busy young professionals."
+      },
+      "2022": {
+        "title": "Expansion",
+        "description": "Reached 1,000+ participants across 20 European countries."
+      },
+      "2023": {
+        "title": "Recognition",
+        "description": "Awarded 'Best Youth Travel Organization' by European Travel Association."
+      },
+      "2024": {
+        "title": "Growth",
+        "description": "Welcomed our 2,500th member and launched Wild Trip adventures."
+      }
+    }
+  },
+  "wildTrip": {
+    "whatIs": {
+      "title": "What is it?",
+      "description": "We invite you to a unique experience exploring other cultures and living adventures in a group of up to 12 people. These are very local backpacking trips, with a lot of flexibility to adapt to the culture, which will allow you to fully immerse yourself in it. Get ready for something really incredible."
+    },
+    "when": {
+      "title": "When?",
+      "description": "There are several trips throughout the year, but right now we're doing adventure trips to Egypt and Iceland."
+    },
+    "howToParticipate": {
+      "title": "How can I participate?",
+      "description": "New trips will be announced on Instagram in the \"Open Opportunities\" section. After completing a form, the most qualified travelers who best fit the experience will be selected."
+    },
+    "ourTrips": {
+      "title": "Our trips"
+    }
+  },
+  "internalEvents": {
+    "aboutEvent": {
+      "title": "About This Event",
+      "desc1": "Our internal events are more than just training sessions – they're transformative experiences that shape the future leaders of the travel industry.",
+      "desc2": "Join a community of passionate professionals dedicated to excellence in travel coordination, cultural exchange, and creating unforgettable experiences for adventurers worldwide."
+    },
+    "experienceEvent": {
+      "title": "Experience Our Events",
+      "subtitle": "See what makes our internal events transformative for travel professionals"
+    },
+    "someMemories": {
+      "title": "Some Memories"
+    },
+    "teamSchedule": {
+      "title": "Teambuilding Schedule",
+      "subtitle": "WW - Surface Camp Asturias"
+    }
+  },
+  "contact": {
+    "whereIsTeam": "Where is\nthe team?",
+    "getInTouch": "Get In Touch",
+    "questionOrIdea": "Have a question or idea in mind?\nWe're here to listen and help you\nevery step of the way.",
+    "contactInfo": "Contact Info"
+  },
+  "joinOurStory": {
+    "title": "Join Our Story",
+    "subtitle": "Be part of a community that's redefining youth travel across Europe. Your adventure\nstarts with a single step.",
+    "startJourney": "Start Your Journey",
+    "contactUs": "Contact Us"
+  },
+  "benefits": {
+    "ourCollaborations": {
+      "title": "Our Collaborations",
+      "travelInsurance": {
+        "title": "Travel Insurance\n- iati",
+        "description": "Travel insurance worldwide. iati offers great\nprices, and if you access it through this link,\nyou get a 5% discount"
+      },
+      "sheltersTransportation": {
+        "title": "Shelters and\nTransportation\n- REAJ",
+        "description": "Get your youth hostel card and enjoy discounts\non accommodations: 15% on ALSA, Goiko,\n10% on FLIXBUS, and other chains.\nVisit the link and use the discount code\n<b>\"PROACTIVEFUTURE\"</b>"
+      }
+    }
+  },
+  "travelCoordinator": {
+    "fellowExplorer": {
+      "title": "More than guides — they're\nfellow explorers",
+      "passionateTravelers": "Passionate Travelers",
+      "passionateTravelersDesc": "Our coordinators have explored the world themselves and\nbring authentic experiences to every trip they lead."
+    },
+    "meetCoordinator": {
+      "title": "Meet Our Coordinators",
+      "subtitle": "Get to know the amazing people who make every Proactive Future\nadventure unforgettable"
+    },
+    "leadAdventure": {
+      "title": "Ready to Lead Adventures?",
+      "subtitle": "Join our team of passionate coordinators and turn your love for travel into a rewarding career. Share your\nexpertise, create lasting connections, and inspire others to explore the world.",
+      "applyNow": "Apply Now – Start Your Journey"
+    }
+  },
+  "about": {
+    "ourMission": "Our Mission",
+    "missionText1": "To create a vibrant community where young\nEuropeans can discover new cultures, build\nlasting friendships, and develop into global\ncitizens through carefully crafted travel\nexperiences.",
+    "missionText2": "We believe that travel has the power to break\ndown barriers, build bridges between cultures,\nand inspire the next generation of European\nleaders.",
+    "connectingPeople": {
+      "title": "Connecting People",
+      "description": "Our business is deeply human: it's built on relationships and interactions, not just while we're\ntraveling. We host many events throughout the year to engage with our community\nand have our WeRoaders and travel coordinators share their stories. Every day we see the\nimpact of our work and are reminded that we make a living building relationships and\nchanging lives. Not many companies can say the same. This is our \"why,\" the reason we\ncome to work every day, and we consider it a privilege."
+    },
+    "geeks": {
+      "title": "For the geeks",
+      "desc1": "Want to know the real story? It was all about\npassion, determination, and yes... meeting the\nright people at the right time.",
+      "desc2": "Sooner or later, we'll write a book about how we\nmanaged to survive a global pandemic and grow\nas a brand. Until then, Fabio writes a yearly\nroundup (in English, because we like being\ninternational) every March 21st, which is\nWeRoad's birthday (we're Aries, yes).",
+      "desc3": "Sooner or later, we'll write a book about how we\nmanaged to survive a global pandemic and grow\nas a brand. Until then, Fabio writes a yearly\nroundup (in English, because we like being\ninternational) every March 21st, which is\nWeRoad's birthday (we're Aries, yes).",
+      "year0": "Year 0/1: the bootstrap",
+      "year2": "Year 2: the start-up",
+      "year3": "Year 3: the scale-up",
+      "year4": "Year 4: dancing times (surviving Covid)",
+      "year5": "Year 5: 5 years in a row",
+      "year6": "Year 6: adventures in technicolor",
+      "year7": "Year 7: pairing community and scaling"
+    },
+    "ourValues": {
+      "title": "Our Values",
+      "subtitle": "The principles that guide everything we do",
+      "adventuresCompleted": "Adventures Completed",
+      "happyTravelers": "Happy Travelers",
+      "countriesVisited": "Countries Visited",
+      "averageRating": "Average Rating"
+    },
+    "part": {
+      "title": "Why be part of it?",
+      "motivatedGroup": {
+        "title": "Motivated group of young\npeople",
+        "description": "Tired of a society where it's increasingly difficult to connect with the people around us, this experience is perfect for opening up to meet wonderful people and create unique shared memories."
+      },
+      "priorityYouth": {
+        "title": "Priority in youth mobility",
+        "description": "Wild Weekend weekends are prepared with care and affection, taking care of every detail to offer incredible adventures and live the event to the fullest. Always with good vibes! ;)"
+      },
+      "creatingTeam": {
+        "title": "Creating team projects",
+        "description": "As they said in a wild weekend: \"prepare for everything\", that's the best: lots of adventure, personal growth and laughs, ready?"
+      },
+      "makeDifference": {
+        "title": "Make a difference on your\nCV",
+        "description": "Several members of the Proactive Future team will coordinate the Wild Weekend to ensure everything runs as smoothly as possible."
+      },
+      "benefitsDaily": {
+        "title": "Benefits in your daily life",
+        "description": "Compare prices online and you'll see that, with everything included, no other price comes close to these. Our goal is to make them affordable."
+      },
+      "continuousTraining": {
+        "title": "Continuous training and\nenjoyment",
+        "description": "Compare prices online and you'll see that, with everything included, no other price comes close to these. Our goal is to make them affordable."
+      }
+    }
+  }
+}

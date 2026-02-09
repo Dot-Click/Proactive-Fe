@@ -6,6 +6,7 @@ import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 // const faqs = [
 //     {
@@ -32,6 +33,7 @@ import { toast } from "sonner";
 // ];
 
 const FaqQuestion = ({ role }: { role: string }) => {
+    const { t } = useTranslation();
     const [openIndex, setOpenIndex] = useState(null);
     const { data, isLoading, isError } = UsegetallFaqs();
     const { mutateAsync: DeletefaqbyId, isPending } = UseDeletefaqbyId();
@@ -63,7 +65,7 @@ const FaqQuestion = ({ role }: { role: string }) => {
 
             {data?.faqs?.length === 0 ? (
                 <div className="bg-white border border-[#E0E1E2] px-4 py-6 rounded-[20px] shadow-sm hover:shadow-md transition-all duration-300">
-                    <span className="text-[#221E33] font-semibold text-[16px]">No FAQs Found</span>
+                    <span className="text-[#221E33] font-semibold text-[16px]">{t('faq.noFaqsFound')}</span>
                 </div>
             ) :
                 data?.faqs?.map((faq: any, index: number) => (

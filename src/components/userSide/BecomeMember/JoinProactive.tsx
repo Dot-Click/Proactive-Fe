@@ -7,65 +7,62 @@ import {
   CalendarCheck,
 } from "lucide-react";
 import box1 from "../../../assets/box.png";
+import { useTranslation } from "react-i18next";
 
-const CARDS = [
+const getCards = (t: (key: string) => string) => [
   {
     id: "exclusive-trips",
     icon: MapPin,
-    title: "Access to Exclusive Trips",
-    description:
-      "Get priority access to limited Wild Trips, Wild Weekends, and Erasmus+ programs before they're released to the public.",
+    title: t('becomeMember.accessExclusiveTrips'),
+    description: t('becomeMember.accessExclusiveTripsDesc'),
     color: "#2DD4BF",
     shadowColor: "#14B8A6",
   },
   {
     id: "member-discounts",
     icon: Tag,
-    title: "Member Discounts",
-    description:
-      "Enjoy exclusive discounts on all Wild Trips & Weekends, plus special offers on accommodation and activities.",
+    title: t('becomeMember.memberDiscounts'),
+    description: t('becomeMember.memberDiscountsDesc'),
     color: "#FACC15",
     shadowColor: "#CA8A04",
   },
   {
     id: "early-access",
     icon: Clock,
-    title: "Early Access",
-    description:
-      "Be the first to know about new destinations and opportunities. Book your spot before anyone else.",
+    title: t('becomeMember.earlyAccess'),
+    description: t('becomeMember.earlyAccessDesc'),
     color: "#A3E635",
     shadowColor: "#65A30D",
   },
   {
     id: "exclusive-communities",
     icon: Users,
-    title: "Exclusive Communities",
-    description:
-      "Join our members-only WhatsApp and Telegram groups to connect with fellow travelers and coordinators.",
+    title: t('becomeMember.exclusiveCommunities'),
+    description: t('becomeMember.exclusiveCommunitiesDesc'),
     color: "#F87171",
     shadowColor: "#DC2626",
   },
   {
     id: "coordinator-support",
     icon: UserCircle2,
-    title: "Free Coordinator Support",
-    description:
-      "Get personalized travel advice and support from our experienced coordinators at no extra cost.",
+    title: t('becomeMember.freeCoordinatorSupport'),
+    description: t('becomeMember.freeCoordinatorSupportDesc'),
     color: "#34D399",
     shadowColor: "#059669",
   },
   {
     id: "validity",
     icon: CalendarCheck,
-    title: "365 Days Valid",
-    description:
-      "Your membership is valid for a full year from the date of purchase, giving you maximum flexibility.",
+    title: t('becomeMember.validity'),
+    description: t('becomeMember.validityDesc'),
     color: "#A78BFA",
     shadowColor: "#7C3AED",
   },
 ] as const;
 
 const JoinProactive = () => {
+  const { t } = useTranslation();
+  const CARDS = getCards(t);
   return (
     <section
       className="relative w-full overflow-hidden bg-white py-16 lg:py-24"
@@ -80,7 +77,7 @@ const JoinProactive = () => {
       {/* Header */}
       <div className="relative z-10 mx-auto max-w-4xl mb-20 flex flex-col items-center gap-4 text-center">
         <h1 className="bg-gradient-to-r from-[#221E33] to-[#565070] bg-clip-text text-4xl font-bold text-transparent lg:text-5xl">
-          Why Join Proactive?
+          {t('becomeMember.whyJoin')}
         </h1>
         <img
           src={box1}
@@ -88,8 +85,7 @@ const JoinProactive = () => {
           className="absolute left-[52%] top-0 w-28 -translate-x-1/2 opacity-20 lg:block hidden"
         />
         <p className="max-w-2xl text-base font-medium text-gray-700">
-          Unlock a world of exclusive travel opportunities and connect with
-          like-minded adventurers
+          {t('becomeMember.whyJoinSubtitle')}
         </p>
       </div>
 

@@ -3,8 +3,10 @@ import ourvalues1 from "../../../../assets/Ourvalues1.png"
 import ourvalues2 from "../../../../assets/Ourvalues2.png"
 import ourvalues3 from "../../../../assets/Ourvalues3.png"
 import ourvalues4 from "../../../../assets/Ourvalues4.png"
+import { useTranslation } from "react-i18next"
 
 const OurValuesCard = () => {
+    const { t } = useTranslation();
     return (
         <div className="grid lg:grid-cols-4 grid-cols-2 lg:gap-6 gap-4 lg:mt-30 mt-6">
             <div className="lg:w-[240px] mx-auto lg:px-8 lg:py-8 px-2 py-2 rounded-[20px] bg-linear-to-b from-[#058B78] to-[#29C8B1] border border-[#FFFFFF]">
@@ -20,7 +22,7 @@ const OurValuesCard = () => {
                             )}
                         </CountUp>
                         </h4>
-                        <p className="text-[#FFFFFF] text-[12px] lg:text-[16px]">Adventures Completed</p>
+                        <p className="text-[#FFFFFF] text-[12px] lg:text-[16px]">{t('about.ourValues.adventuresCompleted')}</p>
                     </div>
                 </div>
             </div>
@@ -38,7 +40,7 @@ const OurValuesCard = () => {
                             )}
                         </CountUp>
                         </h4>
-                        <p className="text-[#FFFFFF] text-sm lg:text-[16px]">Happy Travelers</p>
+                        <p className="text-[#FFFFFF] text-sm lg:text-[16px]">{t('about.ourValues.happyTravelers')}</p>
                     </div>
                 </div>
             </div>
@@ -56,7 +58,7 @@ const OurValuesCard = () => {
                             )}
                         </CountUp>
                         </h4>
-                        <p className="text-[#FFFFFF] text-sm lg:text-[16px] ">Countries Visited</p>
+                        <p className="text-[#FFFFFF] text-sm lg:text-[16px] ">{t('about.ourValues.countriesVisited')}</p>
                     </div>
                 </div>
             </div>
@@ -66,7 +68,7 @@ const OurValuesCard = () => {
                     <img src={ourvalues4} alt="ourvalues4" className="" />
                     <div className="flex flex-col lg:gap-2 justify-center items-center">
                         <h4 className="text-[#FFFFFF] font-bold lg:text-4xl">897/5</h4>
-                        <p className="text-[#FFFFFF] text-sm lg:text-[16px]">Average Rating</p>
+                        <p className="text-[#FFFFFF] text-sm lg:text-[16px]">{t('about.ourValues.averageRating')}</p>
                     </div>
                 </div>
             </div>

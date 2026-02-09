@@ -6,49 +6,52 @@ import {
   Users,
   Sparkles,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const PINK_ICON = "#D81B60";
 const PURPLE_ICON = "#7C3AED";
 
-const items = [
+const getItems = (t: (key: string) => string) => [
   {
     icon: Bed,
-    text: "Alojamiento compartido",
+    text: t('wildWeekend.whatIncluded.sharedAccommodation'),
     color: PINK_ICON,
   },
   {
     icon: UtensilsCrossed,
-    text: "Comidas (desayuno, comida y cena)",
+    text: t('wildWeekend.whatIncluded.meals'),
     color: PINK_ICON,
   },
   {
     icon: Bus,
-    text: "Transporte a las actividades",
+    text: t('wildWeekend.whatIncluded.transport'),
     color: PINK_ICON,
   },
   {
     icon: Ticket,
-    text: "Participar en todas actividades",
+    text: t('wildWeekend.whatIncluded.activities'),
     color: PURPLE_ICON,
   },
   {
     icon: Users,
-    text: "Equipo coordinador",
+    text: t('wildWeekend.whatIncluded.coordinatorTeam'),
     color: PURPLE_ICON,
   },
   {
     icon: Sparkles,
-    text: "Básicamente desde que estás con nosotros: TODO.",
+    text: t('wildWeekend.whatIncluded.everything'),
     color: PURPLE_ICON,
   },
 ];
 
 const WhatIncluded = () => {
+  const { t } = useTranslation();
+  const items = getItems(t);
   return (
     <section className="w-full bg-neutral-100 py-16 lg:py-24">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-neutral-800 mb-12 lg:mb-16">
-          ¿Qué incluye un viaje con Proactive Future?
+          {t('wildWeekend.whatIncluded.title')}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
           {items.map(({ icon: Icon, text, color }, index) => (
