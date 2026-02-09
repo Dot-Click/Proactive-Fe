@@ -7,7 +7,6 @@ import {
 } from "./ui/drawer"
 import { Link } from "react-router-dom";
 import Proactivelogo from "@/assets/proactive-logo.png";
-import Country from "@/assets/sidebaricon/country.png"
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./userSide/LanguageSwitcher/LanguageSwitcher";
 
