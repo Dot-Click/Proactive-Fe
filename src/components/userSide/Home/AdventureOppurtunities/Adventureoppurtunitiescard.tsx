@@ -45,11 +45,15 @@ const Adventureoppurtunitiescard = () => {
             {displayTrips.map((trip: any, index: number) => {
                 const categoryStyle = getCategoryStyle(trip.type || "Mountain Adventure");
                 return (
-                    <div key={trip.id || index} className="relative h-[400px] rounded-[14px] overflow-hidden">
+                    <div
+                        key={trip.id || index}
+                        className="relative h-[400px] rounded-[14px] overflow-hidden cursor-pointer group transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl"
+                        onClick={() => navigate(`/trip/${trip.id}`)}
+                    >
                         <img
                             src={trip.coverImage || ""}
                             alt={trip.title || trip.name}
-                            className="h-full w-full object-cover"
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                             onError={(e) => {
                                 (e.target as HTMLImageElement).src = "/placeholder-trip.jpg";
                             }}
@@ -83,7 +87,10 @@ const Adventureoppurtunitiescard = () => {
                                     </div>
 
                                     <Button
-                                        onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(`/trip/${trip.id}`);
+                                        }}
                                         className="bg-[#0DAC87] hover:bg-[#0ca07d] cursor-pointer text-[#FFFFFF] font-semibold rounded-full px-8 py-5"
                                     >
                                         More Info

@@ -48,6 +48,7 @@ import TermsPage from "./pages/userSide/Terms.page";
 import CookiePolicyPage from "./pages/userSide/CookiePolicy.page";
 import VerifyEmail from "./components/login/VerifyEmail";
 import ResetPassword from "./components/login/ResetPassword";
+import ViewTripDetailPage from "./pages/userSide/ViewTripDetail.page";
 
 function App() {
   return (
@@ -186,6 +187,8 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/cookie-policy" element={<CookiePolicyPage />} />
+        {/* Public trip detail page */}
+        <Route path="/trip/:id" element={<ViewTripDetailPage />} />
       </Route>
     </Routes>
   );

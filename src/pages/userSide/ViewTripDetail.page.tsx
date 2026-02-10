@@ -10,28 +10,47 @@ import VideoSection from "@/components/Adventureoppurtunities/ViewDetailtrip/Vid
 import Faqs from "@/components/Adventureoppurtunities/ViewDetailtrip/Faqs";
 import HowItWorks from "@/components/Adventureoppurtunities/ViewDetailtrip/HowItWorks";
 import { useParams } from "react-router-dom";
-import { UsegetTripbyid } from "@/hooks/gettripbyidhook";
 import { LoaderIcon } from "lucide-react";
 import { UsegetCategory } from "@/hooks/getCategoryhook";
+import { UsegetPublicTripbyid } from "@/hooks/getPublicTripbyidhook";
 
-const ViewDetailTripPage = () => {
+/**
+ * Public trip detail page - accessible without authentication.
+ * Used from landing and other public pages.
+ */
+const ViewTripDetailPage = () => {
   const { id } = useParams();
-  const { data, isLoading, error } = UsegetTripbyid(id ?? "");
+  const { data, isLoading, error } = UsegetPublicTripbyid(id ?? "");
   const { data: categoriesData } = UsegetCategory();
-  if (isLoading)
+
+  // Simple auth check: if a token exists, user is considered logged in.
+  // This aligns with how Supabase/token-based auth is stored on login.
+  const isLoggedIn =
+    typeof window !== "undefined" && !!localStorage.getItem("token");
+
+  if (isLoading) {
     return (
       <div className="w-full flex items-center justify-center py-10">
         <LoaderIcon className="animate-spin" />
       </div>
     );
-  if (error || !data)
-    return <div className="text-center text-red-900">Trip not found</div>;
+  }
+
+  if (error || !data) {
+    return (
+      <div className="text-center text-red-900 py-10">
+        <p className="text-lg font-semibold">Trip not found</p>
+        <p className="text-sm text-gray-600 mt-2">
+          The trip you&apos;re looking for doesn&apos;t exist or has been removed.
+        </p>
+      </div>
+    );
+  }
 
   // Extract trip from API response structure: { trip: {...} }
   const trip: any = data?.trip || data;
 
   // Resolve category name using new categoryId relation (fallback to legacy fields)
-  // Backend now returns categoryName directly, but we still check categoriesData as fallback
   const resolvedCategoryName =
     trip?.categoryName ??
     trip?.category ??
@@ -40,7 +59,7 @@ const ViewDetailTripPage = () => {
     trip?.type ??
     "";
 
-  // Normalized category/type name based on new trips flow (categories)
+  // Normalized category/type name
   const normalizedCategory = resolvedCategoryName
     .toString()
     .toLowerCase()
@@ -51,8 +70,8 @@ const ViewDetailTripPage = () => {
 
   return (
     <div>
-      {/* User dashboard is already protected, so show apply button here */}
-      <MasonryLayout trip={trip} />
+      {/* On public detail page, only show apply button when user is logged in */}
+      <MasonryLayout trip={trip} showApplyButton={isLoggedIn} />
       <Locationmeetingpoint trip={trip} />
       <Tripmood />
       {isWildWeekend && <SurfaceCamp />}
@@ -67,4 +86,5 @@ const ViewDetailTripPage = () => {
   );
 };
 
-export default ViewDetailTripPage;
+export default ViewTripDetailPage;
+

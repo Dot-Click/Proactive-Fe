@@ -176,7 +176,7 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                     <div className="flex flex-col lg:flex-row gap-4">
                                                         <div className="flex lg:flex-row flex-col w-full justify-between gap-4">
                                                             <div className="flex flex-col gap-1 ">
-                                                                <div onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
+                                                                <div onClick={() => navigate(`/trip/${trip.id}`)} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
                                                                     View Detail
                                                                     <MdArrowOutward color="#FFFFFF" />
                                                                 </div>
@@ -258,7 +258,7 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                 <div className="flex flex-col lg:flex-row gap-4">
                                                     <div className="flex lg:flex-row flex-col w-full justify-between gap-4">
                                                         <div className="flex flex-col gap-1 w-full">
-                                                            <div onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
+                                                            <div onClick={() => navigate(`/trip/${trip.id}`)} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
                                                                 View Detail
                                                                 <MdArrowOutward color="#FFFFFF" />
                                                             </div>

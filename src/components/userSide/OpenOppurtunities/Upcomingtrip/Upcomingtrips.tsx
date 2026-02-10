@@ -276,7 +276,7 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery, category }: UpcomingtripsP
                             {filteredTrips.map((trip: OpenTrip, index: number) => (
                                 <li
                                     key={`${trip.id}-${index}`}
-                                    onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)}
+                                    onClick={() => navigate(`/trip/${trip.id}`)}
                                     className="flex items-center gap-3 p-3 rounded-xl border border-[#ECECF1] hover:bg-[#F6F8FD] cursor-pointer transition-colors"
                                 >
                                     <img
