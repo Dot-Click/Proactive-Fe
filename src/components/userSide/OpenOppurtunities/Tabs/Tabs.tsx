@@ -11,7 +11,35 @@ interface TabsProps {
 const Tabs = ({ activeTab, onTabChange }: TabsProps) => {
     const { t } = useTranslation();
     const { data } = UsegetTrips()
-    const counts = data?.counts ?? { all: 0, open: 0, comingSoon: 0, closed: 0 }
+    const rawCounts = data?.counts ?? { all: 0, open: 0, comingSoon: 0, closed: 0 }
+
+    const normalizeCount = (value: unknown): number => {
+        if (typeof value === "number" && Number.isFinite(value)) return value
+        if (typeof value === "string") {
+            const parsed = Number(value)
+            return Number.isFinite(parsed) ? parsed : 0
+        }
+        return 0
+    }
+
+    const openCount = normalizeCount((rawCounts as Record<string, unknown>)?.open ?? (rawCounts as Record<string, unknown>)?.Open)
+    const closedCount = normalizeCount((rawCounts as Record<string, unknown>)?.closed ?? (rawCounts as Record<string, unknown>)?.Closed)
+    const comingSoonCount = normalizeCount(
+        (rawCounts as Record<string, unknown>)?.comingSoon ??
+        (rawCounts as Record<string, unknown>)?.coming_soon ??
+        (rawCounts as Record<string, unknown>)?.["coming-soon"]
+    )
+
+    const allCountFromApi = normalizeCount((rawCounts as Record<string, unknown>)?.all ?? (rawCounts as Record<string, unknown>)?.total)
+    const computedTotal = openCount + comingSoonCount + closedCount
+    const allCount = computedTotal > 0 ? computedTotal : allCountFromApi
+
+    const counts = {
+        all: allCount,
+        open: openCount,
+        comingSoon: comingSoonCount,
+        closed: closedCount,
+    }
 
     const tabConfig: { id: TabId; label: string; count: number }[] = [
         { id: "all", label: t('openOpportunities.all'), count: counts.all },

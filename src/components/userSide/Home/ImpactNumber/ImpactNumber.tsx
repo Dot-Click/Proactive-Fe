@@ -33,12 +33,13 @@
 
 // export default ImpactNumber
 
-import importantMask from "../../../../assets/importantmask.png"
-// import importantbg from "../../../../assets/importantbg.png"
-import importantbg from "../../../../assets/impact-bg.png"
-import importantlayer from "../../../../assets/importantlayer.png"
+import importantMask from "../../../../assets/importantmask.png";
+import importantlayer from "../../../../assets/importantlayer.png";
 import ImpactCard from "./ImpactCard";
 import { useTranslation } from "react-i18next";
+
+const IMPACT_BACKGROUND_URL =
+  "https://www.shutterstock.com/image-photo/panoramic-view-jonhson-lake-near-260nw-2592092981.jpg";
 
 const ImpactNumber = () => {
     const { t } = useTranslation();
@@ -49,14 +50,15 @@ const ImpactNumber = () => {
           alt="importantMask"
           className="lg:h-120 lg:w-full h-100"
         />
-        <div className="absolute inset-0 bg-green-900/20 opacity-100"></div>
-
         <div className="absolute inset-0 lg:top-0">
-          <img
-            src={importantbg}
-            alt="importantbg"
-            className="opacity-80 lg:h-120 lg:w-full h-100"
-          />
+          <div className="relative h-full w-full">
+            <div
+              className="absolute inset-0 h-full w-full bg-cover bg-center opacity-90"
+              style={{ backgroundImage: `url(${IMPACT_BACKGROUND_URL})` }}
+              aria-hidden
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0B7262]/75 via-[#0A4D47]/65 to-[#013932]/80 pointer-events-none" />
+          </div>
         </div>
         <div className="absolute inset-0 lg:top-0 top-8">
           <img

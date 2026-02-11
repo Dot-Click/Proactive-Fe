@@ -6,6 +6,7 @@ import WildWeekendCard from "@/components/userSide/WildWeekend/WildWeekendCard/W
 import WonderPeople from "@/components/userSide/WildWeekend/WonderPeople/WonderPeople"
 import OurMerchant from "@/components/userSide/Home/Merchant/OurMerchant"
 import OpenOppurtunities from "@/components/userSide/WildWeekend/OpenOppurtunities/OpenOppurtunities"
+import JoinAdventureCommunity from "@/components/userSide/WildWeekend/JoinAdventureCommunity/JoinAdventureCommunity"
 
 const WildweekendPage = () => {
   return (
@@ -15,6 +16,7 @@ const WildweekendPage = () => {
       <ConnectStranger/>
       <Exploretrips/>
       <JoinExplorers/>
+      <JoinAdventureCommunity/>
       <WhatIncluded/>
       <OurMerchant/>
       <OpenOppurtunities/>

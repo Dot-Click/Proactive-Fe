@@ -3,7 +3,7 @@ import Searchbar from "@/components/userSide/OpenOppurtunities/SearchBar/Searchb
 import Showtrips from "@/components/userSide/OpenOppurtunities/Showtrip/Showtrips"
 import Tabs, { type TabId } from "@/components/userSide/OpenOppurtunities/Tabs/Tabs"
 import Upcomingtrips from "@/components/userSide/OpenOppurtunities/Upcomingtrip/Upcomingtrips"
-import OpenOppurtunities from "@/components/userSide/WildWeekend/OpenOppurtunities/OpenOppurtunities"
+// import OpenOppurtunities from "@/components/userSide/WildWeekend/OpenOppurtunities/OpenOppurtunities"
 import { useState } from "react"
 
 const OpenOppurtunitiesPage = () => {
@@ -14,7 +14,7 @@ const OpenOppurtunitiesPage = () => {
 
   return (
     <div>
-      <OpenOppurtunities />
+      {/* <OpenOppurtunities /> */}
       <div className="lg:pt-0 md:pt-20">
         <Searchbar
           view={view}

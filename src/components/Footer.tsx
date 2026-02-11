@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import footer from "../assets/footer.png";
 import FooterLogo from "../assets/FooterLogo.png";
 import { FaLinkedinIn, FaPhoneAlt } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
@@ -21,6 +20,9 @@ const SOCIAL_LINKS = {
   linkedin: "https://www.linkedin.com/",
 };
 
+const FOOTER_BACKGROUND_URL =
+  "https://t3.ftcdn.net/jpg/11/28/67/04/360_F_1128670497_hbu3iERhsFLRZgY9fQ2K9dOWO8o9Wjcx.jpg";
+
 const Footer = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
@@ -29,7 +31,6 @@ const Footer = () => {
   const address = contactInfo?.contactAddress ?? "123 Adventure Street, Brussels, Belgium 1000";
   const phone = contactInfo?.contactPhone ?? "+32 2 123 4567";
   const emailContact = contactInfo?.contactEmail ?? "hello@proactivefuture.com";
-console.log(contactInfo);
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = email.trim();
@@ -41,10 +42,15 @@ console.log(contactInfo);
 
   return (
     <div
-      className="flex flex-col lg:justify-center relative w-full min-w-full bg-cover bg-center shrink-0"
-      style={{ backgroundImage: `url(${footer})` }}
+      className="flex flex-col lg:justify-center relative w-full min-w-full overflow-hidden"
+      style={{ backgroundColor: "#101828" }}
     >
-      <div className="bg-[#101828]/90 absolute inset-0" />
+      <div
+        className="absolute inset-0 opacity-30 bg-cover bg-center"
+        style={{ backgroundImage: `url(${FOOTER_BACKGROUND_URL})` }}
+        aria-hidden
+      />
+      <div className="absolute inset-0 bg-[#101828]/88" />
       {/* parent */}
       <div className="relative z-10 max-w-5xl mx-auto lg:py-20 px-4 lg:px-10 py-12 grid grid-cols-1 lg:grid-cols-4 gap-4">
         <div className="flex flex-col gap-8 relative z-10 text-white">

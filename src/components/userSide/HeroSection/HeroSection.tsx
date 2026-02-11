@@ -869,6 +869,15 @@ const HeroSection = () => {
   const path = location.pathname;
   const hero = getHeroData(t)[path];
 
+  const scrollDown = () => {
+    window.scrollBy({
+      top: 2000, // scroll 1 screen down
+      behavior: "smooth",
+    });
+  };
+  
+  
+
   if (!hero) return null;
 
   return (
@@ -906,6 +915,8 @@ const HeroSection = () => {
           </div>
         )}
       </div>
+      {/*just a div to scroll down*/}
+      <div className="absolute bottom-[-38px]  opacity-100 left-[85%] right-[500px] w-full h-20   cursor-pointer" onClick={scrollDown}> </div>
     </div>
   );
 };

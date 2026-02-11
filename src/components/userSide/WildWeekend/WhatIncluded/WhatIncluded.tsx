@@ -2,71 +2,69 @@ import {
   Bed,
   UtensilsCrossed,
   Bus,
-  Ticket,
+  Compass,
   Users,
   Sparkles,
 } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
-const PINK_ICON = "#D81B60";
-const PURPLE_ICON = "#7C3AED";
+const RED_ICON = "#E63946"; // Red color for top row
+const PURPLE_ICON = "#7C3AED"; // Purple color for bottom row
 
-const getItems = (t: (key: string) => string) => [
+const ITEMS = [
   {
     icon: Bed,
-    text: t('wildWeekend.whatIncluded.sharedAccommodation'),
-    color: PINK_ICON,
+    text: "Alojamiento compartido",
+    color: RED_ICON,
   },
   {
     icon: UtensilsCrossed,
-    text: t('wildWeekend.whatIncluded.meals'),
-    color: PINK_ICON,
+    text: "Comidas (desayuno, comida y cena)",
+    color: RED_ICON,
   },
   {
     icon: Bus,
-    text: t('wildWeekend.whatIncluded.transport'),
-    color: PINK_ICON,
+    text: "Transporte a las actividades",
+    color: RED_ICON,
   },
   {
-    icon: Ticket,
-    text: t('wildWeekend.whatIncluded.activities'),
+    icon: Compass,
+    text: "Participar en todas actividades",
     color: PURPLE_ICON,
   },
   {
     icon: Users,
-    text: t('wildWeekend.whatIncluded.coordinatorTeam'),
+    text: "Equipo coordinador",
     color: PURPLE_ICON,
   },
   {
     icon: Sparkles,
-    text: t('wildWeekend.whatIncluded.everything'),
+    text: "Básicamente desde que estás con nosotros: TODO.",
     color: PURPLE_ICON,
   },
 ];
 
 const WhatIncluded = () => {
-  const { t } = useTranslation();
-  const items = getItems(t);
   return (
-    <section className="w-full bg-neutral-100 py-16 lg:py-24">
+    <section className="w-full bg-neutral-100 py-12 lg:py-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-neutral-800 mb-12 lg:mb-16">
-          {t('wildWeekend.whatIncluded.title')}
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-neutral-800 mb-10 lg:mb-12">
+          ¿Qué incluye un viaje con Proactive Future?
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
-          {items.map(({ icon: Icon, text, color }, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+          {ITEMS.map(({ icon: Icon, text, color }, index) => (
             <div
               key={index}
               className="flex flex-col items-center text-center gap-4"
             >
+              {/* Outline icon - no background */}
               <Icon
-                className="w-14 h-14 lg:w-16 lg:h-16 shrink-0"
-                strokeWidth={1.5}
+                className="w-16 h-16 lg:w-20 lg:h-20 shrink-0"
+                strokeWidth={2}
                 stroke={color}
                 fill="none"
                 aria-hidden
               />
-              <p className="text-neutral-800 text-sm lg:text-base font-normal leading-snug">
+              <p className="text-neutral-800 text-sm lg:text-base font-normal leading-relaxed max-w-xs">
                 {text}
               </p>
             </div>

@@ -207,8 +207,7 @@
 // export default Adventuremomentscards;
 
 
-import { useState } from "react";
-import Play from "../../../../assets/play2.png";
+import { useRef, useState } from "react";
 import momentscard1 from "../../../../assets/momentscard1.png";
 import momentscard2 from "../../../../assets/momentscard2.png";
 import momentscard3 from "../../../../assets/momentscard3.png";
@@ -218,7 +217,9 @@ import location from "../../../../assets/footerlocation.png";
 // import video3 from "../../../../assets/457098_United_States_Fish_And_Wildlife_Service_USFWS_1920x1080.mp4";
 
 const Adventuremomentscards = () => {
-  const [activeVideo, setActiveVideo] = useState(null);
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const videoRefs = useRef<Record<number, HTMLVideoElement | null>>({});
 
   const cards = [
     {
@@ -244,7 +245,7 @@ const Adventuremomentscards = () => {
     },
   ];
 
-  const openVideo = (videoUrl:any) => {
+  const openVideo = (videoUrl: string) => {
     setActiveVideo(videoUrl);
   };
 
@@ -252,38 +253,62 @@ const Adventuremomentscards = () => {
     setActiveVideo(null);
   };
 
+  const handleMouseEnter = (cardId: number) => {
+    setHoveredCard(cardId);
+    const video = videoRefs.current[cardId];
+    if (video) {
+      video.currentTime = 0;
+      video.play().catch(() => {
+        /* ignore play interruptions */
+      });
+    }
+  };
+
+  const handleMouseLeave = (cardId: number) => {
+    const video = videoRefs.current[cardId];
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
+    setHoveredCard((prev) => (prev === cardId ? null : prev));
+  };
+
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-2 mb-8">
+      <div className="flex flex-col lg:flex-row gap-6 mb-8">
         {cards.map((card) => (
           <div
             key={card.id}
-            className="relative rounded-[14px] overflow-hidden cursor-pointer group transform transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl"
+            className="relative rounded-[14px] overflow-hidden cursor-pointer group transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 hover:shadow-2xl"
             onClick={() => openVideo(card.videoUrl)}
+            onMouseEnter={() => handleMouseEnter(card.id)}
+            onMouseLeave={() => handleMouseLeave(card.id)}
           >
             <img
               src={card.image}
               alt={`momentscard${card.id}`}
-              className="h-full w-90 object-cover transition-transform duration-500 group-hover:scale-110"
+              className={`h-full w-90 object-cover transition-all duration-300 ${
+                hoveredCard === card.id
+                  ? "opacity-0 scale-105"
+                  : " group-hover:scale-110"
+              }`}
+            />
+
+            <video
+              ref={(element) => {
+                videoRefs.current[card.id] = element;
+              }}
+              src={card.videoUrl}
+              muted
+              playsInline
+              loop
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                hoveredCard === card.id ? "opacity-100" : "opacity-0"
+              }`}
             />
 
             {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-
-            {/* Play button with pop animation */}
-            <div className="absolute inset-0 flex justify-center items-center mb-12 z-10">
-              <div className="relative">
-                {/* Pulse ring animation */}
-                <div className="absolute inset-0 bg-white/30 rounded-full animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                {/* Play icon with scale effect */}
-                <img
-                  src={Play}
-                  alt="Play"
-                  className="h-10 relative z-10 transform transition-all duration-300 group-hover:scale-125 group-hover:drop-shadow-lg"
-                />
-              </div>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t  transition-opacity duration-300" />
 
             {/* Content */}
             <div className="flex flex-col justify-end px-8 py-16 lg:gap-4 absolute inset-0 transform transition-transform duration-300 group-hover:translate-y-[-4px]">

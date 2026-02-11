@@ -47,11 +47,10 @@
 
 // export default OurMerchant
 
-import   { useMemo } from 'react';
-import Marquee from 'react-fast-marquee';
-import { FaStar } from 'react-icons/fa';
-// 1. Import the hook and the type from your hook file
-import { useReviews, type ReviewItem } from "@/hooks/getReviewshook";
+import { useMemo } from "react";
+import Marquee from "react-fast-marquee";
+import { FaStar } from "react-icons/fa";
+import { useReviews } from "@/hooks/getReviewshook";
 import { useTranslation } from "react-i18next";
 
 // --- Types ---
@@ -168,27 +167,31 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 
 export default function TestimonialSection() {
   const { t } = useTranslation();
-  // 2. Call the hook to get reviews
-  const { data: apiReviews, isLoading } = useReviews();
+  const {
+    data: reviews = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useReviews();
 
-  // 3. Convert the API data format to the format your component uses
-  const testimonials = useMemo(() => {
-    // If loading or no data, show the 5 fallback items
-    if (isLoading || !apiReviews || apiReviews.length === 0) {
+  const hasLiveReviews = reviews.length > 0;
+
+  const testimonials = useMemo<Testimonial[]>(() => {
+    if (!hasLiveReviews) {
       return TESTIMONIAL_DATA;
     }
 
-    // Transform API data to Testimonial interface
-    return apiReviews.map((item: ReviewItem, index: number) => ({
-      id: item.link || index,
-      name: item.userName,
-      role: "Google Review", // Since they come from the hook
-      avatar: item.userImage,
-      content: item.review,
-      rating: 5,
-      link: item.link
+    return reviews.map((review, index) => ({
+      id: review.id ?? index,
+      name: review.userName,
+      role: "Google Review",
+      avatar: review.userImage ?? "",
+      content: review.review,
+      rating: review.rating ?? 5,
+      link: review.link,
     }));
-  }, [apiReviews, isLoading]);
+  }, [hasLiveReviews, reviews]);
 
   return (
     <section className="py-12 md:py-20 bg-slate-50 overflow-hidden">
@@ -197,8 +200,26 @@ export default function TestimonialSection() {
           {t('testimonials.title')}
         </h2>
         <p className="text-slate-500 text-sm md:text-base max-w-xl mx-auto">
-          {isLoading ? t('testimonials.loadingFeedback') : t('testimonials.subtitle')}
+          {isLoading
+            ? t("testimonials.loadingFeedback")
+            : t("testimonials.subtitle")}
         </p>
+        {isError && (
+          <div className="mt-4 inline-flex flex-col gap-2 items-center text-xs md:text-sm text-red-500">
+            <span>
+              {error instanceof Error
+                ? error.message
+                : t("testimonials.loadError", "Unable to load reviews right now.")}
+            </span>
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="px-3 py-1.5 rounded-full bg-[#34AB7F] text-white text-xs font-semibold hover:bg-[#2c8e68] transition-colors"
+            >
+              {t("testimonials.retryButton", "Try again")}
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-6 md:gap-8">
@@ -206,14 +227,14 @@ export default function TestimonialSection() {
         <Marquee
           direction="left"
           speed={45}
-          pauseOnHover={true}
-          gradient={true}
+          pauseOnHover
+          gradient
           gradientColor="#f8fafc"
           gradientWidth={50}
-          autoFill={true}
+          autoFill
         >
-          {testimonials.map((t) => (
-            <TestimonialCard key={`top-${t.id}`} testimonial={t} />
+          {testimonials.map((testimonial) => (
+            <TestimonialCard key={`top-${testimonial.id}`} testimonial={testimonial} />
           ))}
         </Marquee>
 
@@ -221,14 +242,14 @@ export default function TestimonialSection() {
         <Marquee
           direction="right"
           speed={45}
-          pauseOnHover={true}
-          gradient={true}
+          pauseOnHover
+          gradient
           gradientColor="#f8fafc"
           gradientWidth={50}
-          autoFill={true}
+          autoFill
         >
-          {testimonials.map((t) => (
-            <TestimonialCard key={`bottom-${t.id}`} testimonial={t} />
+          {testimonials.map((testimonial) => (
+            <TestimonialCard key={`bottom-${testimonial.id}`} testimonial={testimonial} />
           ))}
         </Marquee>
       </div>

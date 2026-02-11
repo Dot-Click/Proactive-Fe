@@ -88,14 +88,20 @@ const Testimonial = () => {
         <div className="py-12 px-4 sm:px-16">
             <Marquee direction="left" pauseOnHover speed={50} gradient={false}>
                 <div className="flex gap-6 lg:gap-10 py-4 px-4 cursor-pointer">
-                    {cards.map((item, index) => (
-                        <div key={isReview ? (item as ReviewItem).link + index : index} className="w-[350px] sm:w-[450px] flex-shrink-0">
-                            <TestimonialCard
-                                item={item as ReviewItem & (typeof FALLBACK_CARDS)[0]}
-                                isReview={isReview}
-                            />
-                        </div>
-                    ))}
+                    {cards.map((item, index) => {
+                        const reviewItem = item as ReviewItem;
+                        const key = isReview && reviewItem?.link 
+                            ? `${reviewItem.link}-${index}` 
+                            : `card-${index}`;
+                        return (
+                            <div key={key} className="w-[350px] sm:w-[450px] flex-shrink-0">
+                                <TestimonialCard
+                                    item={item as ReviewItem & (typeof FALLBACK_CARDS)[0]}
+                                    isReview={isReview}
+                                />
+                            </div>
+                        );
+                    })}
                 </div>
             </Marquee>
         </div>
