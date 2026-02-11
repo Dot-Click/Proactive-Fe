@@ -117,7 +117,8 @@
 
 
 import {  FaUserFriends, FaGlobeAmericas, FaStar } from "react-icons/fa";
-import {TentIcon} from "lucide-react";
+import { LuTentTree } from "react-icons/lu";
+
 import CountUp from 'react-countup';
 
 const ImpactCard = () => {
@@ -126,16 +127,17 @@ const ImpactCard = () => {
 
   return (
     <div className="grid lg:grid-cols-4 grid-cols-2 lg:gap-8 gap-4 lg:mt-30 mt-6">
-      
       {/* 1. CAMPING (Changed from Mountain) */}
       <div className={cardStyle}>
         <div className="flex flex-col items-center gap-6">
-          <TentIcon className={iconStyle} /> 
+          <LuTentTree className={iconStyle} />
           <div className="flex flex-col lg:gap-2 justify-center items-center">
             <h4 className="text-[#FFFFFF] font-bold lg:text-4xl text-2xl">
-                <CountUp start={0} end={2500} separator="," suffix="+" />
+              <CountUp start={0} end={2500} separator="," suffix="+" />
             </h4>
-            <p className="text-[#FFFFFF] text-[12px] lg:text-[16px] opacity-90 uppercase tracking-wider">Camping Spots</p>
+            <p className="text-[#FFFFFF] text-[12px] lg:text-[16px] opacity-90 uppercase tracking-wider">
+              Camping Spots
+            </p>
           </div>
         </div>
       </div>
@@ -146,9 +148,11 @@ const ImpactCard = () => {
           <FaUserFriends className={iconStyle} />
           <div className="flex flex-col lg:gap-2 justify-center items-center">
             <h4 className="text-[#FFFFFF] font-bold lg:text-4xl text-2xl">
-                <CountUp start={0} end={150000} separator="," suffix="+" />
+              <CountUp start={0} end={150000} separator="," suffix="+" />
             </h4>
-            <p className="text-[#FFFFFF] text-sm lg:text-[16px] opacity-90 uppercase tracking-wider">Active Explorers</p>
+            <p className="text-[#FFFFFF] text-sm lg:text-[16px] opacity-90 uppercase tracking-wider">
+              Active Explorers
+            </p>
           </div>
         </div>
       </div>
@@ -159,9 +163,11 @@ const ImpactCard = () => {
           <FaGlobeAmericas className={iconStyle} />
           <div className="flex flex-col lg:gap-2 justify-center items-center">
             <h4 className="text-[#FFFFFF] font-bold lg:text-4xl text-2xl">
-                <CountUp start={0} end={50} suffix="+" />
+              <CountUp start={0} end={50} suffix="+" />
             </h4>
-            <p className="text-[#FFFFFF] text-sm lg:text-[16px] opacity-90 uppercase tracking-wider">Countries</p>
+            <p className="text-[#FFFFFF] text-sm lg:text-[16px] opacity-90 uppercase tracking-wider">
+              Countries
+            </p>
           </div>
         </div>
       </div>
@@ -171,14 +177,17 @@ const ImpactCard = () => {
         <div className="flex flex-col items-center gap-6">
           <FaStar className={iconStyle} />
           <div className="flex flex-col lg:gap-2 justify-center items-center">
-            <h4 className="text-[#FFFFFF] font-bold lg:text-4xl text-2xl">4.9 / 5</h4>
-            <p className="text-[#FFFFFF] text-sm lg:text-[16px] opacity-90 uppercase tracking-wider">Top Rating</p>
+            <h4 className="text-[#FFFFFF] font-bold lg:text-4xl text-2xl">
+              4.9 / 5
+            </h4>
+            <p className="text-[#FFFFFF] text-sm lg:text-[16px] opacity-90 uppercase tracking-wider">
+              Top Rating
+            </p>
           </div>
         </div>
       </div>
-
     </div>
-  )
+  );
 }
 
 export default ImpactCard;
