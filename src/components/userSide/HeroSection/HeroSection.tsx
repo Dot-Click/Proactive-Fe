@@ -305,7 +305,8 @@
 //     // downloadimg: downloadimg
 //   },
 
-//   "/advantages": {
+//   "
+// ": {
 //     image: (
 //       <>
 //         <div className="relative">
@@ -910,8 +911,12 @@ const HeroSection = () => {
           </div>
         )}
         {hero.downloadimg && (
-          <div className="hidden absolute right-24 -bottom-31 lg:flex md:flex-row gap-4 md:mt-4 mt-2">
-            <img src={hero.downloadimg} alt="Download" className="w-16" />
+          <div className="absolute bottom-[-135px]   right-4 sm:right-6 md:right-8 lg:right-28 z-10">
+            <img 
+              src={hero.downloadimg} 
+              alt="Download" 
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer hover:scale-110 transition-transform duration-300" 
+            />
           </div>
         )}
       </div>

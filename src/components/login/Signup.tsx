@@ -25,7 +25,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { ChevronDownIcon } from "lucide-react"
+import { ChevronDownIcon, Eye, EyeOff } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
 import { toast } from "sonner";
 import { useCreateUser } from "@/hooks/UserRegisterhook";
@@ -37,7 +37,7 @@ const SignupSchema = z.object({
     FirstName: z.string().min(2, 'FirstName is required'),
     LastName: z.string().min(2, 'LastName is required'),
     NickName: z.string().optional(),
-    PhoneNumber: z.string().regex(/^\+?\d{10,15}$/, "Invalid phone number"),
+    PhoneNumber: z.string().regex(/^\+?\d{9,15}$/, "Invalid phone number"),
     DOB: z.string()
         .min(1, "DOB is required")
         .regex(/^\d{4}-\d{2}-\d{2}$/, "DOB must be in YYYY-MM-DD format")
@@ -81,6 +81,7 @@ const Signup = () => {
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const [date, setDate] = useState<Date | undefined>(undefined)
+    const [showPassword, setShowPassword] = useState(false);
     const createUserMutation = useCreateUser();
     const { mutate, isPending } = useGoogleSignup();
 
@@ -446,12 +447,26 @@ const Signup = () => {
                                                         Password
                                                     </FormLabel>
                                                     <FormControl>
-                                                        <Input
-                                                            type="password"
-                                                            placeholder="Enter your password"
-                                                            {...field}
-                                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
-                                                        />
+                                                        <div className="relative">
+                                                            <Input
+                                                                type={showPassword ? "text" : "password"}
+                                                                placeholder="Enter your password"
+                                                                {...field}
+                                                                className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full pr-12"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setShowPassword(!showPassword)}
+                                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#97A4A4] hover:text-[#221E33] transition-colors focus:outline-none"
+                                                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                                            >
+                                                                {showPassword ? (
+                                                                    <EyeOff className="h-5 w-5" />
+                                                                ) : (
+                                                                    <Eye className="h-5 w-5" />
+                                                                )}
+                                                            </button>
+                                                        </div>
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>

@@ -8,12 +8,12 @@ import { useTranslation } from "react-i18next"
 const OurValuesCard = () => {
     const { t } = useTranslation();
     return (
-        <div className="grid lg:grid-cols-4 grid-cols-2 lg:gap-6 gap-4 lg:mt-30 mt-6">
+        <div className="grid mb-20 lg:grid-cols-4 grid-cols-2  lg:gap-6 gap-4 lg:mt-30 mt-6">
             <div className="lg:w-[240px] mx-auto lg:px-8 lg:py-8 px-2 py-2 rounded-[20px] bg-linear-to-b from-[#058B78] to-[#29C8B1] border border-[#FFFFFF]">
                 <div className="flex flex-col items-center lg:gap-10 gap-2">
                     <img src={ourvalues1} alt="ourvalues1" className="" />
                     <div className="flex flex-col lg:gap-2 justify-center items-center">
-                        <h4 className="text-[#FFFFFF] font-bold lg:text-4xl"><CountUp start={0} end={2500} delay={0} separator="">
+                        <h4 className="text-[#FFFFFF] font-bold  lg:text-4xl"><CountUp start={0} end={2500} delay={0} separator="">
                             {({ countUpRef }) => (
                                 <div>
                                     <span ref={countUpRef} />

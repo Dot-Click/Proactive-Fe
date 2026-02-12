@@ -40,6 +40,7 @@ import InternaleventsPage from "./pages/userSide/Internalevents.page";
 import AboutPage from "./pages/userSide/About.page";
 import BecomeMemberPage from "./pages/userSide/BecomeMember.page";
 import TravelCoordinatorPage from "./pages/userSide/TravelCoordinator.page";
+import CoordinatorDetailPage from "./pages/userSide/CoordinatorDetail.page";
 import BenefitPage from "./pages/userSide/Benefit.page";
 import ContactPage from "./pages/userSide/Contact.page";
 import FaqPage from "./pages/userSide/Faq.page";
@@ -190,6 +191,9 @@ function App() {
         {/* Public trip detail page */}
         <Route path="/trip/:id" element={<ViewTripDetailPage />} />
       </Route>
+
+      {/* Coordinator detail page - without navbar */}
+      <Route path="/coordinator/:id" element={<CoordinatorDetailPage />} />
     </Routes>
   );
 }

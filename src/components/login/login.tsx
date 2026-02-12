@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import { useLoginUser } from "@/hooks/UseLoginhook"
 import { useGoogleSignup } from "@/hooks/useGoogleSignup"
+import { useState } from "react"
+import { Eye, EyeOff } from "lucide-react"
 
 const LoginSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -38,6 +40,7 @@ const Login = () => {
     const navigate = useNavigate()
     const loginUserMutation = useLoginUser()
     const { mutate, isPending } = useGoogleSignup();
+    const [showPassword, setShowPassword] = useState(false);
     const onSubmit = async (val: z.infer<typeof LoginSchema>) => {
         const { email, Password } = val
         try {
@@ -115,12 +118,26 @@ const Login = () => {
                                                         Password
                                                     </FormLabel>
                                                     <FormControl>
-                                                        <Input
-                                                            type="password"
-                                                            placeholder="Enter your password"
-                                                            {...field}
-                                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
-                                                        />
+                                                        <div className="relative">
+                                                            <Input
+                                                                type={showPassword ? "text" : "password"}
+                                                                placeholder="Enter your password"
+                                                                {...field}
+                                                                className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full pr-12"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setShowPassword(!showPassword)}
+                                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#97A4A4] hover:text-[#221E33] transition-colors focus:outline-none"
+                                                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                                            >
+                                                                {showPassword ? (
+                                                                    <EyeOff className="h-5 w-5" />
+                                                                ) : (
+                                                                    <Eye className="h-5 w-5" />
+                                                                )}
+                                                            </button>
+                                                        </div>
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
