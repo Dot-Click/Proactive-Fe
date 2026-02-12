@@ -2,7 +2,7 @@ import DangerZone from "@/components/settings/DangerZone"
 import Header from "@/components/settings/header"
 import Personalinformation from "@/components/settings/personalinformation"
 import Securityprivacy from "@/components/settings/securityprivacy"
-import Travelpreference from "@/components/settings/Travelpreference"
+// import Travelpreference from "@/components/settings/Travelpreference"
 import Userprofile from "@/components/settings/userprofile"
 
 const UserSettingPage = () => {
@@ -13,7 +13,7 @@ const UserSettingPage = () => {
         <Userprofile/>
         <div className="flex-1 flex flex-col gap-5 mb-8">
         <Personalinformation/>
-        <Travelpreference/>
+        {/* <Travelpreference/> */}
         <Securityprivacy/>
         <DangerZone/>
         </div>

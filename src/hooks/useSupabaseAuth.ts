@@ -3,9 +3,11 @@ import { supabase } from "@/config/supabase";
 import api from "@/config/axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const useSupabaseAuth = () => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -29,6 +31,9 @@ export const useSupabaseAuth = () => {
                      if (response?.data?.data?.user?.id) {
                         localStorage.setItem("userId", response?.data?.data?.user.id)
                     }
+
+                    // Invalidate currentUser query to refresh user data (including avatar)
+                    queryClient.invalidateQueries({ queryKey: ["currentUser"] });
 
                     toast.success("Logged in successfully!");
                      
