@@ -10,21 +10,50 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { UseVerifytokenhook } from "@/hooks/UseVerifytokenhook";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { LoaderIcon } from "lucide-react";
 
 const TokenSchema = z.object({
-  token: z.string("token is required"),
+  token: z.string().min(1, "Token is required"),
 })
 
 
 const VerifyEmail = () => {
+  const [searchParams] = useSearchParams();
+  const tokenFromUrl = searchParams.get("token");
+  const [isAutoVerifying, setIsAutoVerifying] = useState(false);
+  const [showCodeForm, setShowCodeForm] = useState(!tokenFromUrl);
+  
   type TokenSchemaType = z.infer<typeof TokenSchema>
   const form = useForm<TokenSchemaType>({
     resolver: zodResolver(TokenSchema) as any,
     defaultValues: {
-      token: "",
+      token: tokenFromUrl || "",
     },
   });
   const VerifytokenMutation = UseVerifytokenhook()
+
+  // Auto-verify if token is in URL
+  useEffect(() => {
+    if (tokenFromUrl && !showCodeForm) {
+      setIsAutoVerifying(true);
+      VerifytokenMutation.mutate(
+        { token: tokenFromUrl },
+        {
+          onSuccess: () => {
+            setIsAutoVerifying(false);
+          },
+          onError: () => {
+            setIsAutoVerifying(false);
+            setShowCodeForm(true); // Show form if auto-verify fails
+            form.setValue("token", tokenFromUrl); // Pre-fill token
+          },
+        }
+      );
+    }
+  }, [tokenFromUrl]);
+
   const onSubmit = async (val: z.infer<typeof TokenSchema>) => {
     const { token } = val
     try {
@@ -32,7 +61,7 @@ const VerifyEmail = () => {
             token
         })
     } catch (error: any) {
-      const message = error?.response?.data?.message || "Error Forgot Password";
+      const message = error?.response?.data?.message || "Failed to verify email";
       toast.error(message)
     }
   };
@@ -63,44 +92,56 @@ const VerifyEmail = () => {
               <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text text-3xl font-bold px-8">
                 Email Verification
               </h1>
-              <p className="text-[#221E33] text-[14px] mt-2">
-                Please enter your Token to Verify your email
+              <p className="text-[#221E33] text-[14px] mt-2 text-center px-4">
+                {isAutoVerifying 
+                  ? "Verifying your email..." 
+                  : showCodeForm 
+                    ? "Please enter your Token to Verify your email" 
+                    : "Click the link in your email to verify"}
               </p>
             </div>
 
             <div className="px-16 py-10">
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                  <div className="space-y-6">
-                    <FormField
-                      control={form.control}
-                      name="token"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-[#242E2F] font-semibold">
-                            Token
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              type="text"
-                              placeholder="Enter Token"
-                              {...field}
-                              className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Button type="submit" className="rounded-full cursor-pointer w-full mt-6 bg-[#0DAC87] hover:bg-[#129b7b] text-white px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
-                    {
-                        VerifytokenMutation.isPending ? "...Loading" : "Submit"
-                    }
-                    
-                  </Button>
-                </form>
-              </Form>
+              {isAutoVerifying ? (
+                <div className="flex flex-col items-center justify-center py-12">
+                  <LoaderIcon className="animate-spin h-12 w-12 text-[#0DAC87] mb-4" />
+                  <p className="text-[#221E33] text-sm">Verifying your email address...</p>
+                </div>
+              ) : (
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <div className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="token"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-[#242E2F] font-semibold">
+                              Token
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="text"
+                                placeholder="Enter Token"
+                                {...field}
+                                className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <Button 
+                      type="submit" 
+                      disabled={VerifytokenMutation.isPending}
+                      className="rounded-full cursor-pointer w-full mt-6 bg-[#0DAC87] hover:bg-[#129b7b] text-white px-4 py-6 font-semibold hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {VerifytokenMutation.isPending ? "...Loading" : "Verify Email"}
+                    </Button>
+                  </form>
+                </Form>
+              )}
             </div>
           </div>
         </div>
