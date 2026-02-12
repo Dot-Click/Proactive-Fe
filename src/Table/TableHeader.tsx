@@ -30,6 +30,7 @@ interface TableToolbarProps {
   searchValue?: string;
   limitOptions?: number[];
   defaultLimit?: number;
+  limit?: number; // Controlled value for limit
   onSearch?: (value: string) => void;
   onSortClick?: () => void;
   onFilterClick?: () => void;
@@ -62,6 +63,7 @@ const TableHeader: React.FC<TableToolbarProps> = ({
   onSearch,
   limitOptions = [5, 10, 20, 30, 50],
   defaultLimit = 10,
+  limit,
   // onSortClick,
   // onFilterClick,
   onLimitChange,
@@ -111,17 +113,17 @@ const TableHeader: React.FC<TableToolbarProps> = ({
         <div className="flex items-center gap-4">
           <span className="text-[#666373] text-[18px]">Showing</span>
           <Select
-            value={defaultLimit?.toString() || "10"}
+            value={(limit ?? defaultLimit)?.toString() || "10"}
             onValueChange={(value) => {
-              const limit = parseInt(value, 10)
-              onLimitChange?.(limit)
+              const newLimit = parseInt(value, 10)
+              onLimitChange?.(newLimit)
             }}
           >
             <SelectTrigger
               size="sm"
               className="w-[66px] px-2 py-1 bg-[#E8E8E8] font-medium text-[17px] rounded-[8px] h-auto"
             >
-              <SelectValue placeholder={defaultLimit?.toString() || "10"} />
+              <SelectValue placeholder={(limit ?? defaultLimit)?.toString() || "10"} />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>

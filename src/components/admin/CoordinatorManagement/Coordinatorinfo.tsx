@@ -289,11 +289,30 @@ const Coordinatorinfo = () => {
     // 2. States
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [open, setOpen] = useState(false);
+    const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+    const [currentPage, setCurrentPage] = useState<number>(1);
 
     // 3. Logic: Determine which data to show
     const isSearching = searchQuery.trim().length >= 2;
-    const displayData = isSearching ? searchResults : (allData?.coordinators || []);
+    const allDisplayData = isSearching ? searchResults : (allData?.coordinators || []);
     const displayLoading = isSearching ? isSearchLoading : isAllLoading;
+
+    // 4. Pagination Logic
+    const totalItems = allDisplayData.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const displayData = allDisplayData.slice(startIndex, endIndex);
+
+    // Reset to page 1 when search query or items per page changes
+    const handleLimitChange = (limit: number) => {
+        setItemsPerPage(limit);
+        setCurrentPage(1);
+    };
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+    };
 
     const HandleBlockCoordinator = async (id: string) => {
         try {
@@ -319,7 +338,14 @@ const Coordinatorinfo = () => {
                     searchPlaceholder="Search by name or email..."
                     showAddButton
                     url="/dashboard/add-new-coordinator"
-                    onSearch={(val) => setSearchQuery(val)}
+                    onSearch={(val) => {
+                        setSearchQuery(val);
+                        setCurrentPage(1); // Reset to page 1 on search
+                    }}
+                    limit={itemsPerPage}
+                    defaultLimit={10}
+                    limitOptions={[5, 10, 20, 30, 50]}
+                    onLimitChange={handleLimitChange}
                 />
 
                 <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 mt-3">
@@ -328,7 +354,7 @@ const Coordinatorinfo = () => {
                         <div className="col-span-full flex items-center justify-center py-20">
                             <LoaderIcon className="animate-spin h-10 w-10 text-gray-400" />
                         </div>
-                    ) : displayData.length === 0 ? (
+                    ) : allDisplayData.length === 0 ? (
                         // No results state
                         <div className="col-span-full bg-white border border-[#E0E1E2] px-4 py-16 rounded-[20px] text-center shadow-sm">
                             <span className="text-[#666373] font-semibold text-[16px]">
@@ -447,6 +473,61 @@ const Coordinatorinfo = () => {
                         ))
                     )}
                 </div>
+
+                {/* Pagination Controls */}
+                {!displayLoading && totalItems > 0 && (
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 px-4">
+                        <div className="text-[#666373] text-sm">
+                            Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of {totalItems} coordinators
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="outline"
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className="px-4 py-2 rounded-lg border border-[#EFEFEF] bg-white hover:bg-[#FAFAFA] disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Previous
+                            </Button>
+                            <div className="flex items-center gap-1">
+                                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                    let pageNum: number;
+                                    if (totalPages <= 5) {
+                                        pageNum = i + 1;
+                                    } else if (currentPage <= 3) {
+                                        pageNum = i + 1;
+                                    } else if (currentPage >= totalPages - 2) {
+                                        pageNum = totalPages - 4 + i;
+                                    } else {
+                                        pageNum = currentPage - 2 + i;
+                                    }
+                                    return (
+                                        <Button
+                                            key={pageNum}
+                                            variant={currentPage === pageNum ? "default" : "outline"}
+                                            onClick={() => handlePageChange(pageNum)}
+                                            className={`px-3 py-2 rounded-lg min-w-[40px] ${
+                                                currentPage === pageNum
+                                                    ? "bg-[#0DAC87] text-white hover:bg-[#0C9A7A]"
+                                                    : "border border-[#EFEFEF] bg-white hover:bg-[#FAFAFA]"
+                                            }`}
+                                        >
+                                            {pageNum}
+                                        </Button>
+                                    );
+                                })}
+                            </div>
+                            <Button
+                                variant="outline"
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                className="px-4 py-2 rounded-lg border border-[#EFEFEF] bg-white hover:bg-[#FAFAFA] disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Next
+                            </Button>
+                        </div>
+                    </div>
+                )}
             </div>
         </>
     )

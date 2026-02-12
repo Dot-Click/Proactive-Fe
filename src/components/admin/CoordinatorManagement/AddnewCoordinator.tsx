@@ -39,8 +39,12 @@ const formSchema = z
     phoneNumber: z
       .string()
       .min(1, { message: "Phone number is required" })
-      .refine((val) => /^[0-9]{10,15}$/.test(val), {
-        message: "Enter a valid phone number",
+      .refine((val) => {
+        // Remove non-digits and check length
+        const digitsOnly = val.replace(/\D/g, '');
+        return digitsOnly.length >= 9 && digitsOnly.length <= 15;
+      }, {
+        message: "Enter a valid phone number (9-15 digits)",
       }),
     bio: z.string().min(2, {
       message: "Bio must be at least 2 characters.",
@@ -125,13 +129,31 @@ const AddnewCoordinator = () => {
   const CreateCoordinatorMutation = useCreateCoordinator();
   
   const onSubmit = async (val: z.infer<typeof formSchema>) => {
+    // Validate arrays are not empty (should be caught by schema, but double-check)
+    if (!val.specialities || val.specialities.length === 0) {
+      toast.error("Please select at least one speciality");
+      return;
+    }
+    if (!val.languages || val.languages.length === 0) {
+      toast.error("Please select at least one language");
+      return;
+    }
+
     const formData = new FormData();
 
     // Append each field individually to FormData (NOT as nested JSON)
     formData.append("fullName", val.fullName.trim());
-    formData.append("email", val.email.trim());
+    formData.append("email", val.email.trim().toLowerCase());
     formData.append("password", val.password);
-    formData.append("phoneNumber", val.phoneNumber.replace(/\D/g, '')); // Remove non-digits
+    
+    // Clean phone number - remove all non-digits
+    const cleanPhone = val.phoneNumber.replace(/\D/g, '');
+    if (cleanPhone.length < 9 || cleanPhone.length > 15) {
+      toast.error("Phone number must be between 9 and 15 digits");
+      return;
+    }
+    formData.append("phoneNumber", cleanPhone);
+    
     formData.append("bio", val.bio.trim());
     formData.append("certificateLvl", val.certificateLvl);
     formData.append("yearsOfExperience", val.yearsOfExperience.toString());
@@ -139,6 +161,7 @@ const AddnewCoordinator = () => {
     formData.append("accessLvl", val.accessLvl);
     
     // Handle arrays - send as JSON strings since FormData can't send arrays natively
+    // Ensure arrays are properly formatted
     formData.append("specialities", JSON.stringify(val.specialities));
     formData.append("languages", JSON.stringify(val.languages));
     
@@ -172,10 +195,34 @@ const AddnewCoordinator = () => {
       navigate("/dashboard/coordinator-management");
     } catch (err: any) {
       console.error("CreateCoordinator failed:", err);
+      console.error("Error response:", err?.response);
+      console.error("Error data:", err?.response?.data);
+      console.error("Error status:", err?.response?.status);
+      
       const status = err?.response?.status;
       const data = err?.response?.data;
-      const message = data?.message || data || err?.message || "Something went wrong";
-      toast.error(`Error${status ? ` (${status})` : ""}: ${message}`);
+      
+      // Handle validation errors (400 Bad Request)
+      if (status === 400 && data?.errors && typeof data.errors === 'object') {
+        const errorMessages = Object.entries(data.errors)
+          .map(([field, messages]: [string, any]) => {
+            const msg = Array.isArray(messages) ? messages.join(', ') : String(messages);
+            return `${field}: ${msg}`;
+          })
+          .join('\n');
+        toast.error(`Validation Error:\n${errorMessages}`, { duration: 5000 });
+        return;
+      }
+      
+      // Handle conflict errors (409 - email already exists)
+      if (status === 409) {
+        toast.error(data?.message || "A user with this email already exists");
+        return;
+      }
+      
+      // Handle other errors
+      const message = data?.message || (typeof data === 'string' ? data : err?.message) || "Something went wrong";
+      toast.error(`Error${status ? ` (${status})` : ""}: ${message}`, { duration: 5000 });
     }
   };
 

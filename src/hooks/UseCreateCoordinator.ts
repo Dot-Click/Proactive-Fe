@@ -62,7 +62,7 @@
 
 import api from "@/config/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 export interface CoordinatorData {
     fullName: string;
@@ -106,18 +106,14 @@ export const useCreateCoordinator = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["coordinators"] });
             queryClient.invalidateQueries({ queryKey: ["coordinator"] });
-            toast.success("Coordinator created successfully");
+            // Don't show toast here - let the component handle it
         },
         onError: (error: any) => {
             console.error("=== CREATE ERROR ===");
             console.error("Error details:", error?.response?.data);
             console.error("Error message:", error?.response?.data?.message);
             console.error("Error fields:", error?.response?.data?.errors);
-            
-            const errorMessage = error?.response?.data?.message 
-                || error?.message 
-                || "Failed to create coordinator";
-            toast.error(errorMessage);
+            // Don't show toast here - let the component handle it
         },
     });
 };
