@@ -7,6 +7,7 @@ import {
 import proactivefavicon from "../../../assets/sidebaricon/favicon.png"
 import { FaLocationDot } from "react-icons/fa6"
 import calender from "../../../assets/calenderblack.png"
+import detailtrip1 from "../../../assets/detailtrip1.png"
 import { useState } from "react"
 import z from "zod"
 import { useForm } from "react-hook-form"
@@ -199,7 +200,14 @@ const PayNow = ({ tripId }: PayNowProps) => {
                 </DialogTitle>
 
                 <div className="bg-[#FFFFFF] rounded-[15px] px-4 py-4 mt-12 flex lg:flex-row flex-col gap-3 items-center">
-                    <img src={trip?.coverImage || trip} alt="trip" className="h-20 w-22 rounded-[10px]" />
+                    <img 
+                        src={trip?.coverImage || trip || detailtrip1} 
+                        alt="trip" 
+                        className="h-20 w-22 rounded-[10px] object-cover"
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).src = detailtrip1;
+                        }}
+                    />
                     <div className="flex flex-col gap-2">
                         <h4 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-xl">
                             {trip?.name || "Wild Weekend Barcelona"}

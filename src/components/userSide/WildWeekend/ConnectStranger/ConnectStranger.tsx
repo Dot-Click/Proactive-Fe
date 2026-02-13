@@ -10,40 +10,80 @@ const ConnectStranger = () => {
             <div className="bg-black lg:h-[90vh] h-[100vh]"></div>
             <div className="flex lg:flex-row flex-col justify-center items-center lg:gap-20 gap-10 absolute inset-0">
                
-                <div className="flex flex-col lg:gap-8 gap-6 px-5 lg:px-0">
-                    <div className="flex gap-3">
-                        <img src={setting} alt="setting" className="h-4 mt-2" />
-                        <div className="flex flex-col">
-                            <h4 className="text-[#FFFFFF] font-bold text-xl">{t('wildWeekend.connectStranger.title1')}</h4>
-                            <p className="text-[#BCBCBC] text-[12px]" dangerouslySetInnerHTML={{ __html: t('wildWeekend.connectStranger.desc1').replace(/\n/g, '<br />') }} />
+                <div className="flex flex-col lg:gap-8 gap-6 px-5 lg:px-8 max-w-2xl">
+                    <div className="flex gap-3 lg:gap-4">
+                        <img src={setting} alt="setting" className="h-4 mt-2 flex-shrink-0" />
+                        <div className="flex flex-col gap-2 lg:gap-3 flex-1">
+                            <h4 className="text-[#FFFFFF] font-bold text-xl lg:text-2xl mb-1">{t('wildWeekend.connectStranger.title1')}</h4>
+                            <div className="text-[#BCBCBC] text-[12px] lg:text-[14px] leading-relaxed lg:leading-loose space-y-2">
+                                {t('wildWeekend.connectStranger.desc1').split('\n').map((paragraph: string, index: number) => (
+                                    paragraph.trim() && (
+                                        <p key={index} className="mb-2 last:mb-0">
+                                            {paragraph.trim()}
+                                        </p>
+                                    )
+                                ))}
+                            </div>
                         </div>
                     </div>
-                    <div className="flex gap-3">
-                        <img src={setting} alt="setting" className="h-4 mt-2" />
-                        <div className="flex flex-col">
-                            <h4 className="text-[#FFFFFF] font-bold text-xl">{t('wildWeekend.connectStranger.title2')}</h4>
-                            <p className="text-[#BCBCBC] text-[12px]" dangerouslySetInnerHTML={{ __html: t('wildWeekend.connectStranger.desc2').replace(/\n/g, '<br />') }} />
+                    <div className="flex gap-3 lg:gap-4">
+                        <img src={setting} alt="setting" className="h-4 mt-2 flex-shrink-0" />
+                        <div className="flex flex-col gap-2 lg:gap-3 flex-1">
+                            <h4 className="text-[#FFFFFF] font-bold text-xl lg:text-2xl mb-1">{t('wildWeekend.connectStranger.title2')}</h4>
+                            <div className="text-[#BCBCBC] text-[12px] lg:text-[14px] leading-relaxed lg:leading-loose space-y-2">
+                                {t('wildWeekend.connectStranger.desc2').split('\n').map((paragraph: string, index: number) => (
+                                    paragraph.trim() && (
+                                        <p key={index} className="mb-2 last:mb-0">
+                                            {paragraph.trim()}
+                                        </p>
+                                    )
+                                ))}
+                            </div>
                         </div>
                     </div>
-                    <div className="flex gap-3">
-                        <img src={setting} alt="setting" className="h-4 mt-2" />
-                        <div className="flex flex-col">
-                            <h4 className="text-[#FFFFFF] font-bold text-xl">{t('wildWeekend.connectStranger.title3')}</h4>
-                            <p className="text-[#BCBCBC] text-[12px]" dangerouslySetInnerHTML={{ __html: t('wildWeekend.connectStranger.desc3').replace(/\n/g, '<br />') }} />
+                    <div className="flex gap-3 lg:gap-4">
+                        <img src={setting} alt="setting" className="h-4 mt-2 flex-shrink-0" />
+                        <div className="flex flex-col gap-2 lg:gap-3 flex-1">
+                            <h4 className="text-[#FFFFFF] font-bold text-xl lg:text-2xl mb-1">{t('wildWeekend.connectStranger.title3')}</h4>
+                            <div className="text-[#BCBCBC] text-[12px] lg:text-[14px] leading-relaxed lg:leading-loose space-y-2">
+                                {t('wildWeekend.connectStranger.desc3').split('\n').map((paragraph: string, index: number) => (
+                                    paragraph.trim() && (
+                                        <p key={index} className="mb-2 last:mb-0">
+                                            {paragraph.trim()}
+                                        </p>
+                                    )
+                                ))}
+                            </div>
                         </div>
                     </div>
-                    <div className="flex gap-3">
-                        <img src={setting} alt="setting" className="h-4 mt-2" />
-                        <div className="flex flex-col">
-                            <h4 className="text-[#FFFFFF] font-bold text-xl">{t('wildWeekend.connectStranger.title4')}</h4>
-                            <p className="text-[#BCBCBC] text-[12px]" dangerouslySetInnerHTML={{ __html: t('wildWeekend.connectStranger.desc4').replace(/\n/g, '<br />') }} />
+                    <div className="flex gap-3 lg:gap-4">
+                        <img src={setting} alt="setting" className="h-4 mt-2 flex-shrink-0" />
+                        <div className="flex flex-col gap-2 lg:gap-3 flex-1">
+                            <h4 className="text-[#FFFFFF] font-bold text-xl lg:text-2xl mb-1">{t('wildWeekend.connectStranger.title4')}</h4>
+                            <div className="text-[#BCBCBC] text-[12px] lg:text-[14px] leading-relaxed lg:leading-loose space-y-2">
+                                {t('wildWeekend.connectStranger.desc4').split('\n').map((paragraph: string, index: number) => (
+                                    paragraph.trim() && (
+                                        <p key={index} className="mb-2 last:mb-0">
+                                            {paragraph.trim()}
+                                        </p>
+                                    )
+                                ))}
+                            </div>
                         </div>
                     </div>
-                    <div className="flex gap-3">
-                        <img src={setting} alt="setting" className="h-4 mt-2" />
-                        <div className="flex flex-col">
-                            <h4 className="text-[#FFFFFF] font-bold text-xl">{t('wildWeekend.connectStranger.title5')}</h4>
-                            <p className="text-[#BCBCBC] text-[12px]" dangerouslySetInnerHTML={{ __html: t('wildWeekend.connectStranger.desc5').replace(/\n/g, '<br />') }} />
+                    <div className="flex gap-3 lg:gap-4">
+                        <img src={setting} alt="setting" className="h-4 mt-2 flex-shrink-0" />
+                        <div className="flex flex-col gap-2 lg:gap-3 flex-1">
+                            <h4 className="text-[#FFFFFF] font-bold text-xl lg:text-2xl mb-1">{t('wildWeekend.connectStranger.title5')}</h4>
+                            <div className="text-[#BCBCBC] text-[12px] lg:text-[14px] leading-relaxed lg:leading-loose space-y-2">
+                                {t('wildWeekend.connectStranger.desc5').split('\n').map((paragraph: string, index: number) => (
+                                    paragraph.trim() && (
+                                        <p key={index} className="mb-2 last:mb-0">
+                                            {paragraph.trim()}
+                                        </p>
+                                    )
+                                ))}
+                            </div>
                         </div>
                     </div>
 

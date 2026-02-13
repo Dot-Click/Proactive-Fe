@@ -20,10 +20,10 @@ const JoinAdventureCommunity = () => {
           {/* Left Column - Image with Purple Border Effect */}
           <div className="w-full lg:w-1/2">
             <div className="relative">
-              {/* Purple shadow/border effect on bottom and right */}
+              {/* Teal shadow/border effect on bottom and right */}
               <div 
                 className="absolute -bottom-2 -right-2 w-full h-full rounded-xl z-0"
-                style={{ backgroundColor: "#7C3AED", opacity: 0.3 }}
+                style={{ backgroundColor: "#00929f", opacity: 0.3 }}
               />
               {/* Image Container */}
               <div className="relative rounded-xl overflow-hidden z-10">
@@ -43,7 +43,7 @@ const JoinAdventureCommunity = () => {
           {/* Right Column - Text and CTA */}
           <div className="w-full lg:w-1/2 flex flex-col justify-center">
             {/* Secondary Heading */}
-            <h3 className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6" style={{ color: "#E63946" }}>
+            <h3 className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6" style={{ color: "#00929f" }}>
               Somos una familia de exploradores. ¿Te vienes?
             </h3>
 
@@ -64,7 +64,7 @@ const JoinAdventureCommunity = () => {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white font-bold text-lg transition-transform hover:scale-105 shadow-lg"
               style={{
-                background: "linear-gradient(90deg, #E63946 0%, #7C3AED 100%)"
+                background: "linear-gradient(90deg, #f7cb0b 0%, #00929f 100%)"
               }}
             >
               <MessageCircle size={24} />

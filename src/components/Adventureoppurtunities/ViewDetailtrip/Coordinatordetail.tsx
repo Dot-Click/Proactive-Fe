@@ -50,7 +50,7 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
                     {displayCoordinators.map((coordinator: any, index: number) => {
                         const coordinatorName = coordinator.fullName || coordinator.CoordinatorName || "Coordinator"
                         const coordinatorEmail = coordinator.email || coordinator.CoordinatorEmail || ""
-                        const coordinatorImage = coordinator.profilePicture || coordinator.CoordinatorPhoto || "https://github.com/shadcn.png"
+                        const coordinatorImage = coordinator.profilePicture || coordinator.CoordinatorPhoto || ""
                         const coordinatorBio = coordinator.bio || coordinator.CoordinatorBio || "No bio available."
                         // const coordinatorId = coordinator.id || coordinator._id
 
@@ -58,8 +58,17 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
                             <div key={index} className="border border-[#C1C1C1] bg-[#F9F9F9] rounded-[10px] px-3 py-5">
                                 <div className="flex items-center gap-2">
                                     <Avatar className="lg:w-16 lg:h-16 mr-2">
-                                        <AvatarImage src={coordinatorImage} alt={coordinatorName} />
-                                        <AvatarFallback>{coordinatorName.charAt(0)}</AvatarFallback>
+                                        <AvatarImage 
+                                            src={coordinatorImage || undefined} 
+                                            alt={coordinatorName}
+                                            onError={(e) => {
+                                                // Hide image on error, AvatarFallback will show
+                                                (e.target as HTMLImageElement).style.display = 'none';
+                                            }}
+                                        />
+                                        <AvatarFallback className="bg-gradient-to-br from-[#221E33] to-[#565070] text-white">
+                                            {coordinatorName.charAt(0).toUpperCase()}
+                                        </AvatarFallback>
                                     </Avatar>
                                     <div className="flex flex-col">
                                         <h4 className="text-[#141E20] font-semibold">{coordinatorName}</h4>

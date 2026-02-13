@@ -182,22 +182,18 @@ const MasonryLayout = ({ trip, backUrl = "/user-dashboard/adventure-oppurtunitie
                     index === 0 ? "lg:col-span-2 lg:row-span-2" : ""
                   }`}
                 >
-                  {!hasError && imageUrl ? (
-                    <img
-                      src={imageUrl}
-                      className={`w-full h-full object-cover ${
-                        index === 0 ? "h-[400px] lg:h-[500px]" : "h-[200px] lg:h-[240px]"
-                      }`}
-                      alt={`Gallery ${index + 1}`}
-                      onError={() => handleImageError(index)}
-                    />
-                  ) : (
-                    <div className={`bg-gradient-to-br from-[#221E33] to-[#565070] flex items-center justify-center ${
+                  <img
+                    src={hasError || !imageUrl ? detailtrip1 : imageUrl}
+                    className={`w-full h-full object-cover ${
                       index === 0 ? "h-[400px] lg:h-[500px]" : "h-[200px] lg:h-[240px]"
-                    }`}>
-                      <span className="text-white text-sm opacity-50">Imagen no disponible</span>
-                    </div>
-                  )}
+                    }`}
+                    alt={`Gallery ${index + 1}`}
+                    onError={() => {
+                      if (!hasError) {
+                        handleImageError(index);
+                      }
+                    }}
+                  />
                 </div>
               );
             })}
@@ -208,6 +204,10 @@ const MasonryLayout = ({ trip, backUrl = "/user-dashboard/adventure-oppurtunitie
               src={detailtrip1}
               className="w-full h-[400px] object-cover rounded-xl"
               alt="Trip cover"
+              onError={(e) => {
+                // If detailtrip1 also fails, use a placeholder
+                (e.target as HTMLImageElement).src = "https://via.placeholder.com/800x400/221E33/FFFFFF?text=Trip+Image";
+              }}
             />
           </div>
         )}
