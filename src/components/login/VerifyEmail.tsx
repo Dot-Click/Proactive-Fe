@@ -111,13 +111,6 @@ const VerifyEmail = () => {
                   We sent you a verification link. Open your email and click the link to verify your account.
                 </p>
               ) : null}
-              {/* Manual code entry – no longer used; verify only by clicking link in email */}
-              {/* <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                  <FormField ... name="token" ... />
-                  <Button type="submit">Verify Email</Button>
-                </form>
-              </Form> */}
             </div>
           </div>
         </div>
