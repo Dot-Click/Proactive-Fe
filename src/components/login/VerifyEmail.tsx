@@ -2,41 +2,40 @@ import login from "../../assets/login.png"
 import loginLayer from "../../assets/loginLayer.png"
 import loginformbg from "../../assets/loginformbg.png"
 import proactivelogo from "../../assets/proactive-logo.png"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
-import z from "zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "../ui/button";
-import { toast } from "sonner";
+// --- Manual code entry: no longer used; user verifies by clicking link only ---
+// import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+// import { Input } from "../ui/input";
+// import z from "zod"
+// import { useForm } from "react-hook-form"
+// import { zodResolver } from "@hookform/resolvers/zod"
+// import { Button } from "../ui/button";
 import { UseVerifytokenhook } from "@/hooks/UseVerifytokenhook";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { LoaderIcon } from "lucide-react";
 
-const TokenSchema = z.object({
-  token: z.string().min(1, "Token is required"),
-})
-
+// const TokenSchema = z.object({
+//   token: z.string().min(1, "Token is required"),
+// })
 
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
   const tokenFromUrl = searchParams.get("token");
   const [isAutoVerifying, setIsAutoVerifying] = useState(false);
-  const [showCodeForm, setShowCodeForm] = useState(!tokenFromUrl);
-  
-  type TokenSchemaType = z.infer<typeof TokenSchema>
-  const form = useForm<TokenSchemaType>({
-    resolver: zodResolver(TokenSchema) as any,
-    defaultValues: {
-      token: tokenFromUrl || "",
-    },
-  });
+
+  // showCodeForm commented out - no manual code entry, only link click
+  // const [showCodeForm, setShowCodeForm] = useState(!tokenFromUrl);
+  // type TokenSchemaType = z.infer<typeof TokenSchema>
+  // const form = useForm<TokenSchemaType>({
+  //   resolver: zodResolver(TokenSchema) as any,
+  //   defaultValues: { token: tokenFromUrl || "" },
+  // });
+
   const VerifytokenMutation = UseVerifytokenhook()
 
-  // Auto-verify if token is in URL
+  // Auto-verify when user clicks link in email (token in URL) – no code entry needed
   useEffect(() => {
-    if (tokenFromUrl && !showCodeForm) {
+    if (tokenFromUrl) {
       setIsAutoVerifying(true);
       VerifytokenMutation.mutate(
         { token: tokenFromUrl },
@@ -46,25 +45,25 @@ const VerifyEmail = () => {
           },
           onError: () => {
             setIsAutoVerifying(false);
-            setShowCodeForm(true); // Show form if auto-verify fails
-            form.setValue("token", tokenFromUrl); // Pre-fill token
+            // No code form – user must use the link from email
+            // setShowCodeForm(true);
+            // form.setValue("token", tokenFromUrl);
           },
         }
       );
     }
   }, [tokenFromUrl]);
 
-  const onSubmit = async (val: z.infer<typeof TokenSchema>) => {
-    const { token } = val
-    try {
-        await VerifytokenMutation.mutateAsync({
-            token
-        })
-    } catch (error: any) {
-      const message = error?.response?.data?.message || "Failed to verify email";
-      toast.error(message)
-    }
-  };
+  // Manual code submit – commented out; verification only via link click
+  // const onSubmit = async (val: z.infer<typeof TokenSchema>) => {
+  //   const { token } = val
+  //   try {
+  //     await VerifytokenMutation.mutateAsync({ token })
+  //   } catch (error: any) {
+  //     const message = error?.response?.data?.message || "Failed to verify email";
+  //     toast.error(message)
+  //   }
+  // };
 
   return (
     <div
@@ -93,11 +92,11 @@ const VerifyEmail = () => {
                 Email Verification
               </h1>
               <p className="text-[#221E33] text-[14px] mt-2 text-center px-4">
-                {isAutoVerifying 
-                  ? "Verifying your email..." 
-                  : showCodeForm 
-                    ? "Please enter your Token to Verify your email" 
-                    : "Click the link in your email to verify"}
+                {isAutoVerifying
+                  ? "Verifying your email..."
+                  : tokenFromUrl
+                    ? "Verifying..."
+                    : "Check your email and click the link to verify. No code to enter."}
               </p>
             </div>
 
@@ -107,41 +106,18 @@ const VerifyEmail = () => {
                   <LoaderIcon className="animate-spin h-12 w-12 text-[#0DAC87] mb-4" />
                   <p className="text-[#221E33] text-sm">Verifying your email address...</p>
                 </div>
-              ) : (
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="space-y-6">
-                      <FormField
-                        control={form.control}
-                        name="token"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-[#242E2F] font-semibold">
-                              Token
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                type="text"
-                                placeholder="Enter Token"
-                                {...field}
-                                className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <Button 
-                      type="submit" 
-                      disabled={VerifytokenMutation.isPending}
-                      className="rounded-full cursor-pointer w-full mt-6 bg-[#0DAC87] hover:bg-[#129b7b] text-white px-4 py-6 font-semibold hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {VerifytokenMutation.isPending ? "...Loading" : "Verify Email"}
-                    </Button>
-                  </form>
-                </Form>
-              )}
+              ) : !tokenFromUrl ? (
+                <p className="text-[#221E33] text-sm text-center py-6">
+                  We sent you a verification link. Open your email and click the link to verify your account.
+                </p>
+              ) : null}
+              {/* Manual code entry – no longer used; verify only by clicking link in email */}
+              {/* <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                  <FormField ... name="token" ... />
+                  <Button type="submit">Verify Email</Button>
+                </form>
+              </Form> */}
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next"
 const OurValues = () => {
     const { t } = useTranslation();
     return (
-        <div className="relative bg-[#F0F5FD]/28">
+        <div className="relative bg-[#F0F5FD]/28 pb-12 lg:pb-16">
             <img
                 src={importantMask}
                 alt="importantMask"

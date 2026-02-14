@@ -65,7 +65,7 @@ const ViewTripDetailPage = () => {
     .toLowerCase()
     .trim();
 
-  const isWildWeekend = normalizedCategory.includes("wild weekend");
+  // const isWildWeekend = normalizedCategory.includes("wild weekend");
   const isWildTrips = normalizedCategory.includes("wild trips");
 
   return (
