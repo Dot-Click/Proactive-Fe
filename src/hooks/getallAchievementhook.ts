@@ -9,7 +9,7 @@ const getAllAchievements = async () => {
 };
 const getAllAchievementsForUser = async () => {
     const response = await api.get("/api/user/achievements");
-    // console.log("Achievements for user", response.data);
+    console.log("Achievements for user", response.data);
     return response.data;
 };
 
