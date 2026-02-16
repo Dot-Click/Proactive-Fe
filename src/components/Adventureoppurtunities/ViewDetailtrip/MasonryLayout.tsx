@@ -227,14 +227,14 @@ const MasonryLayout = ({ trip, backUrl = "/user-dashboard/adventure-oppurtunitie
               </div>
             )}
             
-            {dateRange && (
+            {showApplyButton && dateRange && (
               <div className="flex items-center gap-2 text-[#666373]">
                 <Calendar className="text-[#0DAC87]" size={18} />
                 <span className="font-medium text-base">{dateRange}</span>
               </div>
             )}
             
-            {data?.duration && (
+            {data?.duration   && (
               <div className="flex items-center gap-2 text-[#666373]">
                 <span className="font-medium text-base">{data.duration}</span>
               </div>
