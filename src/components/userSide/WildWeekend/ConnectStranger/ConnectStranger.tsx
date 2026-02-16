@@ -8,7 +8,7 @@ const ConnectStranger = () => {
     return (
         <div className="relative ">
             <div className="bg-black lg:h-[90vh] h-[100vh]"></div>
-            <div className="flex lg:flex-row flex-col justify-center items-center lg:gap-20 gap-10 absolute inset-0">
+            <div className="flex lg:flex-row flex-col justify-center items-center lg:gap-20 gap-10 absolute inset-0 mt-30">
                
                 <div className="flex flex-col lg:gap-8 gap-6 px-5 lg:px-8 max-w-2xl">
                     <div className="flex gap-3 lg:gap-4">

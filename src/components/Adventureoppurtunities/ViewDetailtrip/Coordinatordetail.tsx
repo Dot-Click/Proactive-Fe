@@ -45,7 +45,7 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
         <>
             <img src={zigzag} alt="zigzag" className="py-4" />
             <div className="px-4 sm:px-16 py-6">
-                <h4 className="text-[#000000] font-bold text-lg">Coordinators</h4>
+                <h4 className="text-[#000000] font-bold text-4xl">Coordinators</h4>
                 <div className="grid lg:grid-cols-2 gap-4 py-4">
                     {displayCoordinators.map((coordinator: any, index: number) => {
                         const coordinatorName = coordinator.fullName || coordinator.CoordinatorName || "Coordinator"
