@@ -101,7 +101,7 @@ const getHeroData = (
   "/open-oppurtunities": {
     image: (
       <>
-        <div className="relative">
+        <div className="relative h-full" style={{ background: "radial-gradient(50% 50% at 100% 50%, rgba(118, 240, 212, 0.32) 0%, rgba(250, 250, 250, 0) 100%) rgb(250, 250, 250)" }}>
           <img
             src={oppHero}
             alt="oppHero"
@@ -132,7 +132,7 @@ const getHeroData = (
   "/what-we-do": {
     image: (
       <>
-        <div className="relative">
+        <div className="relative h-full" style={{ background: "radial-gradient(50% 50% at 100% 50%, rgba(118, 240, 212, 0.32) 0%, rgba(250, 250, 250, 0) 100%) rgb(250, 250, 250)" }}>
           <img
             src={oppHero}
             alt="What We Do"
@@ -162,7 +162,10 @@ const getHeroData = (
   "/wild-weekend": {
     image: (
       <>
-        <div className="relative">
+        <div
+          className="relative  h-full"
+          style={{ backgroundColor: "rgb(242, 242, 245)" }}
+        >
           <img
             src={wwHero}
             alt="wwHero"
@@ -192,7 +195,10 @@ const getHeroData = (
   "/wild-trip": {
     image: (
       <>
-        <div className="relative">
+        <div
+          className="relative  h-full"
+          style={{ backgroundColor: "rgb(242, 242, 245)" }}
+        >
           <img
             src={wtHero}
             alt="wtHero"
@@ -218,7 +224,10 @@ const getHeroData = (
   "/erasmus-plus": {
     image: (
       <>
-        <div className="relative">
+        <div
+          className="relative  h-full"
+          style={{ backgroundColor: "rgb(242, 242, 245)" }}
+        >
           <img
             src={erasmusHero}
             alt="erasmusHero"
@@ -245,7 +254,10 @@ const getHeroData = (
   "/internal-events": {
     image: (
       <>
-        <div className="relative">
+        <div
+          className="relative  h-full"
+          style={{ backgroundColor: "rgb(242, 242, 245)" }}
+        >
           <img
             src={InternalEvents}
             alt="InternalEvents"
@@ -311,7 +323,10 @@ const getHeroData = (
   "/member": {
     image: (
       <>
-        <div className="relative">
+        <div
+          className="relative  h-full"
+          style={{ background: "radial-gradient(50% 50% at 100% 50%, rgba(118, 240, 212, 0.32) 0%, rgba(250, 250, 250, 0) 100%) rgb(250, 250, 250)" }}
+        >
           <img
             src={Member}
             alt="Member"

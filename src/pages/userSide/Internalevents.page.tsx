@@ -12,7 +12,7 @@ const InternaleventsPage = () => {
       <SomeMemories />
       <ExperienceEvent />
       <AboutEvent />
-      <TeamSchedule />
+      {/* <TeamSchedule /> */}
     </div>
   );
 }
