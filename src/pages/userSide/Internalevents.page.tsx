@@ -2,7 +2,7 @@ import AboutEvent from "@/components/userSide/InternalEvents/AboutEvent/AboutEve
 import ExperienceEvent from "@/components/userSide/InternalEvents/ExperienceEvent/ExperienceEvent"
 // import InternalEventCard from "@/components/userSide/InternalEvents/InternalEventCard/InternalEventCard"
 import SomeMemories from "@/components/userSide/InternalEvents/SomeMemories/SomeMemories"
-import TeamSchedule from "@/components/userSide/InternalEvents/TeamSchedule/TeamSchedule"
+// import TeamSchedule from "@/components/userSide/InternalEvents/TeamSchedule/TeamSchedule"
 import WildWeekendCard from "@/components/userSide/WildWeekend/WildWeekendCard/WildWeekendCard"
 
 const InternaleventsPage = () => {

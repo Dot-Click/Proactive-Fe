@@ -7,37 +7,41 @@ import { FaLocationDot } from "react-icons/fa6"
 import { MdArrowOutward } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
 import { UsegetPayment } from "@/hooks/getPaymenthook"
+import { UsegetOpenTrips } from "@/hooks/getOpenTripshook"
 import { LoaderIcon } from "lucide-react"
 import { useMemo } from "react"
 
 const UpcomingAdventures = () => {
     const navigate = useNavigate()
     const { data: paymentData, isLoading } = UsegetPayment()
-    
+
     // Get paid trips and separate into upcoming and past
     const { upcomingTrips, pastTrips } = useMemo(() => {
         const tripPayments = paymentData?.tripPayments || []
         const today = new Date()
-        
+        today.setHours(0, 0, 0, 0) // Compare only the date part
+
         // Filter only paid/completed trips
-        const paidTrips = tripPayments.filter((p: any) => 
+        const paidTrips = tripPayments.filter((p: any) =>
             p.status === "completed" || p.status === "paid" || p.status === "confirmed"
         ).map((p: any) => ({
             ...p.trip,
             paymentId: p.id,
             paymentStatus: p.status
         })).filter((trip: any) => trip && trip.id) // Ensure trip data exists
-        
+
         // Separate into upcoming and past
         const upcoming = paidTrips.filter((trip: any) => {
             if (!trip.startDate) return false
             const startDate = new Date(trip.startDate)
+            startDate.setHours(0, 0, 0, 0)
             return startDate >= today
         })
-        
+
         const past = paidTrips.filter((trip: any) => {
             if (!trip.endDate) return false
             const endDate = new Date(trip.endDate)
+            endDate.setHours(0, 0, 0, 0)
             return endDate < today
         }).sort((a: any, b: any) => {
             // Sort past trips by end date, most recent first
@@ -45,10 +49,22 @@ const UpcomingAdventures = () => {
             const dateB = new Date(b.endDate).getTime()
             return dateB - dateA
         })
-        
+
         return { upcomingTrips: upcoming, pastTrips: past }
     }, [paymentData])
-    
+
+    // Get all open trips that the user hasn't joined yet
+    const { data: openTripsData, isLoading: isOpenTripsLoading } = UsegetOpenTrips()
+    const adventureOpportunities = useMemo(() => {
+        const allOpenTrips = openTripsData?.trips || []
+        const joinedTripIds = new Set([
+            ...upcomingTrips.map((t: any) => t.id),
+            ...pastTrips.map((t: any) => t.id)
+        ])
+
+        return allOpenTrips.filter((trip: any) => !joinedTripIds.has(trip.id))
+    }, [openTripsData, upcomingTrips, pastTrips])
+
     const getDaysLeft = (startDate: Date) => {
         const today = new Date()
         const start = new Date(startDate)
@@ -56,7 +72,7 @@ const UpcomingAdventures = () => {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
         return diffDays
     }
-    
+
     const getDaysAgo = (endDate: Date) => {
         const today = new Date()
         const end = new Date(endDate)
@@ -64,7 +80,7 @@ const UpcomingAdventures = () => {
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
         return diffDays
     }
-    
+
     const renderTripCard = (trip: any, isPast: boolean = false) => {
         return (
             <div key={trip.id} className="bg-[#FFFFFF] px-4 py-6 rounded-[20px] shadow-md">
@@ -83,14 +99,12 @@ const UpcomingAdventures = () => {
                                 {trip?.category && (
                                     <div className="cursor-pointer bg-[#C4FFF0] px-4 py-2 rounded-[7px] text-[#156250] font-semibold">{trip.category}</div>
                                 )}
-                                <div className={`cursor-pointer border px-4 py-2 rounded-[7px] font-semibold flex items-center gap-3 ${
-                                    isPast 
-                                        ? "border-[#666373] text-[#666373]" 
-                                        : "border-[#009C23] text-[#009C23]"
-                                }`}>
-                                    <div className={`w-2 h-2 rounded-full ${
-                                        isPast ? "bg-[#666373]" : "bg-[#009C23]"
-                                    }`} />
+                                <div className={`cursor-pointer border px-4 py-2 rounded-[7px] font-semibold flex items-center gap-3 ${isPast
+                                    ? "border-[#666373] text-[#666373]"
+                                    : "border-[#009C23] text-[#009C23]"
+                                    }`}>
+                                    <div className={`w-2 h-2 rounded-full ${isPast ? "bg-[#666373]" : "bg-[#009C23]"
+                                        }`} />
                                     {isPast ? "Completed" : "Confirmed"}
                                 </div>
                             </div>
@@ -109,7 +123,7 @@ const UpcomingAdventures = () => {
                                 <div className="flex items-center gap-2">
                                     <img src={time} alt="time" className="h-4" />
                                     <span className="text-[#666373] text-[14px]">
-                                        {isPast 
+                                        {isPast
                                             ? `Completed ${getDaysAgo(trip.endDate)} ${getDaysAgo(trip.endDate) === 1 ? 'day' : 'days'} ago`
                                             : `In ${getDaysLeft(trip.startDate)} ${getDaysLeft(trip.startDate) === 1 ? 'day' : 'days'}`
                                         }
@@ -117,8 +131,8 @@ const UpcomingAdventures = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col gap-1">
-                                <div 
-                                    onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)} 
+                                <div
+                                    onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)}
                                     className="flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-4 py-4 text-[#FFFFFF] font-semibold"
                                 >
                                     View Detail
@@ -136,24 +150,24 @@ const UpcomingAdventures = () => {
         <div className="flex flex-col gap-6">
             {/* Upcoming Adventures Section */}
             <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[20px] flex flex-col">
-                <div className="px-4 py-6 flex flex-col lg:flex-row gap-3 justify-between items-center">
+                {/* <div className="px-4 py-6 flex flex-col lg:flex-row gap-3 justify-between items-center">
                     <span className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-lg">
                         Upcoming Adventures
                     </span>
-                    <Button 
-                        onClick={() => navigate("/user-dashboard/adventure-oppurtunities")} 
+                    <Button
+                        onClick={() => navigate("/user-dashboard/adventure-oppurtunities")}
                         className="bg-[#0DAC87] rounded-full py-6 px-6 hover:bg-[#0d9b7a] cursor-pointer"
                     >
                         View All
                     </Button>
-                </div>
-                <Separator className="border-[#D9D9D9] bg-[#D9D9D9] -mt-[8px]" />
-                {isLoading && (
+                </div> */}
+                {/* <Separator className="border-[#D9D9D9] bg-[#D9D9D9] -mt-[8px]" /> */}
+                {/* {isLoading && (
                     <div className="w-full flex items-center justify-center py-10">
                         <LoaderIcon className="animate-spin" />
                     </div>
-                )}
-                {!isLoading && (
+                )} */}
+                {/* {!isLoading && (
                     <div className="flex flex-col gap-3 px-4 py-6 overflow-y-scroll h-152">
                         {upcomingTrips.length > 0 ? (
                             upcomingTrips.map((trip: any) => renderTripCard(trip, false))
@@ -164,30 +178,36 @@ const UpcomingAdventures = () => {
                             </div>
                         )}
                     </div>
-                )}
+                )} */}
             </div>
 
-            {/* Past Adventures Section */}
+            {/* Adventure Opportunities Section */}
             <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[20px] flex flex-col">
                 <div className="px-4 py-6 flex flex-col lg:flex-row gap-3 justify-between items-center">
                     <span className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-lg">
-                        Past Adventures
+                        Adventure Opportunities
                     </span>
+                    <Button
+                        onClick={() => navigate("/open-oppurtunities")}
+                        className="bg-[#0DAC87] rounded-full py-6 px-6 hover:bg-[#0d9b7a] cursor-pointer"
+                    >
+                        Explore More
+                    </Button>
                 </div>
                 <Separator className="border-[#D9D9D9] bg-[#D9D9D9] -mt-[8px]" />
-                {isLoading && (
+                {(isLoading || isOpenTripsLoading) && (
                     <div className="w-full flex items-center justify-center py-10">
                         <LoaderIcon className="animate-spin" />
                     </div>
                 )}
-                {!isLoading && (
+                {!isLoading && !isOpenTripsLoading && (
                     <div className="flex flex-col gap-3 px-4 py-6 overflow-y-scroll h-152">
-                        {pastTrips.length > 0 ? (
-                            pastTrips.map((trip: any) => renderTripCard(trip, true))
+                        {adventureOpportunities.length > 0 ? (
+                            adventureOpportunities.map((trip: any) => renderTripCard(trip, false))
                         ) : (
                             <div className="text-center py-8 text-[#666373]">
-                                <p>No past adventures yet.</p>
-                                <p className="text-sm mt-2">Complete your first adventure to see it here!</p>
+                                <p>No new opportunities at the moment.</p>
+                                <p className="text-sm mt-2">Check back later for more adventures!</p>
                             </div>
                         )}
                     </div>

@@ -20,7 +20,7 @@ import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
 const formSchema = z
     .object({
         dietaryRestrictions: z.string().min(1, {
-            message: "Gender is required",
+            message: "Dietary restriction is required",
         }),
         shortIntro: z.string().min(1, {
             message: "ShortIntro is required",
@@ -46,7 +46,8 @@ const ApplicationForm = () => {
     const { data } = UsegetTripbyid(id ?? '');
     const { data: currentUser } = UsegetCurrentUser();
     const userdetail = currentUser?.data?.user
-    const titleName = data?.trip[0]
+    const tripData = data?.trip?.[0] || data?.trip || data;
+    const titleName = tripData?.name || tripData?.title;
     const { mutateAsync, isPending } = UseApplication();
     const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -75,6 +76,11 @@ const ApplicationForm = () => {
         }
     };
 
+    const onError = (errors: any) => {
+        console.error("Form validation errors:", errors);
+        toast.error("Please fill in all required fields including the intro video.");
+    };
+
     return (
         <DialogContent className="bg-[#FAFAFA] sm:max-w-[650px] max-h-[90vh] border-[8px] border-[#ECFBF6] rounded-[20px] overflow-y-auto">
             {
@@ -90,7 +96,7 @@ const ApplicationForm = () => {
                         </DialogHeader>
                         <div className="py-6 px-7">
                             <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)}>
+                                <form onSubmit={form.handleSubmit(onSubmit, onError)}>
                                     <div className="flex flex-col gap-5">
                                         <FormLabel className="text-[#242E2F] font-semibold">
                                             Name
@@ -231,7 +237,7 @@ const ApplicationForm = () => {
                             </DialogTitle>
                         </DialogHeader>
                         <div className="px-7 py-7 flex flex-col lg:gap-10 gap-4 justify-center items-center">
-                            <span className="text-[#666373] lg:text-center">Your application for {titleName?.title} has been submitted successfully. Our coordinator will review your application and get <br /> back to you within 48 hours.</span>
+                            <span className="text-[#666373] lg:text-center text-center">Your application for <span className="font-bold text-[#221E33]">{titleName}</span> has been submitted successfully. Our coordinator will review your application and get back to you within 48 hours.</span>
                             <div className="bg-[#F4F4F4] rounded-[15px] px-7 py-6 flex flex-col justify-center items-center gap-2">
                                 <div className="flex gap-2 items-center">
                                     <FaCircleExclamation color="#666373" />

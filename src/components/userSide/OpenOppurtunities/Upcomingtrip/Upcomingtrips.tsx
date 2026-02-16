@@ -314,7 +314,7 @@ import { UsegetTrips } from "@/hooks/gettriphook";
 import { type OpenTrip } from "@/hooks/getOpenTripshook";
 import { LoaderIcon, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { FaLocationDot } from "react-icons/fa6";
+import { FaLocationDot } from "react-icons/fa6";    
 
 const WEEKDAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
 
