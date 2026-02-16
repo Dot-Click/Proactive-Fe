@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 const OurMission = () => {
   const { t } = useTranslation();
   return (
-    <div className="bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD] lg:py-16 md:py-10 lg:-mt-30 md:mt-4 py-10 -mt-15">
+    <div className="bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD] lg:py-16 md:py-10 lg:mt-21 md:mt-4 py-10 -mt-15">
       <div className="flex lg:flex-row flex-col lg:gap-20 gap-8 justify-center items-center">
         <div className="flex flex-col lg:gap-8 gap-2 lg:mt-16">
           <div className="relative">
