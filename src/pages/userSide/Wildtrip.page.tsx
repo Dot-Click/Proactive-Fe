@@ -13,6 +13,7 @@ const WildtripPage = () => {
       <WTConnectStranger />
       <OurMerchant />
       <OpenOppurtunities />
+      
     </div>
   );
 }

@@ -77,11 +77,6 @@
     "termsOfServices": "Términos de Servicio",
     "cookiePolicy": "Política de Cookies"
   },
-  "about": {
-    "ourMission": "Nuestra Misión",
-    "missionText1": "Crear una comunidad vibrante donde los jóvenes\neuropeos puedan descubrir nuevas culturas, construir\namistades duraderas y desarrollarse como ciudadanos\nglobales a través de experiencias de viaje\ncuidadosamente diseñadas.",
-    "missionText2": "Creemos que los viajes tienen el poder de derribar\nbarreras, construir puentes entre culturas e inspirar\na la próxima generación de líderes europeos."
-  },
   "becomeMember": {
     "whyJoin": "¿Por qué unirse a Proactive?",
     "whyJoinSubtitle": "Desbloquea un mundo de oportunidades de viaje exclusivas y conéctate con aventureros afines",
@@ -100,15 +95,15 @@
   },
   "wildWeekend": {
     "howItWorks": "¿Cómo funciona?",
-    "chooseDestination": "Elige tu destino",
+    "chooseDestination": "¿Cuándo son?",
     "chooseDestinationDesc": "Descubre nuestras próximas salidas en grupo, puedes elegir por destino, mes o tipo de viaje. Estamos seguros de que tenemos ese viaje con el que llevas tiempo soñando.",
-    "bookFlights": "Reserva tus vuelos",
+    "bookFlights": "¿Cómo me apunto?",
     "bookFlightsDesc": "Cuando recibas un email de que tu viaje está 'Confirmado', ¡querrá decir que es oficial, nos vamos de viaje! No incluimos los vuelos, así que tienes total libertad de elección.",
-    "expertCoordinator": "Coordinador experto",
+    "expertCoordinator": "Equipo coordinador experto",
     "expertCoordinatorDesc": "En nuestro viaje nos acompañará un coordinador, es un compañero de aventuras más que se encarga de la logística y organización del viaje.",
-    "similarAgeGroups": "Grupos de edades similares",
+    "similarAgeGroups": "Aventura",
     "similarAgeGroupsDesc": "El grupo de viaje estará formado por gente de tu edad (25-35 y 35-45 años). De esta manera compartirás la experiencia con gente afin a ti y a tus intereses.",
-    "enjoyBestTrip": "¡Disfruta del mejor viaje en grupo!",
+    "enjoyBestTrip": "¡Disfruta del mejor viaje en grupo! 💗",
     "enjoyBestTripDesc": "Conecta con tus nuevos amigos, explora el destino que hayas elegido y emociónate viviendo la experiencia de tu vida, te aseguramos que será inolvidable.",
     "wonderPeople": {
       "title": "Las personas maravillosas que lo han experimentado te lo cuentan."

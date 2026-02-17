@@ -4,7 +4,7 @@ import Includeditem from "@/components/Adventureoppurtunities/ViewDetailtrip/Inc
 import Locationmeetingpoint from "@/components/Adventureoppurtunities/ViewDetailtrip/Locationmeetingpoint";
 import MasonryLayout from "@/components/Adventureoppurtunities/ViewDetailtrip/MasonryLayout";
 import ParticipantsCards from "@/components/Adventureoppurtunities/ViewDetailtrip/ParticipantsCards";
-// import SurfaceCamp from "@/components/Adventureoppurtunities/ViewDetailtrip/SurfaceCamp";
+import SurfaceCamp from "@/components/Adventureoppurtunities/ViewDetailtrip/SurfaceCamp";
 import Tripmood from "@/components/Adventureoppurtunities/ViewDetailtrip/Tripmood";
 import VideoSection from "@/components/Adventureoppurtunities/ViewDetailtrip/VideoSection";
 import Faqs from "@/components/Adventureoppurtunities/ViewDetailtrip/Faqs";
@@ -65,7 +65,7 @@ const ViewTripDetailPage = () => {
     .toLowerCase()
     .trim();
 
-  // const isWildWeekend = normalizedCategory.includes("wild weekend");
+  const isWildWeekend = normalizedCategory.includes("wild weekend");
   const isWildTrips = normalizedCategory.includes("wild trips");
 
   return (
@@ -74,7 +74,7 @@ const ViewTripDetailPage = () => {
       <MasonryLayout trip={trip} showApplyButton={isLoggedIn} />
       <Locationmeetingpoint trip={trip} />
       <Tripmood />
-      {/* {isWildWeekend && <SurfaceCamp />} */}
+      {(isWildWeekend || isWildTrips) && <SurfaceCamp />}
       {isWildTrips && <Daybyday trip={trip} />}
       <Includeditem trip={trip} />
       <VideoSection trip={trip} />

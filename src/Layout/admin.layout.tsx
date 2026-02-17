@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useIsMobile } from "../hooks/use-mobile";
-import Dashboard from "@/assets/sidebaricon/dashboard.png";
+import Dashboard from "@/assets/sidebaricon/dashboard.svg";
 import UserManagement from "@/assets/sidebaricon/user-management.png";
 import Coordinator from "@/assets/sidebaricon/coordinator-management.png";
 import Trip from "@/assets/sidebaricon/trip-oppurtunities.png";

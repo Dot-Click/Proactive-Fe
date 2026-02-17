@@ -77,11 +77,6 @@
     "termsOfServices": "Terms of Services",
     "cookiePolicy": "Cookie Policy"
   },
-  "about": {
-    "ourMission": "Our Mission",
-    "missionText1": "To create a vibrant community where young\nEuropeans can discover new cultures, build\nlasting friendships, and develop into global\ncitizens through carefully crafted travel\nexperiences.",
-    "missionText2": "We believe that travel has the power to break\ndown barriers, build bridges between cultures,\nand inspire the next generation of European\nleaders."
-  },
   "becomeMember": {
     "whyJoin": "Why Join Proactive?",
     "whyJoinSubtitle": "Unlock a world of exclusive travel opportunities and connect with like-minded adventurers",
@@ -100,15 +95,15 @@
   },
   "wildWeekend": {
     "howItWorks": "How It Works",
-    "chooseDestination": "Choose Your Destination",
+    "chooseDestination": "When are they?",
     "chooseDestinationDesc": "Discover our upcoming group departures, you can choose by destination, month or type of trip. We're sure we have that trip you've been dreaming of.",
-    "bookFlights": "Book Your Flights",
+    "bookFlights": "How do I sign up?",
     "bookFlightsDesc": "When you receive an email that your trip is 'Confirmed', it means it's official, we're going on a trip! We don't include flights, so you have complete freedom of choice.",
-    "expertCoordinator": "Expert Coordinator",
+    "expertCoordinator": "Expert coordinator team",
     "expertCoordinatorDesc": "A coordinator will accompany us on our trip, they're another adventure companion who takes care of the logistics and organization of the trip.",
-    "similarAgeGroups": "Similar Age Groups",
+    "similarAgeGroups": "Adventure",
     "similarAgeGroupsDesc": "The travel group will be made up of people your age (25-35 and 35-45 years old). This way you'll share the experience with people similar to you and your interests.",
-    "enjoyBestTrip": "Enjoy the Best Group Trip!",
+    "enjoyBestTrip": "Enjoy the Best Group Trip! 💗",
     "enjoyBestTripDesc": "Connect with your new friends, explore the destination you've chosen and get excited living the experience of your life, we guarantee it will be unforgettable.",
     "wonderPeople": {
       "title": "Wonderful people who have experienced it tell you about it."

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useIsMobile } from "../hooks/use-mobile";
-import Dashboard from "@/assets/sidebaricon/dashboard.png";
+import Dashboard from "@/assets/sidebaricon/dashboard.svg";
 import oppurtunityManagement from "@/assets/sidebaricon/oppurtunity.png";
 import Applicants from "@/assets/sidebaricon/ApplicantReview.png";
 import Achievement from "@/assets/sidebaricon/Achievement.png";
