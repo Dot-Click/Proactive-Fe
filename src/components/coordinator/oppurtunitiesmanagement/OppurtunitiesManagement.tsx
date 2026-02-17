@@ -63,7 +63,7 @@ const OppurtunitiesManagement = () => {
         </div>
       ),
       cell: ({ row }) => (
-        <div className="flex items-center gap-2 pl-6 w-40">
+        <div className="flex items-center gap-2 pl-6 min-w-[120px]">
           <Button className="bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full px-4 py-5 font-semibold">
             {row.original.category}
           </Button>
@@ -87,8 +87,8 @@ const OppurtunitiesManagement = () => {
             day: "numeric",
           });
         return (
-          <div className="flex flex-col w-30">
-            <div className="font-semibold text-[#666373] text-[14px]">{`${fmt(
+          <div className="flex flex-col min-w-[200px]">
+            <div className="font-semibold text-[#666373] text-[14px] whitespace-nowrap">{`${fmt(
               s
             )} – ${fmt(e)}`}</div>
           </div>
@@ -105,8 +105,8 @@ const OppurtunitiesManagement = () => {
         </div>
       ),
       cell: ({ row }) => (
-        <div className="w-30">
-          <Button className="bg-[#077B21]/10 hover:bg-[#077B21]/20 border border-[#077B21] cursor-pointer px-8 h-10 rounded-full text-[#077B21] font-bold">
+        <div className="min-w-[140px]">
+          <Button className="bg-[#077B21]/10 hover:bg-[#077B21]/20 border border-[#077B21] cursor-pointer px-8 h-10 rounded-full text-[#077B21] font-bold whitespace-nowrap">
             {row.original.status}
           </Button>
         </div>
