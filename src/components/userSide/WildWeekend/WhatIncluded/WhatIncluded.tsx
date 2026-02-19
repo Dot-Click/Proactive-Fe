@@ -7,39 +7,39 @@ import {
   Sparkles,
 } from "lucide-react";
 
-const RED_ICON = "#E63946"; // Red color for top row
-const PURPLE_ICON = "#7C3AED"; // Purple color for bottom row
+const YELLOW_ICON = "#EAB308"; // Yellow color for top row
+const GREEN_ICON = "#0DAC87";  // Green color for bottom row
 
 const ITEMS = [
   {
     icon: Bed,
     text: "Alojamiento compartido",
-    color: RED_ICON,
+    color: YELLOW_ICON,
   },
   {
     icon: UtensilsCrossed,
     text: "Comidas (desayuno, comida y cena)",
-    color: RED_ICON,
+    color: YELLOW_ICON,
   },
   {
     icon: Bus,
     text: "Transporte a las actividades",
-    color: RED_ICON,
+    color: YELLOW_ICON,
   },
   {
     icon: Compass,
     text: "Participar en todas actividades",
-    color: PURPLE_ICON,
+    color: GREEN_ICON,
   },
   {
     icon: Users,
     text: "Equipo coordinador",
-    color: PURPLE_ICON,
+    color: GREEN_ICON,
   },
   {
     icon: Sparkles,
     text: "Básicamente desde que estás con nosotros: TODO.",
-    color: PURPLE_ICON,
+    color: GREEN_ICON,
   },
 ];
 

@@ -13,6 +13,9 @@ import { useParams } from "react-router-dom";
 import { LoaderIcon } from "lucide-react";
 import { UsegetCategory } from "@/hooks/getCategoryhook";
 import { UsegetPublicTripbyid } from "@/hooks/getPublicTripbyidhook";
+import BookingCard from "@/components/Adventureoppurtunities/ViewDetailtrip/BookingCard";
+import CommonFund from "@/components/Adventureoppurtunities/ViewDetailtrip/CommonFund";
+import ThingsToKnow from "@/components/Adventureoppurtunities/ViewDetailtrip/ThingsToKnow";
 
 /**
  * Public trip detail page - accessible without authentication.
@@ -69,19 +72,36 @@ const ViewTripDetailPage = () => {
   const isWildTrips = normalizedCategory.includes("wild trips");
 
   return (
-    <div>
-      {/* On public detail page, only show apply button when user is logged in */}
-      <MasonryLayout trip={trip} showApplyButton={isLoggedIn} />
-      <Locationmeetingpoint trip={trip} />
-      <Tripmood />
-      {(isWildWeekend || isWildTrips) && <SurfaceCamp />}
-      {isWildTrips && <Daybyday trip={trip} />}
-      <Includeditem trip={trip} />
-      <VideoSection trip={trip} />
-      {isWildTrips && <Coordinatordetail trip={trip} />}
-      <HowItWorks />
-      <Faqs />
-      <ParticipantsCards />
+    <div className="bg-white">
+      {/* 1. Header & Gallery (Full Width Within Container) */}
+      <MasonryLayout trip={trip} showApplyButton={false} />
+
+      {/* 2. Main Content Grid (Two Columns) */}
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 pb-20">
+        <div className="flex flex-col lg:flex-row gap-12">
+
+          {/* Main Column (66%) */}
+          <div className="lg:w-2/3 space-y-16">
+            <Locationmeetingpoint trip={trip} />
+            <Tripmood />
+            {(isWildWeekend || isWildTrips) && <SurfaceCamp />}
+            {isWildTrips && <Daybyday trip={trip} />}
+            <Includeditem trip={trip} />
+            <CommonFund trip={trip} />
+            <ThingsToKnow trip={trip} />
+            <VideoSection trip={trip} />
+            {isWildTrips && <Coordinatordetail trip={trip} />}
+            <HowItWorks />
+            <Faqs />
+            <ParticipantsCards />
+          </div>
+
+          {/* Sidebar Column (33%) */}
+          <div className="lg:w-1/3">
+            <BookingCard trip={trip} showApplyButton={isLoggedIn} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

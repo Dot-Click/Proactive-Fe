@@ -114,6 +114,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -129,6 +130,6 @@
   -webkit-text-stroke: 1px #A7D9ED;
 }
 
-body{
+body {
   overflow-x: hidden;
 }

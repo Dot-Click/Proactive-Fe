@@ -4,7 +4,6 @@ import { LoaderIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import calender from "../../../../assets/calenderwhite.png"
 import location from "../../../../assets/locationwhite.png"
-import Shadowblack from "../../../../assets/blackshadow.png"
 
 const Adventureoppurtunitiescard = () => {
     const { data, isLoading } = UsegetTrips();
@@ -53,36 +52,40 @@ const Adventureoppurtunitiescard = () => {
                         <img
                             src={trip.coverImage || ""}
                             alt={trip.title || trip.name}
-                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                             onError={(e) => {
                                 (e.target as HTMLImageElement).src = "/placeholder-trip.jpg";
                             }}
                         />
-                        <div className="absolute inset-0 z-0 top-auto">
-                            <img src={Shadowblack} alt="Shadowblack" />
-                        </div>
 
-                        <div className="absolute inset-0 flex flex-col justify-between items-start py-6 px-4 z-10">
-                            <Button className={`${categoryStyle.bg} cursor-pointer ${categoryStyle.text} font-semibold rounded-[10px]`}>
+                        {/* CSS Gradient Overlay for better aesthetics and readability */}
+                        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent z-0 pointer-events-none" />
+
+                        <div className="absolute inset-0 flex flex-col justify-between items-start py-6 px-5 z-10 transition-colors duration-300 group-hover:bg-black/10">
+                            <Button className={`${categoryStyle.bg} cursor-pointer ${categoryStyle.text} font-bold rounded-full px-4 text-xs h-8 shadow-sm`}>
                                 {trip.type || "Adventure"}
                             </Button>
 
-                            <div className="w-full space-y-3 mb-2">
-                                <h4 className="text-[#FFFFFF] font-bold text-2xl">{trip.title || trip.name}</h4>
+                            <div className="w-full space-y-4">
+                                <h4 className="text-[#FFFFFF] font-extrabold text-2xl tracking-tight leading-tight group-hover:text-[#C4FFF0] transition-colors duration-300">
+                                    {trip.title || trip.name}
+                                </h4>
 
                                 <div className="flex items-center justify-between w-full gap-4">
-                                    <div className="flex flex-col gap-2">
-                                        <div className="flex items-center gap-3">
-                                            <img src={calender} alt="calender" className="w-5" />
-                                            <p className="text-[#FFFFFF] text-[12px]">
+                                    <div className="flex flex-col gap-2.5">
+                                        <div className="flex items-center gap-2.5">
+                                            <img src={calender} alt="calender" className="w-4 h-4 opacity-90" />
+                                            <p className="text-[#FFFFFF]/90 text-[13px] font-medium">
                                                 {trip.startDate && trip.endDate
                                                     ? `${new Date(trip.startDate).toLocaleDateString(undefined, { day: "2-digit", month: "short" })} - ${new Date(trip.endDate).toLocaleDateString(undefined, { day: "2-digit", month: "short" })}`
                                                     : "Dates TBA"}
                                             </p>
                                         </div>
-                                        <div className="flex items-center gap-3">
-                                            <img src={location} alt="location" className="w-4" />
-                                            <p className="text-[#FFFFFF] text-[12px]">{trip.location || "Location TBA"}</p>
+                                        <div className="flex items-center gap-2.5">
+                                            <img src={location} alt="location" className="w-4 h-4 opacity-90" />
+                                            <p className="text-[#FFFFFF]/90 text-[13px] font-medium tracking-wide">
+                                                {trip.location || "Location TBA"}
+                                            </p>
                                         </div>
                                     </div>
 
@@ -91,7 +94,7 @@ const Adventureoppurtunitiescard = () => {
                                             e.stopPropagation();
                                             navigate(`/trip/${trip.id}`);
                                         }}
-                                        className="bg-[#0DAC87] hover:bg-[#0ca07d] cursor-pointer text-[#FFFFFF] font-semibold rounded-full px-8 py-5"
+                                        className="bg-[#0DAC87] hover:bg-[#11c89f] cursor-pointer text-[#FFFFFF] font-bold rounded-full px-7 py-5 shadow-lg active:scale-95 transition-all duration-200"
                                     >
                                         More Info
                                     </Button>

@@ -1,52 +1,91 @@
-import zigzagbottom from "../../../assets/zigzagbottom.png"
-import tripmood1 from "../../../assets/tripmood1.png"
-import tripmood2 from "../../../assets/tripmood2.png"
-import tripmood3 from "../../../assets/tripmood3.png"
-import tripmood4 from "../../../assets/tripmood4.png"
+import { Beer, Coffee, Trees, Building2, Landmark, Gauge, Compass } from "lucide-react";
+
+interface CharacteristicProps {
+    label: string;
+    value: number; // 1 to 5
+    icon: React.ReactNode;
+}
+
+const Characteristic = ({ label, value, icon }: CharacteristicProps) => (
+    <div className="flex items-center justify-between group">
+        <div className="flex items-center gap-3">
+            <div className="text-[#606066] group-hover:text-[#221E33] transition-colors">
+                {icon}
+            </div>
+            <span className="text-[#221E33] font-medium text-base font-sans">{label}</span>
+        </div>
+        <div className="flex gap-1.5 ring-offset-2 ring-[#0DAC87]/10 rounded-full">
+            {[...Array(5)].map((_, i) => (
+                <div
+                    key={i}
+                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${i < value ? "bg-[#514D4D] scale-110" : "bg-[#ECECF1]"
+                        }`}
+                />
+            ))}
+        </div>
+    </div>
+);
 
 const Tripmood = () => {
+    // These could be dynamic from the trip data if available
+    const characteristics = [
+        { label: "Fiesta y Nightlife", value: 3, icon: <Beer size={20} /> },
+        { label: "Relax", value: 1, icon: <Coffee size={20} /> },
+        { label: "Naturaleza y aventura", value: 4, icon: <Trees size={20} /> },
+        { label: "Ciudad y culturas", value: 3, icon: <Building2 size={20} /> },
+        { label: "Monumentos e historia", value: 4, icon: <Landmark size={20} /> },
+    ];
+
     return (
-        <>
-            <div className="px-4 sm:px-16 py-6">
-                <div className="grid lg:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-4 bg-[#F9F9F9] border border-[#C1C1C1] px-6 py-6 rounded-[20px]">
-                        <img src={tripmood1} alt="tripmood1" className="w-10 h-8" />
-                        <h4 className="text-[#221E33] font-medium">Trip Mood</h4>
-                        <span className="text-[#332A2A] text-sm">
-                            This trip is designed to give you a complete 360° experience of the destination. Expect a dynamic pace that lets us explore as much as possible, balanced with moments to relax, connect with the group, and simply enjoy the journey.
-                        </span>
+        <div className="py-12 border-t border-[#ECECF1] mt-8">
+            <h2 className="text-[#221E33] font-extrabold text-3xl mb-12 font-sans tracking-tight">
+                ¿Este viaje es para mí?
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-8">
+                {/* Left Column: Ratings */}
+                <div className="space-y-6">
+                    {characteristics.map((item, idx) => (
+                        <Characteristic key={idx} {...item} />
+                    ))}
+                </div>
+
+                {/* Right Column: Status Indicators */}
+                <div className="space-y-10">
+                    <div className="group">
+                        <div className="flex items-center justify-between pb-4 border-b border-[#ECECF1] group-hover:border-[#0DAC87] transition-colors">
+                            <div className="flex items-center gap-3">
+                                <Gauge size={22} className="text-[#606066]" />
+                                <span className="text-[#221E33] font-medium text-lg font-sans">Esfuerzo físico</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="flex items-end gap-1 h-5">
+                                    <div className="w-1.5 h-2 bg-[#0DAC87] rounded-full" />
+                                    <div className="w-1.5 h-4 bg-[#0DAC87] rounded-full" />
+                                    <div className="w-1.5 h-3 bg-[#D1D5DB] rounded-full" />
+                                </div>
+                                <span className="text-[#221E33] font-bold text-lg font-sans underline decoration-[#0DAC87] decoration-2 underline-offset-4">
+                                    Medio
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="flex flex-col gap-4 bg-[#F9F9F9] border border-[#C1C1C1] px-6 py-6 rounded-[20px]">
-                        <img src={tripmood2} alt="tripmood2" className="w-8 h-8" />
-                        <h4 className="text-[#221E33] font-medium">Physical effort</h4>
-                        <span className="text-[#332A2A] text-sm">
-                            A moderate level of physical effort is required. Some days include walking, outdoor activities, or early starts, but everything is planned to be accessible and enjoyable for anyone with an active lifestyle.
-                        </span>
-                    </div>
-
-                    <div className="flex flex-col gap-4 bg-[#F9F9F9] border border-[#C1C1C1] px-6 py-6 rounded-[20px]">
-                        <img src={tripmood3} alt="tripmood3" className="w-8 h-8" />
-                        <h4 className="text-[#221E33] font-medium">Meeting & farewell</h4>
-                        <span className="text-[#332A2A] text-sm">
-                            We start the trip by meeting the group and the coordinator at a defined meeting point. At the end of the experience, we say goodbye knowing we’ve shared unforgettable moments and created meaningful connections.
-                        </span>
-                    </div>
-
-                    <div className="flex flex-col gap-4 bg-[#F9F9F9] border border-[#C1C1C1] px-6 py-6 rounded-[20px]">
-                        <img src={tripmood4} alt="tripmood4" className="w-4 h-8" />
-                        <h4 className="text-[#221E33] font-medium">High motivation</h4>
-                        <span className="text-[#332A2A] text-sm">
-                            This trip is perfect for curious, open-minded travelers who want to explore, learn, and fully immerse themselves in new cultures. Come with energy, a positive attitude, and the desire to make the most of every day.
-                        </span>
+                    <div className="group">
+                        <div className="flex items-center justify-between pb-4 border-b border-[#ECECF1] group-hover:border-[#0DAC87] transition-colors">
+                            <div className="flex items-center gap-3">
+                                <Compass size={22} className="text-[#606066]" />
+                                <span className="text-[#221E33] font-medium text-lg font-sans">Tipo de viaje</span>
+                            </div>
+                            <span className="text-[#221E33] font-bold text-lg font-sans underline decoration-[#0DAC87] decoration-2 underline-offset-4">
+                                360°
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div className="py-4">
-                <img src={zigzagbottom} alt="zigzagbottom" />
-            </div>
-        </>
-    )
-}
+        </div>
+    );
+};
 
-export default Tripmood
+export default Tripmood;

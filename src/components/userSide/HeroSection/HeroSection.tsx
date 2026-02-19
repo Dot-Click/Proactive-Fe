@@ -1,12 +1,11 @@
 import carousel from "../../../assets/Group 1410091220.png"
-import oppHero from "../../../assets/openoppurtunities.png"
+import oppHero from "../../../assets/openoppurtunitiesss.png"
 // import downloadimg from "../../../assets/Download.png"
-import wwHero from "../../../assets/wildweekend.png"
-import wtHero from "../../../assets/wildtrip.png"
+import wwHero from "../../../assets/wildweekendss.png"
+import wtHero from "../../../assets/wildtripss.png"
 import erasmusHero from "../../../assets/Erasmus+.png"
 import InternalEvents from "../../../assets/Internalevents.png"
-import {useLocation} from "react-router-dom";
-import greenshadow from "../../../assets/greenshadow.png"
+import { useLocation } from "react-router-dom";
 import lightgreenshadow from "../../../assets/lightgreenshadow.png"
 import About from "../../../assets/About.png"
 import Member from "../../../assets/BecomeMember.png"
@@ -33,6 +32,8 @@ interface HeroContent {
   downloadimg?: string;
   CTA?: string | JSX.Element;
 }
+
+
 
 const getHeroData = (
   t: (key: string) => string,
@@ -101,18 +102,24 @@ const getHeroData = (
   "/open-oppurtunities": {
     image: (
       <>
-        <div className="relative h-full" style={{ background: "radial-gradient(50% 50% at 100% 50%, rgba(118, 240, 212, 0.32) 0%, rgba(250, 250, 250, 0) 100%) rgb(250, 250, 250)" }}>
+        <div className="relative h-full" style={{ background: "" }}>
           <img
             src={oppHero}
             alt="oppHero"
             className="relative w-full h-full object-cover object-center md:object-top"
           />
-          <img
-            src={greenshadow}
-            alt="greenshadow"
-            // className="absolute inset-0 z-0"
-            className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
-          />
+          {/* <div className="absolute bottom-3  right-22 bg-black w-20 h-20"></div> */}
+          <div
+            className="absolute bottom-3 z-50 right-22 bg-transparent w-20 h-20 cursor-pointer"
+            onClick={() =>
+              window.scrollBy({
+                top: 1500,
+                behavior: "smooth",
+              })
+            }
+          ></div>
+
+
         </div>
       </>
     ),
@@ -171,11 +178,21 @@ const getHeroData = (
             alt="wwHero"
             className="relative w-full h-full object-cover object-center md:object-top"
           />
-          <img
+          {/* <div className="absolute bottom-3  right-22 bg-black w-20 h-20"></div> */}
+          <div
+            className="absolute bottom-3 z-50 right-22 bg-transparent w-20 h-20 cursor-pointer"
+            onClick={() =>
+              window.scrollBy({
+                top: 1500,
+                behavior: "smooth",
+              })
+            }
+          ></div>
+          {/* <img
             src={lightgreenshadow}
             alt="lightgreenshadow"
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
-          />
+          /> */}
         </div>
       </>
     ),
@@ -204,11 +221,21 @@ const getHeroData = (
             alt="wtHero"
             className="relative w-full h-full object-cover object-center md:object-top"
           />
-          <img
+          {/* <div className="absolute bottom-3  right-22 bg-black w-20 h-20"></div> */}
+          <div
+            className="absolute bottom-3 z-50 right-22 bg-transparent w-20 h-20 cursor-pointer"
+            onClick={() =>
+              window.scrollBy({
+                top: 1500,
+                behavior: "smooth",
+              })
+            }
+          ></div>
+          {/* <img
             src={greenshadow}
             alt="greenshadow"
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
-          />
+          /> */}
         </div>
       </>
     ),
@@ -541,20 +568,18 @@ const getHeroData = (
   },
 });
 
+const scrollDown = () => {
+  window.scrollBy({
+    top: 2000,
+    behavior: "smooth",
+  });
+};
+
 const HeroSection = () => {
   const location = useLocation();
   const { t } = useTranslation();
   const path = location.pathname;
   const hero = getHeroData(t)[path];
-
-  const scrollDown = () => {
-    window.scrollBy({
-      top: 2000, // scroll 1 screen down
-      behavior: "smooth",
-    });
-  };
-  
-  
 
   if (!hero) return null;
 
@@ -564,11 +589,11 @@ const HeroSection = () => {
         {hero.image}
       </div>
       {/* Text */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-        <div className="text-xl md:text-4xl font-bold">{hero.title}</div>
-        <p className="text-xs md:text-lg lg:mt-4">{hero.subtitle}</p>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center pointer-events-none">
+        <div className="text-xl md:text-4xl font-bold pointer-events-auto">{hero.title}</div>
+        <p className="text-xs md:text-lg lg:mt-4 pointer-events-auto">{hero.subtitle}</p>
         {hero.buttons && (
-          <div className="flex md:flex-row gap-4 md:mt-4 mt-2">
+          <div className="flex md:flex-row gap-4 md:mt-4 mt-2 pointer-events-auto">
             {hero.buttons.map((button, index) =>
               button.openModal ? (
                 <Dialog key={index}>
@@ -588,17 +613,17 @@ const HeroSection = () => {
           </div>
         )}
         {hero.downloadimg && (
-          <div className="absolute bottom-[-135px]   right-4 sm:right-6 md:right-8 lg:right-28 z-10">
-            <img 
-              src={hero.downloadimg} 
-              alt="Download" 
-              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer hover:scale-110 transition-transform duration-300" 
+          <div className="absolute bottom-[-135px]   right-4 sm:right-6 md:right-8 lg:right-28 z-10 pointer-events-auto">
+            <img
+              src={hero.downloadimg}
+              alt="Download"
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer hover:scale-110 transition-transform duration-300"
             />
           </div>
         )}
       </div>
       {/*just a div to scroll down*/}
-      <div className="absolute bottom-[-38px]  opacity-100 left-[85%] right-[500px] w-full h-20   cursor-pointer" onClick={scrollDown}> </div>
+      <div className="absolute bottom-[-38px]  opacity-0 left-[85%] right-[500px] w-full h-20   cursor-pointer" onClick={scrollDown}> </div>
     </div>
   );
 };

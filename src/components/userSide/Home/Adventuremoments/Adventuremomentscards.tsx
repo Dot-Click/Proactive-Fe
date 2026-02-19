@@ -128,7 +128,7 @@
 //               <div className="relative">
 //                 {/* Pulse ring animation */}
 //                 <div className="absolute inset-0 bg-white/30 rounded-full animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+
 //                 {/* Play icon with scale effect */}
 //                 <img
 //                   src={Play}
@@ -279,7 +279,7 @@ const Adventuremomentscards = () => {
         {cards.map((card) => (
           <div
             key={card.id}
-            className="relative rounded-[14px] overflow-hidden cursor-pointer group transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 hover:shadow-2xl"
+            className="relative rounded-[14px] overflow-hidden cursor-pointer group transform origin-center transition-all duration-500 hover:scale-110 hover:shadow-2xl z-10 hover:z-20"
             onClick={() => openVideo(card.videoUrl)}
             onMouseEnter={() => handleMouseEnter(card.id)}
             onMouseLeave={() => handleMouseLeave(card.id)}
@@ -287,11 +287,10 @@ const Adventuremomentscards = () => {
             <img
               src={card.image}
               alt={`momentscard${card.id}`}
-              className={`h-full w-90 object-cover transition-all duration-300 ${
-                hoveredCard === card.id
-                  ? "opacity-0 scale-105"
-                  : " group-hover:scale-110"
-              }`}
+              className={`h-full w-90 object-cover transition-all duration-300 ${hoveredCard === card.id
+                ? "opacity-0 scale-105"
+                : " group-hover:scale-110"
+                }`}
             />
 
             <video
@@ -302,16 +301,15 @@ const Adventuremomentscards = () => {
               muted
               playsInline
               loop
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-                hoveredCard === card.id ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${hoveredCard === card.id ? "opacity-100" : "opacity-0"
+                }`}
             />
 
             {/* Overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-t  transition-opacity duration-300" />
 
             {/* Content */}
-            <div className="flex flex-col justify-end px-8 py-16 lg:gap-4 absolute inset-0 transform transition-transform duration-300 group-hover:translate-y-[-4px]">
+            <div className="flex flex-col justify-end px-8 py-16 lg:gap-4 absolute inset-0 transform transition-transform duration-300">
               <h4 className="text-[#FFFFFF] font-bold text-lg drop-shadow-md">
                 {card.title.includes("<br />") ? (
                   <span dangerouslySetInnerHTML={{ __html: card.title.replace(/<br \/>/g, '<br />') }} />

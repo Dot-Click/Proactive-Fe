@@ -1,15 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { TbArrowBackUp } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-// import detailtrip1 from "../../../assets/detailtrip1.png"
-import zigzag from "../../../assets/zigzag.png"
-import { FaLocationDot } from "react-icons/fa6";
 import { Calendar, Star, X, ImageIcon } from "lucide-react";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import ApplicationForm from "./ApplicationForm";
-import { formatDateRange } from "../../../utils/dateFormatter";
 import { useState } from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { ChevronRight, Home, Share2, Scale, Zap } from "lucide-react";
 
 type MasonryLayoutProps = {
   trip: any;
@@ -19,7 +15,7 @@ type MasonryLayoutProps = {
   headerAction?: React.ReactNode;
 };
 
-const MasonryLayout = ({ trip, backUrl = "/user-dashboard/adventure-oppurtunities", backLabel = "Back", showApplyButton = true, headerAction }: MasonryLayoutProps) => {
+const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-oppurtunities", backLabel: _backLabel = "Back", showApplyButton = true, headerAction: _headerAction }: MasonryLayoutProps) => {
   const navigate = useNavigate();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
@@ -36,168 +32,142 @@ const MasonryLayout = ({ trip, backUrl = "/user-dashboard/adventure-oppurtunitie
     return "";
   };
 
-  // Format date range
-  const dateRange = data?.startDate && data?.endDate
-    ? formatDateRange(data.startDate, data.endDate)
-    : "";
-
-  const remainingCount = Math.max(0, galleryImg.length - 4);
-
   return (
     <>
-      <div className="px-4 sm:px-16 py-6 bg-gradient-to-b from-[#F6F8FD] to-white">
-        {/* Header with back button */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <Button
-            onClick={() => navigate(backUrl)}
-            variant="ghost"
-            className="bg-white hover:bg-[#F6F8FD] text-[#221E33] rounded-lg cursor-pointer font-medium shadow-sm border border-[#ECECF1]"
-          >
-            <TbArrowBackUp className="mr-2" />
-            {backLabel}
-          </Button>
-          {headerAction != null ? headerAction : null}
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 mt-30 py-6 bg-white">
+        {/* Breadcrumbs */}
+        <nav className="flex items-center gap-2 text-sm text-[#666373] mb-6 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <Home size={14} className="hover:text-[#0DAC87] cursor-pointer" onClick={() => navigate("/")} />
+          <ChevronRight size={14} />
+          <span className="hover:text-[#0DAC87] cursor-pointer" onClick={() => navigate("/user-dashboard/adventure-oppurtunities")}>trips</span>
+          <ChevronRight size={14} />
+          <span className="hover:text-[#0DAC87] cursor-pointer">{trip?.category || "Explore"}</span>
+          <ChevronRight size={14} />
+          <span className="font-semibold text-[#221E33]">{data?.title || data?.name}</span>
+        </nav>
+
+        {/* Title Section */}
+        <h1 className="text-[#221E33] font-extrabold text-3xl lg:text-4xl mb-6 tracking-tight">
+          {data?.title || data?.name || "Trip Title"}
+        </h1>
+
+        {/* Stats and Actions Row */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+          <div className="flex flex-wrap items-center gap-6">
+            {/* Duration */}
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 bg-[#F6F8FD] rounded-lg">
+                <Calendar className="text-[#666373]" size={16} />
+              </div>
+              <span className="font-bold text-[#221E33] text-sm whitespace-nowrap">
+                {data?.duration || "13 days • 12 nights"}
+              </span>
+            </div>
+
+            {/* Rating */}
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="w-5 h-5 bg-[#0DAC87] rounded-[4px] flex items-center justify-center">
+                    <Star size={12} className="text-white fill-white" />
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-bold text-[#221E33] text-sm">4.8</span>
+                <span className="text-[#666373] text-sm">(2352 reviews)</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3">
+            <Button variant="outline" className="rounded-lg h-10 gap-2 border-[#ECECF1] text-[#221E33] hover:bg-[#F6F8FD] font-semibold text-sm">
+              <Scale size={16} />
+              Compare
+            </Button>
+            <Button variant="outline" className="rounded-lg h-10 gap-2 border-[#ECECF1] text-[#221E33] hover:bg-[#F6F8FD] font-semibold text-sm">
+              <Share2 size={16} />
+              Share
+            </Button>
+          </div>
         </div>
 
-        {/* Gallery Section - Adaptive Grid */}
+        {/* Gallery Section - Redesigned Grid */}
         {galleryImg.length > 0 && (
-          <div className="relative mb-8 group">
-            <div className={`grid gap-2 h-[300px] md:h-[500px] rounded-2xl overflow-hidden shadow-md ${galleryImg.length === 1 ? "grid-cols-1" :
-                galleryImg.length === 2 ? "grid-cols-1 md:grid-cols-2" :
-                  galleryImg.length === 3 ? "grid-cols-1 md:grid-cols-3" :
-                    "grid-cols-1 md:grid-cols-4"
-              }`}>
-              {/* Image 1 */}
+          <div className="relative mb-8 h-[300px] md:h-[500px]">
+            <div className="grid grid-cols-4 grid-rows-2 gap-3 h-full rounded-2xl overflow-hidden">
+              {/* Image 1 - Main Large (2x2) */}
               <div
-                className={`relative cursor-pointer overflow-hidden ${galleryImg.length >= 4 ? "md:col-span-2" : ""
-                  }`}
+                className="col-span-2 row-span-2 cursor-pointer overflow-hidden group"
                 onClick={() => setIsGalleryOpen(true)}
               >
                 <img
                   src={getImageUrl(galleryImg[0])}
-                  className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   alt="Trip Gallery 1"
                 />
               </div>
 
-              {/* Image 2 */}
+              {/* Image 2 - Tall Middle (1x2) */}
               {galleryImg.length > 1 && (
                 <div
-                  className={`relative cursor-pointer overflow-hidden ${galleryImg.length === 3 ? "md:col-span-1" :
-                      galleryImg.length >= 4 ? "md:col-span-1" : ""
-                    }`}
+                  className="col-span-1 row-span-2 cursor-pointer overflow-hidden group"
                   onClick={() => setIsGalleryOpen(true)}
                 >
                   <img
                     src={getImageUrl(galleryImg[1])}
-                    className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     alt="Trip Gallery 2"
                   />
                 </div>
               )}
 
-              {/* Image 3 & 4 (Adaptive) */}
-              {galleryImg.length === 3 && (
+              {/* Image 3 & 4 - Stacked Right (1x1 each) */}
+              {galleryImg.length > 2 && (
                 <div
-                  className="relative cursor-pointer overflow-hidden"
+                  className="col-span-1 row-span-1 cursor-pointer overflow-hidden group"
                   onClick={() => setIsGalleryOpen(true)}
                 >
                   <img
                     src={getImageUrl(galleryImg[2])}
-                    className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     alt="Trip Gallery 3"
                   />
                 </div>
               )}
 
-              {galleryImg.length >= 4 && (
-                <div className="hidden md:flex flex-col gap-2">
-                  <div
-                    className="h-1/2 relative cursor-pointer overflow-hidden"
-                    onClick={() => setIsGalleryOpen(true)}
-                  >
-                    <img
-                      src={getImageUrl(galleryImg[2])}
-                      className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-105"
-                      alt="Trip Gallery 3"
-                    />
-                  </div>
-                  <div
-                    className="h-1/2 relative cursor-pointer overflow-hidden"
-                    onClick={() => setIsGalleryOpen(true)}
-                  >
-                    <img
-                      src={getImageUrl(galleryImg[3])}
-                      className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-105"
-                      alt="Trip Gallery 4"
-                    />
-                    {/* Overlay for "View more" */}
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-100 transition-opacity">
-                      <div className="flex flex-col items-center text-white text-center">
-                        <ImageIcon className="mb-1" size={24} />
-                        <span className="font-bold text-lg">
-                          {remainingCount > 0 ? `Ver otras ${remainingCount} fotos` : "Ver todas las fotos"}
-                        </span>
-                      </div>
+              {galleryImg.length > 3 && (
+                <div
+                  className="col-span-1 row-span-1 cursor-pointer overflow-hidden relative group"
+                  onClick={() => setIsGalleryOpen(true)}
+                >
+                  <img
+                    src={getImageUrl(galleryImg[3])}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    alt="Trip Gallery 4"
+                  />
+                  {/* Overlay for "View more" */}
+                  <div className="absolute bottom-4 right-4 z-10">
+                    <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-lg text-[#221E33] text-sm font-bold shadow-sm flex items-center gap-2 hover:bg-white transition-colors">
+                      <ImageIcon size={16} className="text-[#0DAC87]" />
+                      <span>
+                        See {galleryImg.length > 4 ? `${galleryImg.length - 4} more photos` : "all photos"}
+                      </span>
                     </div>
                   </div>
                 </div>
               )}
             </div>
-
-            {/* Mobile "See all photos" button overlay */}
-            <button
-              className="md:hidden absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg text-[#221E33] text-sm font-semibold shadow-lg flex items-center gap-2"
-              onClick={() => setIsGalleryOpen(true)}
-            >
-              <ImageIcon size={16} />
-              Ver {galleryImg.length} fotos
-            </button>
           </div>
         )}
 
-        {/* Trip Title and Info */}
-        <div className="mb-8">
-          <h1 className="text-[#221E33] font-bold text-3xl lg:text-5xl mb-6 leading-tight">
-            {data?.title || data?.name || "Trip Title"}
-          </h1>
-
-          {/* Info badges */}
-          <div className="flex flex-wrap items-center gap-6 mb-6">
-            {data?.location && (
-              <div className="flex items-center gap-2 text-[#666373]">
-                <FaLocationDot className="text-[#0DAC87]" size={18} />
-                <span className="font-medium text-base">{data.location}</span>
-              </div>
-            )}
-
-            {dateRange && (
-              <div className="flex items-center gap-2 text-[#666373]">
-                <Calendar className="text-[#0DAC87]" size={18} />
-                <span className="font-medium text-base">{dateRange}</span>
-              </div>
-            )}
-          </div>
-
-          {/* Rating and availability */}
-          <div className="flex flex-wrap items-center gap-6 mb-6">
-            <div className="flex items-center gap-2">
-              <Star className="text-[#F59E0B] fill-[#F59E0B]" size={18} />
-              <span className="text-[#332A2A] font-medium text-sm">4.5 (31 reviews)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#28C900] rounded-full" />
-              <span className="text-[#332A2A] font-medium text-sm">Plazas disponibles</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Apply Button */}
+        {/* Apply Button (Secondary style now that header is more complex) */}
         {showApplyButton && (
-          <div className="mb-8">
+          <div className="mb-4 flex justify-end">
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="bg-[#0DAC87] hover:bg-[#119b7b] text-white cursor-pointer rounded-full px-10 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
+                <Button className="bg-[#0DAC87] hover:bg-[#119b7b] text-white cursor-pointer rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-all">
                   Join This Adventure
                 </Button>
               </DialogTrigger>
@@ -205,21 +175,40 @@ const MasonryLayout = ({ trip, backUrl = "/user-dashboard/adventure-oppurtunitie
             </Dialog>
           </div>
         )}
-      </div>
 
-      {/* Divider */}
-      <div className="w-full overflow-hidden">
-        <img src={zigzag} alt="divider" className="w-full h-auto" />
+        {/* Highlights Section */}
+        <div className="mt-12 mb-16">
+          <h3 className="text-[#221E33] font-bold text-2xl mb-6">Highlights</h3>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {(data?.highlights || [
+              "Hike the stunning landscapes of Vietnam",
+              "Visit ancient temples and historic sites",
+              "Explore vibrant local markets and street food",
+              "Enjoy a luxury boat cruise in Ha Long Bay",
+              "Learn about local culture with expert guides",
+              "Authentic experiences with the local community"
+            ]).map((highlight: string, index: number) => (
+              <li key={index} className="flex items-start gap-3">
+                <div className="mt-1 shrink-0 p-1 bg-[#E6F7F3] rounded-full">
+                  <Zap size={14} className="text-[#0DAC87] fill-[#0DAC87]" />
+                </div>
+                <span className="text-[#332A2A] text-base leading-relaxed">{highlight}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       {/* About Trip Section */}
-      <div className="px-4 sm:px-16 py-8 bg-white">
-        <h2 className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-4xl mb-4">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 py-12 bg-white border-t border-[#ECECF1]">
+        <h2 className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-4xl mb-6">
           About Trip
         </h2>
-        <p className="text-[#332A2A] text-base leading-relaxed max-w-4xl">
-          {data?.longDesc || data?.description || "No description available."}
-        </p>
+        <div className="text-[#332A2A] text-base leading-[1.8] max-w-none space-y-4">
+          {(data?.longDesc || data?.description || "No description available.").split('\n').map((para: string, i: number) => (
+            <p key={i}>{para}</p>
+          ))}
+        </div>
       </div>
 
       {/* Full Page Gallery Modal */}
@@ -254,7 +243,7 @@ const MasonryLayout = ({ trip, backUrl = "/user-dashboard/adventure-oppurtunitie
                   <div
                     key={idx}
                     className={`w-full overflow-hidden rounded-xl shadow-md bg-white border border-gray-100 ${galleryImg.length === 1 ? "md:col-span-2" :
-                        (idx % 3 === 0 && galleryImg.length > 2) ? "md:col-span-2" : "md:col-span-1"
+                      (idx % 3 === 0 && galleryImg.length > 2) ? "md:col-span-2" : "md:col-span-1"
                       }`}
                   >
                     <img
