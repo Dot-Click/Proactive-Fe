@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Globe2, Sparkles, Trophy, Quote } from "lucide-react";
+import { useState, useRef } from "react";
 
 interface CoordinatordetailProps {
     trip?: any;
@@ -9,6 +10,32 @@ interface CoordinatordetailProps {
 const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
     const tripData = trip?.trip?.[0] || trip?.trip || trip;
     const coordinators = tripData?.coordinators || (tripData?.coordinator ? [tripData.coordinator] : []) || [];
+    const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+    const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
+
+    const isVideoUrl = (url: string) => {
+        return /\.(mp4|webm|ogg|mov)$/i.test(url) || url.includes('/video/');
+    };
+
+    const handleMouseEnter = (cardId: string, mediaUrl?: string) => {
+        setHoveredCard(cardId);
+        if (mediaUrl && isVideoUrl(mediaUrl)) {
+            const video = videoRefs.current[cardId];
+            if (video) {
+                video.currentTime = 0;
+                video.play().catch(() => { });
+            }
+        }
+    };
+
+    const handleMouseLeave = (cardId: string) => {
+        const video = videoRefs.current[cardId];
+        if (video) {
+            video.pause();
+            video.currentTime = 0;
+        }
+        setHoveredCard((prev) => (prev === cardId ? null : prev));
+    };
 
     // For demonstration, ensure we have 3-5 coordinators with mock data for gif/adventures
     let displayCoordinators = Array.isArray(coordinators)
@@ -73,13 +100,13 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
         <div className="py-16 border-t border-[#ECECF1] mt-16">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
                 <div className="max-w-xl space-y-6">
-                    <h3 className="text-[#221E33] font-extrabold text-3xl font-sans tracking-tight">
+                    <h3 className="text-[#221E33] font-extrabold text-3xl font-quicksand tracking-tight">
                         Los coordinadores de viaje
                     </h3>
-                    <p className="text-[#646464] text-base leading-relaxed font-sans">
+                    <p className="text-[#646464] text-base leading-relaxed font-quicksand">
                         Nuestros coordinadores son elegidos porque son personas como tú: viajeros apasionados, capaces de compartir la experiencia de forma auténtica y con la preparación necesaria para que vivas tu viaje al máximo.
                     </p>
-                    <button className="px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-sans">
+                    <button className="px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-quicksand">
                         Descubre más sobre nuestros coordinadores
                     </button>
                 </div>
@@ -89,25 +116,48 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
                     {displayCoordinators.map((coord: any, idx) => {
                         const name = coord.fullName || "Coordinador";
                         const img = coord.profilePicture;
-                        const gif = coord.gif;
+                        const mediaUrl = coord.profileVideo || coord.profileGif || coord.gif;
+                        const cardId = coord.id ?? `coord-${idx}`;
+                        const hasMedia = !!mediaUrl;
+                        const isVideo = hasMedia && isVideoUrl(mediaUrl);
 
                         return (
                             <Dialog key={idx}>
                                 <DialogTrigger asChild>
-                                    <div className="relative group cursor-pointer">
-                                        <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-full border-4 border-white shadow-xl overflow-hidden transition-all duration-500 group-hover:-translate-y-4 group-hover:scale-110 group-hover:z-20 group-hover:shadow-2xl">
+                                    <div
+                                        className="group cursor-pointer"
+                                        onMouseEnter={() => handleMouseEnter(cardId, mediaUrl)}
+                                        onMouseLeave={() => handleMouseLeave(cardId)}
+                                    >
+                                        <div className="relative w-20 h-20 lg:w-24 lg:h-24 rounded-full border-4 border-white shadow-xl overflow-hidden transition-all duration-500 group-hover:-translate-y-4 group-hover:scale-110 group-hover:z-20 group-hover:shadow-2xl">
                                             {/* Static Image */}
                                             <img
                                                 src={img}
                                                 alt={name}
-                                                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
+                                                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${hoveredCard === cardId && hasMedia ? "opacity-0" : "opacity-100"
+                                                    }`}
                                             />
-                                            {/* GIF/Video Shadow Image (Moving Effect) */}
-                                            <img
-                                                src={gif}
-                                                alt={`${name} moving`}
-                                                className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                                            />
+                                            {/* Video on hover */}
+                                            {hasMedia && isVideo && (
+                                                <video
+                                                    ref={(el) => { videoRefs.current[cardId] = el; }}
+                                                    src={mediaUrl}
+                                                    muted
+                                                    playsInline
+                                                    loop
+                                                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${hoveredCard === cardId ? "opacity-100" : "opacity-0"
+                                                        }`}
+                                                />
+                                            )}
+                                            {/* GIF on hover (fallback) */}
+                                            {hasMedia && !isVideo && (
+                                                <img
+                                                    src={mediaUrl}
+                                                    alt={`${name} moving`}
+                                                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${hoveredCard === cardId ? "opacity-100" : "opacity-0"
+                                                        }`}
+                                                />
+                                            )}
                                         </div>
                                     </div>
                                 </DialogTrigger>

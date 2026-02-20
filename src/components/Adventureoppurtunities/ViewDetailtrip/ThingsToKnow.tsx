@@ -12,8 +12,8 @@ const InfoItem = ({ icon, title, description }: InfoItemProps) => (
             {icon}
         </div>
         <div className="space-y-2">
-            <h4 className="text-[#221E33] font-bold text-lg font-sans">{title}</h4>
-            <div className="text-[#646464] text-sm leading-[1.7] font-sans whitespace-pre-line">
+            <h4 className="text-[#221E33] font-bold text-lg font-quicksand">{title}</h4>
+            <div className="text-[#646464] text-sm leading-[1.7] font-quicksand whitespace-pre-line">
                 {description}
             </div>
         </div>
@@ -23,10 +23,10 @@ const InfoItem = ({ icon, title, description }: InfoItemProps) => (
 const ThingsToKnow = ({ trip: _trip }: { trip?: any }) => {
     return (
         <div className="border-t border-[#ECECF1] pt-12 mt-16 pb-12">
-            <h3 className="text-[#221E33] font-extrabold text-3xl mb-4 font-sans tracking-tight">
+            <h3 className="text-[#221E33] font-extrabold text-3xl mb-4 font-quicksand tracking-tight">
                 Cosas que saber
             </h3>
-            <p className="text-[#646464] text-base mb-12 font-sans">
+            <p className="text-[#646464] text-base mb-12 font-quicksand">
                 Descubre más sobre alojamientos, medios de transporte e información extra útil para el viaje.
             </p>
 
@@ -71,7 +71,7 @@ const ThingsToKnow = ({ trip: _trip }: { trip?: any }) => {
                 />
             </div>
 
-            <button className="mt-12 px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-sans">
+            <button className="mt-12 px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-quicksand">
                 Mostrar menos
             </button>
         </div>

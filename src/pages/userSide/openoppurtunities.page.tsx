@@ -15,7 +15,7 @@ const OpenOppurtunitiesPage = () => {
   return (
     <div>
       {/* <OpenOppurtunities /> */}
-      <div className="lg:pt-0 md:pt-20">
+      <div className="lg:pt-0 font-quickSand md:pt-20">
         <Searchbar
           view={view}
           setView={setView}

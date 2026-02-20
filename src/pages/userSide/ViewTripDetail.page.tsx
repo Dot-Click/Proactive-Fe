@@ -33,7 +33,7 @@ const ViewTripDetailPage = () => {
 
   if (isLoading) {
     return (
-      <div className="w-full flex items-center justify-center py-10">
+      <div className="w-full  flex items-center justify-center py-10">
         <LoaderIcon className="animate-spin" />
       </div>
     );
@@ -72,7 +72,7 @@ const ViewTripDetailPage = () => {
   const isWildTrips = normalizedCategory.includes("wild trips");
 
   return (
-    <div className="bg-white">
+    <div className="bg-white font-quicksand">
       {/* 1. Header & Gallery (Full Width Within Container) */}
       <MasonryLayout trip={trip} showApplyButton={false} />
 

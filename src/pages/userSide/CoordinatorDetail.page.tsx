@@ -1,16 +1,38 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { UsegetCoordinatorbyId } from "@/hooks/getCoordinatorhookid";
 import { LoaderIcon, ArrowLeft, MapPin, Clock, Star } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { useState, useRef } from "react";
 
 const CoordinatorDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, isLoading, isError } = UsegetCoordinatorbyId(id || "");
+  const [isHovered, setIsHovered] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const coordinator = data?.coordinator;
+
+  const isVideoUrl = (url: string) => {
+    return /\.(mp4|webm|ogg|mov)$/i.test(url) || url.includes('/video/');
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => { });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  };
 
   if (isLoading) {
     return (
@@ -76,13 +98,54 @@ const CoordinatorDetailPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 sm:gap-8 lg:gap-12">
           {/* Left Column - Profile Picture & Trip Count */}
           <div className="flex flex-col items-center lg:items-start w-full lg:w-auto">
-            {/* Profile Picture */}
-            <Avatar className="h-40 w-40 xs:h-48 xs:w-48 sm:h-56 sm:w-56 lg:h-64 lg:w-64 mb-4 sm:mb-6 border-4 border-white shadow-lg flex-shrink-0">
-              <AvatarImage src={coordinator.profilePicture} alt={coordinator.fullName} className="object-cover" />
-              <AvatarFallback className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl bg-gradient-to-br from-[#221E33] to-[#565070] text-white">
-                {coordinator.fullName.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
+            {/* Profile Picture with Video/GIF hover */}
+            {(() => {
+              const mediaUrl = coordinator.profileVideo || coordinator.profileGif;
+              const hasMedia = !!mediaUrl;
+              const isVideo = hasMedia && isVideoUrl(mediaUrl);
+              return (
+                <div
+                  className="relative h-40 w-40 xs:h-48 xs:w-48 sm:h-56 sm:w-56 lg:h-64 lg:w-64 mb-4 sm:mb-6 rounded-full border-4 border-white shadow-lg flex-shrink-0 overflow-hidden cursor-pointer group"
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  {/* Static Image */}
+                  <img
+                    src={coordinator.profilePicture || "https://github.com/shadcn.png"}
+                    alt={coordinator.fullName}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHovered && hasMedia ? "opacity-0" : "opacity-100"
+                      }`}
+                  />
+                  {/* Fallback initials */}
+                  {!coordinator.profilePicture && (
+                    <div className="absolute inset-0 flex items-center justify-center text-3xl xs:text-4xl sm:text-5xl lg:text-6xl bg-gradient-to-br from-[#221E33] to-[#565070] text-white">
+                      {coordinator.fullName.charAt(0)}
+                    </div>
+                  )}
+                  {/* Video on hover */}
+                  {hasMedia && isVideo && (
+                    <video
+                      ref={videoRef}
+                      src={mediaUrl}
+                      muted
+                      playsInline
+                      loop
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"
+                        }`}
+                    />
+                  )}
+                  {/* GIF on hover */}
+                  {hasMedia && !isVideo && (
+                    <img
+                      src={mediaUrl}
+                      alt={`${coordinator.fullName} animation`}
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"
+                        }`}
+                    />
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Viajes Realizados Section */}
             <div className="w-full max-w-xs lg:max-w-none">
@@ -94,6 +157,17 @@ const CoordinatorDetailPage = () => {
                   {tripsCompleted}
                 </span>
               </div>
+            </div>
+
+            {/* Aventuras Realizadas Button */}
+            <div className="w-full max-w-xs lg:max-w-none mt-4">
+              <button
+                onClick={() => navigate(`/open-oppurtunities`)}
+                className="w-full flex items-center justify-center gap-2 bg-[#0DAC87] hover:bg-[#09a07d] text-white font-bold text-sm sm:text-base px-6 py-3 sm:py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 active:scale-[0.97]"
+              >
+                <Star className="h-4 w-4 sm:h-5 sm:w-5 fill-white" />
+                Aventuras realizadas
+              </button>
             </div>
           </div>
 
@@ -221,50 +295,50 @@ const CoordinatorDetailPage = () => {
             )}
 
             {/* Performance Metrics */}
-            {(coordinator?.overallPerformance !== undefined || 
-              coordinator?.successRate !== undefined || 
+            {(coordinator?.overallPerformance !== undefined ||
+              coordinator?.successRate !== undefined ||
               coordinator?.customerSatisfaction !== undefined) && (
-              <div className="bg-[#FAFAFE] border border-[#E0E1E2] rounded-lg sm:rounded-xl p-6 sm:p-8">
-                <h3 className="text-[#221E33] font-semibold text-base sm:text-lg mb-4">Performance Metrics</h3>
-                <div className="flex flex-col gap-4 sm:gap-6">
-                  {coordinator?.overallPerformance !== undefined && (
-                    <div>
-                      <div className="flex justify-between mb-2 text-sm">
-                        <span className="text-[#666373]">Overall Performance</span>
-                        <span className="text-[#221E33] font-semibold">
-                          {Math.round(coordinator.overallPerformance)}%
-                        </span>
+                <div className="bg-[#FAFAFE] border border-[#E0E1E2] rounded-lg sm:rounded-xl p-6 sm:p-8">
+                  <h3 className="text-[#221E33] font-semibold text-base sm:text-lg mb-4">Performance Metrics</h3>
+                  <div className="flex flex-col gap-4 sm:gap-6">
+                    {coordinator?.overallPerformance !== undefined && (
+                      <div>
+                        <div className="flex justify-between mb-2 text-sm">
+                          <span className="text-[#666373]">Overall Performance</span>
+                          <span className="text-[#221E33] font-semibold">
+                            {Math.round(coordinator.overallPerformance)}%
+                          </span>
+                        </div>
+                        <Progress value={Math.round(coordinator.overallPerformance)} className="h-2" />
                       </div>
-                      <Progress value={Math.round(coordinator.overallPerformance)} className="h-2" />
-                    </div>
-                  )}
+                    )}
 
-                  {coordinator?.successRate !== undefined && (
-                    <div>
-                      <div className="flex justify-between mb-2 text-sm">
-                        <span className="text-[#666373]">Success Rate</span>
-                        <span className="text-[#221E33] font-semibold">
-                          {Math.round(coordinator.successRate)}%
-                        </span>
+                    {coordinator?.successRate !== undefined && (
+                      <div>
+                        <div className="flex justify-between mb-2 text-sm">
+                          <span className="text-[#666373]">Success Rate</span>
+                          <span className="text-[#221E33] font-semibold">
+                            {Math.round(coordinator.successRate)}%
+                          </span>
+                        </div>
+                        <Progress value={Math.round(coordinator.successRate)} className="h-2" />
                       </div>
-                      <Progress value={Math.round(coordinator.successRate)} className="h-2" />
-                    </div>
-                  )}
+                    )}
 
-                  {coordinator?.customerSatisfaction !== undefined && (
-                    <div>
-                      <div className="flex justify-between mb-2 text-sm">
-                        <span className="text-[#666373]">Customer Satisfaction</span>
-                        <span className="text-[#221E33] font-semibold">
-                          {(coordinator.customerSatisfaction ?? 0).toFixed(2)}/5.0
-                        </span>
+                    {coordinator?.customerSatisfaction !== undefined && (
+                      <div>
+                        <div className="flex justify-between mb-2 text-sm">
+                          <span className="text-[#666373]">Customer Satisfaction</span>
+                          <span className="text-[#221E33] font-semibold">
+                            {(coordinator.customerSatisfaction ?? 0).toFixed(2)}/5.0
+                          </span>
+                        </div>
+                        <Progress value={(coordinator.customerSatisfaction ?? 0) * 20} className="h-2" />
                       </div>
-                      <Progress value={(coordinator.customerSatisfaction ?? 0) * 20} className="h-2" />
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
 
           {/* Professional Information Card */}

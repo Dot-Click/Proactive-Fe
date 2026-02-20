@@ -61,7 +61,7 @@ const Includeditem = ({ trip }: { trip: any }) => {
         <div className="space-y-16 mt-8">
             {/* What's Included */}
             <div className="border-t border-[#ECECF1] pt-12">
-                <h3 className="text-[#221E33] font-extrabold text-3xl mb-10 font-sans tracking-tight">
+                <h3 className="text-[#221E33] font-extrabold text-3xl mb-10 font-quicksand tracking-tight">
                     What's included
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
@@ -71,14 +71,14 @@ const Includeditem = ({ trip }: { trip: any }) => {
                                 <img src={item.img} alt={item.title} className="w-6 h-6 object-contain opacity-70 group-hover:opacity-100 transition-opacity" onError={(e) => { (e.target as HTMLImageElement).src = included1; }} />
                             </div>
                             <div className="space-y-1">
-                                <h4 className="font-bold text-[#221E33] text-lg font-sans leading-tight">{item.title}</h4>
-                                <p className="text-[#646464] text-sm leading-relaxed font-sans">{item.description}</p>
+                                <h4 className="font-bold text-[#221E33] text-lg font-quicksand leading-tight">{item.title}</h4>
+                                <p className="text-[#646464] text-sm leading-relaxed font-quicksand">{item.description}</p>
                             </div>
                         </div>
-                    )) : <p className="text-sm text-[#646464] font-sans italic">No items specified.</p>}
+                    )) : <p className="text-sm text-[#646464] font-quicksand italic">No items specified.</p>}
                 </div>
                 {IncludedItem.length > 0 && (
-                    <button className="mt-10 px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-sans">
+                    <button className="mt-10 px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-quicksand">
                         Show all {IncludedItem.length} included
                     </button>
                 )}
@@ -86,7 +86,7 @@ const Includeditem = ({ trip }: { trip: any }) => {
 
             {/* What's Not Included */}
             <div className="border-t border-[#ECECF1] pt-12">
-                <h3 className="text-[#221E33] font-extrabold text-3xl mb-10 font-sans tracking-tight">
+                <h3 className="text-[#221E33] font-extrabold text-3xl mb-10 font-quicksand tracking-tight">
                     What's not included
                 </h3>
                 <div className="space-y-6">
@@ -95,14 +95,14 @@ const Includeditem = ({ trip }: { trip: any }) => {
                             <div className="shrink-0 w-6 h-6 flex items-center justify-center">
                                 <span className="text-red-500 text-xl font-bold">✕</span>
                             </div>
-                            <span className="text-[#221E33] font-medium text-base font-sans group-hover:text-red-600 transition-colors">
+                            <span className="text-[#221E33] font-medium text-base font-quicksand group-hover:text-red-600 transition-colors">
                                 {item.title} {item.description && <span className="text-[#646464] font-normal">- {item.description}</span>}
                             </span>
                         </div>
-                    )) : <p className="text-sm text-[#646464] font-sans italic">Everything mentioned above is included!</p>}
+                    )) : <p className="text-sm text-[#646464] font-quicksand italic">Everything mentioned above is included!</p>}
                 </div>
                 {NotIncludedItem.length > 0 && (
-                    <button className="mt-8 px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-sans">
+                    <button className="mt-8 px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-quicksand">
                         Show all {NotIncludedItem.length} not included
                     </button>
                 )}

@@ -10,13 +10,18 @@ const MeetCoordinator = () => {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
 
-  const handleMouseEnter = (cardId: string, videoUrl?: string) => {
+  // Helper to check if URL is a video
+  const isVideoUrl = (url: string) => {
+    return /\.(mp4|webm|ogg|mov)$/i.test(url) || url.includes('/video/');
+  };
+
+  const handleMouseEnter = (cardId: string, mediaUrl?: string) => {
     setHoveredCard(cardId);
-    if (videoUrl) {
+    if (mediaUrl && isVideoUrl(mediaUrl)) {
       const video = videoRefs.current[cardId];
       if (video) {
         video.currentTime = 0;
-        video.play().catch(() => {});
+        video.play().catch(() => { });
       }
     }
   };
@@ -27,7 +32,7 @@ const MeetCoordinator = () => {
       video.pause();
       video.currentTime = 0;
     }
-    setHoveredCard((prev) => (prev === cardId ? null : prev));
+    setHoveredCard(null);
   };
 
   return (
@@ -40,54 +45,62 @@ const MeetCoordinator = () => {
         <p className="text-center text-[#221E33]" dangerouslySetInnerHTML={{ __html: t('travelCoordinator.meetCoordinator.subtitle').replace(/\n/g, '<br />') }} />
       </div>
 
-      {/* Coordinators Grid - Improved spacing */}
+      {/* Coordinators Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-6 lg:gap-8 px-4 sm:px-8 lg:px-12 py-8">
         {coordinatorData?.coordinators?.map((item: any, index: number) => {
           const cardId = item.id ?? `coordinator-${index}`;
-          const hasVideo = item.profileVideo || item.profileGif;
-          const videoUrl = item.profileVideo || item.profileGif;
+          // Get media URL (video or gif) — fallback to demo GIF
+          const mediaUrl = item.profileVideo || item.profileGif || item.gif || "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJ4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxx66F9C7Pa/giphy.gif";
+          const hasMedia = !!mediaUrl;
+          const isVideo = hasMedia && isVideoUrl(mediaUrl);
 
           return (
             <button
               key={cardId}
               type="button"
               onClick={() => navigate(`/coordinator/${item.id}`)}
-              onMouseEnter={() => handleMouseEnter(cardId, videoUrl)}
+              onMouseEnter={() => handleMouseEnter(cardId, mediaUrl)}
               onMouseLeave={() => handleMouseLeave(cardId)}
               className="group relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#E5E5E5] text-center shadow-md transition-all duration-300 hover:shadow-xl hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#221E33]/20 focus:ring-offset-2"
             >
-                  {/* Coordinator Image - shown when not hovering or no video */}
-                  <img
-                    src={item.profilePicture || "https://github.com/shadcn.png"}
-                    alt={item.fullName}
-                    className={`absolute inset-0 h-full w-full object-cover rounded-2xl transition-opacity duration-300 ${
-                      hoveredCard === cardId && hasVideo ? "opacity-0" : "opacity-100"
+              {/* 1. Static Profile Image (visible by default, hidden on hover if media exists) */}
+              <img
+                src={item.profilePicture || "https://github.com/shadcn.png"}
+                alt={item.fullName}
+                className={`absolute inset-0 h-full w-full object-cover rounded-2xl transition-opacity duration-300 ${hoveredCard === cardId && hasMedia ? "opacity-0" : "opacity-100"
+                  }`}
+              />
+
+              {/* 2. Video Element (shows if isVideo is true and hovered) */}
+              {hasMedia && isVideo && (
+                <video
+                  ref={(el) => { videoRefs.current[cardId] = el; }}
+                  src={mediaUrl}
+                  muted
+                  playsInline
+                  loop
+                  className={`absolute inset-0 h-full w-full object-cover rounded-2xl transition-opacity duration-300 ${hoveredCard === cardId ? "opacity-100" : "opacity-0"
                     }`}
-                  />
+                />
+              )}
 
-                  {/* Video/GIF - shown on hover if available */}
-                  {hasVideo && (
-                    <video
-                      ref={(el) => {
-                        videoRefs.current[cardId] = el;
-                      }}
-                      src={videoUrl}
-                      muted
-                      playsInline
-                      loop
-                      className={`absolute inset-0 h-full w-full object-cover rounded-2xl transition-opacity duration-300 ${
-                        hoveredCard === cardId ? "opacity-100" : "opacity-0"
-                      }`}
-                    />
-                  )}
+              {/* 3. GIF Element (shows if isVideo is false and hovered) */}
+              {hasMedia && !isVideo && (
+                <img
+                  src={mediaUrl}
+                  alt={`${item.fullName} moving`}
+                  className={`absolute inset-0 h-full w-full object-cover rounded-2xl transition-opacity duration-300 ${hoveredCard === cardId ? "opacity-100" : "opacity-0"
+                    }`}
+                />
+              )}
 
-                  {/* Improved Overlay with Name */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end justify-center pb-4 px-3">
-                    <span className="text-lg font-semibold text-white drop-shadow-lg text-center">
-                      {item.fullName}
-                    </span>
-                  </div>
-                </button>
+              {/* Overlay with Name */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent flex items-end justify-center pb-4 px-3">
+                <span className="text-lg font-semibold text-white drop-shadow-lg text-center">
+                  {item.fullName}
+                </span>
+              </div>
+            </button>
           );
         })}
       </div>

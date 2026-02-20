@@ -7,14 +7,14 @@ const CommonFund = ({ trip }: { trip?: any }) => {
 
     return (
         <div className="border-t border-[#ECECF1] pt-12 mt-16">
-            <h3 className="text-[#221E33] font-extrabold text-3xl mb-8 font-sans tracking-tight">
+            <h3 className="text-[#221E33] font-extrabold text-3xl mb-8 font-quicksand tracking-tight">
                 Common fund
             </h3>
             <div className="space-y-8">
-                <p className="text-[#221E33] text-base leading-relaxed font-sans max-w-3xl">
+                <p className="text-[#221E33] text-base leading-relaxed font-quicksand max-w-3xl">
                     {fundText}
                 </p>
-                <button className="px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-sans">
+                <button className="px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-quicksand">
                     Show all {count} included
                 </button>
             </div>

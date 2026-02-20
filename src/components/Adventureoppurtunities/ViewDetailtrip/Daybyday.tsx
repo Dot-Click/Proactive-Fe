@@ -87,7 +87,7 @@ const Daybyday = ({ trip }: DaybydayProps) => {
 
     return (
         <div className="py-16">
-            <h3 className="text-[#221E33] font-bold text-3xl mb-12 font-sans tracking-tight">Itinerary</h3>
+            <h3 className="text-[#221E33] font-bold text-3xl mb-12 font-quicksand tracking-tight">Itinerary</h3>
             <div className="flex lg:flex-row flex-col gap-12">
                 {/* Itinerary Accordion - Legacy Look restored */}
                 <div className="w-full lg:w-[58%]">
@@ -108,18 +108,18 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                                     <AccordionTrigger className="hover:no-underline py-4 group">
                                         <div className="flex items-center gap-5">
                                             <div className="w-10 h-10 rounded-full bg-[#E6F7F3] flex items-center justify-center shrink-0 group-data-[state=open]:bg-[#0DAC87] transition-colors">
-                                                <span className="text-[#0DAC87] group-data-[state=open]:text-white font-bold text-lg font-sans">
+                                                <span className="text-[#0DAC87] group-data-[state=open]:text-white font-bold text-lg font-quicksand">
                                                     {dayNumber}
                                                 </span>
                                             </div>
-                                            <span className="text-[#221E33] font-bold text-xl font-sans group-hover:text-[#0DAC87] transition-colors">
+                                            <span className="text-[#221E33] font-bold text-xl font-quicksand group-hover:text-[#0DAC87] transition-colors">
                                                 {dayTitle}
                                             </span>
                                         </div>
                                     </AccordionTrigger>
                                     <AccordionContent className="pt-2 pb-6">
                                         <div className="pl-[60px] space-y-6">
-                                            <p className="text-[#514D4D] text-base leading-[1.8] whitespace-pre-line font-sans">
+                                            <p className="text-[#514D4D] text-base leading-[1.8] whitespace-pre-line font-quicksand">
                                                 {dayContent}
                                             </p>
                                             {day.image && (

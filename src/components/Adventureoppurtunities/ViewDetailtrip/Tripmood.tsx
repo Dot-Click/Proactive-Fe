@@ -12,7 +12,7 @@ const Characteristic = ({ label, value, icon }: CharacteristicProps) => (
             <div className="text-[#606066] group-hover:text-[#221E33] transition-colors">
                 {icon}
             </div>
-            <span className="text-[#221E33] font-medium text-base font-sans">{label}</span>
+            <span className="text-[#221E33] font-medium text-base font-quicksand">{label}</span>
         </div>
         <div className="flex gap-1.5 ring-offset-2 ring-[#0DAC87]/10 rounded-full">
             {[...Array(5)].map((_, i) => (
@@ -38,7 +38,7 @@ const Tripmood = () => {
 
     return (
         <div className="py-12 border-t border-[#ECECF1] mt-8">
-            <h2 className="text-[#221E33] font-extrabold text-3xl mb-12 font-sans tracking-tight">
+            <h2 className="text-[#221E33] font-extrabold text-3xl mb-12 font-quicksand tracking-tight">
                 ¿Este viaje es para mí?
             </h2>
 
@@ -56,7 +56,7 @@ const Tripmood = () => {
                         <div className="flex items-center justify-between pb-4 border-b border-[#ECECF1] group-hover:border-[#0DAC87] transition-colors">
                             <div className="flex items-center gap-3">
                                 <Gauge size={22} className="text-[#606066]" />
-                                <span className="text-[#221E33] font-medium text-lg font-sans">Esfuerzo físico</span>
+                                <span className="text-[#221E33] font-medium text-lg font-quicksand">Esfuerzo físico</span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <div className="flex items-end gap-1 h-5">
@@ -64,7 +64,7 @@ const Tripmood = () => {
                                     <div className="w-1.5 h-4 bg-[#0DAC87] rounded-full" />
                                     <div className="w-1.5 h-3 bg-[#D1D5DB] rounded-full" />
                                 </div>
-                                <span className="text-[#221E33] font-bold text-lg font-sans underline decoration-[#0DAC87] decoration-2 underline-offset-4">
+                                <span className="text-[#221E33] font-bold text-lg font-quicksand underline decoration-[#0DAC87] decoration-2 underline-offset-4">
                                     Medio
                                 </span>
                             </div>
@@ -75,9 +75,9 @@ const Tripmood = () => {
                         <div className="flex items-center justify-between pb-4 border-b border-[#ECECF1] group-hover:border-[#0DAC87] transition-colors">
                             <div className="flex items-center gap-3">
                                 <Compass size={22} className="text-[#606066]" />
-                                <span className="text-[#221E33] font-medium text-lg font-sans">Tipo de viaje</span>
+                                <span className="text-[#221E33] font-medium text-lg font-quicksand">Tipo de viaje</span>
                             </div>
-                            <span className="text-[#221E33] font-bold text-lg font-sans underline decoration-[#0DAC87] decoration-2 underline-offset-4">
+                            <span className="text-[#221E33] font-bold text-lg font-quicksand underline decoration-[#0DAC87] decoration-2 underline-offset-4">
                                 360°
                             </span>
                         </div>
