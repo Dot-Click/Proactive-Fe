@@ -22,25 +22,29 @@ const UpcomingAdventures = () => {
         today.setHours(0, 0, 0, 0) // Compare only the date part
 
         // Filter only paid/completed trips
-        const paidTrips = tripPayments.filter((p: any) =>
-            p.status === "completed" || p.status === "paid" || p.status === "confirmed"
-        ).map((p: any) => ({
-            ...p.trip,
-            paymentId: p.id,
-            paymentStatus: p.status
-        })).filter((trip: any) => trip && trip.id) // Ensure trip data exists
+        const OK_STATUSES = new Set(["completed", "paid", "confirmed", "succeeded", "success"])
+
+        const paidTrips = tripPayments.filter((p: any) => OK_STATUSES.has((p.status || "").toString().toLowerCase()))
+            .map((p: any) => ({
+                ...(p.trip || {}),
+                paymentId: p.id,
+                paymentStatus: p.status
+            }))
+            .filter((trip: any) => trip && (trip.id || trip._id)) // Ensure trip data exists
 
         // Separate into upcoming and past
         const upcoming = paidTrips.filter((trip: any) => {
-            if (!trip.startDate) return false
-            const startDate = new Date(trip.startDate)
+            const s = trip.startDate || trip.start_date || trip.start || trip.starts_at
+            if (!s) return false
+            const startDate = new Date(s)
             startDate.setHours(0, 0, 0, 0)
             return startDate >= today
         })
 
         const past = paidTrips.filter((trip: any) => {
-            if (!trip.endDate) return false
-            const endDate = new Date(trip.endDate)
+            const e = trip.endDate || trip.end_date || trip.end || trip.ends_at
+            if (!e) return false
+            const endDate = new Date(e)
             endDate.setHours(0, 0, 0, 0)
             return endDate < today
         }).sort((a: any, b: any) => {
@@ -150,7 +154,7 @@ const UpcomingAdventures = () => {
         <div className="flex flex-col gap-6">
             {/* Upcoming Adventures Section */}
             <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[20px] flex flex-col">
-                {/* <div className="px-4 py-6 flex flex-col lg:flex-row gap-3 justify-between items-center">
+                <div className="px-4 py-6 flex flex-col lg:flex-row gap-3 justify-between items-center">
                     <span className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-lg">
                         Upcoming Adventures
                     </span>
@@ -160,14 +164,14 @@ const UpcomingAdventures = () => {
                     >
                         View All
                     </Button>
-                </div> */}
-                {/* <Separator className="border-[#D9D9D9] bg-[#D9D9D9] -mt-[8px]" /> */}
-                {/* {isLoading && (
+                </div>
+                <Separator className="border-[#D9D9D9] bg-[#D9D9D9] -mt-[8px]" />
+                {isLoading && (
                     <div className="w-full flex items-center justify-center py-10">
                         <LoaderIcon className="animate-spin" />
                     </div>
-                )} */}
-                {/* {!isLoading && (
+                )}
+                {!isLoading && (
                     <div className="flex flex-col gap-3 px-4 py-6 overflow-y-scroll h-152">
                         {upcomingTrips.length > 0 ? (
                             upcomingTrips.map((trip: any) => renderTripCard(trip, false))
@@ -178,7 +182,7 @@ const UpcomingAdventures = () => {
                             </div>
                         )}
                     </div>
-                )} */}
+                )}
             </div>
 
             {/* Adventure Opportunities Section */}

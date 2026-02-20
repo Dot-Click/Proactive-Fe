@@ -45,6 +45,9 @@ export const useLoginUser = () => {
                 case "coordinator":
                     navigate("/coordinator-dashboard");
                     break;
+                case "user":
+                    navigate("/");
+                    break;
                 default:
                     navigate('/user-dashboard');
             }

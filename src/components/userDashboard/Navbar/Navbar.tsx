@@ -45,7 +45,7 @@ const Navbar = ({ role }: NavbarProps) => {
 
   const Handlelogout = async () => {
     try {
-      await Logoutmutation.mutateAsync()
+      await Logoutmutation.mutateAsync({ role: 'user' })
     } catch (error: any) {
       const message = error?.response?.data?.message || "Error on logout";
       toast.error(message)
@@ -207,12 +207,12 @@ const Navbar = ({ role }: NavbarProps) => {
                 </div>
 
                 <div className="flex flex-col">
-                  <DropdownMenuItem asChild>
-                    <div onClick={Handlelogout} className="inline-flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-md">
-                      <LogOut />
-                      Logout
-                    </div>
-                  </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <div onClick={Handlelogout} className="inline-flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-md">
+                            <LogOut />
+                            Logout
+                          </div>
+                        </DropdownMenuItem>
 
                   <DropdownMenuItem asChild>
                     <Link

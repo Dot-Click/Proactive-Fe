@@ -14,6 +14,9 @@ import { UserSideDrawerItems } from "@/components/DrawerItems";
 import { BsTelegram, BsWhatsapp } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
+import { UsegetCurrentUser } from '@/hooks/getCurrentUserhook'
+import { useLogoutUser } from '@/hooks/Uselogouthook'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const UserSideNavbar = ({ role }: { role: string }) => {
     const location = useLocation();
@@ -22,6 +25,9 @@ const UserSideNavbar = ({ role }: { role: string }) => {
         ? UserSideDrawerItems
         : [];
     const navigate = useNavigate()
+    const { data: user } = UsegetCurrentUser()
+    const logout = useLogoutUser()
+    const userData = user?.data?.user
     return (
         <>
             <div className="flex justify-between items-center gap-8 px-6 mt-6 absolute top-0 left-0 right-0 container mx-auto z-10">
@@ -174,8 +180,31 @@ const UserSideNavbar = ({ role }: { role: string }) => {
 
                 <div className="lg:flex hidden items-center gap-4">
                     <LanguageSwitcher />
-                    <Button onClick={() => navigate("/login")} className="bg-light text-black hover:bg-[#c5e4dc] cursor-pointer px-7 py-6 font-bold rounded-full">{t('navbar.logIn')}</Button>
-                    <Button onClick={() => navigate("/signup")} className="bg-[#0DAC87] hover:bg-[#0fa17f] border border-[#FFFFFF]/64 cursor-pointer px-7 py-6 font-bold rounded-full">{t('navbar.joinNow')}</Button>
+                    {userData ? (
+                        <div className="flex items-center gap-3">
+                            <Avatar className="w-12 h-12 lg:w-16 lg:h-16">
+                                <AvatarImage src={userData?.avatar || 'https://github.com/shadcn.png'} />
+                                <AvatarFallback>{(userData?.FirstName || userData?.email || 'U').charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className="cursor-pointer">
+                                    <div className="flex flex-col text-left">
+                                        <span className="font-semibold text-base lg:text-lg">{userData?.FirstName || userData?.coordinatorDetails?.fullName || userData?.email}</span>
+                                        <span className="text-sm text-gray-500">{userData?.email}</span>
+                                    </div>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem onClick={() => navigate('/user-dashboard')}>My Dashboard</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => logout.mutate({ role: 'user' })}>Logout</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                    ) : (
+                        <>
+                            <Button onClick={() => navigate("/login")} className="bg-light text-black hover:bg-[#c5e4dc] cursor-pointer px-7 py-6 font-bold rounded-full">{t('navbar.logIn')}</Button>
+                            <Button onClick={() => navigate("/signup")} className="bg-[#0DAC87] hover:bg-[#0fa17f] border border-[#FFFFFF]/64 cursor-pointer px-7 py-6 font-bold rounded-full">{t('navbar.joinNow')}</Button>
+                        </>
+                    )}
                 </div>
 
                 <div className="lg:hidden flex items-center gap-3">

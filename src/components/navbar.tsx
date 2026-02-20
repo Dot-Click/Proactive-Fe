@@ -116,7 +116,7 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
 
   const Handlelogout = async () => {
     try {
-      await Logoutmutation.mutateAsync()
+      await Logoutmutation.mutateAsync({ role })
     } catch (error: any) {
       const message = error?.response?.data?.message || "Error on logout";
       toast.error(message)
@@ -204,12 +204,12 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
 
         {/* Avatar and dropdown */}
         <div className="flex items-center gap-2 lg:gap-3">
-          <Avatar className="w-10 h-10 lg:w-16 lg:h-16">
+          <Avatar className="w-12 h-12 lg:w-20 lg:h-20">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div className="hidden lg:flex flex-col">
-            <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
+            <span className="font-semibold text-base lg:text-xl">{displayName}</span>
             <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
           </div>
           <DropdownMenu>

@@ -10,6 +10,7 @@ import calenderwhite from "../../../../assets/calenderwhite.png"
 import { Button } from "@/components/ui/button"
 import { useState, useMemo } from "react"
 import { UsegetPastTrips, type PastTrip } from "@/hooks/getPastTripshook"
+import { UsegetPayment } from '@/hooks/getPaymenthook'
 import { LoaderIcon } from "lucide-react"
 
 const FALLBACK_IMAGES = [
@@ -48,8 +49,45 @@ const Pastadventures = () => {
     const [loadmore, setLoadmore] = useState(false)
     const { data, isLoading } = UsegetPastTrips()
     const apiTrips = data?.trips ?? []
+    const { data: paymentData, isLoading: paymentsLoading } = UsegetPayment()
+
+    // derive past trips from user's payment records (trips user participated in)
+    const userPaidPastTrips = useMemo(() => {
+        const tripPayments = paymentData?.tripPayments || []
+        const today = new Date()
+        today.setHours(0,0,0,0)
+
+        const OK_STATUSES = new Set(["completed", "paid", "confirmed", "succeeded", "success"])
+        const paidTrips = tripPayments.filter((p: any) => OK_STATUSES.has((p.status || "").toString().toLowerCase()))
+            .map((p: any) => ({ ...(p.trip || {}) }))
+
+        const past = paidTrips.filter((trip: any) => {
+            const e = trip.endDate || trip.end_date || trip.end || trip.ends_at
+            if (!trip || !e) return false
+            const endDate = new Date(e)
+            endDate.setHours(0,0,0,0)
+            return endDate < today
+        }).sort((a: any, b: any) => {
+            const dateA = new Date(a.endDate).getTime()
+            const dateB = new Date(b.endDate).getTime()
+            return dateB - dateA
+        })
+
+        return past
+    }, [paymentData])
 
     const displayItems = useMemo((): DisplayItem[] => {
+        // Prefer showing user's paid past trips if available
+        if (userPaidPastTrips && userPaidPastTrips.length > 0) {
+            return userPaidPastTrips.map((t: any, index: number) => ({
+                id: t.id,
+                imageUrl: t.coverImage || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length],
+                category: t.category || t.type || "Adventure",
+                title: t.name || t.title || "Past Adventure",
+                date: t.startDate ? new Date(t.startDate).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }) : "",
+            }))
+        }
+
         if (apiTrips.length > 0) {
             return apiTrips.map((t: PastTrip, index: number) => ({
                 id: t.id,
@@ -59,6 +97,7 @@ const Pastadventures = () => {
                 date: t.startDate ? new Date(t.startDate).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }) : "",
             }))
         }
+
         const fallback = loadmore ? [...FALLBACK_PAST_ADVENTURES, ...FALLBACK_PAST_ADVENTURES] : FALLBACK_PAST_ADVENTURES
         return fallback.map((f) => ({
             id: f.id,
@@ -67,9 +106,9 @@ const Pastadventures = () => {
             title: f.title,
             date: f.date,
         }))
-    }, [apiTrips, loadmore])
+    }, [apiTrips, loadmore, userPaidPastTrips])
 
-    const useFallback = apiTrips.length === 0
+    const useFallback = apiTrips.length === 0 && (!userPaidPastTrips || userPaidPastTrips.length === 0)
     const showLoadMore = useFallback && !loadmore
 
     return (
@@ -79,7 +118,7 @@ const Pastadventures = () => {
                 <span className="text-[#221E33] text-sm text-center">Explore our completed adventures and see the amazing experiences we&apos;ve created</span>
             </div>
 
-            {isLoading ? (
+            {isLoading || paymentsLoading ? (
                 <div className="w-full flex items-center justify-center py-16">
                     <LoaderIcon className="animate-spin h-10 w-10 text-[#0DAC87]" />
                 </div>
