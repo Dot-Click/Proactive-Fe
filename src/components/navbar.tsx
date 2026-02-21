@@ -7,13 +7,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { useLocation } from "react-router-dom"
 import { useIsMobile } from "../hooks/use-mobile"
 import DrawerBar from "./Drawer"
-import { AdminDrawerItems, CoordinatorDrawerItems } from "./DrawerItems"
+import { AdminDrawerItems, CoordinatorDrawerItems, UserDashboardDrawerItems } from "./DrawerItems"
 import { useLogoutUser } from "@/hooks/Uselogouthook"
 import { toast } from "sonner"
 import { UsegetNotifications } from "@/hooks/getNotificationhook"
 import { FaCheckDouble } from "react-icons/fa6";
 import { useMarkAsReadNotification } from "@/hooks/MarkAsReadNotification"
 import { useState } from "react"
+import PaymentModal from "@/components/payment/PaymentModal"
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
 
 interface NavbarProps {
@@ -94,17 +95,24 @@ const SubHeading = [
 const Navbar = ({ collapsed, role }: NavbarProps) => {
   const { data, isLoading, isError } = UsegetNotifications()
   const markAsRead = useMarkAsReadNotification();
-  const DrawerItems = role === "coordinator"
-    ? CoordinatorDrawerItems
-    : AdminDrawerItems;
   const location = useLocation();
   const isMobile = useIsMobile();
   const Logoutmutation = useLogoutUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [paymentTripId, setPaymentTripId] = useState<string | null>(null);
+  const [paymentNotificationId, setPaymentNotificationId] = useState<string | null>(null);
   const { data: user } = UsegetCurrentUser();
   const userData = user?.data?.user;
+
+  const DrawerItems = userData?.role === "user"
+    ? UserDashboardDrawerItems
+    : role === "coordinator"
+      ? CoordinatorDrawerItems
+      : AdminDrawerItems;
   const displayName = userData?.role === "coordinator" ? userData?.coordinatorDetails?.fullName : userData?.FirstName || "Admin";
-  let NavHeading = location.pathname.split("/")[2]?.split("-").join(" ");
+  const pathPart = location.pathname.split("/")[2];
+  let NavHeading = pathPart ? pathPart.split("-").join(" ") : undefined;
   if (NavHeading === "payment membership") {
     NavHeading = "Payment & Membership";
   }
@@ -123,9 +131,10 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
     }
   }
   return (
-    <header
-      className={`absolute z-10 ${containerPositionClass} flex justify-between items-center px-4 md:px-8 transition-all duration-300`}
-    >
+    <>
+      <header
+        className={`absolute z-10 ${containerPositionClass} flex justify-between items-center px-4 md:px-8 transition-all duration-300`}
+      >
       {/* Left side */}
       <div className="flex flex-col min-w-0 flex-grow">
         <div className="flex md:items-start items-center justify-between gap-2 lg:gap-4">
@@ -197,46 +206,81 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
                   <span className="text-sm text-gray-500">
                     {val.description}
                   </span>
+                  {/* Pay Now button for approved applications */}
+                  {val.title === "Application approved" && val.type === "trip" && (
+                    <div className="mt-2 flex justify-end">
+                      <button
+                        className="text-sm bg-[#0DAC87] text-white px-3 py-1 rounded-full"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // parse trip id from description
+                          const parts = (val.description || "").split("with trip id ");
+                          const tid = parts[1] ? parts[1].trim() : null;
+                          if (tid) {
+                            setPaymentTripId(tid);
+                            setPaymentNotificationId(val.id);
+                            setPaymentModalOpen(true);
+                          } else {
+                            toast.error("Unable to determine trip for payment");
+                          }
+                        }}
+                      >
+                        Pay Now
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Avatar and dropdown */}
+        {/* Avatar and dropdown (only for regular users) */}
         <div className="flex items-center gap-2 lg:gap-3">
-          <Avatar className="w-12 h-12 lg:w-20 lg:h-20">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <div className="hidden lg:flex flex-col">
-            <span className="font-semibold text-base lg:text-xl">{displayName}</span>
-            <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild className="cursor-pointer">
-              <div className="lg:p-2 rounded-full hover:bg-gray-100">
-                <ChevronDown />
+          {userData?.role === "user" && (
+            <>
+              <Avatar className="w-12 h-12 lg:w-20 lg:h-20">
+                <AvatarImage src={user?.data?.user?.avatar || "https://github.com/shadcn.png"} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div className="hidden lg:flex flex-col">
+                <span className="font-semibold text-base lg:text-xl">{displayName}</span>
+                <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
               </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem className="flex flex-col gap-2 items-start cursor-pointer">
-                <div className="flex lg:hidden flex-col">
-                  <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
-                  <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
-                </div>
-                <div className="flex justify-start items-center gap-3" onClick={Handlelogout}>
-                  <LogOut />
-                  Logout
-                </div>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild className="cursor-pointer">
+                  <div className="lg:p-2 rounded-full hover:bg-gray-100">
+                    <ChevronDown />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem className="flex flex-col gap-2 items-start cursor-pointer">
+                    <div className="flex lg:hidden flex-col">
+                      <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
+                      <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
+                    </div>
+                    <a href="/user-dashboard" className="w-full">
+                      <div className="flex justify-start items-center gap-3">
+                        <span>My Dashboard</span>
+                      </div>
+                    </a>
+                    <div className="flex justify-start items-center gap-3" onClick={Handlelogout}>
+                      <LogOut />
+                      Logout
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          )}
           <DrawerBar items={DrawerItems} />
         </div>
 
       </div >
 
-    </header >
+      </header >
+      {/* Payment Modal */}
+      <PaymentModal open={paymentModalOpen} onOpenChange={(v) => setPaymentModalOpen(v)} tripId={paymentTripId} notificationId={paymentNotificationId} />
+    </>
   );
 };
 

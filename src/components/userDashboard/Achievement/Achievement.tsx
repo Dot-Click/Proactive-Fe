@@ -11,7 +11,8 @@ const Achievement = () =>
 {
     const { data, isLoading, isError } = UsegetallAchievementsForUser();
     const [selectedAchievement, setSelectedAchievement] = useState<string | null>(null);
-    
+    const [allOpen, setAllOpen] = useState(false);
+
     if (isLoading) {
         return <div>Loading...</div>
     }
@@ -88,6 +89,41 @@ const Achievement = () =>
         return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     };
     
+    const AllAchievementsDialog = () => (
+        <Dialog open={allOpen} onOpenChange={(open) => setAllOpen(open)}>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold">All Achievements</DialogTitle>
+                </DialogHeader>
+                <DialogDescription>
+                    <div className="grid gap-4">
+                        {badgeConfig.map((badge) => {
+                            const progress = badgeProgress[badge.name] || { percentage: 0, unlocked: false };
+                            const percentage = Math.round(progress.percentage || 0);
+                            return (
+                                <div key={badge.name} className="p-4 rounded-lg border" style={{ borderColor: badge.borderColor }}>
+                                    <div className="flex items-center gap-4">
+                                        <img src={badge.image} alt={badge.imageAlt} className={badge.imageClass} />
+                                        <div>
+                                            <h3 className="font-semibold text-lg">{badge.name} — {percentage}%</h3>
+                                            <p className="text-sm text-[#666373] mt-1">{badge.description}</p>
+                                            <div className="mt-2">
+                                                <h4 className="font-semibold">How to get:</h4>
+                                                <ul className="list-disc list-inside text-sm text-[#666373] mt-1">
+                                                    {badge.howToGet.map((it, i) => <li key={i}>{it}</li>)}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </DialogDescription>
+            </DialogContent>
+        </Dialog>
+    );
+
     return (
         <>
             <style>{`
@@ -101,9 +137,13 @@ const Achievement = () =>
                     background-color: #A04CD9 !important;
                 }
             `}</style>
+            <AllAchievementsDialog />
             <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[20px] flex flex-col ">
                 <div className="px-4 py-3">
                     <span className="font-bold text-[18px] bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text">Achievements</span>
+                    <div className="float-right">
+                        <button onClick={() => setAllOpen(true)} className="bg-[#0DAC87] text-white px-3 py-1 rounded-full">View All</button>
+                    </div>
                     <div className="mt-6 grid lg:grid-cols-1 gap-3">
                         {badgeConfig.map((badge) => {
                             const progress = badgeProgress[badge.name] || {

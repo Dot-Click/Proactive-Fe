@@ -39,7 +39,8 @@ const Login = () => {
     const loginUserMutation = useLoginUser()
     const { mutate, isPending } = useGoogleSignup();
     const onSubmit = async (val: z.infer<typeof LoginSchema>) => {
-        const { email, Password } = val
+        let { email, Password } = val
+        email = email.trim().toLowerCase();
         try {
             await loginUserMutation.mutateAsync({
                 email,

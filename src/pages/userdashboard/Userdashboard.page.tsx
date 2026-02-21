@@ -6,7 +6,7 @@ import ReviewReminder from "@/components/userDashboard/ReviewReminder/ReviewRemi
 // import ReviewReminder from "@/components/userDashboard/ReviewReminder/ReviewReminder"
 import Stats from "@/components/userDashboard/Stats/Stats"
 import UpcomingAdventures from "@/components/userDashboard/upcomingAdventures/UpcomingAdventures"
-import Pastadventures from "@/components/userSide/OpenOppurtunities/PastAdventure/Pastadventures"
+// import Pastadventures from "@/components/userSide/OpenOppurtunities/PastAdventure/Pastadventures"
 
 
 
@@ -26,9 +26,9 @@ const UserdashboardPage = () => {
           <ReviewReminder />
         </div>
       </div>
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <Pastadventures />
-      </div>
+      </div> */}
     </div>
   )
 }

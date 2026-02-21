@@ -21,6 +21,7 @@ import ApplicantsReviewPage from "./pages/coordinator/ApplicantsReview.page";
 import AchievementControlPage from "./pages/coordinator/AchievementControl.page";
 import ChatUserPage from "./pages/coordinator/ChatUser.page";
 import CoordinatorSettingPage from "./pages/coordinator/Setting.page";
+import CoordinatorOnboardPage from "./pages/coordinator/Onboard.page";
 import LoginPage from "./pages/loginpage/login.page";
 import SignupPage from "./pages/loginpage/Signup.page";
 import ForgetPassPage from "./pages/loginpage/ForgetPass.page";
@@ -194,6 +195,7 @@ function App() {
 
       {/* Coordinator detail page - without navbar */}
       <Route path="/coordinator/:id" element={<CoordinatorDetailPage />} />
+      <Route path="/coordinator/onboard" element={<CoordinatorOnboardPage />} />
     </Routes>
   );
 }

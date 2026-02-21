@@ -28,6 +28,7 @@ import {
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { useCreateCoordinator } from "@/hooks/UseCreateCoordinator";
+import { useInviteCoordinator } from "@/hooks/UseInviteCoordinator";
 import { toast } from "sonner";
 
 const formSchema = z
@@ -127,8 +128,30 @@ const AddnewCoordinator = () => {
   };
   
   const CreateCoordinatorMutation = useCreateCoordinator();
+  const InviteCoordinatorMutation = useInviteCoordinator();
+  const [inviteOnly, setInviteOnly] = useState(false);
+  const [mode, setMode] = useState<"magic" | "custom">("custom");
+  const [magicEmail, setMagicEmail] = useState("");
+  const [magicPassword, setMagicPassword] = useState("");
   
   const onSubmit = async (val: z.infer<typeof formSchema>) => {
+    if (inviteOnly) {
+      // Quick invite flow: only email required
+      const email = val.email?.trim().toLowerCase();
+      if (!email) {
+        toast.error("Please provide an email to invite");
+        return;
+      }
+      try {
+        await InviteCoordinatorMutation.mutateAsync({ email });
+        toast.success("Invitation sent");
+        form.reset();
+        navigate("/dashboard/coordinator-management");
+      } catch (err) {
+        // errors handled in hook
+      }
+      return;
+    }
     // Validate arrays are not empty (should be caught by schema, but double-check)
     if (!val.specialities || val.specialities.length === 0) {
       toast.error("Please select at least one speciality");
@@ -238,8 +261,85 @@ const AddnewCoordinator = () => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="flex items-center gap-6 mb-4">
+              <div className="flex items-center gap-2">
+                <input
+                  id="mode_custom"
+                  type="radio"
+                  name="invite_mode"
+                  checked={mode === "custom"}
+                  onChange={() => { setMode("custom"); setInviteOnly(false); }}
+                />
+                <label htmlFor="mode_custom" className="text-sm">Custom information</label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  id="mode_magic"
+                  type="radio"
+                  name="invite_mode"
+                  checked={mode === "magic"}
+                  onChange={() => { setMode("magic"); setInviteOnly(true); }}
+                />
+                <label htmlFor="mode_magic" className="text-sm">Magic link</label>
+              </div>
+            </div>
+
+            {mode === "magic" && (
+              <div className="bg-white mt-3 rounded-[12px] p-6">
+                <h2 className="text-lg font-semibold mb-3">Magic Link Invite</h2>
+                <div className="grid md:grid-cols-2 gap-4 pb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700">Email</label>
+                    <input
+                      value={magicEmail}
+                      onChange={(e) => setMagicEmail(e.target.value)}
+                      placeholder="Invite email"
+                      className="mt-1 block w-full rounded border px-3 py-2 bg-[#FAFAFE]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700">Password (optional)</label>
+                    <input
+                      type="password"
+                      value={magicPassword}
+                      onChange={(e) => setMagicPassword(e.target.value)}
+                      placeholder="Temporary password (optional)"
+                      className="mt-1 block w-full rounded border px-3 py-2 bg-[#FAFAFE]"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                    <Button
+                    onClick={async () => {
+                      const email = magicEmail?.trim().toLowerCase();
+                      if (!email) {
+                        toast.error("Please provide an email to invite");
+                        return;
+                      }
+                      try {
+                        // send invite; backend currently expects email, extra fields are ignored
+                        await InviteCoordinatorMutation.mutateAsync({ email, password: magicPassword || undefined });
+                        toast.success("Invitation sent");
+                        setMagicEmail("");
+                        setMagicPassword("");
+                        navigate("/dashboard/coordinator-management");
+                      } catch (err) {
+                        // error handled in hook
+                      }
+                    }}
+                    className="rounded-full px-6 py-2 bg-[#0DAC87] text-white"
+                    disabled={(InviteCoordinatorMutation as any).isPending}
+                  >
+                    {(InviteCoordinatorMutation as any).isPending ? "Sending..." : "Send Invite"}
+                  </Button>
+                </div>
+              </div>
+            )}
           {/* ========== Section 1: Coordinator Information ========== */}
-          <div className="bg-white mt-3 rounded-[25px]">
+          {mode === "custom" && (
+            <>
+            <div className="bg-white mt-3 rounded-[25px]">
             <div className="bg-[#FAFAFA] px-7 py-5 rounded-tl-[20px] rounded-tr-[20px]">
               <h1 className="text-[#221E33] font-semibold text-[22px]">
                 Coordinator Information
@@ -391,7 +491,7 @@ const AddnewCoordinator = () => {
                 />
               </div>
             </div>
-          </div>
+            </div>
 
           {/* ========== Section 2: Professional Details ========== */}
           <div className="bg-white mt-3 rounded-[25px]">
@@ -722,6 +822,8 @@ const AddnewCoordinator = () => {
           </div>
 
 
+          </>
+          )}
         </form>
       </Form>
     </div>

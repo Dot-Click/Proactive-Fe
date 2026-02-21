@@ -59,6 +59,28 @@ const Navbar = ({ role }: NavbarProps) => {
         <img src={proactive} alt="proactive" className="h-10 hidden lg:flex" />
 
         <div className="hidden bg-[#FFFFFF] shadow-md lg:flex items-center px-4 py-3 rounded-full gap-6 cursor-pointer">
+          <Link to="/">
+            <span
+              className={`${location.pathname === "/"
+                ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
+                : ""
+                }`}
+            >
+              Home
+            </span>
+          </Link>
+
+          <Link to="/open-oppurtunities">
+            <span
+              className={`${location.pathname === "/open-oppurtunities"
+                ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
+                : ""
+                }`}
+            >
+              Open Opportunities
+            </span>
+          </Link>
+
           <Link to="/user-dashboard">
             <span
               className={`${location.pathname === "/user-dashboard"
@@ -69,6 +91,7 @@ const Navbar = ({ role }: NavbarProps) => {
               Dashboard
             </span>
           </Link>
+
           <Link to="/user-dashboard/adventure-oppurtunities">
             <span
               className={`${location.pathname ===
@@ -80,6 +103,8 @@ const Navbar = ({ role }: NavbarProps) => {
               Opportunities
             </span>
           </Link>
+
+          
         </div>
 
         <div className="flex gap-4">
@@ -183,51 +208,53 @@ const Navbar = ({ role }: NavbarProps) => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <div className="flex items-center gap-2 lg:gap-3">
-            <Avatar className="w-10 h-10 lg:w-16 lg:h-16 bg-red-500">
-              <AvatarImage src={user?.data?.user?.avatar}/>
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div className="hidden lg:flex flex-col">
-              <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
-              <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
+          {userData?.role === "user" && (
+            <div className="flex items-center gap-2 lg:gap-3">
+              <Avatar className="w-10 h-10 lg:w-16 lg:h-16 bg-red-500">
+                <AvatarImage src={user?.data?.user?.avatar}/>
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div className="hidden lg:flex flex-col">
+                <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
+                <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="cursor-pointer">
+                  <div className="rounded-full hover:bg-gray-100">
+                    <ChevronDown color="#A6AAC9" />
+                  </div>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent>
+
+                  <div className="lg:hidden flex flex-col px-3 py-2">
+                    <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
+                    <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
+                  </div>
+
+                  <div className="flex flex-col">
+                          <DropdownMenuItem asChild>
+                            <div onClick={Handlelogout} className="inline-flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-md">
+                              <LogOut />
+                              Logout
+                            </div>
+                          </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to="/user-dashboard/user-settings"
+                        className="inline-flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-md cursor-pointer"
+                      >
+                        <Settings />
+                        Setting
+                      </Link>
+                    </DropdownMenuItem>
+                  </div>
+
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="cursor-pointer">
-                <div className="rounded-full hover:bg-gray-100">
-                  <ChevronDown color="#A6AAC9" />
-                </div>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent>
-
-                <div className="lg:hidden flex flex-col px-3 py-2">
-                  <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
-                  <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
-                </div>
-
-                <div className="flex flex-col">
-                        <DropdownMenuItem asChild>
-                          <div onClick={Handlelogout} className="inline-flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-md">
-                            <LogOut />
-                            Logout
-                          </div>
-                        </DropdownMenuItem>
-
-                  <DropdownMenuItem asChild>
-                    <Link
-                      to="/user-dashboard/user-settings"
-                      className="inline-flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-md cursor-pointer"
-                    >
-                      <Settings />
-                      Setting
-                    </Link>
-                  </DropdownMenuItem>
-                </div>
-
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          )}
 
         </div>
 

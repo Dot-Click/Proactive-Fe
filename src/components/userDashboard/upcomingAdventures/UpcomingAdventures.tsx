@@ -8,6 +8,7 @@ import { MdArrowOutward } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
 import { UsegetPayment } from "@/hooks/getPaymenthook"
 import { UsegetOpenTrips } from "@/hooks/getOpenTripshook"
+import { UsegetNotifications } from "@/hooks/getNotificationhook"
 import { LoaderIcon } from "lucide-react"
 import { useMemo } from "react"
 
@@ -57,17 +58,34 @@ const UpcomingAdventures = () => {
         return { upcomingTrips: upcoming, pastTrips: past }
     }, [paymentData])
 
-    // Get all open trips that the user hasn't joined yet
-    const { data: openTripsData, isLoading: isOpenTripsLoading } = UsegetOpenTrips()
-    const adventureOpportunities = useMemo(() => {
-        const allOpenTrips = openTripsData?.trips || []
-        const joinedTripIds = new Set([
-            ...upcomingTrips.map((t: any) => t.id),
-            ...pastTrips.map((t: any) => t.id)
-        ])
+    // Include trips that were approved via application (even if not paid yet)
+    const { data: notificationsData } = UsegetNotifications();
+    const approvedTripIds = useMemo(() => {
+        const arr = notificationsData || [];
+        return arr
+            .filter((n: any) => n.type === 'trip' && n.title === 'Application approved')
+            .map((n: any) => {
+                const parts = (n.description || "").split("with trip id ");
+                return parts[1] ? parts[1].trim() : null;
+            })
+            .filter(Boolean);
+    }, [notificationsData]);
 
-        return allOpenTrips.filter((trip: any) => !joinedTripIds.has(trip.id))
-    }, [openTripsData, upcomingTrips, pastTrips])
+    // Get open trips (used for merging approved applications and opportunity list)
+    const { data: openTripsData } = UsegetOpenTrips()
+
+    // Merge approved (but unpaid) trips into upcomingTrips if not already present
+    const mergedUpcomingTrips = useMemo(() => {
+        const allOpen = openTripsData?.trips || [];
+        const approvedTrips = allOpen.filter((t: any) => approvedTripIds.includes(String(t.id)));
+        const existingIds = new Set(upcomingTrips.map((t: any) => String(t.id)));
+        const toAdd = approvedTrips
+            .filter((t: any) => !existingIds.has(String(t.id)))
+            .map((t: any) => ({ ...t, applicationApproved: true }));
+        return [...upcomingTrips, ...toAdd];
+    }, [openTripsData, approvedTripIds, upcomingTrips]);
+
+    // (Previously computed adventure opportunities removed — not used in this component)
 
     const getDaysLeft = (startDate: Date) => {
         const today = new Date()
@@ -173,8 +191,8 @@ const UpcomingAdventures = () => {
                 )}
                 {!isLoading && (
                     <div className="flex flex-col gap-3 px-4 py-6 overflow-y-scroll h-152">
-                        {upcomingTrips.length > 0 ? (
-                            upcomingTrips.map((trip: any) => renderTripCard(trip, false))
+                        {mergedUpcomingTrips.length > 0 ? (
+                            mergedUpcomingTrips.map((trip: any) => renderTripCard(trip, false))
                         ) : (
                             <div className="text-center py-8 text-[#666373]">
                                 <p>No upcoming adventures yet.</p>
@@ -184,38 +202,26 @@ const UpcomingAdventures = () => {
                     </div>
                 )}
             </div>
+ 
 
-            {/* Adventure Opportunities Section */}
+            {/* Past Adventures Section */}
             <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[20px] flex flex-col">
                 <div className="px-4 py-6 flex flex-col lg:flex-row gap-3 justify-between items-center">
                     <span className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold text-lg">
-                        Adventure Opportunities
+                        Past Adventures
                     </span>
-                    <Button
-                        onClick={() => navigate("/open-oppurtunities")}
-                        className="bg-[#0DAC87] rounded-full py-6 px-6 hover:bg-[#0d9b7a] cursor-pointer"
-                    >
-                        Explore More
-                    </Button>
                 </div>
                 <Separator className="border-[#D9D9D9] bg-[#D9D9D9] -mt-[8px]" />
-                {(isLoading || isOpenTripsLoading) && (
-                    <div className="w-full flex items-center justify-center py-10">
-                        <LoaderIcon className="animate-spin" />
-                    </div>
-                )}
-                {!isLoading && !isOpenTripsLoading && (
-                    <div className="flex flex-col gap-3 px-4 py-6 overflow-y-scroll h-152">
-                        {adventureOpportunities.length > 0 ? (
-                            adventureOpportunities.map((trip: any) => renderTripCard(trip, false))
-                        ) : (
-                            <div className="text-center py-8 text-[#666373]">
-                                <p>No new opportunities at the moment.</p>
-                                <p className="text-sm mt-2">Check back later for more adventures!</p>
-                            </div>
-                        )}
-                    </div>
-                )}
+                <div className="flex flex-col gap-3 px-4 py-6 overflow-y-scroll h-152">
+                    {pastTrips.length > 0 ? (
+                        pastTrips.map((trip: any) => renderTripCard(trip, true))
+                    ) : (
+                        <div className="text-center py-8 text-[#666373]">
+                            <p>No past adventures found.</p>
+                            <p className="text-sm mt-2">Complete a trip to see it listed here.</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )

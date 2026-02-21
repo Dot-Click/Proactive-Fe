@@ -10,7 +10,9 @@ interface UserLoginData {
 }
 
 const mutationFunction = async (data: UserLoginData) => {
-    const res = await api.post("/api/auth/login", data);
+    // normalize email to avoid case-sensitivity mismatches
+    const payload = { ...data, email: data.email.trim().toLowerCase() };
+    const res = await api.post("/api/auth/login", payload);
     return res.data;
 };
 

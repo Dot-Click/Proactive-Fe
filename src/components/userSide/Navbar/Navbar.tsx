@@ -34,6 +34,18 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                 <img src={proactive} alt="proactive" className="lg:h-10 h-5 lg:flex hidden" />
 
                 <div className="hidden bg-[#FFFFFF]/75 shadow-lg lg:flex items-center px-4 py-2 rounded-full gap-6 cursor-pointer">
+                    {userData?.role === "user" && (
+                        <Link to="/user-dashboard">
+                            <span
+                                className={`${location.pathname === "/user-dashboard"
+                                    ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
+                                    : ""
+                                    }`}
+                            >
+                                Dashboard
+                            </span>
+                        </Link>
+                    )}
                     <Link to="/">
                         <span
                             className={`${location.pathname === "/"
@@ -180,7 +192,7 @@ const UserSideNavbar = ({ role }: { role: string }) => {
 
                 <div className="lg:flex hidden items-center gap-4">
                     <LanguageSwitcher />
-                    {userData ? (
+                    {userData?.role === "user" ? (
                         <div className="flex items-center gap-3">
                             <Avatar className="w-12 h-12 lg:w-16 lg:h-16">
                                 <AvatarImage src={userData?.avatar || 'https://github.com/shadcn.png'} />
