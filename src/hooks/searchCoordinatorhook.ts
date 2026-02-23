@@ -87,17 +87,22 @@ const searchCoordinators = async (query: string): Promise<Coordinator[]> => {
     const rawCoordinators = response.data?.data?.coordinators || [];
 
     // Mapping the API's nested structure to the UI's Coordinator type
-    return rawCoordinators.map((item: any) => ({
-      id: item.id,
-      email: item.email,
-      // Extracting from coordinatorDetails object per your API response
-      fullName: item.coordinatorDetails?.fullName || "No Name",
-      profilePicture: item.coordinatorDetails?.profilePicture || "",
-      specialities: item.coordinatorDetails?.specialities || [],
-      location: item.coordinatorDetails?.location || "N/A",
-      yearsOfExperience: item.coordinatorDetails?.yearsOfExperience || 0,
-      isActive: item.coordinatorDetails?.isActive ?? true,
-    }));
+    return rawCoordinators.map((item: any) => {
+      const nameFromUser = [item.firstName, item.lastName].filter(Boolean).join(" ") || item.nickName || item.email;
+      const fullName = item.coordinatorDetails?.fullName || nameFromUser || "No Name";
+      return {
+        // Prefer coordinatorDetails.id (the coordinator record id) when available,
+        // otherwise fall back to the user id. This ensures the detail view uses the correct id.
+        id: item.coordinatorDetails?.id || item.id,
+        email: item.email,
+        fullName,
+        profilePicture: item.coordinatorDetails?.profilePicture || item.avatar || "",
+        specialities: item.coordinatorDetails?.specialities || [],
+        location: item.coordinatorDetails?.location || item.location || "N/A",
+        yearsOfExperience: item.coordinatorDetails?.yearsOfExperience || 0,
+        isActive: item.coordinatorDetails?.isActive ?? true,
+      };
+    });
   } catch (error) {
     console.error("Search API Error:", error);
     return [];

@@ -7,7 +7,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { UsegetUserByID, type UserByIdResponse } from "@/hooks/getUserById";
+import { useUpdateUserRole } from "@/hooks/updateUserRolehook";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 type ModalProps = {
   userId: string;
@@ -52,10 +62,20 @@ const userData = [
     Number: "02-24",
   },
 ];
+
 const Modal = ({ userId }: ModalProps) => {
   const { data: userById, isLoading, isError } = UsegetUserByID(userId);
+  const updateRoleMutation = useUpdateUserRole(userId);
+  const [selectedRole, setSelectedRole] = useState<"user" | "coordinator" | "admin" | "">(
+    ""
+  );
 
-  console.log("UserById Data:", userById);
+  // Update selectedRole when userById data loads
+  useEffect(() => {
+    if (userById?.userRoles) {
+      setSelectedRole(userById.userRoles as "user" | "coordinator" | "admin");
+    }
+  }, [userById?.userRoles]);
 
   const name = getDisplayName(userById);
   const email = userById?.email ?? "—";
@@ -65,6 +85,23 @@ const Modal = ({ userId }: ModalProps) => {
     : "USER";
   const phone = userById?.phoneNumber ?? "—";
   const address = userById?.address ?? "—";
+
+  const handleRoleChange = async () => {
+    if (!selectedRole || selectedRole === userById?.userRoles) {
+      toast.info("Select a different role to change");
+      return;
+    }
+
+    try {
+      const result = await updateRoleMutation.mutateAsync({
+        role: selectedRole as "user" | "coordinator" | "admin",
+      });
+
+      toast.success(result.message || "Role updated successfully");
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to update role");
+    }
+  };
 
   return (
     <div>
@@ -157,9 +194,33 @@ const Modal = ({ userId }: ModalProps) => {
                 <div className="px-5 py-4 flex flex-col gap-6">
                   <div className="flex justify-between items-center">
                     <span className="text-[#666373]">Role</span>
-                    <Badge className="px-3 py-2 rounded-[6px] bg-[#C4FFF0] text-[#156250] font-medium text-[14px]">
-                      {membership}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Select
+                        value={selectedRole}
+                        onValueChange={(value) =>
+                          setSelectedRole(value as "user" | "coordinator" | "admin")
+                        }
+                      >
+                        <SelectTrigger className="w-[140px] h-[40px] border border-[#E0E1E2] rounded-[6px]">
+                          <SelectValue placeholder="Select role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="user">User</SelectItem>
+                          <SelectItem value="coordinator">Coordinator</SelectItem>
+                          <SelectItem value="admin">Admin</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {selectedRole && selectedRole !== userById?.userRoles && (
+                        <Button
+                          onClick={handleRoleChange}
+                          disabled={updateRoleMutation.isPending}
+                          className="h-[40px] px-3 bg-[#156250] hover:bg-[#0f4a3d] text-white rounded-[6px]"
+                          size="sm"
+                        >
+                          {updateRoleMutation.isPending ? "Saving..." : "Save"}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-[#666373]">Email Verified</span>
@@ -198,3 +259,4 @@ const Modal = ({ userId }: ModalProps) => {
 };
 
 export default Modal;
+

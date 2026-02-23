@@ -234,8 +234,9 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Avatar and dropdown (only for regular users) */}
+        {/* Avatar and dropdown for any role (user, admin, coordinator) */}
         <div className="flex items-center gap-2 lg:gap-3">
+          {/* Show full user block for regular users */}
           {userData?.role === "user" && (
             <>
               <Avatar className="w-12 h-12 lg:w-20 lg:h-20">
@@ -246,32 +247,72 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
                 <span className="font-semibold text-base lg:text-xl">{displayName}</span>
                 <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
               </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild className="cursor-pointer">
-                  <div className="lg:p-2 rounded-full hover:bg-gray-100">
-                    <ChevronDown />
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem className="flex flex-col gap-2 items-start cursor-pointer">
-                    <div className="flex lg:hidden flex-col">
-                      <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
-                      <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
-                    </div>
-                    <a href="/user-dashboard" className="w-full">
-                      <div className="flex justify-start items-center gap-3">
-                        <span>My Dashboard</span>
-                      </div>
-                    </a>
-                    <div className="flex justify-start items-center gap-3" onClick={Handlelogout}>
-                      <LogOut />
-                      Logout
-                    </div>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </>
           )}
+
+          {/* Profile dropdown for admin and coordinator (also present for user) */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="cursor-pointer">
+              <div className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100">
+                <Avatar className="w-10 h-10">
+                  <AvatarImage src={
+                    userData?.role === "coordinator"
+                      ? user?.data?.user?.coordinatorDetails?.profilePicture || user?.data?.user?.avatar
+                      : user?.data?.user?.avatar
+                  } />
+                  <AvatarFallback>{(displayName || "A").substring(0,2).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div className="hidden lg:flex items-center">
+                  <ChevronDown />
+                </div>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem className="flex flex-col gap-2 items-start cursor-pointer">
+                <div className="flex lg:hidden flex-col">
+                  <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
+                  <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
+                </div>
+                {/* Profile link varies by role */}
+                {userData?.role === "admin" && (
+                  <a href="/dashboard/profile" className="w-full">
+                    <div className="flex justify-start items-center gap-3">
+                      <span>Profile</span>
+                    </div>
+                  </a>
+                )}
+                {userData?.role === "coordinator" && (
+                  <a href="/coordinator-dashboard/profile" className="w-full">
+                    <div className="flex justify-start items-center gap-3">
+                      <span>Profile</span>
+                    </div>
+                  </a>
+                )}
+                {userData?.role === "user" && (
+                  <a href="/user-dashboard" className="w-full">
+                    <div className="flex justify-start items-center gap-3">
+                      <span>My Dashboard</span>
+                    </div>
+                  </a>
+                )}
+                <div className="flex justify-start items-center gap-3" onClick={Handlelogout}>
+                  <LogOut />
+                  Logout
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Visible logout button for quick access */}
+          <div className="hidden md:flex items-center">
+            <button
+              onClick={Handlelogout}
+              title="Logout"
+              className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100"
+            >
+              <LogOut />
+            </button>
+          </div>
           <DrawerBar items={DrawerItems} />
         </div>
 

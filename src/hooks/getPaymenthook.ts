@@ -4,7 +4,7 @@ import { useQuery  } from "@tanstack/react-query";
 
 
 const getPayment = async () => {
-    const response = await api.get("/api/payment");
+    const response = await api.get("/api/payment/me");
     return response.data.data;
 };
 

@@ -417,7 +417,7 @@ import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import Map from "@/assets/sidebaricon/map.png"
 import clock from "@/assets/sidebaricon/clock.png"
 import star from "@/assets/sidebaricon/star.png"
@@ -446,6 +446,10 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
     if (isLoading) {
         return (
             <DialogContent className="sm:max-w-[400px] flex flex-col items-center justify-center py-20">
+                <DialogHeader>
+                    <DialogTitle className="sr-only">Loading coordinator details</DialogTitle>
+                    <DialogDescription className="sr-only">Fetching coordinator details from server</DialogDescription>
+                </DialogHeader>
                 <LoaderIcon className="animate-spin h-10 w-10 text-gray-400" />
                 <p className="mt-4 text-sm text-gray-500">Fetching Details...</p>
             </DialogContent>
@@ -455,6 +459,10 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
     if (isError || !coordinator) {
         return (
             <DialogContent className="sm:max-w-[400px] text-center py-10">
+                <DialogHeader>
+                    <DialogTitle className="sr-only">Coordinator details error</DialogTitle>
+                    <DialogDescription className="sr-only">Failed to load coordinator details</DialogDescription>
+                </DialogHeader>
                 <p className="text-red-500 font-semibold">Error loading coordinator details.</p>
                 <DialogClose asChild>
                     <Button className="mt-4" variant="outline">Close</Button>
@@ -493,6 +501,7 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
                     <DialogTitle className="font-bold text-[22px] text-[#221E33]">
                         {coordinator.fullName}
                     </DialogTitle>
+                    <DialogDescription className="sr-only">Coordinator personal summary and languages</DialogDescription>
                 </DialogHeader>
                 <div className="mt-4 flex flex-col gap-5">
                     <div>
@@ -537,6 +546,7 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
             <DialogContent className="sm:max-w-[880px] max-h-[90vh] border-[6px] border-[#E3E3E3] rounded-[20px] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle className="font-bold text-[24px]">Coordinator Details</DialogTitle>
+                    <DialogDescription className="sr-only">Coordinator detailed information and performance metrics</DialogDescription>
                 </DialogHeader>
 
                 <div className="grid gap-4">
@@ -545,7 +555,7 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
                         <div className="flex flex-col lg:flex-row items-start gap-4">
                             <Avatar className="h-20 w-20 border-2 border-white">
                                 <AvatarImage src={coordinator.profilePicture} alt={coordinator.fullName} />
-                                <AvatarFallback>{coordinator.fullName.charAt(0)}</AvatarFallback>
+                                <AvatarFallback>{(coordinator.fullName && coordinator.fullName.charAt(0)) || "?"}</AvatarFallback>
                             </Avatar>
 
                             <div className="flex flex-col justify-between">
@@ -610,7 +620,7 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
                                 <div className="flex flex-col gap-2">
                                     <span className="text-[#666373] text-sm">Specialties:</span>
                                     <div className="flex flex-wrap gap-2">
-                                        {coordinator.specialities.map((spec: string, i: number) => (
+                                        {(coordinator.specialities || []).map((spec: string, i: number) => (
                                             <Badge key={i} className="bg-[#F5F5F5] text-[#727272] hover:bg-[#F5F5F5] border-none px-3 py-1">
                                                 {spec}
                                             </Badge>
@@ -621,7 +631,7 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
                                 <div className="flex flex-col gap-2">
                                     <span className="text-[#666373] text-sm">Languages:</span>
                                     <div className="flex flex-wrap gap-2">
-                                        {coordinator.languages.map((lang: string, i: number) => (
+                                        {(coordinator.languages || []).map((lang: string, i: number) => (
                                             <Badge key={i} className="bg-[#F5F5F5] text-[#727272] hover:bg-[#F5F5F5] border-none px-4 py-1">
                                                 {lang}
                                             </Badge>

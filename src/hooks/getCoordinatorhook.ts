@@ -1,5 +1,5 @@
 import api from "@/config/axios";
-import { useQuery  } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export interface Coordinator {
     id: string;
@@ -16,10 +16,13 @@ export interface Coordinator {
     yearsOfExperience: number;
     location: string;
     isActive: boolean;
+    totalTrips?: number;
+    totalRevenue?: number;
+    repeatCustomers?: number;
 }
 
 interface CoordinatorProps {
-  coordinators: Coordinator[];
+    coordinators: Coordinator[];
 }
 
 
@@ -32,6 +35,7 @@ export const UsegetCoordinator = () => {
     return useQuery<CoordinatorProps>({
         queryKey: ["coordinator"],
         queryFn: getCoordinator,
-        staleTime: 60 * 3 * 1000, 
+        staleTime: 60 * 3 * 1000,
+        refetchOnMount: true,
     });
 };
