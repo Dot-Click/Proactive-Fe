@@ -1,11 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Calendar, Star, X, ImageIcon } from "lucide-react";
+import { Calendar, Star, X, ImageIcon, CheckCircle2, XCircle } from "lucide-react";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import ApplicationForm from "./ApplicationForm";
 import { useState } from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { ChevronRight, Home, Share2, Scale, Zap } from "lucide-react";
+import { ChevronRight, Home, Share2, Scale, Zap, Wallet, Clock } from "lucide-react";
+import { UsegetMyApplications } from "@/hooks/UsegetMyApplicationshook";
+import { UsegetPayment } from "@/hooks/getPaymenthook";
+import TripPaymentModal from "@/components/payment/TripPaymentModal";
+import { useMemo } from "react";
 
 type MasonryLayoutProps = {
   trip: any;
@@ -162,19 +166,93 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
           </div>
         )}
 
-        {/* Apply Button (Secondary style now that header is more complex) */}
-        {showApplyButton && (
-          <div className="mb-4 flex justify-end">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="bg-[#0DAC87] hover:bg-[#119b7b] text-white cursor-pointer rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-all">
-                  Join This Adventure
+        {/* Apply / Pay / Status Button */}
+        {showApplyButton && (() => {
+          const { data: applications } = UsegetMyApplications();
+          const { data: paymentData } = UsegetPayment();
+
+          const userApp = useMemo(() => {
+            return (applications || []).find((app: any) => String(app.tripId) === String(data?.id));
+          }, [applications, data?.id]);
+
+          const isApproved = userApp?.status === 'approved';
+          const isPending = userApp?.status === 'pending';
+          const isRejected = userApp?.status === 'rejected';
+
+          const isPaid = useMemo(() => {
+            const tripPayments = paymentData?.tripPayments || [];
+            const OK_STATUSES = new Set(["completed", "paid", "confirmed", "succeeded", "success"]);
+            return tripPayments.some((p: any) =>
+              String(p.tripId) === String(data?.id) &&
+              OK_STATUSES.has((p.status || "").toString().toLowerCase())
+            );
+          }, [paymentData, data?.id]);
+
+          if (isPaid) {
+            return (
+              <div className="mb-4 flex justify-end">
+                <Button
+                  onClick={() => navigate("/user-dashboard")}
+                  className="bg-[#0DAC87]/10 text-[#0DAC87] border border-[#0DAC87]/20 rounded-full px-10 py-6 text-lg font-bold shadow-sm transition-all flex items-center gap-2"
+                >
+                  <CheckCircle2 size={20} />
+                  Already Booked
                 </Button>
-              </DialogTrigger>
-              <ApplicationForm />
-            </Dialog>
-          </div>
-        )}
+              </div>
+            );
+          }
+
+          if (isApproved) {
+            return (
+              <div className="mb-4 flex justify-end">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="bg-[#FFB800] hover:bg-[#e6a600] text-[#221E33] cursor-pointer rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+                      <Wallet size={20} />
+                      Pay Now (€{data?.perHeadPrice || data?.price || 0})
+                    </Button>
+                  </DialogTrigger>
+                  <TripPaymentModal tripId={data?.id} />
+                </Dialog>
+              </div>
+            );
+          }
+
+          if (isPending) {
+            return (
+              <div className="mb-4 flex justify-end">
+                <Button disabled className="bg-[#F8F9FB] text-[#666373] border border-[#ECECF1] rounded-full px-10 py-6 text-lg font-bold shadow-sm flex items-center gap-2 cursor-default">
+                  <Clock size={20} />
+                  Application Under Review
+                </Button>
+              </div>
+            );
+          }
+
+          if (isRejected) {
+            return (
+              <div className="mb-4 flex justify-end">
+                <Button disabled className="bg-red-50 text-red-500 border border-red-100 rounded-full px-10 py-6 text-lg font-bold shadow-sm flex items-center gap-2 cursor-default">
+                  <XCircle size={20} />
+                  Application Rejected
+                </Button>
+              </div>
+            );
+          }
+
+          return (
+            <div className="mb-4 flex justify-end">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="bg-[#0DAC87] hover:bg-[#119b7b] text-white cursor-pointer rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-all">
+                    Join This Adventure
+                  </Button>
+                </DialogTrigger>
+                <ApplicationForm />
+              </Dialog>
+            </div>
+          );
+        })()}
 
         {/* Highlights Section */}
         <div className="mt-12 mb-16">

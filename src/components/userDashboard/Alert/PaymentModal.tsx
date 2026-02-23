@@ -151,7 +151,9 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: (paymentMethodId: string) => v
 
 const PaymentModal = () => {
     const [showhide, setShowHide] = useState(true);
-    const { mutateAsync } = UseMembership();
+    const { mutateAsync, data: membershipResp } = UseMembership();
+    const membershipData = membershipResp?.data || membershipResp;
+
     const handlePaymentSuccess = async (paymentMethodId: string) => {
         try {
             await mutateAsync({
@@ -212,15 +214,19 @@ const PaymentModal = () => {
                                 <div className="flex flex-col gap-8">
                                     <div className="flex justify-between">
                                         <span className="text-[#221E33]">Membership ID</span>
-                                        <span className="text-[#221E33] font-semibold">PA-123454</span>
+                                        <span className="text-[#221E33] font-semibold">{membershipData?.membershipId || "PA-123454"}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-[#221E33]">Validity</span>
-                                        <span className="text-[#221E33] font-semibold">Sept 30, 2025 - Sept 30, 2026</span>
+                                        <span className="text-[#221E33] font-semibold">
+                                            {membershipData?.membershipExpiry ? (
+                                                `valid until ${new Date(membershipData.membershipExpiry).toLocaleDateString()}`
+                                            ) : "1 Year Activation"}
+                                        </span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="text-[#221E33]">Remaining Days</span>
-                                        <span className="text-[#221E33] font-semibold">365 Days</span>
+                                        <span className="text-[#221E33]">Status</span>
+                                        <span className="text-[#221E33] font-semibold capitalize">{membershipData?.status || "Paid"}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-[#221E33]">Discount  Available</span>

@@ -13,6 +13,7 @@ export const UseMembership = () => {
         mutationFn: mutationFunction,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["payment"] });
+            queryClient.invalidateQueries({ queryKey: ["currentUser"] });
         },
     });
 };

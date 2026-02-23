@@ -6,15 +6,15 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { RiCheckDoubleLine } from "react-icons/ri";
-import { ChevronDown, LogOut, Settings } from "lucide-react";
+import { ChevronDown, LogOut, Settings, Wallet } from "lucide-react";
 import proactive from "../../../assets/proactive-logo.png";
 import Notification from "../../../assets/sidebaricon/notification.png";
-import PayNow from "@/components/Adventureoppurtunities/ViewDetailtrip/PayNow";
+import TripPaymentModal from "@/components/payment/TripPaymentModal";
 import { UserDashboardDrawerItems } from "@/components/DrawerItems";
 import DrawerBar from "@/components/Drawer";
 import { useLogoutUser } from "@/hooks/Uselogouthook";
@@ -23,10 +23,12 @@ import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
 import { FaCheckDouble } from "react-icons/fa";
 import { UsegetNotifications } from "@/hooks/getNotificationhook";
 import { useMarkAsReadNotification } from "@/hooks/MarkAsReadNotification";
+import PaymentModal from "../Alert/PaymentModal";
 
 interface NavbarProps {
   role: string
 }
+
 const Navbar = ({ role }: NavbarProps) => {
   const DrawerItems = role === "user-dashboard"
     ? UserDashboardDrawerItems
@@ -51,7 +53,6 @@ const Navbar = ({ role }: NavbarProps) => {
       toast.error(message)
     }
   }
-
 
   return (
     <>
@@ -103,11 +104,21 @@ const Navbar = ({ role }: NavbarProps) => {
               Opportunities
             </span>
           </Link>
-
-          
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
+          {userData?.role === "user" && !userData?.membershipAvailable && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="hidden md:flex bg-[#0DAC87] hover:bg-[#11a180] text-white rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all active:scale-95 cursor-pointer items-center gap-2">
+                  <Wallet size={16} />
+                  Become a Member (€50)
+                </Button>
+              </DialogTrigger>
+              <PaymentModal />
+            </Dialog>
+          )}
+
           <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <div className="cursor-pointer relative bg-[#F2FBF9] rounded-full w-10 h-10 lg:w-14 lg:h-14 flex items-center justify-center md:mt-1">
@@ -126,13 +137,13 @@ const Navbar = ({ role }: NavbarProps) => {
                   </span>
                   <div className="flex items-center gap-1">
                     <RiCheckDoubleLine color="#000000" size={20} />
-                    <span 
+                    <span
                       onClick={() => {
                         const unreadIds = notifications?.filter((n: any) => !n.read).map((n: any) => n.id as string) || [];
                         if (unreadIds && unreadIds.length > 0) {
                           markAsRead.mutate(unreadIds);
                         }
-                      }} 
+                      }}
                       className="underline cursor-pointer text-[#060A14] font-semibold"
                     >
                       {notificationsLoading ? "Loading..." : "Mark all as read"}
@@ -166,57 +177,56 @@ const Navbar = ({ role }: NavbarProps) => {
 
               {/* Notification Item */}
               {(show ? notifications : notifications?.filter((n: any) => !n.read))?.map((notification: any) => (
-                <div className="px-2 py-2">
-                <div className="bg-[#F4F4F4] rounded-[10px] px-4 py-3">
-                  <div className="flex justify-between items-center">
-                    <span className="font-bold text-[12px]">
-                      {notification.title}
-                    </span>
-                    <div className="w-2 h-2 bg-[#0DAC87] rounded-full" />
-                  </div>
+                <div key={notification.id} className="px-2 py-2">
+                  <div className="bg-[#F4F4F4] rounded-[10px] px-4 py-3">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-[12px]">
+                        {notification.title}
+                      </span>
+                      <div className="w-2 h-2 bg-[#0DAC87] rounded-full" />
+                    </div>
 
-                  <div className="flex flex-col items-start gap-4 mt-2">
-                    <span className="text-[#787878] text-[12px]">
-                      {notification.description.split("with payment.")[0] + "with payment."}
-                    </span>
-                    {notification.type === "trip" && notification.title === "Application approved" && <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const tripId = notification.description.split("with trip id ")[1];
-                        setSelectedTripId(tripId);
-                        setDropdownOpen(false);
-                        setOpen(true);
-                      }}
-                      className="rounded-full px-6 bg-[#0DAC87] cursor-pointer hover:bg-[#109c7c]"
-                    >
-                      Pay Now
-                    </Button>
-                    }
-                    <FaCheckDouble
-                      className={`cursor-pointer ${notification.read ? "text-blue-500" : "text-gray-400"
-                        }`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        markAsRead.mutate(notification.id);
-                      }}
-                    />  
+                    <div className="flex flex-col items-start gap-4 mt-2">
+                      <span className="text-[#787878] text-[12px]">
+                        {notification.description}
+                      </span>
+                      {notification.type === "trip" && notification.title === "Application approved" && <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const tripId = notification.description.split("with trip id ")[1];
+                          setSelectedTripId(tripId);
+                          setDropdownOpen(false);
+                          setOpen(true);
+                        }}
+                        className="rounded-full px-6 bg-[#0DAC87] cursor-pointer hover:bg-[#109c7c]"
+                      >
+                        Pay Now
+                      </Button>
+                      }
+                      <FaCheckDouble
+                        className={`cursor-pointer ${notification.read ? "text-blue-500" : "text-gray-400"
+                          }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          markAsRead.mutate(notification.id);
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
               ))}
-
             </DropdownMenuContent>
           </DropdownMenu>
 
           {userData?.role === "user" && (
             <div className="flex items-center gap-2 lg:gap-3">
               <Avatar className="w-10 h-10 lg:w-16 lg:h-16 bg-red-500">
-                <AvatarImage src={user?.data?.user?.avatar}/>
+                <AvatarImage src={userData?.avatar} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <div className="hidden lg:flex flex-col">
                 <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
-                <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
+                <span className="text-sm text-gray-500">{userData?.email}</span>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger className="cursor-pointer">
@@ -226,51 +236,46 @@ const Navbar = ({ role }: NavbarProps) => {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent>
-
                   <div className="lg:hidden flex flex-col px-3 py-2">
                     <span className="font-semibold text-sm lg:text-lg">{displayName}</span>
-                    <span className="text-sm text-gray-500">{user?.data?.user?.email}</span>
+                    <span className="text-sm text-gray-500">{userData?.email}</span>
                   </div>
 
                   <div className="flex flex-col">
-                          <DropdownMenuItem asChild>
-                            <div onClick={Handlelogout} className="inline-flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-md">
-                              <LogOut />
-                              Logout
-                            </div>
-                          </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <div onClick={Handlelogout} className="inline-flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-md">
+                        <LogOut size={16} />
+                        Logout
+                      </div>
+                    </DropdownMenuItem>
 
                     <DropdownMenuItem asChild>
                       <Link
                         to="/user-dashboard/user-settings"
                         className="inline-flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-md cursor-pointer"
                       >
-                        <Settings />
+                        <Settings size={16} />
                         Setting
                       </Link>
                     </DropdownMenuItem>
                   </div>
-
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           )}
 
+          <div className="lg:hidden flex">
+            <DrawerBar items={DrawerItems} />
+          </div>
         </div>
-
-        <div className="lg:hidden flex">
-          <DrawerBar items={DrawerItems} />
-        </div>
-
       </div>
 
       <Dialog open={open} onOpenChange={(val) => {
         setOpen(val);
         if (!val) setSelectedTripId(null);
       }}>
-        <PayNow tripId={selectedTripId} />
+        {selectedTripId && <TripPaymentModal tripId={selectedTripId} />}
       </Dialog>
-
     </>
   );
 };

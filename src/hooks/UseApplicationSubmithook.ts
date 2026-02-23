@@ -26,6 +26,7 @@ export const UseApplication = () => {
         mutationFn: mutationFunction,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["Application"] });
+            queryClient.invalidateQueries({ queryKey: ["my-applications"] });
         },
     });
 };

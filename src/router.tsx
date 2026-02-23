@@ -51,6 +51,9 @@ import CookiePolicyPage from "./pages/userSide/CookiePolicy.page";
 import VerifyEmail from "./components/login/VerifyEmail";
 import ResetPassword from "./components/login/ResetPassword";
 import ViewTripDetailPage from "./pages/userSide/ViewTripDetail.page";
+import PaymentSuccessPage from "./pages/payment/PaymentSuccess";
+import PaymentFailurePage from "./pages/payment/PaymentFailure";
+
 
 function App() {
   return (
@@ -168,6 +171,14 @@ function App() {
         <Route
           path="/user-dashboard/user-settings"
           element={<UserSettingPage />}
+        />
+        <Route
+          path="/user-dashboard/payment/success"
+          element={<PaymentSuccessPage />}
+        />
+        <Route
+          path="/user-dashboard/payment/failure"
+          element={<PaymentFailurePage />}
         />
       </Route>
 
