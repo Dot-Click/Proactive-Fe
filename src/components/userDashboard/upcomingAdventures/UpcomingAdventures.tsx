@@ -328,7 +328,7 @@ const UpcomingAdventures = () => {
             <div className="bg-white rounded-[32px] border border-[#EEEEEE] overflow-hidden shadow-sm">
                 <div className="px-8 py-6 flex flex-col md:flex-row gap-4 justify-between items-center bg-[#FAFAFA]/50 border-b border-[#EEEEEE]">
                     <div className="flex flex-col items-center md:items-start">
-                        <h2 className="text-[#1F1B2C] font-black text-xl tracking-tight">Mission History</h2>
+                        <h2 className="text-[#1F1B2C] font-black text-xl tracking-tight">Past Adventures</h2>
                         <p className="text-[#666373] text-xs font-medium uppercase tracking-widest">Completed Adventures</p>
                     </div>
                 </div>
