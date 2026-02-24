@@ -1,14 +1,14 @@
 import Footer from "@/components/Footer"
-import Navbar from "@/components/userDashboard/Navbar/Navbar"
+import UserSideNavbar from "@/components/userSide/Navbar/Navbar"
 import { Outlet } from "react-router-dom"
 
 const Userlayout = () => {
     return (
-        <div className="flex flex-col justify-between bg-[#FFFFFF] w-full">
-            <div className="w-full px-16">
-                <Navbar role="user-dashboard"/>
+        <div className="flex flex-col min-h-screen bg-[#FFFFFF] w-full relative">
+            <UserSideNavbar />
+            <div className="pt-24 flex-1">
+                <Outlet />
             </div>
-            <Outlet/>
             <Footer />
         </div>
     )

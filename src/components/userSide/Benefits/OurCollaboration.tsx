@@ -18,7 +18,7 @@ const OurCollaboration = () => {
                     </div>
                 </div> */}
             </div>
-            <div className="md:py-80 py-60">
+            <div className=" py-60">
                 <div className="flex flex-col justify-center items-center md:h-120 h-100 lg:gap-20 gap-4 px-2">
                     <div className="relative">
                         <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text 

@@ -1,7 +1,7 @@
 import Coordinatordetail from "@/components/Adventureoppurtunities/ViewDetailtrip/Coordinatordetail";
 import Daybyday from "@/components/Adventureoppurtunities/ViewDetailtrip/Daybyday";
 import Includeditem from "@/components/Adventureoppurtunities/ViewDetailtrip/Includeditem";
-import Locationmeetingpoint from "@/components/Adventureoppurtunities/ViewDetailtrip/Locationmeetingpoint";
+// import Locationmeetingpoint from "@/components/Adventureoppurtunities/ViewDetailtrip/Locationmeetingpoint";
 import MasonryLayout from "@/components/Adventureoppurtunities/ViewDetailtrip/MasonryLayout";
 import ParticipantsCards from "@/components/Adventureoppurtunities/ViewDetailtrip/ParticipantsCards";
 import SurfaceCamp from "@/components/Adventureoppurtunities/ViewDetailtrip/SurfaceCamp";
@@ -82,7 +82,7 @@ const ViewTripDetailPage = () => {
 
           {/* Main Column (66%) */}
           <div className="lg:w-2/3 space-y-16">
-            <Locationmeetingpoint trip={trip} />
+            {/* <Locationmeetingpoint trip={trip} /> */}
             <Tripmood />
             {(isWildWeekend || isWildTrips) && <SurfaceCamp />}
             {isWildTrips && <Daybyday trip={trip} />}

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import proactive from "../../../assets/proactive-logo.png";
 import { Button } from "@/components/ui/button";
@@ -17,35 +18,51 @@ import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import { UsegetCurrentUser } from '@/hooks/getCurrentUserhook'
 import { useLogoutUser } from '@/hooks/Uselogouthook'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from "@/components/ui/badge";
+import { RiCheckDoubleLine } from "react-icons/ri";
+import { FaCheckDouble } from "react-icons/fa";
+import { UsegetNotifications } from "@/hooks/getNotificationhook";
+import { useMarkAsReadNotification } from "@/hooks/MarkAsReadNotification";
+import { LayoutDashboard, Wallet, Settings, LogOut, Compass } from "lucide-react";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import PaymentModal from "@/components/userDashboard/Alert/PaymentModal";
+import NotificationIconAsset from "../../../assets/sidebaricon/notification.png";
+import TripPaymentModal from "@/components/payment/TripPaymentModal";
+// import { UserDashboardDrawerItems } from "@/components/DrawerItems";
 
-const UserSideNavbar = ({ role }: { role: string }) => {
+const UserSideNavbar = () => {
     const location = useLocation();
     const { t } = useTranslation();
-    const DrawerItems = role === "UserSide"
-        ? UserSideDrawerItems
-        : [];
     const navigate = useNavigate()
     const { data: user } = UsegetCurrentUser()
     const logout = useLogoutUser()
     const userData = user?.data?.user
+    const DrawerItems = [
+        ...UserSideDrawerItems,
+        ...(userData?.role === "user" ? [
+            { label: "My Dashboard", href: "/user-dashboard" },
+            { label: "Adventure Opportunities", href: "/user-dashboard/adventure-oppurtunities" }
+        ] : [])
+    ];
+
+    const { data: notifications, isLoading: notificationsLoading } = UsegetNotifications()
+    const markAsRead = useMarkAsReadNotification();
+    const [showAllNotifications, setShowAllNotifications] = useState(true);
+    const [openPayment, setOpenPayment] = useState(false);
+    const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    const displayName = userData?.role === "coordinator" ? userData?.coordinatorDetails?.fullName : userData?.FirstName || userData?.email || "User";
+
     return (
         <>
             <div className="flex justify-between items-center gap-8 px-6 mt-6 absolute top-0 left-0 right-0 container mx-auto z-10">
-                <img src={proactive} alt="proactive" className="lg:h-10 h-5 lg:flex hidden" />
+                <Link to="/" className="shrink-0 flex items-center">
+                    <img src={proactive} alt="proactive" className="lg:h-10 h-6 w-auto" />
+                </Link>
 
                 <div className="hidden bg-[#FFFFFF]/75 shadow-lg lg:flex items-center px-4 py-2 rounded-full gap-6 cursor-pointer">
-                    {userData?.role === "user" && (
-                        <Link to="/user-dashboard">
-                            <span
-                                className={`${location.pathname === "/user-dashboard"
-                                    ? "bg-[#000000] rounded-full px-6 py-2 text-white font-semibold"
-                                    : ""
-                                    }`}
-                            >
-                                Dashboard
-                            </span>
-                        </Link>
-                    )}
+
                     <Link to="/">
                         <span
                             className={`${location.pathname === "/"
@@ -73,10 +90,10 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="cursor-pointer">
                                     <Link to="/what-we-do">
-                                    <div className="flex gap-1 items-center text-nowrap">
-                                        {t('navbar.whatWeDo')}
-                                        <ChevronDown className='w-4 h-4' />
-                                    </div>
+                                        <div className="flex gap-1 items-center text-nowrap">
+                                            {t('navbar.whatWeDo')}
+                                            <ChevronDown className='w-4 h-4' />
+                                        </div>
                                     </Link>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="bg-[#FFFFFF]/95 flex flex-col justify-center items-center px-4 mt-4">
@@ -155,7 +172,7 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                                             </Link>
                                         </div>
 
-                                        {/* Community */}       
+                                        {/* Community */}
                                         <div className="flex flex-col min-w-[180px]">
                                             <span className="text-xs font-semibold text-gray-400 mb-2">
                                                 {t('navbar.community')}
@@ -193,23 +210,138 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                 <div className="lg:flex hidden items-center gap-4">
                     <LanguageSwitcher />
                     {userData?.role === "user" ? (
-                        <div className="flex items-center gap-3">
-                            <Avatar className="w-12 h-12 lg:w-16 lg:h-16">
-                                <AvatarImage src={userData?.avatar || 'https://github.com/shadcn.png'} />
-                                <AvatarFallback>{(userData?.FirstName || userData?.email || 'U').charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger className="cursor-pointer">
-                                    <div className="flex flex-col text-left">
-                                        <span className="font-semibold text-base lg:text-lg">{userData?.FirstName || userData?.coordinatorDetails?.fullName || userData?.email}</span>
-                                        <span className="text-sm text-gray-500">{userData?.email}</span>
+                        <div className="flex items-center gap-4">
+                            {!userData?.membershipAvailable && (
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <Button className="bg-[#0DAC87] hover:bg-[#11a180] text-white rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all active:scale-95 cursor-pointer items-center gap-2">
+                                            <Wallet size={16} />
+                                            Become a Member (€50)
+                                        </Button>
+                                    </DialogTrigger>
+                                    <PaymentModal />
+                                </Dialog>
+                            )}
+
+                            {/* Notifications */}
+                            <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+                                <DropdownMenuTrigger asChild>
+                                    <div className="cursor-pointer relative bg-white/10 hover:bg-white/20 rounded-full w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center transition-colors">
+                                        <Badge className="font-bold absolute -top-1 -right-1 bg-black text-[10px] text-white rounded-full w-5 h-5 flex items-center justify-center border-2 border-white">
+                                            {notifications?.filter((n: any) => !n.read).length || '0'}
+                                        </Badge>
+                                        <img src={NotificationIconAsset} alt="Notification" className="w-5 h-5 invert" />
                                     </div>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuItem onClick={() => navigate('/user-dashboard')}>My Dashboard</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => logout.mutate({ role: 'user' })}>Logout</DropdownMenuItem>
+
+                                <DropdownMenuContent className="w-80 lg:w-96 max-h-[500px] overflow-y-auto">
+                                    <div className="px-4 py-4">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-lg font-bold bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">
+                                                Notifications
+                                            </span>
+                                            <div className="flex items-center gap-1">
+                                                <RiCheckDoubleLine className="text-black w-5 h-5" />
+                                                <span
+                                                    onClick={() => {
+                                                        const unreadIds = notifications?.filter((n: any) => !n.read).map((n: any) => n.id as string) || [];
+                                                        if (unreadIds.length > 0) markAsRead.mutate(unreadIds);
+                                                    }}
+                                                    className="underline cursor-pointer text-[#060A14] font-semibold text-sm"
+                                                >
+                                                    {notificationsLoading ? "Loading..." : "Mark all as read"}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-4 flex items-center gap-4 cursor-pointer text-sm">
+                                            <span
+                                                onClick={() => setShowAllNotifications(true)}
+                                                className={`${showAllNotifications ? "border-b-2 border-black font-semibold" : "text-gray-500"}`}
+                                            >
+                                                All
+                                            </span>
+                                            <span
+                                                onClick={() => setShowAllNotifications(false)}
+                                                className={`${!showAllNotifications ? "border-b-2 border-black font-semibold" : "text-gray-500"}`}
+                                            >
+                                                Unread
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="border-b border-gray-100" />
+
+                                    {(showAllNotifications ? notifications : notifications?.filter((n: any) => !n.read))?.map((notification: any) => (
+                                        <div key={notification.id} className="p-2">
+                                            <div className={`rounded-lg p-3 transition-colors ${notification.read ? 'bg-white' : 'bg-gray-50'}`}>
+                                                <div className="flex justify-between items-start mb-1">
+                                                    <span className="font-bold text-xs">{notification.title}</span>
+                                                    {!notification.read && <div className="w-2 h-2 bg-[#0DAC87] rounded-full shrink-0 mt-1" />}
+                                                </div>
+                                                <p className="text-gray-500 text-xs mb-3">{notification.description}</p>
+                                                <div className="flex justify-between items-center">
+                                                    {notification.type === "trip" && notification.title === "Application approved" && (
+                                                        <Button
+                                                            size="sm"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                const tripId = notification.description.split("with trip id ")[1];
+                                                                setSelectedTripId(tripId);
+                                                                setDropdownOpen(false);
+                                                                setOpenPayment(true);
+                                                            }}
+                                                            className="bg-[#0DAC87] hover:bg-[#109c7c] h-7 text-[10px] rounded-full px-3"
+                                                        >
+                                                            Pay Now
+                                                        </Button>
+                                                    )}
+                                                    <FaCheckDouble
+                                                        className={`cursor-pointer ml-auto w-4 h-4 ${notification.read ? "text-blue-500" : "text-gray-300"}`}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            markAsRead.mutate(notification.id);
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {(!notifications || notifications.length === 0) && (
+                                        <div className="py-8 text-center text-gray-400 text-sm">No notifications yet</div>
+                                    )}
                                 </DropdownMenuContent>
                             </DropdownMenu>
+
+                            <div className="flex items-center gap-3">
+                                <Avatar className="w-10 h-10 lg:w-12 lg:h-12 border-2 border-white shadow-sm">
+                                    <AvatarImage src={userData?.avatar || 'https://github.com/shadcn.png'} />
+                                    <AvatarFallback>{(userData?.FirstName || userData?.email || 'U').charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger className="cursor-pointer">
+                                        <div className="flex flex-col text-left">
+                                            <span className="font-bold text-sm lg:text-base leading-tight">{displayName}</span>
+                                            <span className="text-xs text-gray-500 truncate max-w-[120px]">{userData?.email}</span>
+                                        </div>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-56">
+                                        <DropdownMenuItem onClick={() => navigate('/user-dashboard')} className="cursor-pointer gap-2">
+                                            <LayoutDashboard className="w-4 h-4 text-[#0DAC87]" /> My Dashboard
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => navigate('/user-dashboard/adventure-oppurtunities')} className="cursor-pointer gap-2">
+                                            <Compass className="w-4 h-4 text-[#0DAC87]" /> Adventure Opportunities
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => navigate('/user-dashboard/user-settings')} className="cursor-pointer gap-2">
+                                            <Settings className="w-4 h-4 text-gray-400" /> Settings
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem onClick={() => logout.mutate({ role: 'user' })} className="cursor-pointer text-red-600 gap-2">
+                                            <LogOut className="w-4 h-4" /> Logout
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
                         </div>
                     ) : (
                         <>
@@ -225,8 +357,15 @@ const UserSideNavbar = ({ role }: { role: string }) => {
                 </div>
 
             </div>
+
+            <Dialog open={openPayment} onOpenChange={(val) => {
+                setOpenPayment(val);
+                if (!val) setSelectedTripId(null);
+            }}>
+                {selectedTripId && <TripPaymentModal tripId={selectedTripId} />}
+            </Dialog>
         </>
     )
 }
 
-export default UserSideNavbar
+export default UserSideNavbar;

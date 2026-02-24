@@ -275,11 +275,11 @@ const Adventuremomentscards = () => {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-6 mb-8">
+      <div className="flex flex-col lg:flex-row gap-6 my-10 mt-20 items-center justify-center">
         {cards.map((card) => (
           <div
             key={card.id}
-            className="relative rounded-[14px] overflow-hidden cursor-pointer group transform origin-center transition-all duration-500 hover:scale-110 hover:shadow-2xl z-10 hover:z-20"
+            className="relative rounded-[14px] overflow-hidden cursor-pointer group transform origin-center transition-all duration-500 hover:scale-110 hover:-translate-y-6 hover:shadow-2xl z-10 hover:z-20"
             onClick={() => openVideo(card.videoUrl)}
             onMouseEnter={() => handleMouseEnter(card.id)}
             onMouseLeave={() => handleMouseLeave(card.id)}

@@ -28,7 +28,7 @@ const JoinAdventureCommunity = () => {
               {/* Image Container */}
               <div className="relative rounded-xl overflow-hidden z-10">
                 <img
-                  src="/src/assets/connect1.png" // Update with actual adventure group image
+                  src="https://res.cloudinary.com/dkkq2n15h/image/upload/v1771910192/connect1_dbklhh.png" // Update with actual adventure group image
                   alt="Grupo de aventureros en la playa"
                   className="w-full h-auto object-cover rounded-xl"
                   onError={(e) => {

@@ -488,54 +488,94 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
         const aventurasText = Array.isArray(crazyAdventures)
             ? crazyAdventures.join(", ")
             : typeof crazyAdventures === "string"
-            ? crazyAdventures
-            : "—";
+                ? crazyAdventures
+                : "—";
         const idiomasText =
             Array.isArray(coordinator.languages) && coordinator.languages.length > 0
                 ? coordinator.languages.join(", ")
                 : "—";
+        const tripsCompleted = coordinator?.completedTrips || coordinator?.totalTrips || 0;
 
         return (
-            <DialogContent className="sm:max-w-[520px] max-h-[90vh] border-[6px] border-[#E3E3E3] rounded-[20px] overflow-y-auto">
-                <DialogHeader>
-                    <DialogTitle className="font-bold text-[22px] text-[#221E33]">
-                        {coordinator.fullName}
-                    </DialogTitle>
-                    <DialogDescription className="sr-only">Coordinator personal summary and languages</DialogDescription>
+            <DialogContent className="sm:max-w-[800px] max-h-[90vh] border-[6px] border-[#E3E3E3] rounded-[32px] overflow-y-auto p-0">
+                <DialogHeader className="sr-only">
+                    <DialogTitle>{coordinator.fullName}</DialogTitle>
+                    <DialogDescription>Coordinator Details</DialogDescription>
                 </DialogHeader>
-                <div className="mt-4 flex flex-col gap-5">
-                    <div>
-                        <h3 className="mb-1.5 text-sm font-semibold text-[#666373]">Biografía</h3>
-                        <p className="text-[15px] leading-relaxed text-[#221E33]">
-                            {coordinator.bio || "—"}
-                        </p>
+
+                <div className="flex flex-col md:flex-row min-h-[500px]">
+                    {/* Left Side: Photo & Trips Done */}
+                    <div className="md:w-[40%] bg-[#FAFAFA] p-8 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-[#EEEEEE]">
+                        <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden border-4 border-white shadow-xl mb-8">
+                            <img
+                                src={coordinator.profilePicture || "https://github.com/shadcn.png"}
+                                alt={coordinator.fullName}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        <div className="text-center w-full max-w-[200px]">
+                            <p className="text-[#666373] text-xs font-bold uppercase tracking-[0.2em] mb-2">
+                                VIAJES REALIZADOS
+                            </p>
+                            <div className="bg-white rounded-2xl py-4 shadow-sm border border-[#EEEEEE]">
+                                <span className="text-4xl font-black text-[#221E33]">
+                                    {tripsCompleted}
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h3 className="mb-1.5 text-sm font-semibold text-[#666373]">Aventuras locas</h3>
-                        <p className="text-[15px] leading-relaxed text-[#221E33]">{aventurasText}</p>
+
+                    {/* Right Side: Info Sections */}
+                    <div className="md:w-[60%] p-8 sm:p-10 flex flex-col gap-8 bg-white">
+                        <div className="space-y-1">
+                            <h2 className="text-3xl sm:text-4xl font-black text-[#221E33] uppercase leading-tight">
+                                {coordinator.fullName}
+                            </h2>
+                            <p className="text-[#0DAC87] font-bold text-sm tracking-wider uppercase">
+                                Coordinador ProActive
+                            </p>
+                        </div>
+
+                        <div className="space-y-6">
+                            {coordinator.bio && (
+                                <div className="space-y-2">
+                                    <h3 className="text-[#666373] text-xs font-black uppercase tracking-widest">Biografía</h3>
+                                    <p className="text-[#221E33] text-[15px] leading-relaxed">
+                                        {coordinator.bio}
+                                    </p>
+                                </div>
+                            )}
+
+                            <div className="space-y-2">
+                                <h3 className="text-[#666373] text-xs font-black uppercase tracking-widest">Idiomas</h3>
+                                <p className="text-[#221E33] text-[15px] font-medium">{idiomasText}</p>
+                            </div>
+
+                            <div className="space-y-2">
+                                <h3 className="text-[#666373] text-xs font-black uppercase tracking-widest">Aventuras Locas</h3>
+                                <p className="text-[#221E33] text-[15px] font-medium">{aventurasText}</p>
+                            </div>
+                        </div>
+
+                        <div className="mt-auto pt-8 flex flex-col gap-3">
+                            <Button
+                                onClick={() => navigate("/open-oppurtunities")}
+                                className="w-full rounded-full bg-[#0DAC87] hover:bg-[#09a07d] text-white font-bold h-14 text-base shadow-lg shadow-[#0DAC87]/20 transition-all active:scale-95"
+                            >
+                                Aventuras realizadas
+                            </Button>
+
+                            <DialogClose asChild>
+                                <Button
+                                    variant="ghost"
+                                    className="w-full rounded-full text-[#666373] hover:text-[#221E33] font-bold h-10 hover:bg-gray-50"
+                                >
+                                    Cerrar
+                                </Button>
+                            </DialogClose>
+                        </div>
                     </div>
-                    <div>
-                        <h3 className="mb-1.5 text-sm font-semibold text-[#666373]">Idiomas</h3>
-                        <p className="text-[15px] leading-relaxed text-[#221E33]">{idiomasText}</p>
-                    </div>
-                    <div className="mt-2">
-                        <Button
-                            onClick={() => navigate("/open-oppurtunities")}
-                            className="w-full rounded-full bg-[#0DAC87] hover:bg-[#09a07d] font-bold h-12 px-6"
-                        >
-                            Aventuras realizadas
-                        </Button>
-                    </div>
-                </div>
-                <div className="mt-6 flex justify-center">
-                    <DialogClose asChild>
-                        <Button
-                            variant="outline"
-                            className="rounded-full bg-[#E0DDDD] hover:bg-[#c7c1c1] text-[#606066] h-11 px-8 font-bold"
-                        >
-                            Cerrar
-                        </Button>
-                    </DialogClose>
                 </div>
             </DialogContent>
         );
@@ -697,7 +737,7 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
                                     >
                                         Edit Profile
                                     </Button>
-                                    <Button 
+                                    <Button
                                         onClick={handleSendEmail}
                                         className="w-full md:w-auto font-bold rounded-full bg-[#000000] hover:bg-[#333333] cursor-pointer h-12 px-10"
                                     >

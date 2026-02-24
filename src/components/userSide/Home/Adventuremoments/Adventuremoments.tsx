@@ -11,7 +11,7 @@ const Adventuremoments = () => {
                 <h1 className="font-bold lg:text-4xl text-2xl text-center bg-linear-to-r from-[#FFFFFF] to-[#E3E3E3] text-transparent bg-clip-text">{t('home.adventureMoments')}</h1>
                 <p className="lg:tracking-wider text-center text-sm text-[#FFFFFF]" dangerouslySetInnerHTML={{ __html: t('home.adventureOpportunitiesSubtitle').replace(/\n/g, '<br className="lg:block hidden" />') }} />
             </div>
-            <div className="absolute inset-x-0 bottom-0 top-32 flex justify-center items-center pointer-events-none">
+            <div className="absolute  inset-x-0 bottom-0 top-32 flex justify-center items-center pointer-events-none">
                 <div className="pointer-events-auto">
                     <Adventuremomentscards />
                 </div>

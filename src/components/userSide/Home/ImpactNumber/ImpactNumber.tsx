@@ -39,7 +39,7 @@ import ImpactCard from "./ImpactCard";
 import { useTranslation } from "react-i18next";
 
 const IMPACT_BACKGROUND_URL =
-  "https://www.shutterstock.com/image-photo/panoramic-view-jonhson-lake-near-260nw-2592092981.jpg";
+  "https://as1.ftcdn.net/jpg/03/50/68/30/1000_F_350683074_SSaXPN4XBvmwEKWRG4aU18Kl7kwkOdrg.jpg";
 
 const ImpactNumber = () => {
     const { t } = useTranslation();
