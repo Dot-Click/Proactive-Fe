@@ -108,9 +108,9 @@ const getHeroData = (
             alt="oppHero"
             className="relative w-full h-full object-cover object-center md:object-top"
           />
-          {/* <div className="absolute bottom-3  right-22 bg-black w-20 h-20"></div> */}
+          {/* <div className="absolute bottom-3  right-22 bg-black w-32 h-32"></div> */}
           <div
-            className="absolute bottom-3 z-50 right-22 bg-transparent w-20 h-20 cursor-pointer"
+            className="absolute bottom-3 z-50 right-22 bg-transparent w-32 h-32 cursor-pointer"
             onClick={() =>
               window.scrollBy({
                 top: 1500,
@@ -178,9 +178,9 @@ const getHeroData = (
             alt="wwHero"
             className="relative w-full h-full object-cover object-center md:object-top"
           />
-          {/* <div className="absolute bottom-3  right-22 bg-black w-20 h-20"></div> */}
+          {/* <div className="absolute bottom-3  right-22 bg-black w-32 h-32"></div> */}
           <div
-            className="absolute bottom-3 z-50 right-22 bg-transparent w-20 h-20 cursor-pointer"
+            className="absolute bottom-3 z-50 right-22 bg-transparent w-32 h-32 cursor-pointer"
             onClick={() =>
               window.scrollBy({
                 top: 1500,
@@ -221,9 +221,9 @@ const getHeroData = (
             alt="wtHero"
             className="relative w-full h-full object-cover object-center md:object-top"
           />
-          {/* <div className="absolute bottom-3  right-22 bg-black w-20 h-20"></div> */}
+          {/* <div className="absolute bottom-3  right-22 bg-black w-32 h-32"></div> */}
           <div
-            className="absolute bottom-3 z-50 right-22 bg-transparent w-20 h-20 cursor-pointer"
+            className="absolute bottom-3 z-50 right-22 bg-transparent w-32 h-32 cursor-pointer"
             onClick={() =>
               window.scrollBy({
                 top: 1500,
@@ -265,6 +265,15 @@ const getHeroData = (
             alt="lightgreenshadow"
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
           /> */}
+           <div
+            className="absolute bottom-16 z-50 right-30 bg-transparent w-32 h-32 cursor-pointer"
+            onClick={() =>
+              window.scrollBy({
+                top: 1500,
+                behavior: "smooth",
+              })
+            }
+          ></div>
         </div>
       </>
     ),
@@ -295,6 +304,15 @@ const getHeroData = (
             alt="lightgreenshadow"
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
           /> */}
+           <div
+            className="absolute bottom-16 z-50 right-30 bg-transparent w-32 h-32 cursor-pointer"
+            onClick={() =>
+              window.scrollBy({
+                top: 1500,
+                behavior: "smooth",
+              })
+            }
+          ></div>
         </div>
       </>
     ),
@@ -364,6 +382,15 @@ const getHeroData = (
             alt="lightgreenshadow"
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
           /> */}
+           <div
+            className="absolute bottom-16 z-50 right-30 bg-transparent w-32 h-32 cursor-pointer"
+            onClick={() =>
+              window.scrollBy({
+                top: 1500,
+                behavior: "smooth",
+              })
+            }
+          ></div>
         </div>
       </>
     ),
@@ -403,6 +430,15 @@ const getHeroData = (
             alt="lightgreenshadow"
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
           /> */}
+           <div
+            className="absolute bottom-16 z-50 right-30 bg-transparent w-32 h-32 cursor-pointer"
+            onClick={() =>
+              window.scrollBy({
+                top: 1500,
+                behavior: "smooth",
+              })
+            }
+          ></div>
         </div>
       </>
     ),
@@ -429,6 +465,15 @@ const getHeroData = (
             alt="advantages"
             className="relative w-full h-full object-cover object-center md:object-top"
           />
+           <div
+            className="absolute bottom-16 z-50 right-30 bg-transparent w-32 h-32 cursor-pointer"
+            onClick={() =>
+              window.scrollBy({
+                top: 1500,
+                behavior: "smooth",
+              })
+            }
+          ></div>
         </div>
       </>
     ),
