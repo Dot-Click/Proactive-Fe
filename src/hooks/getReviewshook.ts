@@ -12,18 +12,23 @@ export interface ReviewItem {
 }
 
 interface ApiReviewPayload {
+  prof_pic: string | undefined;
   id?: string;
   _id?: string;
   link?: string;
   reviewLink?: string;
   userImage?: string;
   profileImage?: string;
+  profilePicture?: string;
   avatar?: string;
   userName?: string;
   name?: string;
+  reviewerName?: string;
   review?: string;
   comment?: string;
+  reviewText?: string;
   rating?: number;
+  stars?: number;
 }
 
 interface ReviewsEnvelope {
@@ -31,27 +36,29 @@ interface ReviewsEnvelope {
 }
 
 type ApiReviewsResponse =
-  | { data?: ReviewsEnvelope }
+  | { success?: boolean; data?: ReviewsEnvelope }
   | { reviews?: ApiReviewPayload[] }
   | ReviewsEnvelope;
 
 const extractReviewsArray = (payload: ApiReviewsResponse): ApiReviewPayload[] => {
   if (!payload) return [];
 
-  if (Array.isArray((payload as ReviewsEnvelope).reviews)) {
-    return (payload as ReviewsEnvelope).reviews ?? [];
+  // Handle { success: true, data: { reviews: [] } }
+  if ("data" in payload && payload.data && Array.isArray(payload.data.reviews)) {
+    return payload.data.reviews;
   }
 
-  if ("data" in payload && payload.data) {
-    return payload.data?.reviews ?? [];
+  // Handle { reviews: [] }
+  if ("reviews" in payload && Array.isArray(payload.reviews)) {
+    return payload.reviews;
   }
 
   return [];
 };
 
 const normaliseReview = (review: ApiReviewPayload, index: number): ReviewItem | null => {
-  const content = review.review ?? review.comment ?? "";
-  const userName = review.userName ?? review.name ?? "";
+  const content = review.reviewText ?? review.review ?? review.comment ?? "";
+  const userName = review.reviewerName ?? review.userName ?? review.name ?? "";
 
   if (!content.trim() || !userName.trim()) {
     return null;
@@ -59,11 +66,11 @@ const normaliseReview = (review: ApiReviewPayload, index: number): ReviewItem | 
 
   return {
     id: review.id ?? review._id ?? `review-${index}`,
-    link: review.link ?? review.reviewLink,
-    userImage: review.userImage ?? review.profileImage ?? review.avatar,
+    link: review.reviewLink ?? review.link,
+    userImage: review.profilePicture ?? review.userImage ?? review.profileImage ?? review.avatar ?? review.prof_pic,
     userName: userName.trim(),
     review: content.trim(),
-    rating: review.rating,
+    rating: review.stars ?? review.rating,
   };
 };
 
@@ -84,9 +91,11 @@ const resolveErrorMessage = (error: unknown): string => {
   return "An unexpected error occurred while loading reviews.";
 };
 
-const getReviews = async (): Promise<ReviewItem[]> => {
+const getReviews = async (lang?: string): Promise<ReviewItem[]> => {
   try {
-    const response = await api.get<ApiReviewsResponse>("/api/user/reviews");
+    const response = await api.get<ApiReviewsResponse>("/api/user/google-reviews", {
+      params: { lang },
+    });
     const reviews = extractReviewsArray(response.data ?? {});
 
     return reviews
@@ -97,10 +106,10 @@ const getReviews = async (): Promise<ReviewItem[]> => {
   }
 };
 
-export const useReviews = () => {
+export const useReviews = (lang?: string) => {
   return useQuery({
-    queryKey: ["reviews"],
-    queryFn: getReviews,
+    queryKey: ["reviews", lang],
+    queryFn: () => getReviews(lang),
     staleTime: 15 * 60 * 1000,
     retry: 1,
   });

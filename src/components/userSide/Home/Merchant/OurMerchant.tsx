@@ -166,20 +166,23 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 };
 
 export default function TestimonialSection() {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const currentLang = i18n.language === "es" ? "es" : "en";
   const {
     data: reviews = [],
     isLoading,
     isError,
     error,
     refetch,
-  } = useReviews();
-
-  const hasLiveReviews = reviews.length > 0;
+  } = useReviews(currentLang);
 
   const testimonials = useMemo<Testimonial[]>(() => {
-    if (!hasLiveReviews) {
+    if (isLoading && reviews.length === 0) {
       return TESTIMONIAL_DATA;
+    }
+
+    if (reviews.length === 0) {
+      return [];
     }
 
     return reviews.map((review, index) => ({
@@ -191,7 +194,7 @@ export default function TestimonialSection() {
       rating: review.rating ?? 5,
       link: review.link,
     }));
-  }, [hasLiveReviews, reviews]);
+  }, [isLoading, reviews]);
 
   return (
     <section className="py-12 md:py-20 bg-slate-50 overflow-hidden">
@@ -224,34 +227,36 @@ export default function TestimonialSection() {
 
       <div className="flex flex-col gap-6 md:gap-8">
         {/* Row 1: Right to Left */}
-        <Marquee
-          direction="left"
-          speed={45}
-          pauseOnHover
-          gradient
-          gradientColor="#f8fafc"
-          gradientWidth={50}
-          autoFill
-        >
-          {testimonials.map((testimonial) => (
-            <TestimonialCard key={`top-${testimonial.id}`} testimonial={testimonial} />
-          ))}
-        </Marquee>
+        {testimonials.length > 0 && (
+          <Marquee
+            direction="left"
+            speed={45}
+            pauseOnHover
+            gradient
+            gradientColor="#f8fafc"
+            gradientWidth={50}
+          >
+            {testimonials.slice(0, Math.ceil(testimonials.length / 2)).map((testimonial) => (
+              <TestimonialCard key={`top-${testimonial.id}`} testimonial={testimonial} />
+            ))}
+          </Marquee>
+        )}
 
         {/* Row 2: Left to Right */}
-        <Marquee
-          direction="right"
-          speed={45}
-          pauseOnHover
-          gradient
-          gradientColor="#f8fafc"
-          gradientWidth={50}
-          autoFill
-        >
-          {testimonials.map((testimonial) => (
-            <TestimonialCard key={`bottom-${testimonial.id}`} testimonial={testimonial} />
-          ))}
-        </Marquee>
+        {testimonials.length > 1 && (
+          <Marquee
+            direction="right"
+            speed={45}
+            pauseOnHover
+            gradient
+            gradientColor="#f8fafc"
+            gradientWidth={50}
+          >
+            {testimonials.slice(Math.ceil(testimonials.length / 2)).map((testimonial) => (
+              <TestimonialCard key={`bottom-${testimonial.id}`} testimonial={testimonial} />
+            ))}
+          </Marquee>
+        )}
       </div>
     </section>
   );

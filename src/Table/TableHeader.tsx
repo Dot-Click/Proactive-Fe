@@ -65,50 +65,55 @@ const TableHeader: React.FC<TableToolbarProps> = ({
   defaultLimit = 10,
   limit,
   // onSortClick,
-  // onFilterClick,
+  onFilterClick,
   onLimitChange,
-  // onAddClick,
+  onAddClick,
 }) => {
   return (
     <div className="bg-white px-4 py-8 rounded-lg shadow-sm mt-3">
-      {showSearch && (
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="flex lg:flex-row flex-col justify-between gap-4"
-        >
-          <div className="relative">
-            <Search
-              size={24}
-              color="#666373"
-              className="absolute ml-3 text-gray-400 top-1/2 -translate-y-1/2"
-            />
-            <input
-              type="text"
-              placeholder={searchPlaceholder}
-              {...(searchValue !== undefined && { value: searchValue })}
-              onChange={(e) => onSearch?.(e.target.value)}
-              className="placeholder:text-[#666373] lg:w-[600px] w-full pl-10 pr-3 px-3 py-3 border border-[#EFEFEF] bg-[#FAFAFE] outline-none rounded-[10px]"
-            />
-          </div>
-          {showAddButton &&
-            (url ? (
-              <Link to={url}>
-                <Button className="cursor-pointer font-medium py-6 px-22 rounded-full lg:w-30 w-full">
-                  {addButtonLabel}
-                  {addButtonIcon}
-                </Button>
-              </Link>
-            ) : (
-              <Button
-                // onClick={onAddClick}
-                className="flex gap-2 cursor-pointer font-medium py-6 md:w-30 w-full rounded-full"
-              >
-                {addButtonIcon}
+      <div className="flex lg:flex-row flex-col justify-between gap-4">
+        {showSearch ? (
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="flex-1"
+          >
+            <div className="relative">
+              <Search
+                size={24}
+                color="#666373"
+                className="absolute ml-3 text-gray-400 top-1/2 -translate-y-1/2"
+              />
+              <input
+                type="text"
+                placeholder={searchPlaceholder}
+                {...(searchValue !== undefined && { value: searchValue })}
+                onChange={(e) => onSearch?.(e.target.value)}
+                className="placeholder:text-[#666373] lg:w-[600px] w-full pl-10 pr-3 px-3 py-3 border border-[#EFEFEF] bg-[#FAFAFE] outline-none rounded-[10px]"
+              />
+            </div>
+          </form>
+        ) : (
+          <div className="flex-1" />
+        )}
+
+        {showAddButton &&
+          (url ? (
+            <Link to={url}>
+              <Button className="cursor-pointer font-medium py-6 px-22 rounded-full lg:w-30 w-full">
                 {addButtonLabel}
+                {addButtonIcon}
               </Button>
-            ))}
-        </form>
-      )}
+            </Link>
+          ) : (
+            <Button
+              onClick={onAddClick}
+              className="flex gap-2 cursor-pointer font-medium py-6 lg:w-30 w-full rounded-full"
+            >
+              {addButtonIcon}
+              {addButtonLabel}
+            </Button>
+          ))}
+      </div>
       <div className="flex md:flex-row flex-col justify-between items-center mt-8 gap-4">
         <div className="flex items-center gap-4">
           <span className="text-[#666373] text-[18px]">Showing</span>
@@ -144,7 +149,7 @@ const TableHeader: React.FC<TableToolbarProps> = ({
             </Button>
           )} */}
           {showFilter && (
-            <Button className="bg-[#FAFAFA] text-black border border-[#EFEFEF] hover:bg-[#FAFAFA] cursor-pointer font-medium md:w-30 w-auto py-5 rounded-[15px]">
+            <Button onClick={onFilterClick} className="bg-[#FAFAFA] text-black border border-[#EFEFEF] hover:bg-[#FAFAFA] cursor-pointer font-medium md:w-30 w-auto py-5 rounded-[15px]">
               <Funnel fill="#000000" />
               Filter
             </Button>

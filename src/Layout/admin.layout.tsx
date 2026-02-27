@@ -7,6 +7,7 @@ import { useIsMobile } from "../hooks/use-mobile";
 import Dashboard from "@/assets/sidebaricon/dashboard.svg";
 import UserManagement from "@/assets/sidebaricon/user-management.png";
 import Coordinator from "@/assets/sidebaricon/coordinator-management.png";
+import Star from "@/assets/sidebaricon/star.png";
 import Trip from "@/assets/sidebaricon/trip-oppurtunities.png";
 import Chat from "@/assets/sidebaricon/chat-management.png";
 import Payment from "@/assets/sidebaricon/payment-membership.png";
@@ -17,6 +18,7 @@ const AdminItems = [
   { label: "User Management", href: "/dashboard/user-management", Icon: UserManagement },
   { label: "Coordinator Management", href: "/dashboard/coordinator-management", Icon: Coordinator },
   { label: "Trip Opportunities", href: "/dashboard/trip-management", Icon: Trip },
+  { label: "Google Reviews", href: "/dashboard/google-reviews", Icon: Star },
   { label: "Chat Management", href: "/dashboard/chat-management", Icon: Chat },
   { label: "Payment & Membership", href: "/dashboard/payment-membership", Icon: Payment },
   { label: "Settings", href: "/dashboard/settings", Icon: Settings },
@@ -34,8 +36,8 @@ const AdminLayout = () => {
   return (
     <>
       <div className="flex w-full py-8">
-        <SidebarNav collapsed={collapsed} setCollapsed={setCollapsed} items={AdminItems} Url='/dashboard'/>
-        <Navbar collapsed={collapsed} role="admin"/>
+        <SidebarNav collapsed={collapsed} setCollapsed={setCollapsed} items={AdminItems} Url='/dashboard' />
+        <Navbar collapsed={collapsed} role="admin" />
         <main
           className={`w-full min-w-0 px-4 transition-all duration-300 mt-16 md:mt-14 lg:mt-16 ${collapsed ? "md:-ml-40" : ""}`}
         >
@@ -43,7 +45,7 @@ const AdminLayout = () => {
         </main>
       </div>
 
-    </> 
+    </>
 
   )
 }

@@ -11,6 +11,7 @@ import AddtripPage from "./pages/admin/Addtrip.page";
 import ChatManagementPage from "./pages/admin/ChatManagement.page";
 import PaymentmembershipPage from "./pages/admin/Paymentmembership.page";
 import SettingPage from "./pages/admin/Setting.page";
+
 import CoordinatorLayout from "./Layout/coordinator.layout";
 import CoordinatorDashboard from "./pages/coordinator/CoordinatorDashboard";
 import AddCoordinatortripPage from "./pages/coordinator/AddCoordinatortrip.page";
@@ -53,6 +54,7 @@ import ResetPassword from "./components/login/ResetPassword";
 import ViewTripDetailPage from "./pages/userSide/ViewTripDetail.page";
 import PaymentSuccessPage from "./pages/payment/PaymentSuccess";
 import PaymentFailurePage from "./pages/payment/PaymentFailure";
+import GoogleReviewPage from "./pages/admin/GoogleReview.page";
 
 
 function App() {
@@ -102,6 +104,10 @@ function App() {
         <Route
           path="/dashboard/payment-membership"
           element={<PaymentmembershipPage />}
+        />
+        <Route
+          path="/dashboard/google-reviews"
+          element={<GoogleReviewPage />}
         />
         <Route path="/dashboard/settings" element={<SettingPage />} />
       </Route>
