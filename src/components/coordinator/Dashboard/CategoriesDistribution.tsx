@@ -72,3 +72,5 @@ const CategoriesDistribution = () => {
 }
 
 export default CategoriesDistribution
+
+
