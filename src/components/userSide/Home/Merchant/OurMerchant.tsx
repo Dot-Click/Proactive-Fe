@@ -171,9 +171,6 @@ export default function TestimonialSection() {
   const {
     data: reviews = [],
     isLoading,
-    isError,
-    error,
-    refetch,
   } = useReviews(currentLang);
 
   const testimonials = useMemo<Testimonial[]>(() => {
@@ -207,22 +204,7 @@ export default function TestimonialSection() {
             ? t("testimonials.loadingFeedback")
             : t("testimonials.subtitle")}
         </p>
-        {isError && (
-          <div className="mt-4 inline-flex flex-col gap-2 items-center text-xs md:text-sm text-red-500">
-            <span>
-              {error instanceof Error
-                ? error.message
-                : t("testimonials.loadError", "Unable to load reviews right now.")}
-            </span>
-            <button
-              type="button"
-              onClick={() => refetch()}
-              className="px-3 py-1.5 rounded-full bg-[#34AB7F] text-white text-xs font-semibold hover:bg-[#2c8e68] transition-colors"
-            >
-              {t("testimonials.retryButton", "Try again")}
-            </button>
-          </div>
-        )}
+       
       </div>
 
       <div className="flex flex-col gap-6 md:gap-8">
