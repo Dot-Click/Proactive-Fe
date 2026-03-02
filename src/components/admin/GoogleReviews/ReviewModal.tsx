@@ -64,11 +64,27 @@ const ReviewModal = ({ isOpen, onClose, review }: ReviewModalProps) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        const data = new FormData();
+        data.append("reviewerName", formData.reviewerName);
+        data.append("reviewText", formData.reviewText);
+        data.append("stars", formData.stars.toString());
+        data.append("language", formData.language);
+
+        if (formData.reviewLink) {
+            data.append("reviewLink", formData.reviewLink);
+        }
+
+        data.append("isActive", formData.isActive.toString());
+
+        if (file) {
+            data.append("profilePicture", file);
+        }
+
         if (review) {
             // Update
             updateReview.mutate({
                 id: review.id,
-                data: { ...formData },
+                data: data,
             }, {
                 onSuccess: () => {
                     onClose();
@@ -76,27 +92,6 @@ const ReviewModal = ({ isOpen, onClose, review }: ReviewModalProps) => {
             });
         } else {
             // Create
-            const data = new FormData();
-            data.append("reviewerName", formData.reviewerName);
-            data.append("reviewText", formData.reviewText);
-            data.append("stars", formData.stars.toString());
-            data.append("language", formData.language);
-
-            // Only add these if they have values, and for now let's hope the backend 
-            // has been updated or ignores extra fields.
-            // If the user said "POST 400", it's likely validation failed.
-            if (formData.reviewLink) {
-                data.append("reviewLink", formData.reviewLink);
-            }
-
-            // isActive is often default true in backend, sending it might fail validation
-            // if it's not in the schema. I'll omit it for now to fix the 400.
-            // data.append("isActive", formData.isActive.toString());
-
-            if (file) {
-                data.append("profilePicture", file);
-            }
-
             createReview.mutate(data, {
                 onSuccess: () => {
                     onClose();
@@ -194,18 +189,16 @@ const ReviewModal = ({ isOpen, onClose, review }: ReviewModalProps) => {
                         </div>
                     </div>
 
-                    {!review && (
-                        <div className="space-y-2">
-                            <Label htmlFor="profilePicture">Profile Picture</Label>
-                            <Input
-                                id="profilePicture"
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                                required
-                            />
-                        </div>
-                    )}
+                    <div className="space-y-2">
+                        <Label htmlFor="profilePicture">Profile Picture {review && "(Optional)"}</Label>
+                        <Input
+                            id="profilePicture"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setFile(e.target.files?.[0] || null)}
+                            required={!review}
+                        />
+                    </div>
 
                     <div className="flex justify-end gap-3 pt-6">
                         <Button type="button" variant="outline" onClick={onClose}>
