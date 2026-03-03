@@ -413,18 +413,21 @@
 // Update the CoordinatorDetailModal component with email modal integration
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Map from "@/assets/sidebaricon/map.png"
 import clock from "@/assets/sidebaricon/clock.png"
 import star from "@/assets/sidebaricon/star.png"
 import { Progress } from "@/components/ui/progress"
 import { useNavigate } from "react-router-dom"
 import { UsegetCoordinatorbyId } from "@/hooks/getCoordinatorhookid"
+import { useUpdateUserRole } from "@/hooks/updateUserRolehook"
 import { LoaderIcon, Mail } from "lucide-react"
+import { toast } from "sonner"
 import CoordinatorEmailModal from "../CoordinatorManagement/CoordinatorEmailModal"
 
 // Helper function to format stats with dynamic values
@@ -439,9 +442,25 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
     const navigate = useNavigate()
     const { data, isLoading, isError } = UsegetCoordinatorbyId(coordinatorId);
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const [selectedRole, setSelectedRole] = useState<"user" | "coordinator" | "admin" | "">("");
+    const [userRole, setUserRole] = useState<string>("");
 
     // Accessing the nested coordinator object from your API response structure
     const coordinator = data?.coordinator;
+
+    // Get the userId from coordinator data - THIS IS THE KEY FIX!
+    const userId = coordinator?.userId;
+    
+    // Initialize the mutation with the actual USER ID, not coordinator detail ID
+    const updateRoleMutation = useUpdateUserRole(userId || "");
+
+    // Initialize role when coordinator data loads
+    useEffect(() => {
+        if (coordinator?.userRole) {
+            setUserRole(coordinator.userRole);
+            setSelectedRole(coordinator.userRole as "user" | "coordinator" | "admin");
+        }
+    }, [coordinator?.userRole]);
 
     if (isLoading) {
         return (
@@ -473,6 +492,26 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
 
     const handleSendEmail = () => {
         setIsEmailModalOpen(true);
+    };
+
+    const handleRoleChange = async () => {
+        if (!selectedRole || selectedRole === userRole) {
+            toast.info("Select a different role to change");
+            return;
+        }
+
+        try {
+            const result = await updateRoleMutation.mutateAsync({
+                role: selectedRole as "user" | "coordinator" | "admin",
+            });
+
+            setUserRole(selectedRole);
+            toast.success(result.message || "Role updated successfully");
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || "Failed to update role");
+            // Reset selected role on error
+            setSelectedRole(userRole as "user" | "coordinator" | "admin" | "");
+        }
     };
 
     const coordinatorData = {
@@ -717,6 +756,61 @@ const Coordinatordetailmodal = ({ coordinatorId, role }: { coordinatorId: string
                                     </div>
                                     <Progress value={(coordinator?.customerSatisfaction ?? 0) * 20} className="h-2" />
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Role Management Section */}
+                    <div className="border border-[#E0E1E2] rounded-[10px] bg-white">
+                        <h1 className="text-[#221E33] font-medium text-[18px] m-5">Access Control</h1>
+                        <div className="border-b border-[#EDEDED]" />
+                        <div className="px-5 py-4 flex flex-col gap-6">
+                            <div className="flex flex-col gap-2">
+                                <label className="text-[#666373] text-sm font-semibold">Current Role</label>
+                                <div className="inline-flex items-center gap-2 w-fit">
+                                    <Badge className={`px-4 py-2 text-[12px] font-semibold rounded-full ${
+                                        userRole === 'admin' ? 'bg-[#FF6B6B]/10 text-[#FF6B6B] border border-[#FF6B6B]' :
+                                        userRole === 'coordinator' ? 'bg-[#0DAC87]/10 text-[#0DAC87] border border-[#0DAC87]' :
+                                        'bg-[#4A90E2]/10 text-[#4A90E2] border border-[#4A90E2]'
+                                    }`}>
+                                        {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
+                                    </Badge>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                                <label className="text-[#666373] text-sm font-semibold">Change Role</label>
+                                <div className="flex items-center gap-3">
+                                    <Select
+                                        value={selectedRole}
+                                        onValueChange={(value) =>
+                                            setSelectedRole(value as "user" | "coordinator" | "admin")
+                                        }
+                                    >
+                                        <SelectTrigger className="w-[180px] h-[40px] border border-[#E0E1E2] rounded-[8px] bg-white">
+                                            <SelectValue placeholder="Select role" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="user">User</SelectItem>
+                                            <SelectItem value="coordinator">Coordinator</SelectItem>
+                                            <SelectItem value="admin">Admin</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    {selectedRole && selectedRole !== userRole && (
+                                        <Button
+                                            onClick={handleRoleChange}
+                                            disabled={updateRoleMutation.isPending}
+                                            className="h-[40px] px-6 bg-[#0DAC87] hover:bg-[#09a07d] text-white rounded-[8px] font-semibold"
+                                            size="sm"
+                                        >
+                                            {updateRoleMutation.isPending ? "Saving..." : "Update Role"}
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="pt-2 text-xs text-[#A1A1A1] italic">
+                                Changing the coordinator's role will affect their access permissions and dashboard features.
                             </div>
                         </div>
                     </div>

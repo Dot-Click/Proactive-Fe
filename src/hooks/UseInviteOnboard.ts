@@ -18,6 +18,7 @@ export const useValidateInvite = (token?: string) => {
     queryFn: () => validateToken(token || ''),
     enabled: !!token,
     retry: false,
+    throwOnError: false, // Don't throw errors, just return them
   });
 };
 

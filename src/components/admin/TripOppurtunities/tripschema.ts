@@ -77,7 +77,7 @@ export const tripSchema = z
       .min(10, "Description must be at least 10 characters"),
     coverImage: z.any().optional(),
     location: z.string().min(1, "Location is required"),
-    locationId: z.string().min(1, "Location is required"), // ADD THIS
+    locationId: z.string().optional(), // Optional - only set if location is from database
     mapCoordinates: z.string().optional(),
     startDate: z
       .date()
@@ -121,18 +121,7 @@ export const tripSchema = z
     BestPrice: z.string().min(1, "Best price message is required"),
     FinalPrice: z.string().min(1, "Final price is required"),
   })
-  .refine(
-    (data) => {
-      // Ensure location and locationId are both present if one is
-      return (
-        !(data.location && !data.locationId) &&
-        !(data.locationId && !data.location)
-      );
-    },
-    {
-      message: "Both location name and ID must be provided",
-      path: ["locationId"],
-    }
-  );
+  // Location validation removed - locationId is now optional for custom free-text locations
+  .strict();
 
 export type TripFormType = z.infer<typeof tripSchema>;

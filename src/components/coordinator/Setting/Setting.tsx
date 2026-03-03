@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import UpdatePassword from "./UpdatePassword";
 import NotificationPreferences from "./NotificationPreferences";
 import { UsegetCoordinatorSetting } from "@/hooks/getCoordinatorSettinghook";
@@ -24,11 +25,13 @@ const formSchema = z.object({
     message: "Name is required",
   }),
   Email: z.string().email({ message: "Invalid email address" }),
+  PhoneNumber: z.string().optional(),
+  Bio: z.string().optional(),
 });
 
 const Setting = () => {
   type FormSchemaType = z.infer<typeof formSchema>;
-  const { data: settingsData, isLoading } = UsegetCoordinatorSetting();
+  const { data: settingsData, isLoading, isError, error } = UsegetCoordinatorSetting();
   const { mutate: updateSettings, isPending } = UseupdateCoordinatorSetting();
 
   const form = useForm<FormSchemaType>({
@@ -36,6 +39,8 @@ const Setting = () => {
     defaultValues: {
       Name: "",
       Email: "",
+      PhoneNumber: "",
+      Bio: "",
     },
   });
 
@@ -48,9 +53,14 @@ const Setting = () => {
       form.reset({
         Name: settingsData.fullName || "",
         Email: settingsData.email || "",
+        PhoneNumber: settingsData.phoneNumber || "",
+        Bio: settingsData.bio || "",
       });
       if (settingsData.avatar) {
         setProfile(settingsData.avatar);
+      }
+      if (settingsData.notificationPref) {
+        setPrefs(settingsData.notificationPref);
       }
     }
   }, [settingsData, form]);
@@ -67,6 +77,8 @@ const Setting = () => {
     const formData = new FormData();
     formData.append("Name", val.Name);
     formData.append("Email", val.Email);
+    if (val.PhoneNumber) formData.append("PhoneNumber", val.PhoneNumber);
+    if (val.Bio) formData.append("Bio", val.Bio);
 
     if (profileFile) {
       formData.append("prof_pic", profileFile);
@@ -75,9 +87,43 @@ const Setting = () => {
     updateSettings(formData);
   };
 
+  // local state for notification toggles
+  const [prefs, setPrefs] = useState<{
+    emailNotf: boolean;
+    appAlert: boolean;
+    reviewNotf: boolean;
+  }>({ emailNotf: false, appAlert: false, reviewNotf: false });
+
+  const handleSavePreferences = () => {
+    updateSettings({ notificationPref: prefs });
+  };
+
   return (
     <>
-      <div className="bg-white lg:mt-4 rounded-[25px]">
+      {isLoading && (
+        <div className="bg-white lg:mt-4 rounded-[25px] p-8 flex items-center justify-center min-h-96">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-[#0DAC87]/30 border-t-[#0DAC87] rounded-full animate-spin" />
+            <p className="text-[#666373] font-medium">Loading settings...</p>
+          </div>
+        </div>
+      )}
+
+      {isError && (
+        <div className="bg-white lg:mt-4 rounded-[25px] p-8 flex items-center justify-center min-h-96">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center">
+              <span className="text-red-500 text-xl">⚠️</span>
+            </div>
+            <p className="text-red-500 font-semibold">Failed to load settings</p>
+            <p className="text-[#666373] text-sm">{(error as any)?.response?.data?.message || "Please try refreshing the page"}</p>
+          </div>
+        </div>
+      )}
+
+      {!isLoading && !isError && (
+        <>
+          <div className="bg-white lg:mt-4 rounded-[25px]">
         <div className="bg-[#FAFAFA] px-6 py-6 rounded-tl-[25px] rounded-tr-[25px] font-medium">
           <span className="bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text">
             Update Profile
@@ -150,7 +196,6 @@ const Setting = () => {
                         <Input
                           placeholder="Coordinator@proactivefuture.com"
                           {...field}
-                          disabled={true}
                           className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                         />
                       </FormControl>
@@ -159,6 +204,49 @@ const Setting = () => {
                   )}
                 />
               </div>
+
+              {/* additional personal fields */}
+              <div className="mt-4 grid lg:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="PhoneNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[#242E2F] font-semibold">
+                        Phone Number
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="+123456789"
+                          {...field}
+                          className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="Bio"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[#242E2F] font-semibold">
+                        Bio
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Short bio about yourself"
+                          {...field}
+                          className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33] h-32 resize-none"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <Button
                 type="submit"
                 className="mt-4 rounded-full px-6 py-4 bg-[#0DAC87] hover:bg-[#0f9c7b] cursor-pointer"
@@ -171,7 +259,12 @@ const Setting = () => {
         </div>
       </div>
       <UpdatePassword />
-      <NotificationPreferences />
+      <NotificationPreferences
+        initial={prefs}
+        onSave={handleSavePreferences}
+      />
+        </>
+      )}
     </>
   );
 };

@@ -6,7 +6,7 @@ const OurCollaboration = () => {
     const { t } = useTranslation();
     return (
         <>
-            <div className="flex justify-center items-start pt-50 ">
+            <div className="flex justify-center mt-10 items-start pt-50 ">
                 {/* Speech Bubble */}
                 {/* <div className="mr-100 lg:flex hidden">
                     <div className="relative bg-[#E8EEF8] rounded-2xl px-8 py-6 max-w-sm shadow-sm">

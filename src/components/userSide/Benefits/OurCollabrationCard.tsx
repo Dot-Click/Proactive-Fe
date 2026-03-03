@@ -23,7 +23,7 @@ const OurCollabrationCard = () => {
                 </div>
             </div>
 
-            <div className="flex lg:flex-row flex-col md:gap-12 gap-6 items-center">
+            <div className="flex lg:flex-row mb-28 flex-col md:gap-12 gap-6 items-center">
                 <div className="flex flex-col lg:items-start items-center gap-6">
                     <div>
                         <h1 className="text-[#221E33] font-bold md:text-4xl lg:text-start text-center" dangerouslySetInnerHTML={{ __html: t('benefits.ourCollaborations.sheltersTransportation.title').replace(/\n/g, '<br className="lg:flex hidden" />') }} />

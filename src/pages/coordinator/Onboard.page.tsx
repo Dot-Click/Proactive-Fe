@@ -54,7 +54,7 @@ const COORDINATOR_TYPES = [
 const CoordinatorOnboardPage: React.FC = () => {
   const [search] = useSearchParams();
   const token = search.get("token") || undefined;
-  const { data, isLoading: validating } = useValidateInvite(token);
+  const { data, isLoading: validating, isError, error } = useValidateInvite(token) as any;
   const complete = useCompleteInvite();
   const navigate = useNavigate();
 
@@ -116,6 +116,36 @@ const CoordinatorOnboardPage: React.FC = () => {
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-[#0DAC87]/30 border-t-[#0DAC87] rounded-full animate-spin" />
           <p className="font-bold text-[#221E33] uppercase tracking-widest text-sm">Validating Invite...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle validation errors or no token
+  if (isError || !token || !data?.data?.email) {
+    const errorMsg = error?.response?.data?.message || "Invalid or expired invitation link";
+    return (
+      <div
+        className="min-h-screen relative flex items-center justify-center bg-cover bg-center"
+        style={{ backgroundImage: `url(${login})` }}
+      >
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-70"
+          style={{ backgroundImage: `url(${loginLayer})` }}
+        ></div>
+        <div
+          className="relative z-10 bg-cover p-12 shadow-2xl rounded-3xl text-center max-w-md w-full border border-white/10"
+          style={{ backgroundImage: `url(${loginformbg})` }}
+        >
+          <div className="w-20 h-20 bg-red-50/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+            <Lock className="w-10 h-10 text-red-400" />
+          </div>
+          <h2 className="text-2xl font-black text-[#221E33] uppercase mb-4">Link Expired</h2>
+          <p className="text-[#666373] mb-2 font-medium">{errorMsg}</p>
+          <p className="text-[#666373] mb-8 font-medium">Please contact the admin for a new invitation link.</p>
+          <Button onClick={() => navigate("/login")} className="w-full rounded-full bg-[#221E33] hover:bg-black h-14 text-white font-bold transition-all shadow-lg">
+            Back to Login
+          </Button>
         </div>
       </div>
     );
@@ -224,7 +254,12 @@ const CoordinatorOnboardPage: React.FC = () => {
                       <div className="relative">
                         <Input type="password" {...register("password", {
                           required: "Password is required",
-                          minLength: { value: 8, message: "Min 8 characters" }
+                          minLength: { value: 8, message: "Password must be at least 8 characters long" },
+                          validate: {
+                            uppercase: v => /[A-Z]/.test(v) || "Password must contain at least one uppercase letter",
+                            number: v => /[0-9]/.test(v) || "Password must contain at least one number",
+                            special: v => /[!@#$%^&*(),.?\":{}|<>]/.test(v) || "Password must contain at least one special character",
+                          },
                         })} className="bg-[#FAFAFE] border border-[#EFEFEF] focus:border-[#0DAC87] h-14 rounded-2xl px-12" placeholder="••••••••" />
                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
                       </div>
@@ -249,7 +284,11 @@ const CoordinatorOnboardPage: React.FC = () => {
                       />
                     </div>
 
-                    <Button type="button" onClick={() => setStep(2)} className="bg-[#0DAC87] hover:bg-[#11a180] hover:scale-[1.02] w-full rounded-full h-16 cursor-pointer font-bold transition-all shadow-lg text-white uppercase tracking-widest mt-4">
+                    <Button
+                      type="button"
+                      onClick={handleSubmit(() => setStep(2))}
+                      className="bg-[#0DAC87] hover:bg-[#11a180] hover:scale-[1.02] w-full rounded-full h-16 cursor-pointer font-bold transition-all shadow-lg text-white uppercase tracking-widest mt-4"
+                    >
                       Continue to Expertise
                     </Button>
                   </div>

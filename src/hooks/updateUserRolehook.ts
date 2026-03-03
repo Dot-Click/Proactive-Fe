@@ -37,17 +37,12 @@ export const useUpdateUserRole = (userId: string) => {
       // Invalidate user queries to refetch updated data
       queryClient.invalidateQueries({ queryKey: ["user", userId] });
       queryClient.invalidateQueries({ queryKey: ["user-by-id", userId] });
-      queryClient.invalidateQueries({ queryKey: ["getAllUsers"] });
+      queryClient.invalidateQueries({ queryKey: ["all-users"] }); // Main users list
       // Invalidate all coordinator queries (both list and individual)
-      queryClient.invalidateQueries({ queryKey: ["coordinator"] });
-      // Also invalidate any active coordinator search queries so results update immediately
-      // use predicate to match queries like ["search-coordinators", "<query>"]
-      try {
-        queryClient.invalidateQueries({ predicate: (q) => q.queryKey[0] === "search-coordinators" });
-      } catch (err) {
-        // Fallback: invalidate base key
-        queryClient.invalidateQueries({ queryKey: ["search-coordinators"] });
-      }
+      queryClient.invalidateQueries({ queryKey: ["coordinator"] }); // Main coordinators list
+      // Invalidate search queries so they update immediately
+      queryClient.invalidateQueries({ queryKey: ["search-coordinators"] });
+      queryClient.invalidateQueries({ queryKey: ["search-users"] });
     },
   });
 };

@@ -6,6 +6,13 @@ export interface CoordinatorSetting {
     fullName: string;
     email: string;
     avatar: string | null;
+    phoneNumber?: string;
+    bio?: string;
+    notificationPref?: {
+        emailNotf: boolean;
+        appAlert: boolean;
+        reviewNotf: boolean;
+    };
 }
 
 const getCoordinatorSetting = async (): Promise<CoordinatorSetting> => {

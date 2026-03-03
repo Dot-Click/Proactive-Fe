@@ -6,14 +6,34 @@ interface UpdateCoordinatorSettingData {
     Name?: string;
     Email?: string;
     prof_pic?: File;
+    PhoneNumber?: string;
+    Bio?: string;
+    notificationPref?: {
+        emailNotf: boolean;
+        appAlert: boolean;
+        reviewNotf: boolean;
+    };
 }
 
 const updateCoordinatorSetting = async (data: UpdateCoordinatorSettingData | FormData) => {
-    const isFormData = data instanceof FormData;
-    const response = await api.patch("/api/coordinator/setting", data, {
-        headers: {
-            "Content-Type": isFormData ? "multipart/form-data" : "application/json",
+    let requestData = data;
+    let headers: any = {};
+
+    // If it's a plain object, convert to FormData
+    if (!(data instanceof FormData)) {
+        const formData = new FormData();
+        if (data.Name) formData.append("Name", data.Name);
+        if (data.Email) formData.append("Email", data.Email);
+        if (data.PhoneNumber) formData.append("PhoneNumber", data.PhoneNumber);
+        if (data.Bio) formData.append("Bio", data.Bio);
+        if (data.notificationPref) {
+            formData.append("notificationPref", JSON.stringify(data.notificationPref));
         }
+        requestData = formData;
+    }
+
+    const response = await api.patch("/api/coordinator/setting", requestData, {
+        headers,
     });
     return response.data.data;
 };

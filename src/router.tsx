@@ -22,6 +22,7 @@ import ApplicantsReviewPage from "./pages/coordinator/ApplicantsReview.page";
 import AchievementControlPage from "./pages/coordinator/AchievementControl.page";
 import ChatUserPage from "./pages/coordinator/ChatUser.page";
 import CoordinatorSettingPage from "./pages/coordinator/Setting.page";
+import CoordinatorProfilePage from "./pages/coordinator/Profile.page";
 import CoordinatorOnboardPage from "./pages/coordinator/Onboard.page";
 import LoginPage from "./pages/loginpage/login.page";
 import SignupPage from "./pages/loginpage/Signup.page";
@@ -149,6 +150,10 @@ function App() {
         <Route
           path="/coordinator-dashboard/chat-users"
           element={<ChatUserPage />}
+        />
+        <Route
+          path="/coordinator-dashboard/profile"
+          element={<CoordinatorProfilePage />}
         />
         <Route
           path="/coordinator-dashboard/settings"

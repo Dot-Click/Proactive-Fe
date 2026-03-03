@@ -76,7 +76,7 @@ const SelectCard = ({
 }: {
   selected: boolean;
   onClick: () => void;
-  icon: string;
+  icon?: string;
   title: string;
   desc: string;
 }) => (
@@ -95,7 +95,7 @@ const SelectCard = ({
       </span>
     )}
     <div className="flex flex-col gap-4 py-4 justify-center items-center text-center">
-      <img src={icon} alt={title} className="w-10 h-8" />
+      {icon && <img src={icon} alt={title} className="w-10 h-8" />}
       <h4 className="font-semibold">{title}</h4>
       <span className="text-[#606066] text-[11px]">{desc}</span>
     </div>
@@ -103,21 +103,25 @@ const SelectCard = ({
 );
 
 const Included = () => {
-
-  // const toggleValue = (
-  //   values: string[],
-  //   value: string,
-  //   onChange: (v: string[]) => void
-  // ) => {
-  //   if (values.includes(value)) {
-  //     onChange(values.filter((v) => v !== value));
-  //   } else {
-  //     onChange([...values, value]);
-  //   }
-  // };
-  const [ShowIncludedItems, setShowIncludedItems] = useState<boolean>(true);
-  const [ShownotIncludedItems, setShowNotIncludedItems] = useState<boolean>(true);
+  const [ShowIncludedItems] = useState<boolean>(true);
+  const [ShownotIncludedItems] = useState<boolean>(true);
   const { control } = useFormContext<TripFormType>();
+
+  // allow adding custom item labels
+  const [customIncluded, setCustomIncluded] = useState<{id:string;title:string;desc:string;icon:string}[]>([]);
+  const [customNotIncluded, setCustomNotIncluded] = useState<{id:string;title:string;desc:string;icon:string}[]>([]);
+
+  const addCustomItem = (forIncluded: boolean) => {
+    const name = window.prompt("Enter item name");
+    if (!name) return;
+    const id = `custom-${Date.now()}`;
+    const newItem = { id, title: name, desc: "", icon: "" };
+    if (forIncluded) {
+      setCustomIncluded((prev) => [...prev, newItem]);
+    } else {
+      setCustomNotIncluded((prev) => [...prev, newItem]);
+    }
+  };
 
   return (
     <form className="">
@@ -128,7 +132,7 @@ const Included = () => {
             type="button"
             className="text-[#666373] rounded-full border border-[#666373] w-30 py-5 cursor-pointer"
             variant="outline"
-            onClick={() => setShowIncludedItems(!ShowIncludedItems)}
+            onClick={() => addCustomItem(true)}
           >
             <Plus /> Add Item
           </Button>
@@ -157,6 +161,22 @@ const Included = () => {
                         desc={item.desc}
                       />
                     ))}
+                    {customIncluded.map((item) => (
+                      <SelectCard
+                        key={item.id}
+                        selected={field.value.includes(item.title)}
+                        onClick={() =>
+                          field.onChange(
+                            field.value.includes(item.title)
+                              ? field.value.filter((i) => i !== item.title)
+                              : [...field.value, item.title]
+                          )
+                        }
+                        icon={item.icon}
+                        title={item.title}
+                        desc={item.desc}
+                      />
+                    ))}
                   </div>
                   {fieldState.error && (
                     <FormMessage className="mt-2">{fieldState.error.message}</FormMessage>
@@ -175,7 +195,7 @@ const Included = () => {
             type="button"
             className="text-[#666373] rounded-full border border-[#666373] w-30 py-5 cursor-pointer"
             variant="outline"
-            onClick={() => setShowNotIncludedItems(!ShownotIncludedItems)}
+            onClick={() => addCustomItem(false)}
           >
             <Plus /> Add Item
           </Button>
@@ -197,6 +217,22 @@ const Included = () => {
                             field.value.includes(item.id)
                               ? field.value.filter((i) => i !== item.id)
                               : [...field.value, item.id]
+                          )
+                        }
+                        icon={item.icon}
+                        title={item.title}
+                        desc={item.desc}
+                      />
+                    ))}
+                    {customNotIncluded.map((item) => (
+                      <SelectCard
+                        key={item.id}
+                        selected={field.value.includes(item.title)}
+                        onClick={() =>
+                          field.onChange(
+                            field.value.includes(item.title)
+                              ? field.value.filter((i) => i !== item.title)
+                              : [...field.value, item.title]
                           )
                         }
                         icon={item.icon}

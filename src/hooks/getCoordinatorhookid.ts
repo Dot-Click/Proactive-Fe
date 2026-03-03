@@ -13,6 +13,9 @@ export interface CoordinatorStats {
 
 export interface Coordinator {
     coordinator:{
+        id: string;
+        userId: string;
+        userRole: string;
         accessLvl: string;
         bio: string;
         certificateLvl: string;
