@@ -211,7 +211,7 @@ const UserSideNavbar = () => {
                     <LanguageSwitcher />
                     {userData?.role === "user" ? (
                         <div className="flex items-center gap-4">
-                            {!userData?.membershipAvailable && (
+                            {/* {!userData?.membershipAvailable && (
                                 <Dialog>
                                     <DialogTrigger asChild>
                                         <Button className="bg-[#0DAC87] hover:bg-[#11a180] text-white rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all active:scale-95 cursor-pointer items-center gap-2">
@@ -221,7 +221,7 @@ const UserSideNavbar = () => {
                                     </DialogTrigger>
                                     <PaymentModal />
                                 </Dialog>
-                            )}
+                            )} */}
 
                             {/* Notifications */}
                             <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>

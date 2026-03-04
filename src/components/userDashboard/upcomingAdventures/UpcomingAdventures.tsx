@@ -8,7 +8,7 @@ import { MdArrowOutward } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
 import { UsegetPayment } from "@/hooks/getPaymenthook"
 import { UsegetMyApplications } from "@/hooks/UsegetMyApplicationshook"
-import { LoaderIcon, Wallet, Clock } from "lucide-react"
+import { LoaderIcon, Wallet, Clock, CheckCircle } from "lucide-react"
 import { useMemo } from "react"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import TripPaymentModal from "@/components/payment/TripPaymentModal"
@@ -251,6 +251,12 @@ const UpcomingAdventures = () => {
                                         </DialogTrigger>
                                         <TripPaymentModal tripId={trip.id} />
                                     </Dialog>
+                                )}
+                                {!trip.isApplication && !trip.applicationApproved && (
+                                    <div className="flex-1 lg:flex-none justify-center items-center gap-2 rounded-full px-8 py-6 bg-green-50 border border-green-200 text-green-600 font-bold text-sm cursor-default">
+                                        <CheckCircle size={18} />
+                                        Already Paid
+                                    </div>
                                 )}
                                 {trip.applicationPending && (
                                     <div className="flex-1 lg:flex-none justify-center items-center gap-2 rounded-full px-8 py-6 bg-[#F8F9FB] border border-[#ECECF1] text-[#666373] font-bold text-sm cursor-default">

@@ -13,13 +13,6 @@
 // import { UsegetCategory } from "@/hooks/getCategoryhook";
 // import { UseGetLocations } from "@/hooks/UseGetLocationhook";
 // import type { Location } from "@/hooks/UseGetLocationhook";
-
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
 // } from "@/components/ui/select";
 // import { Upload, ChevronDown, Plus, Trash2 } from "lucide-react";
 // import {
@@ -766,6 +759,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { DayMap } from "./DayMap";
 
 const BasicInfo = () => {
   const { control, watch, setValue } = useFormContext<TripFormType>();
@@ -1181,6 +1175,23 @@ const BasicInfo = () => {
                             )}
                           />
                         </div>
+
+                        {/* Day Location and Map */}
+                        {isWildTripsCategory && (
+                          <div className="md:col-span-2 mt-4 pt-4 border-t border-[#EFEFEF]">
+                            <DayMap
+                              dayNumber={index + 1}
+                              location={watch(`daysItinerary.${index}.location`)}
+                              coordinates={watch(`daysItinerary.${index}.coordinates`)}
+                              onLocationChange={(newLocation) =>
+                                setValue(`daysItinerary.${index}.location`, newLocation)
+                              }
+                              onCoordinatesChange={(newCoordinates) =>
+                                setValue(`daysItinerary.${index}.coordinates`, newCoordinates)
+                              }
+                            />
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

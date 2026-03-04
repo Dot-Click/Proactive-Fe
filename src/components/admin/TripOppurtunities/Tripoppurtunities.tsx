@@ -4,10 +4,11 @@ import { UsegetTrips } from "@/hooks/gettriphook";
 import { UseSearchTrips } from "@/hooks/searchTripshook";
 import { UseupdateRejectedtripStatus } from "@/hooks/updatetripRejectedstatushook";
 import { Useupdatetripstatus } from "@/hooks/updatetripstatushook";
+import { UseDeleteTrip } from "@/hooks/UseDeleteTripHook";
 import ReusableTable from "@/Table/ReusableTable";
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
-import { LoaderIcon } from "lucide-react";
+import { LoaderIcon, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -187,6 +188,8 @@ const userData: ColumnDef<trip>[] = [
     cell: ({row}) => {
       const {mutateAsync} = Useupdatetripstatus();
       const {mutateAsync: mutateAsync2} = UseupdateRejectedtripStatus();
+      const {mutateAsync: deleteTrip} = UseDeleteTrip();
+      
     const HandleApproveTrip = async (id: string) => {
       try {
         await mutateAsync({id});
@@ -202,10 +205,31 @@ const userData: ColumnDef<trip>[] = [
         toast.error('Failed to Reject Trip')
       }
     }
+
+    const HandleDeleteTrip = async (id: string) => {
+      if (window.confirm('Are you sure you want to delete this trip? This action cannot be undone.')) {
+        try {
+          await deleteTrip(id);
+          toast.success('Trip deleted successfully');
+        } catch (error) {
+          toast.error('Failed to delete trip');
+        }
+      }
+    }
+
       return (
         <div className="flex gap-2">
           <Button className="cursor-pointer px-7 h-10 rounded-full" onClick={() => HandleApproveTrip(row.original.id)}>{row.original.status === "live" ? "Approved" : "Approve"}</Button>
           <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] font-bold" onClick={() => HandleRejectTrip(row.original.id)}>{row.original.status === "pending" ? "Rejected" : "Reject"}</Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => HandleDeleteTrip(row.original.id)}
+            className="cursor-pointer h-10 px-2 text-[#9C0000] hover:bg-[#9C0000]/10"
+            title="Delete trip"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
         </div>
       )
     }

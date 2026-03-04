@@ -61,6 +61,8 @@ export const dayItinerarySchema = z.object({
     .optional(),
   image: z.any().nullable().optional(), // File object for upload
   imagePreview: z.string().optional(), // For UI preview
+  location: z.string().optional(), // Location name for this day's activity
+  coordinates: z.string().optional(), // Coordinates as "lat,lon" string
 });
 
 export type DayItineraryType = z.infer<typeof dayItinerarySchema>;

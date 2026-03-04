@@ -1,5 +1,6 @@
 import Navbar from "@/components/navbar"
 import { SidebarNav } from "@/components/Sidebar";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
@@ -35,6 +36,7 @@ const AdminLayout = () => {
 
   return (
     <>
+      <ScrollToTop />
       <div className="flex w-full py-8">
         <SidebarNav collapsed={collapsed} setCollapsed={setCollapsed} items={AdminItems} Url='/dashboard' />
         <Navbar collapsed={collapsed} role="admin" />
