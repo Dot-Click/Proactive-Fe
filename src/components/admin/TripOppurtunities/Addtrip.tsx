@@ -76,6 +76,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         "categoryId",
         "title",
         "description",
+        "coverImage",
         "location",
         "startDate",
         "endDate",

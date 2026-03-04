@@ -77,7 +77,10 @@ export const tripSchema = z
     description: z
       .string()
       .min(10, "Description must be at least 10 characters"),
-    coverImage: z.any().optional(),
+    coverImage: z.any().refine(
+      (file) => file !== null && file !== undefined,
+      "Cover image is required"
+    ),
     location: z.string().min(1, "Location is required"),
     locationId: z.string().optional(), // Optional - only set if location is from database
     mapCoordinates: z.string().optional(),
@@ -107,8 +110,8 @@ export const tripSchema = z
     CoordinatorName: z.string().min(1, "Coordinator name is required"),
     CoordinatorRole: z.string().optional(),
     CoordinatorBio: z.string().min(1, "Coordinator bio is required"),
-    CoordinatorInstagram: z.string().optional(),
-    CoordinatorLinkedin: z.string().optional(),
+    CoordinatorInstagram: z.string().min(1, "Instagram link is required"),
+    CoordinatorLinkedin: z.string().min(1, "LinkedIn link is required"),
     CoordinatorPhoto: z
       .any()
       .nullable()
@@ -118,7 +121,10 @@ export const tripSchema = z
       ),
 
     // Step 5 – Media & Price
-    PromotionalVideo: z.any().optional(),
+    PromotionalVideo: z.any().refine(
+      (file) => file !== null && file !== undefined,
+      "Promotional video is required"
+    ),
     GalleryImages: z.array(z.any()).min(1, "Upload at least 1 gallery image"),
     BestPrice: z.string().min(1, "Best price message is required"),
     FinalPrice: z.string().min(1, "Final price is required"),
