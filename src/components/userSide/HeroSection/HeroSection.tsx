@@ -266,7 +266,7 @@ const getHeroData = (
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
           /> */}
            <div
-            className="absolute bottom-16 z-50 right-30 bg-transparent w-32 h-32 cursor-pointer"
+            className="absolute bottom-6 z-50 right-24 bg-transparent w-32 h-32 cursor-pointer"
             onClick={() =>
               window.scrollBy({
                 top: 1500,
@@ -305,7 +305,7 @@ const getHeroData = (
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
           /> */}
            <div
-            className="absolute bottom-16 z-50 right-30 bg-transparent w-32 h-32 cursor-pointer"
+            className="absolute bottom-6 z-50 right-24 bg-transparent w-32 h-32 cursor-pointer"
             onClick={() =>
               window.scrollBy({
                 top: 1500,
@@ -343,6 +343,15 @@ const getHeroData = (
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
           /> */}
         </div>
+        <div
+            className="absolute bottom-[-55px] z-50 right-24 bg-transparent w-32 h-32 cursor-pointer"
+            onClick={() =>
+              window.scrollBy({
+                top: 1500,
+                behavior: "smooth",
+              })
+            }
+          ></div>
       </>
     ),
     title: (
@@ -383,7 +392,7 @@ const getHeroData = (
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
           /> */}
            <div
-            className="absolute bottom-16 z-50 right-30 bg-transparent w-32 h-32 cursor-pointer"
+            className="absolute bottom-6 z-50 right-24 bg-transparent w-32 h-32 cursor-pointer"
             onClick={() =>
               window.scrollBy({
                 top: 1500,
@@ -431,7 +440,7 @@ const getHeroData = (
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
           /> */}
            <div
-            className="absolute bottom-16 z-50 right-30 bg-transparent w-32 h-32 cursor-pointer"
+            className="absolute bottom-10 z-50 right-24 bg-transparent w-32 h-32 cursor-pointer"
             onClick={() =>
               window.scrollBy({
                 top: 1500,
@@ -501,6 +510,15 @@ const getHeroData = (
             className="absolute inset-0 w-full h-full object-cover object-center md:object-top"
           /> */}
         </div>
+         <div
+            className="absolute bottom-[-55px] z-50 right-24 bg-transparent w-32 h-32 cursor-pointer"
+            onClick={() =>
+              window.scrollBy({
+                top: 1500,
+                behavior: "smooth",
+              })
+            }
+          ></div>
       </>
     ),
     title: (

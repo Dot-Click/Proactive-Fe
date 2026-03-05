@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Plus, Check } from "lucide-react";
+import { Plus, Check, X } from "lucide-react";
 import included1 from "../../../assets/included1.png";
 import included2 from "../../../assets/included2.png";
 import included3 from "../../../assets/included3.png";
@@ -8,7 +8,7 @@ import included5 from "../../../assets/included5.png";
 import { Controller, useFormContext } from "react-hook-form";
 import { FormMessage } from "@/components/ui/form";
 import clsx from "clsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { TripFormType } from "./tripschema";
 
 
@@ -107,19 +107,76 @@ const Included = () => {
   const [ShownotIncludedItems] = useState<boolean>(true);
   const { control } = useFormContext<TripFormType>();
 
-  // allow adding custom item labels
+  // Persistent custom items stored in localStorage
   const [customIncluded, setCustomIncluded] = useState<{id:string;title:string;desc:string;icon:string}[]>([]);
   const [customNotIncluded, setCustomNotIncluded] = useState<{id:string;title:string;desc:string;icon:string}[]>([]);
 
+  // Add item dialog states
+  const [showAddIncludedDialog, setShowAddIncludedDialog] = useState(false);
+  const [showAddNotIncludedDialog, setShowAddNotIncludedDialog] = useState(false);
+  const [newItemName, setNewItemName] = useState("");
+
+  // Load custom items from localStorage on mount
+  useEffect(() => {
+    const savedIncluded = localStorage.getItem("customIncludedItems");
+    const savedNotIncluded = localStorage.getItem("customNotIncludedItems");
+
+    if (savedIncluded) {
+      try {
+        setCustomIncluded(JSON.parse(savedIncluded));
+      } catch (e) {
+        console.error("Error loading custom included items:", e);
+      }
+    }
+
+    if (savedNotIncluded) {
+      try {
+        setCustomNotIncluded(JSON.parse(savedNotIncluded));
+      } catch (e) {
+        console.error("Error loading custom not included items:", e);
+      }
+    }
+  }, []);
+
+  // Save custom items to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("customIncludedItems", JSON.stringify(customIncluded));
+  }, [customIncluded]);
+
+  useEffect(() => {
+    localStorage.setItem("customNotIncludedItems", JSON.stringify(customNotIncluded));
+  }, [customNotIncluded]);
+
   const addCustomItem = (forIncluded: boolean) => {
-    const name = window.prompt("Enter item name");
-    if (!name) return;
+    if (forIncluded) {
+      setShowAddIncludedDialog(true);
+    } else {
+      setShowAddNotIncludedDialog(true);
+    }
+  };
+
+  const confirmAddItem = (forIncluded: boolean) => {
+    if (!newItemName.trim()) return;
+
     const id = `custom-${Date.now()}`;
-    const newItem = { id, title: name, desc: "", icon: "" };
+    const newItem = { id, title: newItemName.trim(), desc: "", icon: "" };
+
     if (forIncluded) {
       setCustomIncluded((prev) => [...prev, newItem]);
+      setShowAddIncludedDialog(false);
     } else {
       setCustomNotIncluded((prev) => [...prev, newItem]);
+      setShowAddNotIncludedDialog(false);
+    }
+
+    setNewItemName("");
+  };
+
+  const removeCustomItem = (id: string, forIncluded: boolean) => {
+    if (forIncluded) {
+      setCustomIncluded((prev) => prev.filter(item => item.id !== id));
+    } else {
+      setCustomNotIncluded((prev) => prev.filter(item => item.id !== id));
     }
   };
 
@@ -137,6 +194,41 @@ const Included = () => {
             <Plus /> Add Item
           </Button>
         </div>
+
+        {/* Add Item Dialog for Included */}
+        {showAddIncludedDialog && (
+          <div className="mb-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+            <div className="flex items-center gap-2 mb-2">
+              <input
+                type="text"
+                placeholder="Enter item name..."
+                value={newItemName}
+                onChange={(e) => setNewItemName(e.target.value)}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#108700]"
+                onKeyPress={(e) => e.key === 'Enter' && confirmAddItem(true)}
+              />
+              <Button
+                type="button"
+                onClick={() => confirmAddItem(true)}
+                className="bg-[#108700] hover:bg-[#0a5d00] text-white px-4 py-2 rounded-md"
+              >
+                Add
+              </Button>
+              <Button
+                type="button"
+                onClick={() => {
+                  setShowAddIncludedDialog(false);
+                  setNewItemName("");
+                }}
+                variant="outline"
+                className="px-4 py-2"
+              >
+                <X size={16} />
+              </Button>
+            </div>
+          </div>
+        )}
+
         {
           ShowIncludedItems && (
             <Controller
@@ -162,20 +254,28 @@ const Included = () => {
                       />
                     ))}
                     {customIncluded.map((item) => (
-                      <SelectCard
-                        key={item.id}
-                        selected={field.value.includes(item.title)}
-                        onClick={() =>
-                          field.onChange(
-                            field.value.includes(item.title)
-                              ? field.value.filter((i) => i !== item.title)
-                              : [...field.value, item.title]
-                          )
-                        }
-                        icon={item.icon}
-                        title={item.title}
-                        desc={item.desc}
-                      />
+                      <div key={item.id} className="relative">
+                        <SelectCard
+                          selected={field.value.includes(item.title)}
+                          onClick={() =>
+                            field.onChange(
+                              field.value.includes(item.title)
+                                ? field.value.filter((i) => i !== item.title)
+                                : [...field.value, item.title]
+                            )
+                          }
+                          icon={item.icon}
+                          title={item.title}
+                          desc={item.desc}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeCustomItem(item.id, true)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
                     ))}
                   </div>
                   {fieldState.error && (
@@ -200,6 +300,41 @@ const Included = () => {
             <Plus /> Add Item
           </Button>
         </div>
+
+        {/* Add Item Dialog for Not Included */}
+        {showAddNotIncludedDialog && (
+          <div className="mb-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+            <div className="flex items-center gap-2 mb-2">
+              <input
+                type="text"
+                placeholder="Enter item name..."
+                value={newItemName}
+                onChange={(e) => setNewItemName(e.target.value)}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D40004]"
+                onKeyPress={(e) => e.key === 'Enter' && confirmAddItem(false)}
+              />
+              <Button
+                type="button"
+                onClick={() => confirmAddItem(false)}
+                className="bg-[#D40004] hover:bg-[#b30003] text-white px-4 py-2 rounded-md"
+              >
+                Add
+              </Button>
+              <Button
+                type="button"
+                onClick={() => {
+                  setShowAddNotIncludedDialog(false);
+                  setNewItemName("");
+                }}
+                variant="outline"
+                className="px-4 py-2"
+              >
+                <X size={16} />
+              </Button>
+            </div>
+          </div>
+        )}
+
         {
           ShownotIncludedItems && (
             <Controller
@@ -225,20 +360,28 @@ const Included = () => {
                       />
                     ))}
                     {customNotIncluded.map((item) => (
-                      <SelectCard
-                        key={item.id}
-                        selected={field.value.includes(item.title)}
-                        onClick={() =>
-                          field.onChange(
-                            field.value.includes(item.title)
-                              ? field.value.filter((i) => i !== item.title)
-                              : [...field.value, item.title]
-                          )
-                        }
-                        icon={item.icon}
-                        title={item.title}
-                        desc={item.desc}
-                      />
+                      <div key={item.id} className="relative">
+                        <SelectCard
+                          selected={field.value.includes(item.title)}
+                          onClick={() =>
+                            field.onChange(
+                              field.value.includes(item.title)
+                                ? field.value.filter((i) => i !== item.title)
+                                : [...field.value, item.title]
+                            )
+                          }
+                          icon={item.icon}
+                          title={item.title}
+                          desc={item.desc}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeCustomItem(item.id, false)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
                     ))}
                   </div>
                   {fieldState.error && (

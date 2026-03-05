@@ -1,52 +1,36 @@
-// import { useFormContext, Controller, useFieldArray } from "react-hook-form";
-// import type { TripFormType } from "./tripschema";
-// import {
-//   FormControl,
-//   FormField,
-//   FormItem,
-//   FormLabel,
-//   FormMessage,
-// } from "@/components/ui/form";
-// import { Input } from "@/components/ui/input";
-// import { Textarea } from "@/components/ui/textarea";
-// import { useEffect, useState, useRef } from "react";
-// import { UsegetCategory } from "@/hooks/getCategoryhook";
+import { useFormContext, Controller, useFieldArray } from "react-hook-form";
+import type { TripFormType } from "./tripschema";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useEffect, useState } from "react";
+import { UsegetCategory } from "@/hooks/getCategoryhook";
+// Location dropdown removed - using free text input instead
 // import { UseGetLocations } from "@/hooks/UseGetLocationhook";
 // import type { Location } from "@/hooks/UseGetLocationhook";
-// } from "@/components/ui/select";
-// import { Upload, ChevronDown, Plus, Trash2 } from "lucide-react";
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "@/components/ui/popover";
-// import { Button } from "@/components/ui/button";
-// import { Calendar } from "@/components/ui/calendar";
 
-// const BasicInfo = () => {
-//   const { control, watch, setValue } = useFormContext<TripFormType>();
-//   const [openStart, setOpenStart] = useState(false);
-//   const [openEnd, setOpenEnd] = useState(false);
-//   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-//   const [endDate, setendDate] = useState<Date | undefined>(undefined);
-//   const [profile, setProfile] = useState("");
-//   const [dayImagePreviews, setDayImagePreviews] = useState<
-//     Record<number, string>
-//   >({});
-
-//   // Days itinerary field array
-//   const {
-//     fields: daysFields,
-//     append: appendDay,
-//     remove: removeDay,
-//   } = useFieldArray({
-//     control,
-//     name: "daysItinerary",
-//   });
-
-//   // Custom Dropdown State
-//   const [isOpenLocation, setIsOpenLocation] = useState(false);
-//   const locationRef = useRef<HTMLDivElement>(null);
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Upload, Plus, Trash2 } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { DayMap } from "./DayMap";
 
 //   const { data, isLoading, isError } = UsegetCategory();
 //   const { data: locationsData, isLoading: isLocLoading } = UseGetLocations(); // Location Hook
@@ -723,44 +707,6 @@
 //   );
 // };
 
-// export default BasicInfo;
-
-
-
-import { useFormContext, Controller, useFieldArray } from "react-hook-form";
-import type { TripFormType } from "./tripschema";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
-import { UsegetCategory } from "@/hooks/getCategoryhook";
-// Location dropdown removed - using free text input instead
-// import { UseGetLocations } from "@/hooks/UseGetLocationhook";
-// import type { Location } from "@/hooks/UseGetLocationhook";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Upload, Plus, Trash2 } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { DayMap } from "./DayMap";
-
 const BasicInfo = () => {
   const { control, watch, setValue } = useFormContext<TripFormType>();
   const [openStart, setOpenStart] = useState(false);
@@ -777,7 +723,7 @@ const BasicInfo = () => {
     fields: daysFields,
     append: appendDay,
     remove: removeDay,
-  } = useFieldArray({
+  } = useFieldArray<any, any>({
     control,
     name: "daysItinerary",
   });

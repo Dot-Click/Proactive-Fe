@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -15,9 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+// import { Textarea } from "@/components/ui/textarea";
 import { UsegetCoordinator } from "@/hooks/getCoordinatorhook";
-import { Upload } from "lucide-react";
+// import { Upload } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import type { TripFormType } from "./tripschema";
@@ -25,8 +25,8 @@ import type { TripFormType } from "./tripschema";
 const Coordinator = () => {
   const { control, setValue, watch } = useFormContext<TripFormType>();
   const coordinatorNameValue = watch("CoordinatorName");
-  const coordinatorPhotoValue = watch("CoordinatorPhoto");
-  const [profile, setProfile] = useState("");
+  // const coordinatorPhotoValue = watch("CoordinatorPhoto");
+  const [, setProfile] = useState("");
   const [show, setShow] = useState(false);
   const hasAutoExpanded = useRef(false);
   const { data } = UsegetCoordinator();
@@ -39,23 +39,33 @@ const Coordinator = () => {
     }
   }, [coordinatorNameValue]);
 
-  const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setProfile(URL.createObjectURL(file));
-      setValue("CoordinatorPhoto", file);
-    } else {
-      setProfile("");
-      setValue("CoordinatorPhoto", null);
+  // const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     setProfile(URL.createObjectURL(file));
+  //     setValue("CoordinatorPhoto", file);
+  //   } else {
+  //     setProfile("");
+  //     setValue("CoordinatorPhoto", null);
+  //   }
+  // };
+
+  // Handle coordinator selection change
+  const handleCoordinatorChange = (coordinatorId: string) => {
+    const selectedCoordinator = data?.coordinators?.find((coord: any) => coord.userId === coordinatorId);
+    
+    if (selectedCoordinator) {
+      // Auto-populate coordinator details
+      setValue("CoordinatorBio", selectedCoordinator.bio || "");
+      setValue("CoordinatorPhoto", selectedCoordinator.profilePicture || null);
+      setProfile(selectedCoordinator.profilePicture || "");
+      
+      // Note: Social links are not stored in coordinator profile, so they remain empty
+      // They can be filled manually if needed
+      setValue("CoordinatorInstagram", "");
+      setValue("CoordinatorLinkedin", "");
     }
   };
-
-  // Handle coordinator photo URL preview (for edit mode)
-  useEffect(() => {
-    if (coordinatorPhotoValue && typeof coordinatorPhotoValue === "string") {
-      setProfile(coordinatorPhotoValue);
-    }
-  }, [coordinatorPhotoValue]);
 
   return (
     <div>
@@ -90,7 +100,10 @@ const Coordinator = () => {
                     </FormLabel>
                     <FormControl>
                       <Select
-                        onValueChange={field.onChange}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          handleCoordinatorChange(value);
+                        }}
                         value={field.value}
                       >
                         <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
@@ -112,120 +125,29 @@ const Coordinator = () => {
                   </FormItem>
                 )}
               />
-              {/* TEMP: Coordinator role field hidden per requirement */}
-              {/* <FormField
-                control={control}
-                name="CoordinatorRole"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#242E2F] font-semibold">
-                      Role
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Lead Coordinator"
-                        {...field}
-                        className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
             </div>
-            <div className="flex mt-8 gap-3 items-center">
-              <Avatar className="w-20 h-20">
-                <AvatarImage
-                  className="object-cover"
-                  src={profile ? profile : "https://github.com/shadcn.png"}
-                  alt="@shadcn"
-                />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <input
-                onChange={HandleuploadProfile}
-                type="file"
-                id="coordinatorphoto"
-                className="hidden"
-              />
-              <Button type="button" className="rounded-full w-42 ">
-                <label
-                  htmlFor="coordinatorphoto"
-                  className="flex gap-1 items-center cursor-pointer"
-                >
-                  <Upload strokeWidth={3} size={60} />
-                  Upload Photo
-                </label>
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-6">
-              <FormField
-                control={control}
-                name="CoordinatorBio"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2 mt-6">
-                    <FormLabel className="text-[#242E2F] font-semibold">
-                      Short Description
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Describe coordinator bio......"
-                        className="bg-[#FAFAFE] border border-[#EFEFEF] h-26 placeholder:text-[#221E33]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={control}
-                name="CoordinatorInstagram"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#242E2F] font-semibold mt-6">
-                      Instagram (optional)
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="@username"
-                        {...field}
-                        className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={control}
-                name="CoordinatorLinkedin"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#242E2F] font-semibold mt-6">
-                      Linkedin (optional)
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Linkedin profile URL "
-                        {...field}
-                        className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex justify-start mt-4">
-                <Button
-                  onClick={() => setShow(false)}
-                  type="button"
-                  variant={"outline"}
-                  className="text-[#9C0000] rounded-full px-8 py-4 border border-[#9C0000] cursor-pointer"
-                >
-                  Remove
-                </Button>
+
+            {/* Coordinator details are auto-populated when selected */}
+            {coordinatorNameValue && (
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                <p className="text-sm text-gray-600 mb-2">
+                  Coordinator details will be automatically populated from their profile.
+                </p>
+                <div className="text-sm">
+                  <strong>Bio:</strong> {watch("CoordinatorBio") || "No bio available"}
+                </div>
               </div>
+            )}
+
+            <div className="flex justify-start mt-4">
+              <Button
+                onClick={() => setShow(false)}
+                type="button"
+                variant={"outline"}
+                className="text-[#9C0000] rounded-full px-8 py-4 border border-[#9C0000] cursor-pointer"
+              >
+                Remove
+              </Button>
             </div>
           </>
         )}

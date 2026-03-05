@@ -24,7 +24,7 @@ import { CheckCircle, AlertCircle } from "lucide-react";
 
 const AddTrip = ({ backUrl }: { backUrl: string }) => {
   const methods = useForm<TripFormType>({
-    resolver: zodResolver(tripSchema),
+    resolver: zodResolver(tripSchema) as any,
     mode: "onChange", // Validate on change instead of on submit
     reValidateMode: "onChange",
     shouldUnregister: false,
@@ -111,11 +111,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
     if (step === 4) {
       valid = await methods.trigger([
         "CoordinatorName",
-        // "CoordinatorRole", // TEMP: role field hidden
-        "CoordinatorBio",
-        "CoordinatorInstagram",
-        "CoordinatorLinkedin",
-        "CoordinatorPhoto",
+        // Coordinator details are now auto-populated, so we only validate the name selection
       ]);
     }
 
@@ -462,7 +458,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
           <form onSubmit={methods.handleSubmit(
             (data) => {
               console.log("✅ Form validation passed! Submitting...");
-              onSubmit(data);
+              onSubmit(data as TripFormType);
             },
             (errors) => {
               console.error("❌ Form validation failed:", errors);

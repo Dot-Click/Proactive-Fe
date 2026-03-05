@@ -193,7 +193,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       SportsLevel: trip.sportLvl ?? "",
       included: includedIds,
       notIncluded: notIncludedIds,
-      CoordinatorName: coordinatorName || "",
+      CoordinatorName: coordinatorId || "", // Use ID for dropdown selection
       CoordinatorRole: coord?.CoordinatorRole ?? coord?.role ?? "",
       CoordinatorBio: coord?.CoordinatorBio ?? coord?.bio ?? "",
       CoordinatorInstagram:
