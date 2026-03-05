@@ -26,15 +26,25 @@ const Characteristic = ({ label, value, icon }: CharacteristicProps) => (
     </div>
 );
 
-const Tripmood = () => {
-    // These could be dynamic from the trip data if available
-    const characteristics = [
-        { label: "Fiesta y Nightlife", value: 3, icon: <Beer size={20} /> },
-        { label: "Relax", value: 1, icon: <Coffee size={20} /> },
-        { label: "Naturaleza y aventura", value: 4, icon: <Trees size={20} /> },
-        { label: "Ciudad y culturas", value: 3, icon: <Building2 size={20} /> },
-        { label: "Monumentos e historia", value: 4, icon: <Landmark size={20} /> },
+const Tripmood = ({ trip }: { trip?: any }) => {
+    // Values may come from trip.mood which is stored as array of {label,value}
+    const raw: any[] = trip?.mood || [];
+    const defaultChars = [
+        { label: "Fiesta y Nightlife", icon: <Beer size={20} /> },
+        { label: "Relax", icon: <Coffee size={20} /> },
+        { label: "Naturaleza y aventura", icon: <Trees size={20} /> },
+        { label: "Ciudad y culturas", icon: <Building2 size={20} /> },
+        { label: "Monumentos e historia", icon: <Landmark size={20} /> },
     ];
+    const characteristics =
+        raw.length > 0
+            ? raw.map((item, idx) => ({
+                  label: item.label || defaultChars[idx]?.label || "",
+                  value:
+                      typeof item.value === "number" ? item.value : 0,
+                  icon: defaultChars[idx]?.icon,
+              }))
+            : defaultChars.map((c) => ({ ...c, value: 0 }));
 
     return (
         <div className="py-12 border-t border-[#ECECF1] mt-8">

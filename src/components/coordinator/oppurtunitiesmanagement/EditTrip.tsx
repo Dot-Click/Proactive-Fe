@@ -1,5 +1,5 @@
 import { Form } from "@/components/ui/form";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   tripSchema,
@@ -28,10 +28,11 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
 
   const methods = useForm<TripFormType>({
     resolver: zodResolver(tripSchema),
+    mode: "onChange",
+    reValidateMode: "onChange",
     shouldUnregister: false,
     defaultValues: {
       categoryId: "",
-      // Days itinerary (shown when category is selected)
       daysItinerary: [],
       title: "",
       description: "",
@@ -58,6 +59,19 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       GalleryImages: [],
       BestPrice: "",
       FinalPrice: "",
+      // Initialize field arrays with default values
+      highlights: [],
+      mood: [
+        { label: "Fiesta y Nightlife", value: 0 },
+        { label: "Relax", value: 0 },
+        { label: "Naturaleza y aventura", value: 0 },
+        { label: "Ciudad y culturas", value: 0 },
+        { label: "Monumentos e historia", value: 0 },
+      ],
+      commonFund: "",
+      commonFundDescription: "",
+      commonFundCount: undefined,
+      thingsToKnow: [],
     },
   });
 
@@ -207,7 +221,31 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       })(),
       BestPrice: trip.bestPriceMsg ?? "",
       FinalPrice: trip.perHeadPrice != null ? String(trip.perHeadPrice) : "",
+      // Dynamic fields - ensure they're properly loaded
+      highlights: Array.isArray(trip.highlights) ? trip.highlights : [],
+      mood: Array.isArray(trip.mood) && trip.mood.length > 0 
+        ? trip.mood 
+        : [
+            { label: "Fiesta y Nightlife", value: 0 },
+            { label: "Relax", value: 0 },
+            { label: "Naturaleza y aventura", value: 0 },
+            { label: "Ciudad y culturas", value: 0 },
+            { label: "Monumentos e historia", value: 0 },
+          ],
+      commonFund: trip.commonFund ?? "",
+      commonFundDescription: trip.commonFundDescription ?? "",
+      commonFundCount: trip.commonFundCount ?? undefined,
+      thingsToKnow: Array.isArray(trip.thingsToKnow) ? trip.thingsToKnow : [],
     };
+
+    console.log("Setting form values with dynamic fields:", {
+      highlights: values.highlights,
+      mood: values.mood,
+      commonFund: values.commonFund,
+      commonFundDescription: values.commonFundDescription,
+      commonFundCount: values.commonFundCount,
+      thingsToKnow: values.thingsToKnow,
+    });
 
     methods.reset(values);
   }, [tripData, methods]);
@@ -315,6 +353,13 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         coordinatorBio: data.CoordinatorBio,
         coordinatorInstagram: data.CoordinatorInstagram,
         coordinatorLinkedin: data.CoordinatorLinkedin,
+        // dynamic sections
+        highlights: data.highlights,
+        mood: data.mood,
+        commonFund: data.commonFund,
+        commonFundDescription: data.commonFundDescription,
+        commonFundCount: data.commonFundCount,
+        thingsToKnow: data.thingsToKnow,
         // Days itinerary data
         daysItinerary: daysItinerary,
       };

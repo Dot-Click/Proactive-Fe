@@ -110,8 +110,8 @@ export const tripSchema = z
     CoordinatorName: z.string().min(1, "Coordinator name is required"),
     CoordinatorRole: z.string().optional(),
     CoordinatorBio: z.string().min(1, "Coordinator bio is required"),
-    CoordinatorInstagram: z.string().min(1, "Instagram link is required"),
-    CoordinatorLinkedin: z.string().min(1, "LinkedIn link is required"),
+    CoordinatorInstagram: z.string().optional(),
+    CoordinatorLinkedin: z.string().optional(),
     CoordinatorPhoto: z
       .any()
       .nullable()
@@ -121,15 +121,35 @@ export const tripSchema = z
       ),
 
     // Step 5 – Media & Price
-    PromotionalVideo: z.any().refine(
-      (file) => file !== null && file !== undefined,
-      "Promotional video is required"
-    ),
+    PromotionalVideo: z.any().optional(),
     GalleryImages: z.array(z.any()).min(1, "Upload at least 1 gallery image"),
     BestPrice: z.string().min(1, "Best price message is required"),
     FinalPrice: z.string().min(1, "Final price is required"),
+
+    // Dynamic additional sections (optional)
+    highlights: z.array(z.string()).optional().default([]),
+    mood: z
+      .array(
+        z.object({
+          label: z.string().optional(),
+          value: z.coerce.number().min(0).max(5).optional(), // Coerce string to number
+        })
+      )
+      .optional()
+      .default([]),
+    commonFund: z.string().optional().default(""),
+    commonFundDescription: z.string().optional().default(""),
+    commonFundCount: z.coerce.number().optional().nullable(), // Coerce string to number
+    thingsToKnow: z
+      .array(
+        z.object({
+          title: z.string().optional(),
+          description: z.string().optional(),
+        })
+      )
+      .optional()
+      .default([]),
   })
-  // Location validation removed - locationId is now optional for custom free-text locations
-  .strict();
+  .passthrough(); // Allow extra fields but validate schema fields
 
 export type TripFormType = z.infer<typeof tripSchema>;

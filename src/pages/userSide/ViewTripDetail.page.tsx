@@ -9,6 +9,7 @@ import Tripmood from "@/components/Adventureoppurtunities/ViewDetailtrip/Tripmoo
 import VideoSection from "@/components/Adventureoppurtunities/ViewDetailtrip/VideoSection";
 import Faqs from "@/components/Adventureoppurtunities/ViewDetailtrip/Faqs";
 import HowItWorks from "@/components/Adventureoppurtunities/ViewDetailtrip/HowItWorks";
+import Highlights from "@/components/Adventureoppurtunities/ViewDetailtrip/Highlights";
 import { useParams } from "react-router-dom";
 import { LoaderIcon } from "lucide-react";
 import { UsegetCategory } from "@/hooks/getCategoryhook";
@@ -83,7 +84,8 @@ const ViewTripDetailPage = () => {
           {/* Main Column (66%) */}
           <div className="lg:w-2/3 space-y-16">
             {/* <Locationmeetingpoint trip={trip} /> */}
-            <Tripmood />
+            <Highlights trip={trip} />
+            <Tripmood trip={trip} />
             {(isWildWeekend || isWildTrips) && <SurfaceCamp />}
             {isWildTrips && <Daybyday trip={trip} />}
             <Includeditem trip={trip} />

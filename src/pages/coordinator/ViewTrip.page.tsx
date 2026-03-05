@@ -5,6 +5,10 @@ import Locationmeetingpoint from "@/components/Adventureoppurtunities/ViewDetail
 import MasonryLayout from "@/components/Adventureoppurtunities/ViewDetailtrip/MasonryLayout";
 import SurfaceCamp from "@/components/Adventureoppurtunities/ViewDetailtrip/SurfaceCamp";
 import VideoSection from "@/components/Adventureoppurtunities/ViewDetailtrip/VideoSection";
+import Highlights from "@/components/Adventureoppurtunities/ViewDetailtrip/Highlights";
+import Tripmood from "@/components/Adventureoppurtunities/ViewDetailtrip/Tripmood";
+import CommonFund from "@/components/Adventureoppurtunities/ViewDetailtrip/CommonFund";
+import ThingsToKnow from "@/components/Adventureoppurtunities/ViewDetailtrip/ThingsToKnow";
 import { Button } from "@/components/ui/button";
 import { UsegetTripbyid } from "@/hooks/gettripbyidhook";
 import { UsegetCategory } from "@/hooks/getCategoryhook";
@@ -78,10 +82,14 @@ const ViewTripPage = () => {
         }
       />
       <Locationmeetingpoint trip={trip} />
+      <Highlights trip={trip} />
+      <Tripmood trip={trip} />
+      <CommonFund trip={trip} />
       {isWildWeekend && <SurfaceCamp />}
       {isWildTrips && <Daybyday trip={trip} />}
       <Includeditem trip={trip} />
       <VideoSection trip={trip} />
+      <ThingsToKnow trip={trip} />
       {isWildTrips && <Coordinatordetail trip={trip} />}
     </div>
   );

@@ -36,6 +36,28 @@ export const updateTripSchema = z.object({
   GalleryImages: z.array(z.any()).optional(),
   BestPrice: z.string().min(1, "Best price message is required").optional(),
   FinalPrice: z.string().min(1, "Final price is required").optional(),
+
+  // dynamic editable sections
+  highlights: z.array(z.string()).optional(),
+  mood: z
+    .array(
+      z.object({
+        label: z.string(),
+        value: z.number().min(0).max(5),
+      })
+    )
+    .optional(),
+  commonFund: z.string().optional(),
+  commonFundDescription: z.string().optional(),
+  commonFundCount: z.number().optional(),
+  thingsToKnow: z
+    .array(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+      })
+    )
+    .optional(),
 });
 
 export type UpdateTripFormType = z.infer<typeof updateTripSchema>;

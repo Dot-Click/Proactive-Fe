@@ -46,14 +46,16 @@ export const UseUpdateTrip = () => {
   return useMutation({
     mutationKey: ["update-trip"],
     mutationFn: updateTripMutation,
-    onSuccess: (response) => {
+    onSuccess: (response, variables) => {
       const msg =
         response?.message ??
         response?.data?.message ??
         "Trip updated successfully";
       toast.success(msg);
+      // Invalidate all trip-related queries
       queryClient.invalidateQueries({ queryKey: ["trips"] });
-      queryClient.invalidateQueries({ queryKey: ["trip"] });
+      // Specifically invalidate the trip by ID that was just updated
+      queryClient.invalidateQueries({ queryKey: ["trips", variables.id] });
     },
     onError: (error: any) => {
       console.error("Trip update error:", error);
