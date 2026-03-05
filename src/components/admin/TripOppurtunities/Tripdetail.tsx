@@ -130,9 +130,10 @@ import type { TripFormType } from "./tripschema";
 
 const TripDetail = () => {
     const { control } = useFormContext<TripFormType>();
-    const highlightsArray = useFieldArray({ control, name: "highlights" as any });
-    const moodArray = useFieldArray({ control, name: "mood" as any });
-    const thingsArray = useFieldArray({ control, name: "thingsToKnow" as any });
+    // useFieldArray generics set to any to satisfy typing constraints and avoid 'never' errors
+    const highlightsArray = useFieldArray<any, any>({ control, name: "highlights" });
+    const moodArray = useFieldArray<any, any>({ control, name: "mood" });
+    const thingsArray = useFieldArray<any, any>({ control, name: "thingsToKnow" });
 
     // prepopulate mood with default categories on mount if empty
     React.useEffect(() => {
@@ -256,6 +257,7 @@ const TripDetail = () => {
                                         <FormControl>
                                             <Input
                                                 {...field}
+                                                value={field.value as string}
                                                 placeholder="Highlight text"
                                             />
                                         </FormControl>
@@ -300,6 +302,7 @@ const TripDetail = () => {
                                         <FormControl>
                                             <Input
                                                 {...field}
+                                                value={field.value as string}
                                                 placeholder="Label"
                                             />
                                         </FormControl>
@@ -317,6 +320,7 @@ const TripDetail = () => {
                                                 min={0}
                                                 max={5}
                                                 {...field}
+                                                value={field.value as number}
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -374,6 +378,7 @@ const TripDetail = () => {
                                     <Input
                                         type="number"
                                         {...field}
+                                        value={field.value as number | string | undefined}
                                         placeholder="e.g. 4"
                                     />
                                 </FormControl>
@@ -401,6 +406,7 @@ const TripDetail = () => {
                                         <FormControl>
                                             <Input
                                                 {...field}
+                                                value={field.value as string}
                                                 placeholder="Item title"
                                             />
                                         </FormControl>
@@ -416,6 +422,7 @@ const TripDetail = () => {
                                         <FormControl>
                                             <Textarea
                                                 {...field}
+                                                value={field.value as string}
                                                 placeholder="Description"
                                             />
                                         </FormControl>

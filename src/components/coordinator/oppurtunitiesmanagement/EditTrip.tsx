@@ -1,5 +1,5 @@
 import { Form } from "@/components/ui/form";
-import { FormProvider, useForm, useFieldArray } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   tripSchema,
@@ -27,7 +27,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
   const navigate = useNavigate();
 
   const methods = useForm<TripFormType>({
-    resolver: zodResolver(tripSchema),
+    resolver: zodResolver(tripSchema) as any,
     mode: "onChange",
     reValidateMode: "onChange",
     shouldUnregister: false,
@@ -119,8 +119,9 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         : [];
 
     const coordinatorId = coord ? coord.id ?? coord._id ?? coord.userId : "";
-    const coordinatorName =
-      coordinatorId || (coord?.fullName ?? coord?.CoordinatorName ?? "");
+    // coordinatorName calculated for potential future use but not needed at this stage
+    // const coordinatorName =
+    //   coordinatorId || (coord?.fullName ?? coord?.CoordinatorName ?? "");
 
     // Map daysItenary (database column name) to daysItinerary (form field name)
     const daysItineraryData = (() => {
@@ -478,7 +479,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       <hr />
       <FormProvider {...methods}>
         <Form {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <form onSubmit={methods.handleSubmit((data) => onSubmit(data as TripFormType))}>
             {step === 1 && <BasicInfo />}
             {step === 2 && <TripDetail />}
             {step === 3 && <Included />}
@@ -500,7 +501,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
               <Button
                 type="button"
                 onClick={
-                  step === totalStep ? methods.handleSubmit(onSubmit) : next
+                  step === totalStep ? methods.handleSubmit((data) => onSubmit(data as TripFormType)) : next
                 }
                 disabled={isPending}
                 className={`${

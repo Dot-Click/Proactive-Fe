@@ -1,4 +1,4 @@
-import { Bus, Home, FileText, Lock } from "lucide-react";
+import { Bus } from "lucide-react";
 
 interface InfoItemProps {
     icon: React.ReactNode;
