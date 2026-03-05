@@ -5,7 +5,8 @@ export const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+    // Show when user has scrolled down a bit (e.g. 300px)
+    if (window.scrollY > 300) {
       setIsVisible(true);
     } else {
       setIsVisible(false);

@@ -1,18 +1,18 @@
-import carousel from "../../../assets/Group 1410091220.png"
-import oppHero from "../../../assets/openoppurtunitiesss.png"
+import carousel from "../../../assets/Group 1410091219.png"
+import oppHero from "../../../assets/Group 1410091088 (4).png"
 // import downloadimg from "../../../assets/Download.png"
-import wwHero from "../../../assets/wildweekendss.png"
-import wtHero from "../../../assets/wildtripss.png"
-import erasmusHero from "../../../assets/Erasmus+.png"
-import InternalEvents from "../../../assets/Internalevents.png"
+import wwHero from "../../../assets/Group 1410091088 (5).png"
+import wtHero from "../../../assets/Group 1410091088 (6).png"
+import erasmusHero from "../../../assets/Group 1410091088 (7).png"
+import InternalEvents from "../../../assets/Group 1410091086.png"
 import { useLocation } from "react-router-dom";
 import lightgreenshadow from "../../../assets/lightgreenshadow.png"
-import About from "../../../assets/About.png"
-import Member from "../../../assets/BecomeMember.png"
-import TravelCoordinatore from "../../../assets/Travelcoordinator.png"
-import advantages from "../../../assets/benefits.png"
-import contact from "../../../assets/Contact.png"
-import faq from "../../../assets/FAQ.png"
+import About from "../../../assets/Group 1410091088 (8).png"
+import Member from "../../../assets/Group 1410091088 (9).png"
+import TravelCoordinatore from "../../../assets/Group 1410091088 (10).png"
+import advantages from "../../../assets/Group 1410091220.png"
+import contact from "../../../assets/Group 1410091088 (11).png"
+import faq from "../../../assets/Group 1410091088 (12).png"
 import type { JSX } from "react";
 import type React from "react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -109,7 +109,7 @@ const getHeroData = (
             className="relative w-full h-full object-cover object-center md:object-top"
           />
           {/* <div className="absolute bottom-3  right-22 bg-black w-32 h-32"></div> */}
-          <div
+          {/* <div
             className="absolute bottom-3 z-50 right-22 bg-transparent w-32 h-32 cursor-pointer"
             onClick={() =>
               window.scrollBy({
@@ -117,7 +117,7 @@ const getHeroData = (
                 behavior: "smooth",
               })
             }
-          ></div>
+            ></div> */}
 
 
         </div>

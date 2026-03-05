@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import Footer from "@/components/Footer"
+import { ScrollToTop } from "@/components/ScrollToTop";
 import HeroSection from "@/components/userSide/HeroSection/HeroSection"
 import UserSideNavbar from "@/components/userSide/Navbar/Navbar"
 import { Outlet, useLocation } from "react-router-dom"
@@ -13,6 +14,7 @@ const UserSidelayout = () => {
 
     return (
         <div className="flex flex-col min-h-screen w-full bg-[#FFFFFF]">
+            <ScrollToTop />
             <div className="relative shrink-0">
                 <UserSideNavbar />
                 <HeroSection />
