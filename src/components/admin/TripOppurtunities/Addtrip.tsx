@@ -47,6 +47,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       SportsLevel: "",
       included: [],
       notIncluded: [],
+      coordinators: [], // Array of coordinator IDs
       CoordinatorName: "",
       CoordinatorRole: "", // TEMP: role field hidden in UI, kept for form stability
       CoordinatorBio: "",
@@ -110,8 +111,8 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
 
     if (step === 4) {
       valid = await methods.trigger([
-        "CoordinatorName",
-        // Coordinator details are now auto-populated, so we only validate the name selection
+        "coordinators",
+        // Coordinator details are now auto-populated, so we only validate the coordinator selection
       ]);
     }
 
@@ -228,9 +229,38 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         shopping: { title: "Shopping & Souvenirs", description: "Personal purchases not included.", img: included3 },
       };
 
+      // merge custom item icons from localStorage if present
+      const customIncludedMap: Record<string, { title: string; description: string; img: string }> = {};
+      try {
+        const saved = localStorage.getItem("customIncludedItems");
+        if (saved) {
+          JSON.parse(saved).forEach((it: any) => {
+            if (it.title) {
+              customIncludedMap[it.title] = { title: it.title, description: it.desc || "", img: it.icon || "" };
+            }
+          });
+        }
+      } catch (e) {
+        console.warn("failed to parse customIncludedItems from localStorage", e);
+      }
+
+      const customNotIncludedMap: Record<string, { title: string; description: string; img: string }> = {};
+      try {
+        const saved = localStorage.getItem("customNotIncludedItems");
+        if (saved) {
+          JSON.parse(saved).forEach((it: any) => {
+            if (it.title) {
+              customNotIncludedMap[it.title] = { title: it.title, description: it.desc || "", img: it.icon || "" };
+            }
+          });
+        }
+      } catch (e) {
+        console.warn("failed to parse customNotIncludedItems from localStorage", e);
+      }
+
       // Transform included IDs to objects with title, description, and img
       const includedItems = (data.included ?? []).map((id: string) => {
-        const lookup = INCLUDED_LOOKUP[id];
+        const lookup = INCLUDED_LOOKUP[id] || customIncludedMap[id];
         if (lookup) {
           return {
             title: lookup.title,
@@ -248,7 +278,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
 
       // Transform notIncluded IDs to objects with title, description, and img
       const notIncludedItems = (data.notIncluded ?? []).map((id: string) => {
-        const lookup = NOT_INCLUDED_LOOKUP[id];
+        const lookup = NOT_INCLUDED_LOOKUP[id] || customNotIncludedMap[id];
         if (lookup) {
           return {
             title: lookup.title,
@@ -287,8 +317,8 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         perHeadPrice: data.FinalPrice,
         instaLink: data.CoordinatorInstagram || undefined,
         likedinLink: data.CoordinatorLinkedin || undefined,
-        // Send coordinator as an array
-        coordinators: data.CoordinatorName ? [data.CoordinatorName] : [],
+        // Send coordinators as an array of IDs
+        coordinators: data.coordinators || [],
         coordinatorBio: data.CoordinatorBio,
         coordinatorInstagram: data.CoordinatorInstagram,
         coordinatorLinkedin: data.CoordinatorLinkedin,
@@ -311,6 +341,8 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         commonFundCount: payload.commonFundCount,
         thingsToKnow: payload.thingsToKnow,
       });
+      console.log("📏 Payload JSON size:", JSON.stringify(payload).length, "characters");
+      // Send payload as a form field (reverted from file to avoid unexpected field error)
       formData.append("payload", JSON.stringify(payload));
 
       if (data.coverImage && data.coverImage instanceof File) {
@@ -353,6 +385,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       console.log("====================================");
     } catch (error) {
       console.error("❌ ERROR in onSubmit:", error);
+      console.error("Full error response:", JSON.stringify((error as any)?.response?.data, null, 2));
       console.error("Error details:", {
         message: (error as any)?.message,
         response: (error as any)?.response?.data,

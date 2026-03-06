@@ -115,6 +115,9 @@ const Included = () => {
   const [showAddIncludedDialog, setShowAddIncludedDialog] = useState(false);
   const [showAddNotIncludedDialog, setShowAddNotIncludedDialog] = useState(false);
   const [newItemName, setNewItemName] = useState("");
+  // icon file/preview for the custom item being created
+  const [newItemIconFile, setNewItemIconFile] = useState<File | null>(null);
+  const [newItemIconPreview, setNewItemIconPreview] = useState("");
 
   // Load custom items from localStorage on mount
   useEffect(() => {
@@ -148,6 +151,10 @@ const Included = () => {
   }, [customNotIncluded]);
 
   const addCustomItem = (forIncluded: boolean) => {
+    // clear previous dialog state
+    setNewItemName("");
+    setNewItemIconFile(null);
+    setNewItemIconPreview("");
     if (forIncluded) {
       setShowAddIncludedDialog(true);
     } else {
@@ -159,7 +166,12 @@ const Included = () => {
     if (!newItemName.trim()) return;
 
     const id = `custom-${Date.now()}`;
-    const newItem = { id, title: newItemName.trim(), desc: "", icon: "" };
+    const newItem = {
+      id,
+      title: newItemName.trim(),
+      desc: "",
+      icon: newItemIconPreview || "",
+    };
 
     if (forIncluded) {
       setCustomIncluded((prev) => [...prev, newItem]);
@@ -169,7 +181,10 @@ const Included = () => {
       setShowAddNotIncludedDialog(false);
     }
 
+    // reset fields
     setNewItemName("");
+    setNewItemIconFile(null);
+    setNewItemIconPreview("");
   };
 
   const removeCustomItem = (id: string, forIncluded: boolean) => {
@@ -198,7 +213,7 @@ const Included = () => {
         {/* Add Item Dialog for Included */}
         {showAddIncludedDialog && (
           <div className="mb-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex flex-col gap-2 mb-2">
               <input
                 type="text"
                 placeholder="Enter item name..."
@@ -207,24 +222,55 @@ const Included = () => {
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#108700]"
                 onKeyPress={(e) => e.key === 'Enter' && confirmAddItem(true)}
               />
-              <Button
-                type="button"
-                onClick={() => confirmAddItem(true)}
-                className="bg-[#108700] hover:bg-[#0a5d00] text-white px-4 py-2 rounded-md"
-              >
-                Add
-              </Button>
-              <Button
-                type="button"
-                onClick={() => {
-                  setShowAddIncludedDialog(false);
-                  setNewItemName("");
-                }}
-                variant="outline"
-                className="px-4 py-2"
-              >
-                <X size={16} />
-              </Button>
+              <div className="flex items-center gap-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) {
+                      setNewItemIconFile(null);
+                      setNewItemIconPreview("");
+                      return;
+                    }
+                    setNewItemIconFile(file);
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      setNewItemIconPreview(reader.result as string);
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                />
+                {newItemIconPreview && (
+                  <img
+                    src={newItemIconPreview}
+                    alt="icon preview"
+                    className="h-10 w-10 object-contain rounded"
+                  />
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  onClick={() => confirmAddItem(true)}
+                  className="bg-[#108700] hover:bg-[#0a5d00] text-white px-4 py-2 rounded-md"
+                >
+                  Add
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setShowAddIncludedDialog(false);
+                    setNewItemName("");
+                    setNewItemIconFile(null);
+                    setNewItemIconPreview("");
+                  }}
+                  variant="outline"
+                  className="px-4 py-2"
+                >
+                  <X size={16} />
+                </Button>
+              </div>
             </div>
           </div>
         )}
@@ -304,7 +350,7 @@ const Included = () => {
         {/* Add Item Dialog for Not Included */}
         {showAddNotIncludedDialog && (
           <div className="mb-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex flex-col gap-2 mb-2">
               <input
                 type="text"
                 placeholder="Enter item name..."
@@ -313,24 +359,55 @@ const Included = () => {
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D40004]"
                 onKeyPress={(e) => e.key === 'Enter' && confirmAddItem(false)}
               />
-              <Button
-                type="button"
-                onClick={() => confirmAddItem(false)}
-                className="bg-[#D40004] hover:bg-[#b30003] text-white px-4 py-2 rounded-md"
-              >
-                Add
-              </Button>
-              <Button
-                type="button"
-                onClick={() => {
-                  setShowAddNotIncludedDialog(false);
-                  setNewItemName("");
-                }}
-                variant="outline"
-                className="px-4 py-2"
-              >
-                <X size={16} />
-              </Button>
+              <div className="flex items-center gap-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) {
+                      setNewItemIconFile(null);
+                      setNewItemIconPreview("");
+                      return;
+                    }
+                    setNewItemIconFile(file);
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      setNewItemIconPreview(reader.result as string);
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                />
+                {newItemIconPreview && (
+                  <img
+                    src={newItemIconPreview}
+                    alt="icon preview"
+                    className="h-10 w-10 object-contain rounded"
+                  />
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  onClick={() => confirmAddItem(false)}
+                  className="bg-[#D40004] hover:bg-[#b30003] text-white px-4 py-2 rounded-md"
+                >
+                  Add
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setShowAddNotIncludedDialog(false);
+                    setNewItemName("");
+                    setNewItemIconFile(null);
+                    setNewItemIconPreview("");
+                  }}
+                  variant="outline"
+                  className="px-4 py-2"
+                >
+                  <X size={16} />
+                </Button>
+              </div>
             </div>
           </div>
         )}

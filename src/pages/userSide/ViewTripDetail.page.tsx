@@ -4,12 +4,12 @@ import Includeditem from "@/components/Adventureoppurtunities/ViewDetailtrip/Inc
 // import Locationmeetingpoint from "@/components/Adventureoppurtunities/ViewDetailtrip/Locationmeetingpoint";
 import MasonryLayout from "@/components/Adventureoppurtunities/ViewDetailtrip/MasonryLayout";
 import ParticipantsCards from "@/components/Adventureoppurtunities/ViewDetailtrip/ParticipantsCards";
-import SurfaceCamp from "@/components/Adventureoppurtunities/ViewDetailtrip/SurfaceCamp";
+// import SurfaceCamp from "@/components/Adventureoppurtunities/ViewDetailtrip/SurfaceCamp";
 import Tripmood from "@/components/Adventureoppurtunities/ViewDetailtrip/Tripmood";
 import VideoSection from "@/components/Adventureoppurtunities/ViewDetailtrip/VideoSection";
 import Faqs from "@/components/Adventureoppurtunities/ViewDetailtrip/Faqs";
 import HowItWorks from "@/components/Adventureoppurtunities/ViewDetailtrip/HowItWorks";
-import Highlights from "@/components/Adventureoppurtunities/ViewDetailtrip/Highlights";
+// import Highlights from "@/components/Adventureoppurtunities/ViewDetailtrip/Highlights";
 import { useParams } from "react-router-dom";
 import { LoaderIcon } from "lucide-react";
 import { UsegetCategory } from "@/hooks/getCategoryhook";
@@ -69,7 +69,7 @@ const ViewTripDetailPage = () => {
     .toLowerCase()
     .trim();
 
-  const isWildWeekend = normalizedCategory.includes("wild weekend");
+  // const isWildWeekend = normalizedCategory.includes("wild weekend");
   const isWildTrips = normalizedCategory.includes("wild trips");
 
   return (
@@ -84,15 +84,15 @@ const ViewTripDetailPage = () => {
           {/* Main Column (66%) */}
           <div className="lg:w-2/3 space-y-16">
             {/* <Locationmeetingpoint trip={trip} /> */}
-            <Highlights trip={trip} />
+            {/* <Highlights trip={trip} /> */}
             <Tripmood trip={trip} />
-            {(isWildWeekend || isWildTrips) && <SurfaceCamp />}
+            {/* {(isWildWeekend || isWildTrips) && <SurfaceCamp />} */}
             {isWildTrips && <Daybyday trip={trip} />}
             <Includeditem trip={trip} />
             <CommonFund trip={trip} />
             <ThingsToKnow trip={trip} />
             <VideoSection trip={trip} />
-            {isWildTrips && <Coordinatordetail trip={trip} />}
+            <Coordinatordetail trip={trip} />
             <HowItWorks />
             <Faqs />
             <ParticipantsCards />

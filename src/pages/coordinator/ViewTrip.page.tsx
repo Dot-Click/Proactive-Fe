@@ -9,6 +9,9 @@ import Highlights from "@/components/Adventureoppurtunities/ViewDetailtrip/Highl
 import Tripmood from "@/components/Adventureoppurtunities/ViewDetailtrip/Tripmood";
 import CommonFund from "@/components/Adventureoppurtunities/ViewDetailtrip/CommonFund";
 import ThingsToKnow from "@/components/Adventureoppurtunities/ViewDetailtrip/ThingsToKnow";
+
+// participants view component for coordinator
+import TripParticipants from "@/components/coordinator/oppurtunitiesmanagement/TripParticipants";
 import { Button } from "@/components/ui/button";
 import { UsegetTripbyid } from "@/hooks/gettripbyidhook";
 import { UsegetCategory } from "@/hooks/getCategoryhook";
@@ -81,6 +84,10 @@ const ViewTripPage = () => {
           </Button>
         }
       />
+
+      {/* participants list for this trip */}
+      <TripParticipants tripId={trip?.id || trip?._id || ""} isWildTrips={isWildTrips} />
+
       <Locationmeetingpoint trip={trip} />
       <Highlights trip={trip} />
       <Tripmood trip={trip} />
@@ -90,7 +97,7 @@ const ViewTripPage = () => {
       <Includeditem trip={trip} />
       <VideoSection trip={trip} />
       <ThingsToKnow trip={trip} />
-      {isWildTrips && <Coordinatordetail trip={trip} />}
+      <Coordinatordetail trip={trip} />
     </div>
   );
 };

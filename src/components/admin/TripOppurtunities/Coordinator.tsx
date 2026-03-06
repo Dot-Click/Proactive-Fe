@@ -21,11 +21,11 @@ import { UsegetCoordinator } from "@/hooks/getCoordinatorhook";
 import { useState, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import type { TripFormType } from "./tripschema";
+import { X, Plus } from "lucide-react";
 
 const Coordinator = () => {
   const { control, setValue, watch } = useFormContext<TripFormType>();
-  const coordinatorNameValue = watch("CoordinatorName");
-  // const coordinatorPhotoValue = watch("CoordinatorPhoto");
+  const coordinatorsValue = watch("coordinators") || [];
   const [, setProfile] = useState("");
   const [show, setShow] = useState(false);
   const hasAutoExpanded = useRef(false);
@@ -33,38 +33,36 @@ const Coordinator = () => {
 
   // Auto-expand coordinator section once when editing with existing coordinator data
   useEffect(() => {
-    if (coordinatorNameValue && !hasAutoExpanded.current) {
+    if (coordinatorsValue.length > 0 && !hasAutoExpanded.current) {
       hasAutoExpanded.current = true;
       setShow(true);
     }
-  }, [coordinatorNameValue]);
+  }, [coordinatorsValue]);
 
-  // const HandleuploadProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     setProfile(URL.createObjectURL(file));
-  //     setValue("CoordinatorPhoto", file);
-  //   } else {
-  //     setProfile("");
-  //     setValue("CoordinatorPhoto", null);
-  //   }
-  // };
-
-  // Handle coordinator selection change
-  const handleCoordinatorChange = (coordinatorId: string) => {
-    const selectedCoordinator = data?.coordinators?.find((coord: any) => coord.userId === coordinatorId);
-    
-    if (selectedCoordinator) {
-      // Auto-populate coordinator details
-      setValue("CoordinatorBio", selectedCoordinator.bio || "");
-      setValue("CoordinatorPhoto", selectedCoordinator.profilePicture || null);
-      setProfile(selectedCoordinator.profilePicture || "");
-      
-      // Note: Social links are not stored in coordinator profile, so they remain empty
-      // They can be filled manually if needed
-      setValue("CoordinatorInstagram", "");
-      setValue("CoordinatorLinkedin", "");
+  // Handle adding a coordinator
+  const handleAddCoordinator = (coordinatorId: string) => {
+    if (!coordinatorsValue.includes(coordinatorId)) {
+      const newCoordinators = [...coordinatorsValue, coordinatorId];
+      setValue("coordinators", newCoordinators);
     }
+  };
+
+  // Handle removing a coordinator
+  const handleRemoveCoordinator = (coordinatorId: string) => {
+    const newCoordinators = coordinatorsValue.filter(id => id !== coordinatorId);
+    setValue("coordinators", newCoordinators);
+  };
+
+  // Get coordinator details by ID
+  const getCoordinatorById = (id: string) => {
+    return data?.coordinators?.find((coord: any) => coord.userId === id);
+  };
+
+  // Get available coordinators (not already selected)
+  const getAvailableCoordinators = () => {
+    return data?.coordinators?.filter((coord: any) =>
+      !coordinatorsValue.includes(coord.userId)
+    ) || [];
   };
 
   return (
@@ -81,7 +79,7 @@ const Coordinator = () => {
             onClick={() => setShow(!show)}
             className="rounded-full bg-[#FD8B3A] px-5 py-5 cursor-pointer hover:bg-[#ff8832] w-auto"
           >
-            Add Coordinator
+            {show ? "Hide Coordinators" : "Add Coordinators"}
           </Button>
         </div>
       </div>
@@ -89,65 +87,108 @@ const Coordinator = () => {
       <div className="bg-white px-6 py-6">
         {show && (
           <>
-            <div className="mt-12 grid md:grid-cols-2 gap-6">
-              <FormField
-                control={control}
-                name="CoordinatorName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#242E2F] font-semibold">
-                      Coordinator Name
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          handleCoordinatorChange(value);
-                        }}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
-                          <SelectValue placeholder="Select Coordinator" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {data?.coordinators?.map((coordinator: any) => (
-                            <SelectItem
-                              key={coordinator.id}
-                              value={coordinator.userId}
-                            >
-                              {coordinator.fullName}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Coordinator details are auto-populated when selected */}
-            {coordinatorNameValue && (
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-600 mb-2">
-                  Coordinator details will be automatically populated from their profile.
-                </p>
-                <div className="text-sm">
-                  <strong>Bio:</strong> {watch("CoordinatorBio") || "No bio available"}
+            {/* Selected Coordinators Display */}
+            {coordinatorsValue.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-[#221E33] font-semibold mb-4">Selected Coordinators ({coordinatorsValue.length})</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {coordinatorsValue.map((coordinatorId) => {
+                    const coordinator = getCoordinatorById(coordinatorId);
+                    return (
+                      <div key={coordinatorId} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={coordinator?.profilePicture || "https://via.placeholder.com/40x40?text=C"}
+                            alt={coordinator?.fullName || "Coordinator"}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                          <div>
+                            <p className="font-medium text-[#221E33]">{coordinator?.fullName || "Unknown Coordinator"}</p>
+                            <p className="text-sm text-gray-600">{coordinator?.email || ""}</p>
+                          </div>
+                        </div>
+                        <Button
+                          onClick={() => handleRemoveCoordinator(coordinatorId)}
+                          variant="outline"
+                          size="sm"
+                          className="text-red-600 border-red-300 hover:bg-red-50"
+                        >
+                          <X size={16} />
+                        </Button>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
-            <div className="flex justify-start mt-4">
-              <Button
-                onClick={() => setShow(false)}
-                type="button"
-                variant={"outline"}
-                className="text-[#9C0000] rounded-full px-8 py-4 border border-[#9C0000] cursor-pointer"
-              >
-                Remove
-              </Button>
+            {/* Add Coordinator Section */}
+            <div className="mt-6">
+              <h3 className="text-[#221E33] font-semibold mb-4">Add Coordinator</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <FormField
+                  control={control}
+                  name="coordinators"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[#242E2F] font-semibold">
+                        Select Coordinator
+                      </FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value) => {
+                            handleAddCoordinator(value);
+                          }}
+                          value=""
+                        >
+                          <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
+                            <SelectValue placeholder="Choose a coordinator to add" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {getAvailableCoordinators().map((coordinator: any) => (
+                              <SelectItem
+                                key={coordinator.id}
+                                value={coordinator.userId}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <img
+                                    src={coordinator.profilePicture || "https://via.placeholder.com/24x24?text=C"}
+                                    alt={coordinator.fullName}
+                                    className="w-6 h-6 rounded-full object-cover"
+                                  />
+                                  {coordinator.fullName}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Coordinator details info */}
+              {coordinatorsValue.length > 0 && (
+                <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <p className="text-sm text-blue-800 mb-2">
+                    <strong>Selected Coordinators: {coordinatorsValue.length}</strong>
+                  </p>
+                  <p className="text-sm text-blue-700">
+                    Coordinator details will be automatically populated from their profiles when the trip is created.
+                    Each coordinator will be displayed with their photo in the trip details page.
+                  </p>
+                </div>
+              )}
+
+              {coordinatorsValue.length === 0 && (
+                <div className="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <p className="text-sm text-yellow-800">
+                    Please select at least one coordinator for this trip.
+                  </p>
+                </div>
+              )}
             </div>
           </>
         )}

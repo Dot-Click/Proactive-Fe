@@ -106,19 +106,14 @@ export const tripSchema = z
       .array(z.string())
       .min(1, "Select at least one not-included item"),
 
-    // Step 4 – Coordinator
-    CoordinatorName: z.string().min(1, "Coordinator name is required"),
+    // Step 4 – Coordinators (Multiple coordinators supported)
+    coordinators: z.array(z.string()).min(1, "Select at least one coordinator"),
+    CoordinatorName: z.string().optional(), // Keep for backward compatibility
     CoordinatorRole: z.string().optional(),
-    CoordinatorBio: z.string().min(1, "Coordinator bio is required"),
+    CoordinatorBio: z.string().optional(),
     CoordinatorInstagram: z.string().optional(),
     CoordinatorLinkedin: z.string().optional(),
-    CoordinatorPhoto: z
-      .any()
-      .nullable()
-      .refine(
-        (file) => file !== null && file !== undefined,
-        "Coordinator photo is required"
-      ),
+    CoordinatorPhoto: z.any().optional(),
 
     // Step 5 – Media & Price
     PromotionalVideo: z.any().optional(),
