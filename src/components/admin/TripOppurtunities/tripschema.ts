@@ -101,9 +101,9 @@ export const tripSchema = z
     SportsLevel: z.string().min(1, "Sports level is required"),
 
     // Step 3 – Included
-    included: z.array(z.string()).min(1, "Select at least one included item"),
+    included: z.array(z.any()).min(1, "Select at least one included item"),
     notIncluded: z
-      .array(z.string())
+      .array(z.any())
       .min(1, "Select at least one not-included item"),
 
     // Step 4 – Coordinators (Multiple coordinators supported)

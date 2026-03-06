@@ -1,8 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, Users, MapPin, ShieldCheck, Heart } from "lucide-react";
+import { Calendar, Users, MapPin, ShieldCheck, Heart, CheckCircle2, Wallet, Clock, XCircle } from "lucide-react";
 import { formatDateRange } from "../../../utils/dateFormatter";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ApplicationForm from "./ApplicationForm";
+import { UsegetMyApplications } from "@/hooks/UsegetMyApplicationshook";
+import { UsegetPayment } from "@/hooks/getPaymenthook";
+import TripPaymentModal from "@/components/payment/TripPaymentModal";
+import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 type BookingCardProps = {
     trip: any;
@@ -11,6 +16,7 @@ type BookingCardProps = {
 
 const BookingCard = ({ trip, showApplyButton }: BookingCardProps) => {
     const data = trip?.trip?.[0] || trip?.trip || trip;
+    const navigate = useNavigate();
 
     const dateRange = data?.startDate && data?.endDate
         ? formatDateRange(data.startDate, data.endDate)
@@ -61,14 +67,99 @@ const BookingCard = ({ trip, showApplyButton }: BookingCardProps) => {
             {/* Booking Actions */}
             {showApplyButton && (
                 <div className="space-y-3">
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button className="w-full bg-[#0DAC87] hover:bg-[#119b7b] text-white h-14 rounded-xl text-lg font-bold shadow-md transition-all">
-                                Join Adventure
-                            </Button>
-                        </DialogTrigger>
-                        <ApplicationForm />
-                    </Dialog>
+                    {(() => {
+                        const { data: applications } = UsegetMyApplications();
+                        const { data: paymentData } = UsegetPayment();
+
+                        const userApp = useMemo(() => {
+                            return (applications || []).find((app: any) => String(app.tripId) === String(data?.id));
+                        }, [applications, data?.id]);
+
+                        const isApproved = userApp?.status === 'approved';
+                        const isPending = userApp?.status === 'pending';
+                        const isRejected = userApp?.status === 'rejected';
+
+                        const isPaid = useMemo(() => {
+                            const tripPayments = paymentData?.tripPayments || [];
+                            const OK_STATUSES = new Set(["completed", "paid", "confirmed", "succeeded", "success"]);
+                            return tripPayments.some((p: any) =>
+                                String(p.tripId) === String(data?.id) &&
+                                OK_STATUSES.has((p.status || "").toString().toLowerCase())
+                            );
+                        }, [paymentData, data?.id]);
+
+                        const categoryName = (data?.categoryName || data?.category || data?.type || "").toLowerCase();
+                        const isDirectPayment = ['wild weekends', 'wild weekend', 'internal events', 'internal event'].some(c => categoryName.includes(c));
+
+                        if (isPaid) {
+                            return (
+                                <Button
+                                    onClick={() => navigate("/user-dashboard")}
+                                    className="w-full bg-[#0DAC87]/10 text-[#0DAC87] border border-[#0DAC87]/20 h-14 rounded-xl text-lg font-bold shadow-sm transition-all flex items-center justify-center gap-2"
+                                >
+                                    <CheckCircle2 size={20} />
+                                    Already Booked
+                                </Button>
+                            );
+                        }
+
+                        if (isDirectPayment) {
+                            return (
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <Button className="w-full bg-[#0DAC87] hover:bg-[#119b7b] text-white h-14 rounded-xl text-lg font-bold shadow-md transition-all flex items-center justify-center gap-2">
+                                            <Wallet size={20} />
+                                            Pay Now to Join
+                                        </Button>
+                                    </DialogTrigger>
+                                    <TripPaymentModal tripId={data?.id} />
+                                </Dialog>
+                            );
+                        }
+
+                        if (isApproved) {
+                            return (
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <Button className="w-full bg-[#FFB800] hover:bg-[#e6a600] text-[#221E33] h-14 rounded-xl text-lg font-bold shadow-md transition-all flex items-center justify-center gap-2">
+                                            <Wallet size={20} />
+                                            Pay Now (€{data?.perHeadPrice || data?.price || 0})
+                                        </Button>
+                                    </DialogTrigger>
+                                    <TripPaymentModal tripId={data?.id} />
+                                </Dialog>
+                            );
+                        }
+
+                        if (isPending) {
+                            return (
+                                <Button disabled className="w-full bg-[#F8F9FB] text-[#666373] border border-[#ECECF1] h-14 rounded-xl text-lg font-bold shadow-sm flex items-center justify-center gap-2 cursor-default">
+                                    <Clock size={20} />
+                                    Application Under Review
+                                </Button>
+                            );
+                        }
+
+                        if (isRejected) {
+                            return (
+                                <Button disabled className="w-full bg-red-50 text-red-500 border border-red-100 h-14 rounded-xl text-lg font-bold shadow-sm flex items-center justify-center gap-2 cursor-default">
+                                    <XCircle size={20} />
+                                    Application Rejected
+                                </Button>
+                            );
+                        }
+
+                        return (
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button className="w-full bg-[#0DAC87] hover:bg-[#119b7b] text-white h-14 rounded-xl text-lg font-bold shadow-md transition-all">
+                                        Join Adventure
+                                    </Button>
+                                </DialogTrigger>
+                                <ApplicationForm />
+                            </Dialog>
+                        );
+                    })()}
                     <Button variant="outline" className="w-full h-12 rounded-xl border-[#ECECF1] text-[#221E33] font-bold text-sm hover:bg-[#F6F8FD] gap-2">
                         <Heart size={18} className="text-[#EF4444]" />
                         Add to Wishlist

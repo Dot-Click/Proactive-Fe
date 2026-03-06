@@ -43,56 +43,8 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
             ...coord,
             fullName: coord.fullName || coord.CoordinatorName,
             profilePicture: coord.profilePicture || coord.CoordinatorPhoto,
-            // Mock data for demo
-            gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJ4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxx66F9C7Pa/giphy.gif",
-            tripsDone: Math.floor(Math.random() * 15) + 5,
-            bio: "Viajero incasable, amante de las montañas y fotógrafo aficionado. He recorrido más de 30 países buscando las mejores puestas de sol.",
-            crazyAdventures: "Dormí en un iglú en Groenlandia y crucé el desierto del Sáhara en camello durante 7 días.",
-            languages: ["Español", "Inglés", "Francés"]
         }))
         : [];
-
-    if (displayCoordinators.length < 3) {
-        const mocks = [
-            {
-                fullName: "Alex Rivera",
-                profilePicture: "https://i.pravatar.cc/300?u=1",
-                gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJ4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l0HlPcEIPqY2Tj1V6/giphy.gif",
-                tripsDone: 12,
-                bio: "Apasionado por la cultura asiática y el senderismo. Mi misión es que cada viajero descubra la esencia real de cada destino.",
-                crazyAdventures: "Hice paracaidismo sobre los Alpes y buceé con tiburones en Sudáfrica.",
-                languages: ["Español", "Inglés", "Portugués"]
-            },
-            {
-                fullName: "Maria Garcia",
-                profilePicture: "https://i.pravatar.cc/300?u=2",
-                gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJ4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
-                tripsDone: 8,
-                bio: "Especialista en rutas gastronómicas y mercados locales. Creo que la mejor forma de conocer un país es a través de su comida.",
-                crazyAdventures: "Comí insectos en Tailandia y aprendí a cocinar pasta con una 'nonna' en Sicilia.",
-                languages: ["Español", "Italiano", "Inglés"]
-            },
-            {
-                fullName: "Jordan Smit",
-                profilePicture: "https://i.pravatar.cc/300?u=3",
-                gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJ4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l2JhMvI81e59S3Ucw/giphy.gif",
-                tripsDone: 15,
-                bio: "Geólogo y guía de montaña. Me encanta explicar la historia natural de los paisajes que visitamos.",
-                crazyAdventures: "Subí al campo base del Everest y exploré cuevas de hielo en Islandia.",
-                languages: ["Inglés", "Español", "Alemán"]
-            },
-            {
-                fullName: "Sam Lopez",
-                profilePicture: "https://i.pravatar.cc/300?u=4",
-                gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJ4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4Znd4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxx66F9C7Pa/giphy.gif",
-                tripsDone: 5,
-                bio: "Surfista y amante del mar. Siempre busco los destinos con las mejores olas y playas vírgenes.",
-                crazyAdventures: "Surfeé olas de 5 metros en Nazaret y viví en una furgoneta un año.",
-                languages: ["Español", "Inglés"]
-            }
-        ];
-        displayCoordinators = [...displayCoordinators, ...mocks].slice(0, 5);
-    }
 
     if (displayCoordinators.length === 0) return null;
 
@@ -178,7 +130,7 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
                                                         <Trophy className="text-white" size={24} />
                                                     </div>
                                                     <div>
-                                                        <p className="text-white font-black text-2xl leading-none">{coord.tripsDone}</p>
+                                                        <p className="text-white font-black text-2xl leading-none">{coord.tripsDone || 0}</p>
                                                         <p className="text-white/70 text-[10px] uppercase font-bold tracking-widest mt-1">Viajes realizados</p>
                                                     </div>
                                                 </div>
@@ -224,7 +176,7 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
                                                     <h4>Idiomas</h4>
                                                 </div>
                                                 <div className="flex flex-wrap gap-2">
-                                                    {coord.languages.map((lang: string, lIdx: number) => (
+                                                    {(coord.languages || []).map((lang: string, lIdx: number) => (
                                                         <Badge key={lIdx} variant="outline" className="border-[#ECECF1] text-[#666373] font-medium px-4 py-1.5 rounded-full">
                                                             {lang}
                                                         </Badge>

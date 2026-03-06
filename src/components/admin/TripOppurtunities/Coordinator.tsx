@@ -21,12 +21,12 @@ import { UsegetCoordinator } from "@/hooks/getCoordinatorhook";
 import { useState, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import type { TripFormType } from "./tripschema";
-import { X, Plus } from "lucide-react";
+import { X } from "lucide-react";
 
 const Coordinator = () => {
   const { control, setValue, watch } = useFormContext<TripFormType>();
   const coordinatorsValue = watch("coordinators") || [];
-  const [, setProfile] = useState("");
+
   const [show, setShow] = useState(false);
   const hasAutoExpanded = useRef(false);
   const { data } = UsegetCoordinator();
@@ -129,7 +129,7 @@ const Coordinator = () => {
                 <FormField
                   control={control}
                   name="coordinators"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel className="text-[#242E2F] font-semibold">
                         Select Coordinator

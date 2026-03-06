@@ -9,7 +9,6 @@ import Tripmood from "@/components/Adventureoppurtunities/ViewDetailtrip/Tripmoo
 import VideoSection from "@/components/Adventureoppurtunities/ViewDetailtrip/VideoSection";
 import Faqs from "@/components/Adventureoppurtunities/ViewDetailtrip/Faqs";
 import HowItWorks from "@/components/Adventureoppurtunities/ViewDetailtrip/HowItWorks";
-import Highlights from "@/components/Adventureoppurtunities/ViewDetailtrip/Highlights";
 import CommonFund from "@/components/Adventureoppurtunities/ViewDetailtrip/CommonFund";
 import ThingsToKnow from "@/components/Adventureoppurtunities/ViewDetailtrip/ThingsToKnow";
 import { useParams } from "react-router-dom";
@@ -57,7 +56,6 @@ const ViewDetailTripPage = () => {
       {/* User dashboard is already protected, so show apply button here */}
       <MasonryLayout trip={trip} />
       <Locationmeetingpoint trip={trip} />
-      <Highlights trip={trip} />
       <Tripmood trip={trip} />
       <CommonFund trip={trip} />
       {isWildWeekend && <SurfaceCamp />}

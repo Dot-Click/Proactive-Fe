@@ -188,6 +188,9 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
             );
           }, [paymentData, data?.id]);
 
+          const categoryName = (data?.categoryName || data?.category || data?.type || "").toLowerCase();
+          const isDirectPayment = ['wild weekends', 'wild weekend', 'internal events', 'internal event'].some(c => categoryName.includes(c));
+
           if (isPaid) {
             return (
               <div className="mb-4 flex justify-end">
@@ -198,6 +201,22 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
                   <CheckCircle2 size={20} />
                   Already Booked
                 </Button>
+              </div>
+            );
+          }
+
+          if (isDirectPayment) {
+            return (
+              <div className="mb-4 flex justify-end">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="bg-[#0DAC87] hover:bg-[#119b7b] text-white cursor-pointer rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+                      <Wallet size={20} />
+                      Pay Now to Join
+                    </Button>
+                  </DialogTrigger>
+                  <TripPaymentModal tripId={data?.id} />
+                </Dialog>
               </div>
             );
           }

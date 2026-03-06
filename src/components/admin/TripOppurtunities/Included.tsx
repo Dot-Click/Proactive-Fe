@@ -108,15 +108,15 @@ const Included = () => {
   const { control } = useFormContext<TripFormType>();
 
   // Persistent custom items stored in localStorage
-  const [customIncluded, setCustomIncluded] = useState<{id:string;title:string;desc:string;icon:string}[]>([]);
-  const [customNotIncluded, setCustomNotIncluded] = useState<{id:string;title:string;desc:string;icon:string}[]>([]);
+  const [customIncluded, setCustomIncluded] = useState<{ id: string; title: string; desc: string; icon: string }[]>([]);
+  const [customNotIncluded, setCustomNotIncluded] = useState<{ id: string; title: string; desc: string; icon: string }[]>([]);
 
   // Add item dialog states
   const [showAddIncludedDialog, setShowAddIncludedDialog] = useState(false);
   const [showAddNotIncludedDialog, setShowAddNotIncludedDialog] = useState(false);
   const [newItemName, setNewItemName] = useState("");
   // icon file/preview for the custom item being created
-  const [newItemIconFile, setNewItemIconFile] = useState<File | null>(null);
+  const [, setNewItemIconFile] = useState<File | null>(null);
   const [newItemIconPreview, setNewItemIconPreview] = useState("");
 
   // Load custom items from localStorage on mount
@@ -286,14 +286,15 @@ const Included = () => {
                     {INCLUDED_ITEMS.map((item) => (
                       <SelectCard
                         key={item.id}
-                        selected={field.value.includes(item.id)}
-                        onClick={() =>
+                        selected={field.value.some((v: any) => (typeof v === "string" ? v : v.id) === item.id)}
+                        onClick={() => {
+                          const isSelected = field.value.some((v: any) => (typeof v === "string" ? v : v.id) === item.id);
                           field.onChange(
-                            field.value.includes(item.id)
-                              ? field.value.filter((i) => i !== item.id)
+                            isSelected
+                              ? field.value.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id)
                               : [...field.value, item.id]
                           )
-                        }
+                        }}
                         icon={item.icon}
                         title={item.title}
                         desc={item.desc}
@@ -302,14 +303,15 @@ const Included = () => {
                     {customIncluded.map((item) => (
                       <div key={item.id} className="relative">
                         <SelectCard
-                          selected={field.value.includes(item.title)}
-                          onClick={() =>
+                          selected={field.value.some((v: any) => (typeof v === "string" ? v === item.title : (v.id === item.id || v.title === item.title)))}
+                          onClick={() => {
+                            const isSelected = field.value.some((v: any) => (typeof v === "string" ? v === item.title : (v.id === item.id || v.title === item.title)));
                             field.onChange(
-                              field.value.includes(item.title)
-                                ? field.value.filter((i) => i !== item.title)
-                                : [...field.value, item.title]
+                              isSelected
+                                ? field.value.filter((v: any) => (typeof v === "string" ? v !== item.title : (v.id !== item.id && v.title !== item.title)))
+                                : [...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]
                             )
-                          }
+                          }}
                           icon={item.icon}
                           title={item.title}
                           desc={item.desc}
@@ -423,14 +425,15 @@ const Included = () => {
                     {NOT_INCLUDED_ITEMS.map((item) => (
                       <SelectCard
                         key={item.id}
-                        selected={field.value.includes(item.id)}
-                        onClick={() =>
+                        selected={field.value.some((v: any) => (typeof v === "string" ? v : v.id) === item.id)}
+                        onClick={() => {
+                          const isSelected = field.value.some((v: any) => (typeof v === "string" ? v : v.id) === item.id);
                           field.onChange(
-                            field.value.includes(item.id)
-                              ? field.value.filter((i) => i !== item.id)
+                            isSelected
+                              ? field.value.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id)
                               : [...field.value, item.id]
                           )
-                        }
+                        }}
                         icon={item.icon}
                         title={item.title}
                         desc={item.desc}
@@ -439,14 +442,15 @@ const Included = () => {
                     {customNotIncluded.map((item) => (
                       <div key={item.id} className="relative">
                         <SelectCard
-                          selected={field.value.includes(item.title)}
-                          onClick={() =>
+                          selected={field.value.some((v: any) => (typeof v === "string" ? v === item.title : (v.id === item.id || v.title === item.title)))}
+                          onClick={() => {
+                            const isSelected = field.value.some((v: any) => (typeof v === "string" ? v === item.title : (v.id === item.id || v.title === item.title)));
                             field.onChange(
-                              field.value.includes(item.title)
-                                ? field.value.filter((i) => i !== item.title)
-                                : [...field.value, item.title]
+                              isSelected
+                                ? field.value.filter((v: any) => (typeof v === "string" ? v !== item.title : (v.id !== item.id && v.title !== item.title)))
+                                : [...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]
                             )
-                          }
+                          }}
                           icon={item.icon}
                           title={item.title}
                           desc={item.desc}

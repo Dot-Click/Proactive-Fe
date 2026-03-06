@@ -2,8 +2,6 @@ import { Button } from "@/components/ui/button";
 import { DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -19,12 +17,6 @@ import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
 
 const formSchema = z
     .object({
-        dietaryRestrictions: z.string().min(1, {
-            message: "Dietary restriction is required",
-        }),
-        shortIntro: z.string().min(1, {
-            message: "ShortIntro is required",
-        }),
         introVideo: z.instanceof(File, {
             message: "Intro video is required",
         }),
@@ -35,8 +27,6 @@ const ApplicationForm = () => {
     const form = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
-            dietaryRestrictions: "",
-            shortIntro: "",
             introVideo: undefined,
         },
     });
@@ -63,8 +53,7 @@ const ApplicationForm = () => {
             if (id) {
                 formData.append("tripId", id);
             }
-            formData.append("shortIntro", val.shortIntro);
-            formData.append("dietaryRestrictions", val.dietaryRestrictions);
+            formData.append("shortIntro", "From profile");
             if (val.introVideo) {
                 formData.append("introVideo", val.introVideo);
             }
@@ -119,54 +108,7 @@ const ApplicationForm = () => {
                                             className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                                         />
 
-                                        <FormField
-                                            control={form.control}
-                                            name="dietaryRestrictions"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-[#242E2F] font-semibold">
-                                                        Dietary Restriction
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Select
-                                                            onValueChange={field.onChange}
-                                                            value={field.value}
-                                                        >
-                                                            <SelectTrigger className="w-full bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6">
-                                                                <SelectValue placeholder="Select dietary restrictions" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectItem value="none">None</SelectItem>
-                                                                <SelectItem value="vegetarian">Vegetarian</SelectItem>
-                                                                <SelectItem value="vegan">Vegan</SelectItem>
-                                                                <SelectItem value="halal">Halal</SelectItem>
-                                                                <SelectItem value="gluten-free">Gluten-free</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={form.control}
-                                            name="shortIntro"
-                                            render={({ field }) => (
-                                                <FormItem className="md:col-span-2">
-                                                    <FormLabel className="text-[#242E2F] font-semibold">
-                                                        Short Introduction
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Textarea
-                                                            placeholder="Short Introduction"
-                                                            className="bg-[#FFFFFF] border border-[#EFEFEF] h-32 placeholder:text-[#221E33] px-4 py-3"
-                                                            {...field}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
+
                                         <FormField
                                             control={form.control}
                                             name="introVideo"

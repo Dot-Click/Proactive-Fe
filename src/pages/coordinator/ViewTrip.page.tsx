@@ -5,7 +5,6 @@ import Locationmeetingpoint from "@/components/Adventureoppurtunities/ViewDetail
 import MasonryLayout from "@/components/Adventureoppurtunities/ViewDetailtrip/MasonryLayout";
 import SurfaceCamp from "@/components/Adventureoppurtunities/ViewDetailtrip/SurfaceCamp";
 import VideoSection from "@/components/Adventureoppurtunities/ViewDetailtrip/VideoSection";
-import Highlights from "@/components/Adventureoppurtunities/ViewDetailtrip/Highlights";
 import Tripmood from "@/components/Adventureoppurtunities/ViewDetailtrip/Tripmood";
 import CommonFund from "@/components/Adventureoppurtunities/ViewDetailtrip/CommonFund";
 import ThingsToKnow from "@/components/Adventureoppurtunities/ViewDetailtrip/ThingsToKnow";
@@ -89,7 +88,6 @@ const ViewTripPage = () => {
       <TripParticipants tripId={trip?.id || trip?._id || ""} isWildTrips={isWildTrips} />
 
       <Locationmeetingpoint trip={trip} />
-      <Highlights trip={trip} />
       <Tripmood trip={trip} />
       <CommonFund trip={trip} />
       {isWildWeekend && <SurfaceCamp />}
