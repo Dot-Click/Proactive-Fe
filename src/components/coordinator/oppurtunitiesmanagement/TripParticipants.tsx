@@ -64,19 +64,20 @@ const TripParticipants = ({ tripId, isWildTrips }: TripParticipantsProps) => {
     },
     ...(isWildTrips
       ? [
-          {
-            id: "payment",
-            header: () => <div><h1>Payment</h1></div>,
-            cell: ({ row }: any) => {
-              const paid = row.original.paymentStatus || row.original.isPaid || false;
-              return paid ? (
-                <CheckCircle className="text-[#0DAC87]" />
-              ) : (
-                <span className="text-xs text-[#666373]">—</span>
-              );
-            },
+        {
+          id: "payment",
+          header: () => <div><h1>Payment</h1></div>,
+          cell: ({ row }: any) => {
+            const paymentValue = (row.original.paymentStatus || row.original.isPaid || "").toString().toLowerCase();
+            const isPaid = ["paid", "success", "succeeded", "completed", "confirmed"].includes(paymentValue) || row.original.isPaid === true;
+            return isPaid ? (
+              <CheckCircle className="text-[#0DAC87]" />
+            ) : (
+              <span className="text-xs text-[#666373]">—</span>
+            );
           },
-        ]
+        },
+      ]
       : []),
     {
       id: "profile",

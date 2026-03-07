@@ -200,7 +200,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       console.log("🚀 TRIP CREATION STARTED");
       console.log("====================================");
       console.log("📝 Form Data Received:", data);
-      
+
       const formData = new FormData();
 
       // Build daysItinerary data (without image files - those are sent separately)
@@ -258,40 +258,68 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         console.warn("failed to parse customNotIncludedItems from localStorage", e);
       }
 
+      // map to store files for multi-part upload
+      const includedIconFiles: File[] = [];
+      const notIncludedIconFiles: File[] = [];
+
       // Transform included IDs to objects with title, description, and img
-      const includedItems = (data.included ?? []).map((id: string) => {
-        const lookup = INCLUDED_LOOKUP[id] || customIncludedMap[id];
-        if (lookup) {
-          return {
-            title: lookup.title,
-            description: lookup.description,
-            img: lookup.img, // Image path will be handled by backend or can be set if needed
+      const includedItems = (data.included ?? []).map((item: any) => {
+        let transformedItem;
+        if (typeof item === "string") {
+          const lookup = INCLUDED_LOOKUP[item] || customIncludedMap[item];
+          transformedItem = lookup ? {
+            title: String(lookup.title),
+            description: String(lookup.description || ""),
+            img: String(lookup.img || ""),
+          } : {
+            title: String(item),
+            description: "",
+            img: "",
           };
+        } else if (item && typeof item === "object") {
+          transformedItem = {
+            title: String(item.title || ""),
+            description: String(item.description || item.desc || ""),
+            img: String(item.icon || item.img || ""),
+          };
+          // Collect if there's a new file to upload
+          if (item.iconFile instanceof File) {
+            includedIconFiles.push(item.iconFile);
+          }
+        } else {
+          transformedItem = { title: "", description: "", img: "" };
         }
-        // Fallback if ID not found in lookup
-        return {
-          title: id,
-          description: "",
-          img: "",
-        };
+        return transformedItem;
       });
 
       // Transform notIncluded IDs to objects with title, description, and img
-      const notIncludedItems = (data.notIncluded ?? []).map((id: string) => {
-        const lookup = NOT_INCLUDED_LOOKUP[id] || customNotIncludedMap[id];
-        if (lookup) {
-          return {
-            title: lookup.title,
-            description: lookup.description,
-            img: lookup.img, // Image path will be handled by backend or can be set if needed
+      const notIncludedItems = (data.notIncluded ?? []).map((item: any) => {
+        let transformedItem;
+        if (typeof item === "string") {
+          const lookup = NOT_INCLUDED_LOOKUP[item] || customNotIncludedMap[item];
+          transformedItem = lookup ? {
+            title: String(lookup.title),
+            description: String(lookup.description || ""),
+            img: String(lookup.img || ""),
+          } : {
+            title: String(item),
+            description: "",
+            img: "",
           };
+        } else if (item && typeof item === "object") {
+          transformedItem = {
+            title: String(item.title || ""),
+            description: String(item.description || item.desc || ""),
+            img: String(item.icon || item.img || ""),
+          };
+          // Collect if there's a new file to upload
+          if (item.iconFile instanceof File) {
+            notIncludedIconFiles.push(item.iconFile);
+          }
+        } else {
+          transformedItem = { title: "", description: "", img: "" };
         }
-        // Fallback if ID not found in lookup
-        return {
-          title: id,
-          description: "",
-          img: "",
-        };
+        return transformedItem;
       });
 
       // Send all trip fields as one JSON string so backend gets real arrays (fixes "expected array, received string").
@@ -332,7 +360,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         // Days itinerary data
         daysItinerary: daysItinerary,
       };
-      
+
       console.log("📦 Payload with Dynamic Fields:", {
         highlights: payload.highlights,
         mood: payload.mood,
@@ -376,11 +404,21 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         });
       }
 
+      // Append included/notIncluded icon files
+      if (includedIconFiles.length > 0) {
+        console.log(`Appending ${includedIconFiles.length} included icon files`);
+        includedIconFiles.forEach((file) => formData.append("included_icons", file));
+      }
+      if (notIncludedIconFiles.length > 0) {
+        console.log(`Appending ${notIncludedIconFiles.length} not-included icon files`);
+        notIncludedIconFiles.forEach((file) => formData.append("not_included_icons", file));
+      }
+
       console.log("🚀 Calling API mutation...");
       console.log("📦 FormData keys:", Array.from(formData.keys()));
-      
+
       const result = await mutateAsync(formData);
-      
+
       console.log("✅ SUCCESS! API Response:", result);
       console.log("====================================");
     } catch (error) {
@@ -427,7 +465,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
               </span>
             </div>
             <Progress value={(step / totalStep) * 100} className="h-1.5" />
-            
+
             {/* Clickable Section Tabs */}
             <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mt-8">
               {steps.map((label, index) => {
@@ -442,26 +480,24 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
                     key={index}
                     onClick={() => validateAndGoToSection(sectionNum)}
                     disabled={!canNavigate && !isCurrentStep}
-                    className={`relative flex flex-col items-center p-3 rounded-lg transition-all duration-300 ${
-                      isCurrentStep
-                        ? "bg-[#0DAC87]/10 border border-[#0DAC87]"
-                        : isPastStep
+                    className={`relative flex flex-col items-center p-3 rounded-lg transition-all duration-300 ${isCurrentStep
+                      ? "bg-[#0DAC87]/10 border border-[#0DAC87]"
+                      : isPastStep
                         ? "bg-[#35FF62]/5 border border-[#0DAC87]/30 cursor-pointer hover:bg-[#35FF62]/10"
                         : "bg-gray-50 border border-gray-200 cursor-not-allowed opacity-60"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-2 w-full justify-center">
                       {isValidated && (
                         <CheckCircle className="w-4 h-4 text-[#0DAC87] flex-shrink-0" />
                       )}
                       <span
-                        className={`text-[11px] font-semibold text-center transition-colors ${
-                          isCurrentStep
-                            ? "text-[#0DAC87]"
-                            : isPastStep
+                        className={`text-[11px] font-semibold text-center transition-colors ${isCurrentStep
+                          ? "text-[#0DAC87]"
+                          : isPastStep
                             ? "text-[#0DAC87]"
                             : "text-[#999]"
-                        }`}
+                          }`}
                       >
                         {label}
                       </span>
@@ -536,11 +572,10 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
                 <Button
                   type="submit"
                   disabled={isPending || !methods.formState.isValid}
-                  className={`${
-                    isPending || !methods.formState.isValid
-                      ? "bg-[#0DAC87]/60 cursor-not-allowed"
-                      : "bg-[#0DAC87] hover:bg-[#0d9e7c]"
-                  } cursor-pointer rounded-full px-12 py-5 mx-6 my-6 w-full md:w-auto text-white font-bold transition-all duration-200`}
+                  className={`${isPending || !methods.formState.isValid
+                    ? "bg-[#0DAC87]/60 cursor-not-allowed"
+                    : "bg-[#0DAC87] hover:bg-[#0d9e7c]"
+                    } cursor-pointer rounded-full px-12 py-5 mx-6 my-6 w-full md:w-auto text-white font-bold transition-all duration-200`}
                 >
                   {isPending ? (
                     <span className="flex items-center gap-2">

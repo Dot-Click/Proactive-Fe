@@ -106,10 +106,8 @@ function App() {
           path="/dashboard/payment-membership"
           element={<PaymentmembershipPage />}
         />
-        <Route
-          path="/dashboard/google-reviews"
-          element={<GoogleReviewPage />}
-        />
+        <Route path="/dashboard/google-reviews" element={<GoogleReviewPage />} />
+        <Route path="/dashboard/view-trip/:id" element={<ViewTripPage />} />
         <Route path="/dashboard/settings" element={<SettingPage />} />
       </Route>
 

@@ -9,6 +9,7 @@ import ReusableTable from "@/Table/ReusableTable";
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
 import { LoaderIcon, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -26,222 +27,199 @@ type trip = {
 };
 
 
-const userData: ColumnDef<trip>[] = [
-  {
-    accessorKey: 'name',
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div className="pl-8">
-        <h1>Trip Name</h1>
-      </div>
-    ),
-
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12 flex-shrink-0">
-            <AvatarImage src={row.original.coverImage || "https://github.com/shadcn.png"} alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-
-          <div className="flex flex-col justify-center cursor-pointer">
-            <span className="font-semibold text-[14px] text-[#666373]">
-              {row.original.name}
-            </span>
-            <span className="text-[12px] text-[#666373] line-clamp-2">
-              {row.original.description.slice(0, 50)}
-            </span>
-          </div>
-        </div>
-      )
-    }
-  },
-  // {
-  //   accessorKey: 'Coordinator',
-  //   enableColumnFilter: true,
-  //   enableSorting: true,
-  //   header: () => (
-  //     <div className="pl-2">
-  //       <h1>Coordinator</h1>
-  //     </div>
-  //   ),
-  //   cell: ({ row }) => {
-  //     return (
-  //       <div className="">
-  //         <span className="flex items-center cursor-pointer rounded-full px-2 py-6 text-[12px]">
-  //           {row.original.Coordinator}
-  //           <br />
-  //           maria.r@email.com
-  //         </span>
-  //       </div>
-  //     )
-  //   }
-  // },
-  {
-    accessorKey: 'category',
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div>
-        <h1>Category</h1>
-      </div>
-    ),
-    cell: ({ row }) => {
-      return (
-        <Button className="text-center bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full
-        px-4 py-5 font-semibold">
-          {row.original.category}
-        </Button>
-      )
-    }
-  },
-  {
-    accessorKey: 'startDate',
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div>
-        <h1>startDate</h1>
-      </div>
-    ),
-    cell: ({ row }) => {
-      return (
-        <div >
-          <span className="text-[#666373] text-[13px]">
-            {
-              new Date(row.original.startDate).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-              })
-            }
-          </span>
-          <br />
-          {/* <span className="text-[#666373] text-[13px]">
-              8/6 join
-            </span> */}
-        </div>
-      )
-    }
-  },
-  {
-    accessorKey: 'endDate',
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div>
-        <h1>endDate</h1>
-      </div>
-    ),
-    cell: ({ row }) => {
-      return (
-        <div >
-          <span className="text-[#666373] text-[13px]">
-            {
-              new Date(row.original.endDate).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-              })
-            }
-          </span>
-          <br />
-          {/* <span className="text-[#666373] text-[13px]">
-              8/6 join
-            </span> */}
-        </div>
-      )
-    }
-  },
-  {
-    accessorKey: 'Status',
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div className="text-center">
-        <h1>Status</h1>
-      </div>
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="text-center">
-          <Button
-            className={`${row.original.status === 'Pending' ? 'bg-[#CE5600]/10 text-[#CE5600] border border-[#CE5600] hover:bg-[#CE5600]/20 px-6 py-4' : 'bg-[#35FF62]/10 text-[#077B21] border border-[#077B21] hover:bg-[#35FF62]/20 px-10 py-4'} text-center cursor-pointer rounded-full
-        font-semibold`}
-          >
-            {row.original.status}
-          </Button>
-        </div>
-      )
-    }
-  },
-  {
-    accessorKey: 'Actions',
-    enableColumnFilter: true,
-    enableSorting: true,
-    header: () => (
-      <div>
-        <h1>Actions</h1>
-      </div>
-    ),
-    cell: ({row}) => {
-      const {mutateAsync} = Useupdatetripstatus();
-      const {mutateAsync: mutateAsync2} = UseupdateRejectedtripStatus();
-      const {mutateAsync: deleteTrip} = UseDeleteTrip();
-      
-    const HandleApproveTrip = async (id: string) => {
-      try {
-        await mutateAsync({id});
-      } catch (error) {
-        toast.error('Failed to Approve Trip')
-      }
-    }
-
-    const HandleRejectTrip = async (id: string) => {
-      try {
-        await mutateAsync2({id});
-      } catch (error) {
-        toast.error('Failed to Reject Trip')
-      }
-    }
-
-    const HandleDeleteTrip = async (id: string) => {
-      if (window.confirm('Are you sure you want to delete this trip? This action cannot be undone.')) {
-        try {
-          await deleteTrip(id);
-          toast.success('Trip deleted successfully');
-        } catch (error) {
-          toast.error('Failed to delete trip');
-        }
-      }
-    }
-
-      return (
-        <div className="flex gap-2">
-          <Button className="cursor-pointer px-7 h-10 rounded-full" onClick={() => HandleApproveTrip(row.original.id)}>{row.original.status === "live" ? "Approved" : "Approve"}</Button>
-          <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] font-bold" onClick={() => HandleRejectTrip(row.original.id)}>{row.original.status === "pending" ? "Rejected" : "Reject"}</Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => HandleDeleteTrip(row.original.id)}
-            className="cursor-pointer h-10 px-2 text-[#9C0000] hover:bg-[#9C0000]/10"
-            title="Delete trip"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
-      )
-    }
-
-  },
-]
-
 const Tripoppurtunities = () => {
+  const navigate = useNavigate();
   const { data: trip, isLoading, isError } = UsegetTrips();
   const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
   const [searchQuery, setSearchQuery] = useState("");
   const [pageSize, setPageSize] = useState<number>(10);
+
+  const userData: ColumnDef<trip>[] = [
+    {
+      accessorKey: 'name',
+      enableColumnFilter: true,
+      enableSorting: true,
+      header: () => (
+        <div className="pl-8">
+          <h1>Trip Name</h1>
+        </div>
+      ),
+
+      cell: ({ row }) => {
+        return (
+          <div className="flex items-center gap-3">
+            <Avatar className="h-12 w-12 flex-shrink-0">
+              <AvatarImage src={row.original.coverImage || "https://github.com/shadcn.png"} alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+
+            <div className="flex flex-col justify-center cursor-pointer">
+              <span className="font-semibold text-[14px] text-[#666373]">
+                {row.original.name}
+              </span>
+              <span className="text-[12px] text-[#666373] line-clamp-2">
+                {row.original.description.slice(0, 50)}
+              </span>
+            </div>
+          </div>
+        )
+      }
+    },
+    {
+      accessorKey: 'category',
+      enableColumnFilter: true,
+      enableSorting: true,
+      header: () => (
+        <div>
+          <h1>Category</h1>
+        </div>
+      ),
+      cell: ({ row }) => {
+        return (
+          <Button className="text-center bg-[#FD8B3A] text-white hover:bg-[#FD8B3A] cursor-pointer rounded-full
+          px-4 py-5 font-semibold">
+            {row.original.category}
+          </Button>
+        )
+      }
+    },
+    {
+      accessorKey: 'startDate',
+      enableColumnFilter: true,
+      enableSorting: true,
+      header: () => (
+        <div>
+          <h1>startDate</h1>
+        </div>
+      ),
+      cell: ({ row }) => {
+        return (
+          <div >
+            <span className="text-[#666373] text-[13px]">
+              {
+                new Date(row.original.startDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })
+              }
+            </span>
+          </div>
+        )
+      }
+    },
+    {
+      accessorKey: 'endDate',
+      enableColumnFilter: true,
+      enableSorting: true,
+      header: () => (
+        <div>
+          <h1>endDate</h1>
+        </div>
+      ),
+      cell: ({ row }) => {
+        return (
+          <div >
+            <span className="text-[#666373] text-[13px]">
+              {
+                new Date(row.original.endDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })
+              }
+            </span>
+          </div>
+        )
+      }
+    },
+    {
+      accessorKey: 'Status',
+      enableColumnFilter: true,
+      enableSorting: true,
+      header: () => (
+        <div className="text-center">
+          <h1>Status</h1>
+        </div>
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="text-center">
+            <Button
+              className={`${row.original.status === 'Pending' ? 'bg-[#CE5600]/10 text-[#CE5600] border border-[#CE5600] hover:bg-[#CE5600]/20 px-6 py-4' : 'bg-[#35FF62]/10 text-[#077B21] border border-[#077B21] hover:bg-[#35FF62]/20 px-10 py-4'} text-center cursor-pointer rounded-full
+          font-semibold`}
+            >
+              {row.original.status}
+            </Button>
+          </div>
+        )
+      }
+    },
+    {
+      accessorKey: 'Actions',
+      enableColumnFilter: true,
+      enableSorting: true,
+      header: () => (
+        <div>
+          <h1>Actions</h1>
+        </div>
+      ),
+      cell: ({ row }) => {
+        const { mutateAsync } = Useupdatetripstatus();
+        const { mutateAsync: mutateAsync2 } = UseupdateRejectedtripStatus();
+        const { mutateAsync: deleteTrip } = UseDeleteTrip();
+
+        const HandleApproveTrip = async (id: string) => {
+          try {
+            await mutateAsync({ id });
+          } catch (error) {
+            toast.error('Failed to Approve Trip')
+          }
+        }
+
+        const HandleRejectTrip = async (id: string) => {
+          try {
+            await mutateAsync2({ id });
+          } catch (error) {
+            toast.error('Failed to Reject Trip')
+          }
+        }
+
+        const HandleDeleteTrip = async (id: string) => {
+          if (window.confirm('Are you sure you want to delete this trip? This action cannot be undone.')) {
+            try {
+              await deleteTrip(id);
+              toast.success('Trip deleted successfully');
+            } catch (error) {
+              toast.error('Failed to delete trip');
+            }
+          }
+        }
+
+        return (
+          <div className="flex gap-2">
+            <Button
+              className="cursor-pointer px-7 h-10 rounded-full bg-[#0DAC87] hover:bg-[#119b7b]"
+              onClick={() => navigate(`/dashboard/view-trip/${row.original.id}`)}
+            >
+              View
+            </Button>
+            <Button className="cursor-pointer px-7 h-10 rounded-full" onClick={() => HandleApproveTrip(row.original.id)}>{row.original.status === "live" ? "Approved" : "Approve"}</Button>
+            <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] font-bold" onClick={() => HandleRejectTrip(row.original.id)}>{row.original.status === "pending" ? "Rejected" : "Reject"}</Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => HandleDeleteTrip(row.original.id)}
+              className="cursor-pointer h-10 px-2 text-[#9C0000] hover:bg-[#9C0000]/10"
+              title="Delete trip"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        )
+      }
+    },
+  ];
   const { data: searchResults, isLoading: isSearchLoading } = UseSearchTrips(searchQuery);
 
   if (isError) {
@@ -277,9 +255,9 @@ const Tripoppurtunities = () => {
         onLimitChange={(limit) => setPageSize(limit)}
       />
       <div className="bg-white rounded-[25px] mt-3">
-        <ReusableTable 
-          data={displayData} 
-          columns={userData} 
+        <ReusableTable
+          data={displayData}
+          columns={userData}
           onExposeColumns={(payload) => setColumnsMenu(payload)}
           pageSize={pageSize}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}

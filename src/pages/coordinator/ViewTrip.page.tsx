@@ -17,11 +17,11 @@ import { UsegetCategory } from "@/hooks/getCategoryhook";
 import { LoaderIcon } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 
-const VIEW_BACK_URL = "/coordinator-dashboard/oppurtunities-management";
 
 const ViewTripPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const isAdmin = window.location.pathname.startsWith("/dashboard");
   const { data, isLoading, error } = UsegetTripbyid(id ?? "");
   const { data: categoriesData } = UsegetCategory();
 
@@ -38,7 +38,7 @@ const ViewTripPage = () => {
       <div className="px-4 py-8 text-center">
         <p className="text-red-600 font-medium">Trip not found</p>
         <Button
-          onClick={() => navigate(VIEW_BACK_URL)}
+          onClick={() => navigate(isAdmin ? "/dashboard/trip-management" : "/coordinator-dashboard/oppurtunities-management")}
           variant="outline"
           className="mt-4"
         >
@@ -65,18 +65,25 @@ const ViewTripPage = () => {
     .trim();
 
   const isWildWeekend = normalizedCategory.includes("wild weekend");
-  const isWildTrips = normalizedCategory.includes("wild trips");
+  const isWildTrips = normalizedCategory.includes("wild trip");
+
+  const dynamicBackUrl = isAdmin
+    ? "/dashboard/trip-management"
+    : "/coordinator-dashboard/oppurtunities-management";
+  const editUrl = isAdmin
+    ? `/dashboard/edit-trip/${id}`
+    : `/coordinator-dashboard/edit-trip/${id}`;
 
   return (
     <div>
       <MasonryLayout
         trip={trip}
-        backUrl={VIEW_BACK_URL}
+        backUrl={dynamicBackUrl}
         backLabel="Back to Opportunities"
         showApplyButton={false}
         headerAction={
           <Button
-            onClick={() => navigate(`/coordinator-dashboard/edit-trip/${id}`)}
+            onClick={() => navigate(editUrl)}
             className="rounded-full bg-[#0DAC87] hover:bg-[#119b7b] cursor-pointer px-8 py-5"
           >
             Edit Trip

@@ -73,32 +73,61 @@ const SelectCard = ({
   icon,
   title,
   desc,
+  onIconChange,
 }: {
   selected: boolean;
   onClick: () => void;
   icon?: string;
   title: string;
   desc: string;
+  onIconChange?: (file: File) => void;
 }) => (
   <div
-    onClick={onClick}
     className={clsx(
-      "relative cursor-pointer rounded-[15px] border px-2 py-4 transition-all ",
+      "relative rounded-[15px] border px-2 py-4 transition-all flex flex-col items-center justify-between min-h-[220px]",
       selected
         ? "border-[#108700] ring-2 ring-[#108700]/20 bg-[#F5FFF5]"
         : "border-[#C1C1C1] bg-white"
     )}
   >
+    {/* Clickable area for selection */}
+    <div
+      onClick={onClick}
+      className="absolute inset-0 z-0 cursor-pointer"
+    />
+
     {selected && (
-      <span className="absolute top-2 right-2 rounded-full bg-[#108700] p-1 text-white">
+      <span className="absolute top-2 right-2 rounded-full bg-[#108700] p-1 text-white z-10">
         <Check size={14} />
       </span>
     )}
-    <div className="flex flex-col gap-4 py-4 justify-center items-center text-center">
-      {icon && <img src={icon} alt={title} className="w-10 h-8" />}
-      <h4 className="font-semibold">{title}</h4>
-      <span className="text-[#606066] text-[11px]">{desc}</span>
+
+    <div className="flex flex-col gap-4 py-4 justify-center items-center text-center relative z-10">
+      {icon && <img src={icon} alt={title} className="w-10 h-8 object-contain" />}
+      <h4 className="font-semibold text-sm px-2">{title}</h4>
+      <span className="text-[#606066] text-[11px] px-2">{desc}</span>
     </div>
+
+    {selected && (
+      <div className="relative z-20 mt-2">
+        <input
+          type="file"
+          id={`icon-upload-${title.replace(/\s+/g, "-")}`}
+          className="hidden"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file && onIconChange) onIconChange(file);
+          }}
+        />
+        <label
+          htmlFor={`icon-upload-${title.replace(/\s+/g, "-")}`}
+          className="cursor-pointer bg-white border border-[#108700] text-[#108700] text-[10px] px-3 py-1.5 rounded-full hover:bg-[#108700] hover:text-white transition-colors flex items-center gap-1 font-medium shadow-sm"
+        >
+          <Plus size={10} /> Change Image
+        </label>
+      </div>
+    )}
   </div>
 );
 
@@ -282,49 +311,89 @@ const Included = () => {
               control={control}
               render={({ field, fieldState }) => (
                 <div>
-                  <div className="grid grid-cols-3 gap-4">
-                    {INCLUDED_ITEMS.map((item) => (
-                      <SelectCard
-                        key={item.id}
-                        selected={field.value.some((v: any) => (typeof v === "string" ? v : v.id) === item.id)}
-                        onClick={() => {
-                          const isSelected = field.value.some((v: any) => (typeof v === "string" ? v : v.id) === item.id);
-                          field.onChange(
-                            isSelected
-                              ? field.value.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id)
-                              : [...field.value, item.id]
-                          )
-                        }}
-                        icon={item.icon}
-                        title={item.title}
-                        desc={item.desc}
-                      />
-                    ))}
-                    {customIncluded.map((item) => (
-                      <div key={item.id} className="relative">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                    {INCLUDED_ITEMS.map((item) => {
+                      const existing = field.value.find((v: any) =>
+                        (typeof v === "string" ? v : v.id) === item.id
+                      );
+                      const isSelected = !!existing;
+                      const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
+
+                      return (
                         <SelectCard
-                          selected={field.value.some((v: any) => (typeof v === "string" ? v === item.title : (v.id === item.id || v.title === item.title)))}
+                          key={item.id}
+                          selected={isSelected}
                           onClick={() => {
-                            const isSelected = field.value.some((v: any) => (typeof v === "string" ? v === item.title : (v.id === item.id || v.title === item.title)));
-                            field.onChange(
-                              isSelected
-                                ? field.value.filter((v: any) => (typeof v === "string" ? v !== item.title : (v.id !== item.id && v.title !== item.title)))
-                                : [...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]
-                            )
+                            if (isSelected) {
+                              field.onChange(field.value.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id));
+                            } else {
+                              field.onChange([...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
+                            }
                           }}
-                          icon={item.icon}
+                          icon={displayIcon}
                           title={item.title}
                           desc={item.desc}
+                          onIconChange={(file) => {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                              const newValue = field.value.map((v: any) => {
+                                if ((typeof v === "string" ? v : v.id) === item.id) {
+                                  return { ...item, description: item.desc, icon: reader.result, iconFile: file };
+                                }
+                                return v;
+                              });
+                              field.onChange(newValue);
+                            };
+                            reader.readAsDataURL(file);
+                          }}
                         />
-                        <button
-                          type="button"
-                          onClick={() => removeCustomItem(item.id, true)}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
-                        >
-                          <X size={12} />
-                        </button>
-                      </div>
-                    ))}
+                      );
+                    })}
+                    {customIncluded.map((item) => {
+                      const existing = field.value.find((v: any) =>
+                        (v.id === item.id || v.title === item.title)
+                      );
+                      const isSelected = !!existing;
+                      const displayIcon = (existing && existing.icon) || item.icon;
+
+                      return (
+                        <div key={item.id} className="relative group">
+                          <SelectCard
+                            selected={isSelected}
+                            onClick={() => {
+                              if (isSelected) {
+                                field.onChange(field.value.filter((v: any) => (v.id !== item.id && v.title !== item.title)));
+                              } else {
+                                field.onChange([...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
+                              }
+                            }}
+                            icon={displayIcon}
+                            title={item.title}
+                            desc={item.desc}
+                            onIconChange={(file) => {
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                const newValue = field.value.map((v: any) => {
+                                  if (v.id === item.id || v.title === item.title) {
+                                    return { ...v, icon: reader.result, iconFile: file };
+                                  }
+                                  return v;
+                                });
+                                field.onChange(newValue);
+                              };
+                              reader.readAsDataURL(file);
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeCustomItem(item.id, true)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors z-30 shadow-md opacity-0 group-hover:opacity-100"
+                          >
+                            <X size={12} />
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                   {fieldState.error && (
                     <FormMessage className="mt-2">{fieldState.error.message}</FormMessage>
@@ -421,49 +490,89 @@ const Included = () => {
               control={control}
               render={({ field, fieldState }) => (
                 <div>
-                  <div className="grid grid-cols-3 gap-4">
-                    {NOT_INCLUDED_ITEMS.map((item) => (
-                      <SelectCard
-                        key={item.id}
-                        selected={field.value.some((v: any) => (typeof v === "string" ? v : v.id) === item.id)}
-                        onClick={() => {
-                          const isSelected = field.value.some((v: any) => (typeof v === "string" ? v : v.id) === item.id);
-                          field.onChange(
-                            isSelected
-                              ? field.value.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id)
-                              : [...field.value, item.id]
-                          )
-                        }}
-                        icon={item.icon}
-                        title={item.title}
-                        desc={item.desc}
-                      />
-                    ))}
-                    {customNotIncluded.map((item) => (
-                      <div key={item.id} className="relative">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                    {NOT_INCLUDED_ITEMS.map((item) => {
+                      const existing = field.value.find((v: any) =>
+                        (typeof v === "string" ? v : v.id) === item.id
+                      );
+                      const isSelected = !!existing;
+                      const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
+
+                      return (
                         <SelectCard
-                          selected={field.value.some((v: any) => (typeof v === "string" ? v === item.title : (v.id === item.id || v.title === item.title)))}
+                          key={item.id}
+                          selected={isSelected}
                           onClick={() => {
-                            const isSelected = field.value.some((v: any) => (typeof v === "string" ? v === item.title : (v.id === item.id || v.title === item.title)));
-                            field.onChange(
-                              isSelected
-                                ? field.value.filter((v: any) => (typeof v === "string" ? v !== item.title : (v.id !== item.id && v.title !== item.title)))
-                                : [...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]
-                            )
+                            if (isSelected) {
+                              field.onChange(field.value.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id));
+                            } else {
+                              field.onChange([...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
+                            }
                           }}
-                          icon={item.icon}
+                          icon={displayIcon}
                           title={item.title}
                           desc={item.desc}
+                          onIconChange={(file) => {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                              const newValue = field.value.map((v: any) => {
+                                if ((typeof v === "string" ? v : v.id) === item.id) {
+                                  return { ...item, description: item.desc, icon: reader.result, iconFile: file };
+                                }
+                                return v;
+                              });
+                              field.onChange(newValue);
+                            };
+                            reader.readAsDataURL(file);
+                          }}
                         />
-                        <button
-                          type="button"
-                          onClick={() => removeCustomItem(item.id, false)}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
-                        >
-                          <X size={12} />
-                        </button>
-                      </div>
-                    ))}
+                      );
+                    })}
+                    {customNotIncluded.map((item) => {
+                      const existing = field.value.find((v: any) =>
+                        (v.id === item.id || v.title === item.title)
+                      );
+                      const isSelected = !!existing;
+                      const displayIcon = (existing && existing.icon) || item.icon;
+
+                      return (
+                        <div key={item.id} className="relative group">
+                          <SelectCard
+                            selected={isSelected}
+                            onClick={() => {
+                              if (isSelected) {
+                                field.onChange(field.value.filter((v: any) => (v.id !== item.id && v.title !== item.title)));
+                              } else {
+                                field.onChange([...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
+                              }
+                            }}
+                            icon={displayIcon}
+                            title={item.title}
+                            desc={item.desc}
+                            onIconChange={(file) => {
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                const newValue = field.value.map((v: any) => {
+                                  if (v.id === item.id || v.title === item.title) {
+                                    return { ...v, icon: reader.result, iconFile: file };
+                                  }
+                                  return v;
+                                });
+                                field.onChange(newValue);
+                              };
+                              reader.readAsDataURL(file);
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeCustomItem(item.id, false)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors z-30 shadow-md opacity-0 group-hover:opacity-100"
+                          >
+                            <X size={12} />
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                   {fieldState.error && (
                     <FormMessage className="mt-2">{fieldState.error.message}</FormMessage>

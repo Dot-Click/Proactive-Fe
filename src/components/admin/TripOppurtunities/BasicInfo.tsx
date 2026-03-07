@@ -743,10 +743,10 @@ const BasicInfo = () => {
   // Check if selected category is "Wild Trips" (case-insensitive)
   const isWildTripsCategory = selectedCategoryId && data?.categories
     ? data.categories.some(
-        (cat: any) =>
-          cat.id === selectedCategoryId &&
-          cat.name.toLowerCase().trim() === "wild trips"
-      )
+      (cat: any) =>
+        cat.id === selectedCategoryId &&
+        cat.name.toLowerCase().includes("wild trip")
+    )
     : false;
 
   // Ensure categoryId is properly set when categories load (for edit mode)
@@ -1047,9 +1047,8 @@ const BasicInfo = () => {
                                 </FormLabel>
                                 <FormControl>
                                   <Textarea
-                                    placeholder={`Describe activities for Day ${
-                                      index + 1
-                                    }...`}
+                                    placeholder={`Describe activities for Day ${index + 1
+                                      }...`}
                                     {...field}
                                     value={field.value ?? ""}
                                     className="bg-white border border-[#EFEFEF] h-28 placeholder:text-[#999] text-sm"
@@ -1085,11 +1084,10 @@ const BasicInfo = () => {
                                       className="block cursor-pointer hover:bg-[#f5f5ff] transition-colors duration-200 rounded-[8px]"
                                     >
                                       <div
-                                        className={`${
-                                          dayImagePreviews[index]
+                                        className={`${dayImagePreviews[index]
                                             ? "py-2"
                                             : "py-6"
-                                        } flex flex-col items-center`}
+                                          } flex flex-col items-center`}
                                       >
                                         {dayImagePreviews[index] ? (
                                           <img
@@ -1188,9 +1186,8 @@ const BasicInfo = () => {
                         className="block cursor-pointer hover:bg-[#f0f0ff] transition-colors duration-200 rounded-[10px]"
                       >
                         <div
-                          className={`${
-                            profile ? "py-0" : "py-14"
-                          } flex flex-col items-center`}
+                          className={`${profile ? "py-0" : "py-14"
+                            } flex flex-col items-center`}
                         >
                           {profile ? (
                             <img
