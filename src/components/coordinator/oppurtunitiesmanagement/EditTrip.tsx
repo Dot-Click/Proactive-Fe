@@ -72,6 +72,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       commonFundDescription: "",
       commonFundCount: undefined,
       thingsToKnow: [],
+      coordinators: [],
     },
   });
 
@@ -104,18 +105,18 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
     const includedIds =
       trip.included != null && Array.isArray(trip.included)
         ? trip.included
-            .map((item: any) =>
-              typeof item === "string" ? item : item?.title ?? item?.id ?? ""
-            )
-            .filter(Boolean)
+          .map((item: any) =>
+            typeof item === "string" ? item : item?.title ?? item?.id ?? ""
+          )
+          .filter(Boolean)
         : [];
     const notIncludedIds =
       trip.notIncluded != null && Array.isArray(trip.notIncluded)
         ? trip.notIncluded
-            .map((item: any) =>
-              typeof item === "string" ? item : item?.title ?? item?.id ?? ""
-            )
-            .filter(Boolean)
+          .map((item: any) =>
+            typeof item === "string" ? item : item?.title ?? item?.id ?? ""
+          )
+          .filter(Boolean)
         : [];
 
     const coordinatorId = coord ? coord.id ?? coord._id ?? coord.userId : "";
@@ -178,15 +179,15 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
           : "",
       startDate: trip.startDate
         ? (() => {
-            const d = new Date(trip.startDate);
-            return !isNaN(d.getTime()) ? d : undefined;
-          })()
+          const d = new Date(trip.startDate);
+          return !isNaN(d.getTime()) ? d : undefined;
+        })()
         : undefined,
       endDate: trip.endDate
         ? (() => {
-            const d = new Date(trip.endDate);
-            return !isNaN(d.getTime()) ? d : undefined;
-          })()
+          const d = new Date(trip.endDate);
+          return !isNaN(d.getTime()) ? d : undefined;
+        })()
         : undefined,
       LongDescription: trip.longDesc ?? "",
       GroupSize: trip.groupSize != null ? String(trip.groupSize) : "",
@@ -224,19 +225,22 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       FinalPrice: trip.perHeadPrice != null ? String(trip.perHeadPrice) : "",
       // Dynamic fields - ensure they're properly loaded
       highlights: Array.isArray(trip.highlights) ? trip.highlights : [],
-      mood: Array.isArray(trip.mood) && trip.mood.length > 0 
-        ? trip.mood 
+      mood: Array.isArray(trip.mood) && trip.mood.length > 0
+        ? trip.mood
         : [
-            { label: "Fiesta y Nightlife", value: 0 },
-            { label: "Relax", value: 0 },
-            { label: "Naturaleza y aventura", value: 0 },
-            { label: "Ciudad y culturas", value: 0 },
-            { label: "Monumentos e historia", value: 0 },
-          ],
+          { label: "Fiesta y Nightlife", value: 0 },
+          { label: "Relax", value: 0 },
+          { label: "Naturaleza y aventura", value: 0 },
+          { label: "Ciudad y culturas", value: 0 },
+          { label: "Monumentos e historia", value: 0 },
+        ],
       commonFund: trip.commonFund ?? "",
       commonFundDescription: trip.commonFundDescription ?? "",
       commonFundCount: trip.commonFundCount ?? undefined,
       thingsToKnow: Array.isArray(trip.thingsToKnow) ? trip.thingsToKnow : [],
+      coordinators: Array.isArray(trip.coordinators)
+        ? trip.coordinators.map((c: any) => typeof c === 'string' ? c : (c.id || c._id || c.userId || ""))
+        : [coordinatorId || ""].filter(Boolean),
     };
 
     console.log("Setting form values with dynamic fields:", {
@@ -315,6 +319,58 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
     try {
       const formData = new FormData();
 
+      // map to store files for multi-part upload
+      const includedIconFiles: File[] = [];
+      const notIncludedIconFiles: File[] = [];
+
+      // Transform included IDs to objects with title, description, and img
+      const includedItems = (data.included ?? []).map((item: any) => {
+        let transformedItem;
+        if (typeof item === "string") {
+          transformedItem = {
+            title: String(item),
+            description: "",
+            img: "",
+          };
+        } else if (item && typeof item === "object") {
+          transformedItem = {
+            title: String(item.title || ""),
+            description: String(item.description || item.desc || ""),
+            img: String(item.icon || item.img || ""),
+          };
+          if (item.iconFile instanceof File) {
+            includedIconFiles.push(item.iconFile);
+          }
+        } else {
+          transformedItem = { title: "", description: "", img: "" };
+        }
+        return transformedItem;
+      });
+
+      // Transform notIncluded IDs to objects with title, description, and img
+      const notIncludedItems = (data.notIncluded ?? []).map((item: any) => {
+        let transformedItem;
+        if (typeof item === "string") {
+          transformedItem = {
+            title: String(item),
+            description: "",
+            img: "",
+          };
+        } else if (item && typeof item === "object") {
+          transformedItem = {
+            title: String(item.title || ""),
+            description: String(item.description || item.desc || ""),
+            img: String(item.icon || item.img || ""),
+          };
+          if (item.iconFile instanceof File) {
+            notIncludedIconFiles.push(item.iconFile);
+          }
+        } else {
+          transformedItem = { title: "", description: "", img: "" };
+        }
+        return transformedItem;
+      });
+
       // Build daysItinerary data (without image files - those are sent separately)
       // Keep existing image URLs for days that don't have new file uploads
       const daysItinerary =
@@ -343,13 +399,13 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         groupSize: data.GroupSize,
         rhythm: data.rhythm,
         sportLvl: data.SportsLevel,
-        included: data.included ?? [],
-        notIncluded: data.notIncluded ?? [],
+        included: includedItems,
+        notIncluded: notIncludedItems,
         bestPriceMsg: data.BestPrice,
         perHeadPrice: data.FinalPrice,
         instaLink: data.CoordinatorInstagram || undefined,
         likedinLink: data.CoordinatorLinkedin || undefined,
-        coordinators: data.CoordinatorName,
+        coordinators: data.coordinators,
         // coordinatorRole: data.CoordinatorRole, // TEMP: role field hidden
         coordinatorBio: data.CoordinatorBio,
         coordinatorInstagram: data.CoordinatorInstagram,
@@ -383,11 +439,20 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         data.daysItinerary.forEach((day, index) => {
           if (day.image && day.image instanceof File) {
             formData.append("day_images", day.image);
-            // Also append the index to help backend map images to days
             formData.append("day_image_indices", index.toString());
           }
         });
       }
+
+      // Append included/notIncluded icon files
+      if (includedIconFiles.length > 0) {
+        includedIconFiles.forEach((file) => formData.append("included_icons", file));
+      }
+      if (notIncludedIconFiles.length > 0) {
+        notIncludedIconFiles.forEach((file) => formData.append("not_included_icons", file));
+      }
+
+      console.log("🚀 Updating trip with payload:", payload);
 
       await mutateAsync({ id, formData });
       navigate(backUrl || "/coordinator-dashboard/oppurtunities-management");
@@ -465,9 +530,8 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
               {steps.map((label, index) => (
                 <span
                   key={index}
-                  className={`text-[12px] font-semibold transition-colors ${
-                    step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
-                  }`}
+                  className={`text-[12px] font-semibold transition-colors ${step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
+                    }`}
                 >
                   {label}
                 </span>
@@ -479,13 +543,33 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       <hr />
       <FormProvider {...methods}>
         <Form {...methods}>
-          <form onSubmit={methods.handleSubmit((data) => onSubmit(data as TripFormType))}>
+          <form onSubmit={methods.handleSubmit(
+            (data) => {
+              console.log("✅ Update validation passed! Submitting...");
+              onSubmit(data as TripFormType);
+            },
+            (errors) => {
+              console.error("❌ Update validation failed:", errors);
+            }
+          )}>
             {step === 1 && <BasicInfo />}
             {step === 2 && <TripDetail />}
             {step === 3 && <Included />}
             {step === 4 && <Coordinator />}
             {step === 5 && <Mediaprice />}
             {step === 6 && <Reviewsave />}
+
+            {/* Show validation errors blocking submission */}
+            {step === totalStep && Object.keys(methods.formState.errors).length > 0 && (
+              <div className="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-700 font-semibold mb-2">⚠️ Please fix the following errors before updating:</p>
+                <ul className="text-red-600 text-sm space-y-1">
+                  {Object.entries(methods.formState.errors).map(([field, error]: [string, any]) => (
+                    <li key={field}>• {field}: {error?.message || "Invalid"}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <div className="bg-white rounded-bl-[25px] rounded-br-[25px] flex md:flex-row flex-col justify-end mt-auto pt-24 gap-4">
               {step > 1 && (
@@ -499,16 +583,15 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
                 </Button>
               )}
               <Button
-                type="button"
+                type={step === totalStep ? "submit" : "button"}
                 onClick={
-                  step === totalStep ? methods.handleSubmit((data) => onSubmit(data as TripFormType)) : next
+                  step === totalStep ? undefined : next
                 }
                 disabled={isPending}
-                className={`${
-                  step === totalStep
-                    ? "bg-[#0DAC87] hover:bg-[#0d9e7c]"
-                    : "bg-[#000000]"
-                } cursor-pointer rounded-full px-12 py-5 mx-6 my-6 w-full md:w-auto`}
+                className={`${step === totalStep
+                  ? "bg-[#0DAC87] hover:bg-[#0d9e7c]"
+                  : "bg-[#000000]"
+                  } cursor-pointer rounded-full px-12 py-5 mx-6 my-6 w-full md:w-auto`}
               >
                 {step === totalStep
                   ? isPending

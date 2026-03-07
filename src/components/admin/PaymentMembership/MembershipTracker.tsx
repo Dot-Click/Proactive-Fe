@@ -9,7 +9,7 @@ import ActiveTrips from "@/assets/sidebaricon/activetrips.png"
 import CloseTrips from "@/assets/sidebaricon/closetrips.png"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
-import { UsegetPayment } from "@/hooks/getPaymenthook";
+import { UsegetAllPayments } from "@/hooks/getAllPaymentshook";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 // import { Badge } from "@/components/ui/badge";
@@ -152,7 +152,7 @@ const userData: ColumnDef<User>[] = [
 ]
 
 const MembershipTracker = () => {
-    const { data: MembershipData, isLoading, isError } = UsegetPayment();
+    const { data: MembershipData, isLoading, isError } = UsegetAllPayments();
     const membershipPaymentsData = MembershipData?.membershipPayments?.payments;
     const membershipPaymentsStats = MembershipData?.membershipPayments?.keyStates;
     const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null);
@@ -203,7 +203,7 @@ const MembershipTracker = () => {
 
         try {
             const doc = new jsPDF("landscape", "pt", "a4");
-            
+
             // Add title
             doc.setFontSize(20);
             doc.setTextColor(34, 30, 51); // #221E33 color
@@ -225,7 +225,7 @@ const MembershipTracker = () => {
             doc.setFontSize(12);
             doc.setTextColor(34, 30, 51);
             doc.text("Summary Statistics", 20, 90);
-            
+
             doc.setFontSize(10);
             doc.setTextColor(80, 80, 80);
             stats.forEach((stat, index) => {
@@ -250,7 +250,7 @@ const MembershipTracker = () => {
                     const expiryDate = member.membershipExpiry
                         ? new Date(member.membershipExpiry).toLocaleDateString()
                         : "N/A";
-                    const daysLeft = member.membershipExpiry ? 
+                    const daysLeft = member.membershipExpiry ?
                         Math.ceil((new Date(member.membershipExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0;
                     const status = member.status || "N/A";
 
@@ -363,9 +363,9 @@ const MembershipTracker = () => {
                         : user.email
                     : "Unknown";
                 const expiryDate = member.membershipExpiry;
-                const daysLeft = expiryDate ? 
+                const daysLeft = expiryDate ?
                     Math.ceil((new Date(expiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0;
-                
+
                 return [
                     `"${displayName}"`,
                     `"${user?.email || ""}"`,
@@ -404,7 +404,7 @@ const MembershipTracker = () => {
     if (isError) {
         return <div>Error loading membership data.</div>;
     }
-    
+
     if (isLoading) {
         return (
             <div className="w-full flex items-center justify-center py-10">
@@ -412,7 +412,7 @@ const MembershipTracker = () => {
             </div>
         )
     }
-    
+
     return (
         <div>
             <div className="px-6 py-4 bg-white rounded-[20px] mt-3">
@@ -451,7 +451,7 @@ const MembershipTracker = () => {
                     )}
                     Export PDF
                 </Button>
-                
+
                 <Button
                     onClick={handleExportToCSV}
                     disabled={exportLoading || !membershipPaymentsData?.length}
@@ -480,9 +480,9 @@ const MembershipTracker = () => {
                 onLimitChange={(limit) => setPageSize(limit)}
             />
             <div className="bg-white rounded-[25px] mt-3">
-                <ReusableTable 
-                    data={membershipPaymentsData ?? []} 
-                    columns={userData} 
+                <ReusableTable
+                    data={membershipPaymentsData ?? []}
+                    columns={userData}
                     onExposeColumns={(payload) => setColumnsMenu(payload)}
                     pageSize={pageSize}
                     onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}

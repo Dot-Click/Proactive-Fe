@@ -6,7 +6,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { Download, LoaderIcon, FileText } from "lucide-react"
 import credit from "@/assets/sidebaricon/credit.png"
 import { useState } from "react";
-import { UsegetPayment } from "@/hooks/getPaymenthook";
+import { UsegetAllPayments } from "@/hooks/getAllPaymentshook";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -156,7 +156,7 @@ const userData: ColumnDef<User>[] = [
 ]
 
 const PaymentStatus = () => {
-  const { data: paymentData, isLoading, isError } = UsegetPayment();
+  const { data: paymentData, isLoading, isError } = UsegetAllPayments();
   const [columnsMenu, setColumnsMenu] = useState<{ items: { id: string; label?: string; checked: boolean }[], toggle: (id: string, v: boolean) => void } | null>(null)
   const [pageSize, setPageSize] = useState<number>(10);
   const [exportLoading, setExportLoading] = useState(false);
@@ -174,7 +174,7 @@ const PaymentStatus = () => {
 
     try {
       const doc = new jsPDF("landscape", "pt", "a4");
-      
+
       // Add title
       doc.setFontSize(20);
       doc.setTextColor(40, 40, 40);
@@ -305,7 +305,7 @@ const PaymentStatus = () => {
             ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
             : user.email
           : "Unknown";
-        
+
         return [
           `"${displayName}"`,
           `"${user?.email || ""}"`,
@@ -344,7 +344,7 @@ const PaymentStatus = () => {
   if (isError) {
     return <div>Error loading membership data.</div>;
   }
-  
+
   if (isLoading) {
     return (
       <div className="w-full flex items-center justify-center py-10">
@@ -352,62 +352,62 @@ const PaymentStatus = () => {
       </div>
     )
   }
-  
- return (
-  <div>
-    {/* Export Buttons - Placed above the TableHeader */}
-    <div className="flex justify-end gap-2 mb-3">
-      <Button
-        onClick={handleExportToPDF}
-        disabled={exportLoading || !paymentData?.tripPayments?.length}
-        className="bg-black  text-white"
-      >
-        {exportLoading && exportType === 'pdf' ? (
-          <LoaderIcon className="h-4 w-4 animate-spin mr-2" />
-        ) : (
-          <Download className="h-4 w-4 mr-2" />
-        )}
-        Export PDF
-      </Button>
-      
-      <Button
-        onClick={handleExportToCSV}
-        disabled={exportLoading || !paymentData?.tripPayments?.length}
-        variant="outline"
-        className="border-black text-black hover:bg-[#666373]/10"
-      >
-        {exportLoading && exportType === 'csv' ? (
-          <LoaderIcon className="h-4 w-4 animate-spin mr-2" />
-        ) : (
-          <FileText className="h-4 w-4 mr-2" />
-        )}
-        Export CSV
-      </Button>
-    </div>
 
-    <TableHeader
-      showSearch
-      showFilter={false}
-      showSort
-      showColumns
-      columnsMenuItems={columnsMenu?.items ?? []}
-      onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
-      defaultLimit={pageSize}
-      limitOptions={[5, 10, 20, 30, 50]}
-      onLimitChange={(limit) => setPageSize(limit)}
-    />
-    
-    <div className="bg-white rounded-[25px] mt-3">
-      <ReusableTable 
-        data={paymentData?.tripPayments ?? []} 
-        columns={userData} 
-        onExposeColumns={(payload) => setColumnsMenu(payload)}
-        pageSize={pageSize}
-        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+  return (
+    <div>
+      {/* Export Buttons - Placed above the TableHeader */}
+      <div className="flex justify-end gap-2 mb-3">
+        <Button
+          onClick={handleExportToPDF}
+          disabled={exportLoading || !paymentData?.tripPayments?.length}
+          className="bg-black  text-white"
+        >
+          {exportLoading && exportType === 'pdf' ? (
+            <LoaderIcon className="h-4 w-4 animate-spin mr-2" />
+          ) : (
+            <Download className="h-4 w-4 mr-2" />
+          )}
+          Export PDF
+        </Button>
+
+        <Button
+          onClick={handleExportToCSV}
+          disabled={exportLoading || !paymentData?.tripPayments?.length}
+          variant="outline"
+          className="border-black text-black hover:bg-[#666373]/10"
+        >
+          {exportLoading && exportType === 'csv' ? (
+            <LoaderIcon className="h-4 w-4 animate-spin mr-2" />
+          ) : (
+            <FileText className="h-4 w-4 mr-2" />
+          )}
+          Export CSV
+        </Button>
+      </div>
+
+      <TableHeader
+        showSearch
+        showFilter={false}
+        showSort
+        showColumns
+        columnsMenuItems={columnsMenu?.items ?? []}
+        onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
+        defaultLimit={pageSize}
+        limitOptions={[5, 10, 20, 30, 50]}
+        onLimitChange={(limit) => setPageSize(limit)}
       />
+
+      <div className="bg-white rounded-[25px] mt-3">
+        <ReusableTable
+          data={paymentData?.tripPayments ?? []}
+          columns={userData}
+          onExposeColumns={(payload) => setColumnsMenu(payload)}
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        />
+      </div>
     </div>
-  </div>
-)
+  )
 }
 
 export default PaymentStatus

@@ -92,7 +92,7 @@ const ViewTripPage = () => {
       />
 
       {/* participants list for this trip */}
-      <TripParticipants tripId={trip?.id || trip?._id || ""} isWildTrips={isWildTrips} />
+      <TripParticipants tripId={trip?.id || trip?._id || ""} isWildTrips={isWildTrips || isWildWeekend} />
 
       <Locationmeetingpoint trip={trip} />
       <Tripmood trip={trip} />
