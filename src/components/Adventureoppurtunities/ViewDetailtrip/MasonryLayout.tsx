@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Calendar, Star, X, ImageIcon, CheckCircle2, XCircle } from "lucide-react";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import ApplicationForm from "./ApplicationForm";
-import { useState } from "react";
+import { toast } from "sonner";
+import { useState, useMemo } from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { ChevronRight, Home, Share2, Scale, Zap, Wallet, Clock } from "lucide-react";
+import { ChevronRight, Home, Share2, Zap, Wallet, Clock } from "lucide-react";
 import { UsegetMyApplications } from "@/hooks/UsegetMyApplicationshook";
 import { UsegetPayment } from "@/hooks/getPaymenthook";
 import TripPaymentModal from "@/components/payment/TripPaymentModal";
-import { useMemo } from "react";
 
 type MasonryLayoutProps = {
   trip: any;
@@ -25,6 +25,28 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
 
   // Extract trip data - handle both direct trip object and nested structure
   const data = trip?.trip?.[0] || trip?.trip || trip;
+
+  const handleShare = async () => {
+    const shareData = {
+      title: data?.title || data?.name || "Trip Adventure",
+      text: data?.shortDesc || data?.description || "Check out this amazing adventure opportunity!",
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copied to clipboard!");
+      }
+    } catch (err) {
+      if ((err as Error).name !== "AbortError") {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copied to clipboard!");
+      }
+    }
+  };
   const galleryImg = data?.galleryImages || [];
 
   // Helper function to get image URL with proper handling
@@ -86,11 +108,11 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3">
-            <Button variant="outline" className="rounded-lg h-10 gap-2 border-[#ECECF1] text-[#221E33] hover:bg-[#F6F8FD] font-semibold text-sm">
-              <Scale size={16} />
-              Compare
-            </Button>
-            <Button variant="outline" className="rounded-lg h-10 gap-2 border-[#ECECF1] text-[#221E33] hover:bg-[#F6F8FD] font-semibold text-sm">
+            <Button 
+              onClick={handleShare}
+              variant="outline" 
+              className="rounded-lg h-10 gap-2 border-[#ECECF1] text-[#221E33] hover:bg-[#F6F8FD] font-semibold text-sm cursor-pointer"
+            >
               <Share2 size={16} />
               Share
             </Button>

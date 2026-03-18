@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, Users, MapPin, ShieldCheck, Heart, CheckCircle2, Wallet, Clock, XCircle } from "lucide-react";
+import { Calendar, Users, MapPin, ShieldCheck, CheckCircle2, Wallet, Clock, XCircle } from "lucide-react";
 import { formatDateRange } from "../../../utils/dateFormatter";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ApplicationForm from "./ApplicationForm";
@@ -65,7 +65,7 @@ const BookingCard = ({ trip, showApplyButton }: BookingCardProps) => {
             </div>
 
             {/* Booking Actions */}
-            {showApplyButton && (
+            {showApplyButton ? (
                 <div className="space-y-3">
                     {(() => {
                         const { data: applications } = UsegetMyApplications();
@@ -160,10 +160,16 @@ const BookingCard = ({ trip, showApplyButton }: BookingCardProps) => {
                             </Dialog>
                         );
                     })()}
-                    <Button variant="outline" className="w-full h-12 rounded-xl border-[#ECECF1] text-[#221E33] font-bold text-sm hover:bg-[#F6F8FD] gap-2">
-                        <Heart size={18} className="text-[#EF4444]" />
-                        Add to Wishlist
+                </div>
+            ) : (
+                <div className="space-y-3">
+                    <Button 
+                        onClick={() => navigate("/login")}
+                        className="w-full bg-[#1F1B2C] hover:bg-[#2F2942] text-white h-14 rounded-xl text-lg font-bold shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        Sign in to Join Adventure
                     </Button>
+                    <p className="text-center text-[#666373] text-xs font-medium">Create an account to start your journey</p>
                 </div>
             )}
 
