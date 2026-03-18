@@ -31,7 +31,7 @@ const AdventureOppurtunities = () => {
             }}
           />
         </div>
-        <div className="px-4 sm:px-16 py-18 flex justify-center items-center">
+        <div className="w-full max-w-[100vw] py-18">
           <Adventureoppurtunitiescard />
         </div>
       </div>

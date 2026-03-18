@@ -147,3 +147,6 @@ const TripParticipants = ({ tripId, isWildTrips }: TripParticipantsProps) => {
 };
 
 export default TripParticipants;
+
+
+

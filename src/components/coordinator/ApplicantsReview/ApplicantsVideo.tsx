@@ -17,3 +17,5 @@ const ApplicantsVideo = ({video}: {video: string}) => {
 }
 
 export default ApplicantsVideo
+
+

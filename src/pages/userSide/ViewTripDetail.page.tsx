@@ -17,6 +17,7 @@ import { UsegetPublicTripbyid } from "@/hooks/getPublicTripbyidhook";
 import BookingCard from "@/components/Adventureoppurtunities/ViewDetailtrip/BookingCard";
 import CommonFund from "@/components/Adventureoppurtunities/ViewDetailtrip/CommonFund";
 import ThingsToKnow from "@/components/Adventureoppurtunities/ViewDetailtrip/ThingsToKnow";
+import ConfirmedParticipants from "@/components/Adventureoppurtunities/ViewDetailtrip/ConfirmedParticipants";
 
 /**
  * Public trip detail page - accessible without authentication.
@@ -95,6 +96,7 @@ const ViewTripDetailPage = () => {
             <Coordinatordetail trip={trip} />
             <HowItWorks />
             <Faqs />
+            <ConfirmedParticipants trip={trip} />
             <ParticipantsCards />
           </div>
 

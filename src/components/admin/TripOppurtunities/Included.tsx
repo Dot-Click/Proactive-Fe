@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Plus, Check, X } from "lucide-react";
+import { Plus, Check, X, Upload } from "lucide-react";
 import included1 from "../../../assets/included1.png";
 import included2 from "../../../assets/included2.png";
 import included3 from "../../../assets/included3.png";
@@ -81,6 +81,7 @@ const SelectCard = ({
   title: string;
   desc: string;
   onIconChange?: (file: File) => void;
+  isCustom?: boolean;
 }) => (
   <div
     className={clsx(
@@ -108,7 +109,7 @@ const SelectCard = ({
       <span className="text-[#606066] text-[11px] px-2">{desc}</span>
     </div>
 
-    {selected && (
+    {selected && isCustom && (
       <div className="relative z-20 mt-2">
         <input
           type="file"
@@ -252,24 +253,34 @@ const Included = () => {
                 onKeyPress={(e) => e.key === 'Enter' && confirmAddItem(true)}
               />
               <div className="flex items-center gap-2">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) {
-                      setNewItemIconFile(null);
-                      setNewItemIconPreview("");
-                      return;
-                    }
-                    setNewItemIconFile(file);
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      setNewItemIconPreview(reader.result as string);
-                    };
-                    reader.readAsDataURL(file);
-                  }}
-                />
+                <div className="relative">
+                  <input
+                    type="file"
+                    id="new-included-icon-upload"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) {
+                        setNewItemIconFile(null);
+                        setNewItemIconPreview("");
+                        return;
+                      }
+                      setNewItemIconFile(file);
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        setNewItemIconPreview(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }}
+                  />
+                  <label
+                    htmlFor="new-included-icon-upload"
+                    className="cursor-pointer bg-white border border-[#108700] text-[#108700] text-sm px-4 py-2 rounded-md hover:bg-[#108700] hover:text-white transition-colors flex items-center gap-2 font-medium shadow-sm"
+                  >
+                    <Upload size={16} /> Choose Image
+                  </label>
+                </div>
                 {newItemIconPreview && (
                   <img
                     src={newItemIconPreview}
@@ -360,6 +371,7 @@ const Included = () => {
                         <div key={item.id} className="relative group">
                           <SelectCard
                             selected={isSelected}
+                            isCustom={true}
                             onClick={() => {
                               if (isSelected) {
                                 field.onChange(field.value.filter((v: any) => (v.id !== item.id && v.title !== item.title)));
@@ -431,24 +443,34 @@ const Included = () => {
                 onKeyPress={(e) => e.key === 'Enter' && confirmAddItem(false)}
               />
               <div className="flex items-center gap-2">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) {
-                      setNewItemIconFile(null);
-                      setNewItemIconPreview("");
-                      return;
-                    }
-                    setNewItemIconFile(file);
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      setNewItemIconPreview(reader.result as string);
-                    };
-                    reader.readAsDataURL(file);
-                  }}
-                />
+                <div className="relative">
+                  <input
+                    type="file"
+                    id="new-not-included-icon-upload"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) {
+                        setNewItemIconFile(null);
+                        setNewItemIconPreview("");
+                        return;
+                      }
+                      setNewItemIconFile(file);
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        setNewItemIconPreview(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }}
+                  />
+                  <label
+                    htmlFor="new-not-included-icon-upload"
+                    className="cursor-pointer bg-white border border-[#D40004] text-[#D40004] text-sm px-4 py-2 rounded-md hover:bg-[#D40004] hover:text-white transition-colors flex items-center gap-2 font-medium shadow-sm"
+                  >
+                    <Upload size={16} /> Choose Image
+                  </label>
+                </div>
                 {newItemIconPreview && (
                   <img
                     src={newItemIconPreview}
@@ -539,6 +561,7 @@ const Included = () => {
                         <div key={item.id} className="relative group">
                           <SelectCard
                             selected={isSelected}
+                            isCustom={true}
                             onClick={() => {
                               if (isSelected) {
                                 field.onChange(field.value.filter((v: any) => (v.id !== item.id && v.title !== item.title)));

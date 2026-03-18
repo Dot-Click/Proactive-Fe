@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button"
 import { UsegetTrips } from "@/hooks/gettriphook"
+import { useRef, useEffect } from "react"
 import { LoaderIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import Marquee from "react-fast-marquee"
 import calender from "../../../../assets/calenderwhite.png"
 import location from "../../../../assets/locationwhite.png"
 
@@ -9,9 +11,41 @@ const Adventureoppurtunitiescard = () => {
     const { data, isLoading } = UsegetTrips();
     const navigate = useNavigate();
     const trips = data?.trips ?? [];
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    // Take only the first 3 trips for display
-    const displayTrips = trips.slice(0, 3);
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+        
+        // Pure DOM listeners to prevent React re-renders while seamlessly reversing CSS animations
+        const handleMouseEnter = () => {
+            const elements = container.querySelectorAll('.rfm-marquee');
+            elements.forEach((el) => {
+                el.getAnimations().forEach((anim) => {
+                    anim.playbackRate = -1;
+                });
+            });
+        };
+
+        const handleMouseLeave = () => {
+            const elements = container.querySelectorAll('.rfm-marquee');
+            elements.forEach((el) => {
+                el.getAnimations().forEach((anim) => {
+                    anim.playbackRate = 1;
+                });
+            });
+        };
+
+        container.addEventListener('mouseenter', handleMouseEnter);
+        container.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+            container.removeEventListener('mouseenter', handleMouseEnter);
+            container.removeEventListener('mouseleave', handleMouseLeave);
+        };
+    }, []);
+
+    const displayTrips = trips;
 
     // Category badge colors
     const getCategoryStyle = (type: string) => {
@@ -38,15 +72,25 @@ const Adventureoppurtunitiescard = () => {
             </div>
         );
     }
-
     return (
-        <div className="flex flex-col lg:flex-row gap-5">
+        <div 
+            ref={containerRef}
+            className="relative w-full group/carousel px-4 sm:px-16 overflow-hidden"
+        >
+            <Marquee 
+                speed={40} 
+                direction="left"
+                pauseOnHover={false} 
+                gradient={false} 
+                className="py-4 overflow-y-hidden pt-4 pb-8"
+            >
+                <div className="flex gap-5 pr-5">
             {displayTrips.map((trip: any, index: number) => {
                 const categoryStyle = getCategoryStyle(trip.type || "Mountain Adventure");
                 return (
                     <div
                         key={trip.id || index}
-                        className="relative h-[400px] rounded-[14px] overflow-hidden cursor-pointer group transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl"
+                        className="relative h-[400px] w-[320px] sm:w-[350px] lg:w-[380px] flex-shrink-0 rounded-[14px] overflow-hidden cursor-pointer group transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl"
                         onClick={() => navigate(`/trip/${trip.id}`)}
                     >
                         <img
@@ -104,6 +148,8 @@ const Adventureoppurtunitiescard = () => {
                     </div>
                 );
             })}
+                </div>
+            </Marquee>
         </div>
     );
 };

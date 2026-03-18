@@ -11,6 +11,7 @@ import Faqs from "@/components/Adventureoppurtunities/ViewDetailtrip/Faqs";
 import HowItWorks from "@/components/Adventureoppurtunities/ViewDetailtrip/HowItWorks";
 import CommonFund from "@/components/Adventureoppurtunities/ViewDetailtrip/CommonFund";
 import ThingsToKnow from "@/components/Adventureoppurtunities/ViewDetailtrip/ThingsToKnow";
+import ConfirmedParticipants from "@/components/Adventureoppurtunities/ViewDetailtrip/ConfirmedParticipants";
 import { useParams } from "react-router-dom";
 import { UsegetTripbyid } from "@/hooks/gettripbyidhook";
 import { LoaderIcon } from "lucide-react";
@@ -66,6 +67,7 @@ const ViewDetailTripPage = () => {
       {isWildTrips && <Coordinatordetail trip={trip} />}
       <HowItWorks />
       <Faqs />
+      <ConfirmedParticipants trip={trip} />
       <ParticipantsCards />
     </div>
   );
