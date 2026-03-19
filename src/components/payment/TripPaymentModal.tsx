@@ -14,7 +14,8 @@ import logo from "@/assets/sidebaricon/favicon.png";
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Percent, Tag } from 'lucide-react';
+import { useValidateDiscount } from '@/hooks/useDiscountshook';
 
 const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
@@ -176,15 +177,17 @@ export const TripPaymentModalContent = ({ tripId, paymentAmount }: { tripId: str
     const { data: tripResp, isLoading } = UsegetTripbyid(tripId);
     const trip = tripResp?.trip || tripResp;
     const { mutateAsync } = UsePayment();
+    const { mutateAsync: validateDiscount } = useValidateDiscount();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
     const [discountCode, setDiscountCode] = useState("");
-    const [appliedDiscount, setAppliedDiscount] = useState<{ amount?: number; percentage?: number } | null>(null);
+    const [appliedDiscount, setAppliedDiscount] = useState<any | null>(null);
     const [discountError, setDiscountError] = useState("");
+    const [isValidating, setIsValidating] = useState(false);
 
-    const categoryName = (trip?.categoryName || trip?.category || trip?.type || "").toLowerCase();
-    const isWildWeekend = ['wild weekends', 'wild weekend'].some(c => categoryName.includes(c));
+    // const categoryName = (trip?.categoryName || trip?.category || trip?.type || "").toLowerCase();
+    // const isWildWeekend = ['wild weekends', 'wild weekend'].some(c => categoryName.includes(c));
 
     const originalPrice = paymentAmount !== undefined && paymentAmount !== "" && paymentAmount !== null
         ? Number(paymentAmount)
@@ -192,26 +195,32 @@ export const TripPaymentModalContent = ({ tripId, paymentAmount }: { tripId: str
     
     // Calculate final price based on applied discount
     const finalPrice = appliedDiscount
-        ? appliedDiscount.percentage
-            ? originalPrice * (1 - appliedDiscount.percentage / 100)
-            : Math.max(0, originalPrice - (appliedDiscount.amount || 0))
+        ? Number(appliedDiscount.discountPercentage) > 0
+            ? originalPrice * (1 - Number(appliedDiscount.discountPercentage) / 100)
+            : Math.max(0, originalPrice - Number(appliedDiscount.amount || 0))
         : originalPrice;
 
-    const handleApplyDiscount = () => {
+    const handleApplyDiscount = async () => {
         setDiscountError("");
         if (!discountCode.trim()) {
             setDiscountError("Please enter a code");
             return;
         }
         
-        // For demonstration logic as per backend currently doesn't have open discount validation endpoint
-        // Example logic: if code is WILD10, give 10% off
-        if (discountCode.toUpperCase() === 'WILD10') {
-            setAppliedDiscount({ percentage: 10 });
-        } else if (discountCode.toUpperCase() === 'MINUS50') {
-            setAppliedDiscount({ amount: 50 });
-        } else {
-            setDiscountError("Invalid discount code");
+        setIsValidating(true);
+        try {
+            const result = await validateDiscount({ 
+                tripId, 
+                discountCode: discountCode.trim() 
+            });
+            setAppliedDiscount(result);
+            toast.success("Discount code applied!");
+        } catch (error: any) {
+            console.error("Discount validation failed:", error);
+            setDiscountError(error?.response?.data?.message || "Invalid or expired discount code");
+            setAppliedDiscount(null);
+        } finally {
+            setIsValidating(false);
         }
     };
 
@@ -290,42 +299,59 @@ export const TripPaymentModalContent = ({ tripId, paymentAmount }: { tripId: str
                     </div>
                 </div>
 
-                {isWildWeekend && (
-                    <div className="mt-6 flex flex-col gap-2">
-                        <p className="text-sm font-bold text-[#221E33]">Discount Code</p>
-                        <div className="flex gap-2">
-                            <Input 
-                                placeholder="Enter code" 
-                                className="bg-[#FAFAFE] border-[#EFEFEF] h-12 flex-1 rounded-xl"
-                                value={discountCode}
-                                onChange={(e) => setDiscountCode(e.target.value)}
-                                disabled={!!appliedDiscount}
-                            />
-                            {appliedDiscount ? (
-                                <Button 
-                                    onClick={() => {
-                                        setAppliedDiscount(null);
-                                        setDiscountCode("");
-                                    }}
-                                    className="h-12 bg-red-50 text-red-500 hover:bg-red-100 rounded-xl px-4 font-bold"
-                                    type="button"
-                                >
-                                    Remove
-                                </Button>
-                            ) : (
-                                <Button 
-                                    onClick={handleApplyDiscount}
-                                    className="h-12 bg-[#221E33] hover:bg-[#322c4b] text-white rounded-xl px-6 font-bold"
-                                    type="button"
-                                >
-                                    Apply
-                                </Button>
-                            )}
-                        </div>
-                        {discountError && <p className="text-red-500 text-xs mt-1">{discountError}</p>}
-                        {appliedDiscount && <p className="text-[#0DAC87] text-xs mt-1 font-semibold">Discount applied successfully!</p>}
+                {/* Show for all trips as per requirement or specific types? 
+                    The user said "Add create discount... and only work for this [trip]". 
+                    Usually we'd check if any discount exists for the trip, but displaying 
+                    the field for everyone is safer for flexibility. 
+                 */}
+                <div className="mt-6 flex flex-col gap-2">
+                    <p className="text-sm font-bold text-[#221E33] flex items-center gap-2">
+                        <Tag size={16} className="text-[#0DAC87]" />
+                        Discount Code
+                    </p>
+                    <div className="flex gap-2">
+                        <Input 
+                            placeholder="Enter code" 
+                            className="bg-[#FAFAFE] border-[#EFEFEF] h-12 flex-1 rounded-xl font-medium focus:ring-1 focus:ring-[#0DAC87]"
+                            value={discountCode}
+                            onChange={(e) => setDiscountCode(e.target.value)}
+                            disabled={!!appliedDiscount || isValidating}
+                            onKeyDown={(e) => e.key === 'Enter' && handleApplyDiscount()}
+                        />
+                        {appliedDiscount ? (
+                            <Button 
+                                onClick={() => {
+                                    setAppliedDiscount(null);
+                                    setDiscountCode("");
+                                }}
+                                className="h-12 bg-red-50 text-red-500 hover:bg-red-100 rounded-xl px-4 font-bold border border-red-100"
+                                type="button"
+                            >
+                                Remove
+                            </Button>
+                        ) : (
+                            <Button 
+                                onClick={handleApplyDiscount}
+                                disabled={isValidating}
+                                className="h-12 bg-[#221E33] hover:bg-[#322c4b] text-white rounded-xl px-6 font-bold flex items-center gap-2"
+                                type="button"
+                            >
+                                {isValidating ? <Loader2 size={16} className="animate-spin" /> : 'Apply'}
+                            </Button>
+                        )}
                     </div>
-                )}
+                    {discountError && <p className="text-red-500 text-xs mt-1 font-medium">{discountError}</p>}
+                    {appliedDiscount && (
+                        <div className="flex items-center gap-1.5 mt-1 text-[#0DAC87]">
+                            <Percent size={14} />
+                            <p className="text-xs font-semibold">
+                                {appliedDiscount.discountPercentage > 0 
+                                    ? `${appliedDiscount.discountPercentage}% discount applied` 
+                                    : `€${appliedDiscount.amount} discount applied`}
+                            </p>
+                        </div>
+                    )}
+                </div>
             </DialogHeader>
 
             {stripePromise && (

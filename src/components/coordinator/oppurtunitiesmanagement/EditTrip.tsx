@@ -16,10 +16,11 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import arrowBack from "@/assets/sidebaricon/arrow.png";
 // import Template from "@/assets/sidebaricon/template.png";
-import { Progress } from "@/components/ui/progress";
+// import { Progress } from "@/components/ui/progress";
 import { UseUpdateTrip } from "@/hooks/useUpdateTriphook";
 import { UsegetTripbyid } from "@/hooks/gettripbyidhook";
-import { LoaderIcon } from "lucide-react";
+import { LoaderIcon, AlertCircle } from "lucide-react";
+import TripWizardProgress from "@/components/admin/TripOppurtunities/TripWizardProgress";
 
 const EditTrip = ({ backUrl }: { backUrl: string }) => {
   const { id } = useParams<{ id: string }>();
@@ -89,7 +90,31 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
   ];
 
   const [step, setStep] = useState(1);
+  const [validatedSections, setValidatedSections] = useState<Set<number>>(new Set());
   const totalStep = 6;
+
+  const validateAndGoToSection = async (targetStep: number) => {
+    // Current validation logic for the CURRENT step being left
+    let valid = false;
+    if (step === 1) {
+      valid = await methods.trigger(["categoryId", "title", "description", "location", "startDate", "endDate", "duration", "status"]);
+    } else if (step === 2) {
+      valid = await methods.trigger(["LongDescription", "GroupSize", "rhythm", "SportsLevel"]);
+    } else if (step === 3) {
+      valid = await methods.trigger(["included", "notIncluded"]);
+    } else if (step === 4) {
+      valid = await methods.trigger(["coordinators"]);
+    } else if (step === 5) {
+      valid = await methods.trigger(["PromotionalVideo", "GalleryImages", "BestPrice", "FinalPrice"]);
+    }
+
+    if (valid) {
+      setValidatedSections((prev) => new Set([...prev, step]));
+    }
+
+    // Always allow navigation
+    setStep(targetStep);
+  };
   const { mutateAsync, isPending } = UseUpdateTrip();
 
   // Load trip data into form when available (matches API response: data.trip).
@@ -244,8 +269,10 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       applicationType: trip.applicationType ?? "video",
       depositAmount: trip.depositAmount ?? "",
       status: trip.status ?? "active",
-      coordinators: Array.isArray(trip.coordinators)
-        ? trip.coordinators.map((c: any) => typeof c === 'string' ? c : (c.id || c._id || c.userId || ""))
+      coordinators: (Array.isArray(trip.coordinators) && trip.coordinators.length > 0)
+        ? trip.coordinators
+          .map((c: any) => typeof c === 'string' ? c : (c.id || c._id || c.userId || ""))
+          .filter(Boolean)
         : [coordinatorId || ""].filter(Boolean),
     };
 
@@ -310,7 +337,11 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       ]);
     }
 
-    if (valid && step < totalStep) {
+    if (valid) {
+      setValidatedSections((prev) => new Set([...prev, step]));
+    }
+    
+    if (step < totalStep) {
       setStep((s) => s + 1);
     }
   };
@@ -465,7 +496,12 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       console.log("🚀 Updating trip with payload:", payload);
 
       await mutateAsync({ id, formData });
-      navigate(backUrl || "/coordinator-dashboard/oppurtunities-management");
+      
+      // If we're on the last step, navigate back to the management page
+      // Otherwise, stay on the current step so user can continue editing
+      if (step === totalStep) {
+        navigate(backUrl || "/coordinator-dashboard/oppurtunities-management");
+      }
     } catch (error) {
       console.error("Error updating trip:", error);
     }
@@ -529,25 +565,22 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
           </div>
         </div>
       </div>
+      <TripWizardProgress
+        step={step}
+        totalStep={totalStep}
+        steps={steps}
+        validatedSections={validatedSections}
+        onStepClick={validateAndGoToSection}
+        isEditMode={true}
+      />
       <div className="bg-white">
-        <div className="px-8 py-6">
-          <div className="flex flex-col gap-2">
-            <span className="font-semibold">
-              Step {step} of {totalStep}
-            </span>
-            <Progress value={(step / totalStep) * 100} />
-            <div className="flex flex-wrap md:justify-between gap-4 mt-2">
-              {steps.map((label, index) => (
-                <span
-                  key={index}
-                  className={`text-[12px] font-semibold transition-colors ${step === index + 1 ? "text-[#221E33]" : "text-[#606066]"
-                    }`}
-                >
-                  {label}
-                </span>
-              ))}
+        <div className="px-8 pb-6">
+          {Object.keys(methods.formState.errors).length > 0 && step < totalStep && (
+            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <span>Please fix the errors in this section before continuing</span>
             </div>
-          </div>
+          )}
         </div>
       </div>
       <hr />
@@ -570,18 +603,20 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
             {step === 6 && <Reviewsave />}
 
             {/* Show validation errors blocking submission */}
-            {step === totalStep && Object.keys(methods.formState.errors).length > 0 && (
+            {Object.keys(methods.formState.errors).length > 0 && (
               <div className="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-700 font-semibold mb-2">⚠️ Please fix the following errors before updating:</p>
-                <ul className="text-red-600 text-sm space-y-1">
+                <p className="text-red-700 font-semibold mb-2">⚠️ Missing or invalid information:</p>
+                <div className="flex flex-wrap gap-2">
                   {Object.entries(methods.formState.errors).map(([field, error]: [string, any]) => (
-                    <li key={field}>• {field}: {error?.message || "Invalid"}</li>
+                    <span key={field} className="bg-white px-3 py-1 text-red-600 text-xs rounded-full border border-red-200">
+                      • {field === 'coordinators' ? 'Please select a coordinator in Step 4' : field}: {error?.message || "Invalid"}
+                    </span>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
 
-            <div className="bg-white rounded-bl-[25px] rounded-br-[25px] flex md:flex-row flex-col justify-end mt-auto pt-24 gap-4">
+            <div className="bg-white rounded-bl-[25px] rounded-br-[25px] flex md:flex-row flex-col justify-end mt-auto pt-24 gap-4 px-6 items-center">
               {step > 1 && (
                 <Button
                   type="button"
@@ -589,9 +624,22 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
                   variant={"outline"}
                   className="text-[#666373] w-full md:w-auto border border-[#666373] font-bold cursor-pointer rounded-full px-8 py-5 my-6"
                 >
-                  {step === totalStep ? "Preview Trip Page" : "previous"}
+                  Previous
                 </Button>
               )}
+              
+              {/* Permanent Save Button */}
+              {step < totalStep && (
+                <Button
+                  type="submit"
+                  disabled={isPending}
+                  variant="outline"
+                  className="text-[#0DAC87] border-[#0DAC87] hover:bg-green-50 font-bold cursor-pointer rounded-full px-8 py-5 my-6 w-full md:w-auto"
+                >
+                  {isPending ? "Saving..." : "Save Changes"}
+                </Button>
+              )}
+
               <Button
                 type={step === totalStep ? "submit" : "button"}
                 onClick={
@@ -601,7 +649,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
                 className={`${step === totalStep
                   ? "bg-[#0DAC87] hover:bg-[#0d9e7c]"
                   : "bg-[#000000]"
-                  } cursor-pointer rounded-full px-12 py-5 mx-6 my-6 w-full md:w-auto`}
+                  } cursor-pointer rounded-full px-12 py-5 my-6 w-full md:w-auto`}
               >
                 {step === totalStep
                   ? isPending

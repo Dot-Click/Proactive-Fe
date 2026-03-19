@@ -3,7 +3,7 @@ const CommonFund = ({ trip }: { trip?: any }) => {
 
     // Placeholder text from the user's screenshot if data is missing
     const fundText = data?.commonFundDescription || data?.commonFund || "The group fund will be collected on-site, and the fee will be approximately €150. Depending on the participants' needs, this amount may vary and could be adjusted later. In any case, any unused portion will be refunded.";
-    const count = data?.commonFundCount || 4;
+    // const count = data?.commonFundCount || 4;
 
     return (
         <div className="border-t border-[#ECECF1] pt-12 mt-16">

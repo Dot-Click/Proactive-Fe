@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UseGetAllUser } from "@/hooks/getUserhook";
 import { UseSearchUsers } from "@/hooks/searchUserhook";
 import { useUpdateUserStatus } from "@/hooks/updateUserStatushook";
+import { useUpdateMembership } from "@/hooks/updateMembershipHook";
 import { useMemo, useState } from "react";
 
 type User = {
@@ -35,8 +36,8 @@ type User = {
   lastActive?: string | null;
   createdAt?: string;
   updatedAt?: string;
-  coordinatorDetailsId?: string | null;
   userStatus?: string;
+  membershipExpiry?: string | null;
 };
 
 const getInitials = (value?: string) => {
@@ -109,6 +110,48 @@ const StatusCell = ({ row }: { row: any }) => {
   );
 };
 
+const MembershipCell = ({ row }: { row: any }) => {
+  const { mutate, isPending } = useUpdateMembership();
+  const membershipExpiry = row.original.membershipExpiry;
+  const isMember = membershipExpiry && new Date(membershipExpiry) > new Date();
+
+  return (
+    <div className="flex justify-center items-center gap-2">
+      {isMember ? (
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-[10px] text-[#077B21] font-bold">Expires: {new Date(membershipExpiry).toLocaleDateString()}</span>
+          <Button 
+            variant="outline"
+            size="sm"
+            disabled={isPending}
+            onClick={() => mutate({ userId: row.original.id, action: "remove" })}
+            className="text-[#D14343] border-[#D14343] hover:bg-red-50 rounded-full h-8 text-xs font-bold"
+          >
+            Remove
+          </Button>
+        </div>
+      ) : (
+        <Button 
+          variant="outline"
+          size="sm"
+          disabled={isPending}
+          onClick={() => mutate({ userId: row.original.id, action: "activate" })}
+          className="text-[#0DAC87] border-[#0DAC87] hover:bg-green-50 rounded-full h-8 text-xs font-bold"
+        >
+          Activate
+        </Button>
+      )}
+    </div>
+  );
+};
+
+// const formatDate = (value?: string | null) => {
+//   if (!value) return "—";
+//   const parsed = new Date(value);
+//   if (Number.isNaN(parsed.getTime())) return "—";
+//   return parsed.toLocaleDateString();
+// };
+
 const userColumns: ColumnDef<User>[] = [
   {
     accessorKey: "id",
@@ -157,6 +200,15 @@ const userColumns: ColumnDef<User>[] = [
         <span>{row.original.email}</span>
       </div>
     ),
+  },
+  {
+    accessorKey: "membership",
+    header: () => (
+      <div className="text-center">
+        <h1>Membership</h1>
+      </div>
+    ),
+    cell: ({ row }) => <MembershipCell row={row} />,
   },
   {
     accessorKey: "phoneNumber",
@@ -241,7 +293,7 @@ const FilterSection = () => {
         searchPlaceholder="Search users by name or email"
         onSearch={(query) => setSearchQuery(query)}
         defaultLimit={pageSize}
-        limitOptions={[5, 10, 20, 30, 50]}
+        limitOptions={[10, 20, 50]}
         onLimitChange={(limit) => setPageSize(limit)}
       />
       <div className="bg-white rounded-[25px] mt-3 overflow-x-auto">

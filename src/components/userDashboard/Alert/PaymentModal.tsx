@@ -13,7 +13,8 @@ import logo from "../../../assets/sidebaricon/favicon.png"
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import PaymentSuccess from "../../../assets/SuccessPayment.png"
 import { toast } from 'sonner';
-// import { UsegetCurrentUser } from '@/hooks/getCurrentUserhook';
+import { useValidateDiscount } from '@/hooks/useDiscountshook';
+import { Loader2, Tag, Percent } from 'lucide-react';
 
 const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
@@ -24,7 +25,7 @@ const PaymentSchema = z.object({
 
 type PaymentSchemaType = z.infer<typeof PaymentSchema>;
 
-const CheckoutForm = ({ onSuccess }: { onSuccess: (paymentMethodId: string) => void }) => {
+const CheckoutForm = ({ onSuccess, amount, isProcessing }: { onSuccess: (paymentMethodId: string) => void, amount: number, isProcessing: boolean }) => {
     const stripe = useStripe();
     const elements = useElements();
     const form = useForm<PaymentSchemaType>({
@@ -141,7 +142,7 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: (paymentMethodId: string) => v
                         disabled={!stripe || !elements}
                         className="bg-[#0DAC87] hover:bg-[#11a180] hover:scale-105 cursor-pointer w-full rounded-full py-6 font-semibold transition-all"
                     >
-                        Pay €50 Now
+                        {isProcessing ? <Loader2 className="animate-spin" /> : `Pay €${amount} Now`}
                     </Button>
                 </div>
             </form>
@@ -151,21 +152,55 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: (paymentMethodId: string) => v
 
 const PaymentModal = () => {
     const [showhide, setShowHide] = useState(true);
-    const { mutateAsync, data: membershipResp } = UseMembership();
+    const { mutateAsync: createMembership, data: membershipResp } = UseMembership();
     const membershipData = membershipResp?.data || membershipResp;
+    const { mutateAsync: validateDiscount } = useValidateDiscount();
+
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [discountCode, setDiscountCode] = useState("");
+    const [appliedDiscount, setAppliedDiscount] = useState<any | null>(null);
+    const [isValidating, setIsValidating] = useState(false);
+    const [discountError, setDiscountError] = useState("");
+
+    const originalPrice = 50;
+    const finalPrice = appliedDiscount
+        ? Number(appliedDiscount.discountPercentage) > 0
+            ? originalPrice * (1 - Number(appliedDiscount.discountPercentage) / 100)
+            : Math.max(0, originalPrice - Number(appliedDiscount.amount || 0))
+        : originalPrice;
+
+    const handleApplyDiscount = async () => {
+        setDiscountError("");
+        if (!discountCode.trim()) return;
+        setIsValidating(true);
+        try {
+            const result = await validateDiscount({ tripId: "", discountCode: discountCode.trim() });
+            setAppliedDiscount(result);
+            toast.success("Discount applied!");
+        } catch (e: any) {
+            setDiscountError(e?.response?.data?.message || "Invalid code");
+            setAppliedDiscount(null);
+        } finally {
+            setIsValidating(false);
+        }
+    };
 
     const handlePaymentSuccess = async (paymentMethodId: string) => {
+        setIsProcessing(true);
         try {
-            await mutateAsync({
+            await createMembership({
                 payment_method_id: paymentMethodId,
-                amount: 50,
+                amount: finalPrice,
                 currency: 'eur',
                 membership_type: 'annual',
+                discountCode: appliedDiscount?.discountCode
             });
             setShowHide(false);
             toast.success("Membership Created Successfully")
         } catch (error) {
             console.error('Payment failed:', error);
+        } finally {
+            setIsProcessing(false);
         }
     };
 
@@ -185,18 +220,64 @@ const PaymentModal = () => {
                                 <div className="bg-white px-6 py-6 rounded-[20px] mt-10 mx-6">
                                     <div className="flex justify-between items-center">
                                         <span className="text-[#242E2F] font-medium">Membership Fee</span>
-                                        <div className="flex flex-col">
-                                            <span className="text-[#000000] font-bold text-4xl">€50.00</span>
-                                            <span className="text-[#000000] font-medium">/ 365 days</span>
+                                        <div className="flex flex-col items-end">
+                                            {appliedDiscount ? (
+                                                <>
+                                                    <span className="text-[#BEBEBE] line-through text-sm">€50.00</span>
+                                                    <span className="text-[#0DAC87] font-bold text-4xl">€{finalPrice.toFixed(2)}</span>
+                                                </>
+                                            ) : (
+                                                <span className="text-[#000000] font-bold text-4xl">€50.00</span>
+                                            )}
+                                            <span className="text-[#1F1B2C] font-medium text-xs mt-1">/ 365 days</span>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div className="mt-6 mx-6">
+                                    <p className="text-sm font-bold text-[#1F1B2C] mb-2 flex items-center gap-2">
+                                        <Tag size={16} className="text-[#0DAC87]" />
+                                        Discount Code
+                                    </p>
+                                    <div className="flex gap-2">
+                                        <Input 
+                                            placeholder="Enter code" 
+                                            className="flex-1 h-12 bg-white rounded-xl border-[#ECECF1]"
+                                            value={discountCode}
+                                            onChange={(e) => setDiscountCode(e.target.value)}
+                                            disabled={!!appliedDiscount || isValidating}
+                                        />
+                                        {appliedDiscount ? (
+                                            <Button 
+                                                onClick={() => { setAppliedDiscount(null); setDiscountCode(""); }}
+                                                className="h-12 bg-red-50 text-red-500 hover:bg-red-100 rounded-xl px-4"
+                                            >
+                                                Remove
+                                            </Button>
+                                        ) : (
+                                            <Button 
+                                                onClick={handleApplyDiscount}
+                                                disabled={isValidating || !discountCode.trim()}
+                                                className="h-12 bg-[#221E33] hover:bg-[#322c4b] text-white rounded-xl px-6 font-bold"
+                                            >
+                                                {isValidating ? <Loader2 className="animate-spin" size={16} /> : "Apply"}
+                                            </Button>
+                                        )}
+                                    </div>
+                                    {discountError && <p className="text-red-500 text-xs mt-1">{discountError}</p>}
+                                    {appliedDiscount && (
+                                        <p className="text-[#0DAC87] text-xs mt-1 font-bold flex items-center gap-1">
+                                            <Percent size={12} />
+                                            Discount applied successfully!
+                                        </p>
+                                    )}
                                 </div>
                             </DialogHeader>
 
                             <div className="mt-10 px-6 flex-1 flex flex-col">
                                 <span className="text-[#000000] font-bold text-lg mb-6 block">Payment Info</span>
                                 <Elements stripe={stripePromise}>
-                                    <CheckoutForm onSuccess={handlePaymentSuccess} />
+                                    <CheckoutForm onSuccess={handlePaymentSuccess} amount={finalPrice} isProcessing={isProcessing} />
                                 </Elements>
                             </div>
                         </>

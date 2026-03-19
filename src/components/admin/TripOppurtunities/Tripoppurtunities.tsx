@@ -2,8 +2,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UsegetTrips } from "@/hooks/gettriphook";
 import { UseSearchTrips } from "@/hooks/searchTripshook";
-import { UseupdateRejectedtripStatus } from "@/hooks/updatetripRejectedstatushook";
-import { Useupdatetripstatus } from "@/hooks/updatetripstatushook";
+// import { UseupdateRejectedtripStatus } from "@/hooks/updatetripRejectedstatushook";
+// import { Useupdatetripstatus } from "@/hooks/updatetripstatushook";
 import { UseDeleteTrip } from "@/hooks/UseDeleteTripHook";
 import ReusableTable from "@/Table/ReusableTable";
 import TableHeader from "@/Table/TableHeader"
