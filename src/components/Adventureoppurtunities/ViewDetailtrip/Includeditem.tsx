@@ -62,7 +62,7 @@ const Includeditem = ({ trip }: { trip: any }) => {
     const visibleExcluded = showAllExcluded ? NotIncludedItem : NotIncludedItem.slice(0, 4);
 
     return (
-        <div className="space-y-12 mt-12 bg-white">
+        <div id="included-section" className="space-y-12 mt-12 bg-white">
             <div className="flex flex-col lg:flex-row gap-10">
                 {/* Included Column */}
                 <div className="flex-1 bg-[#F9FEFB] rounded-[32px] p-8 border border-[#E8F5EE] shadow-sm transition-all hover:shadow-md">
@@ -97,7 +97,15 @@ const Includeditem = ({ trip }: { trip: any }) => {
 
                     {IncludedItem.length > 4 && (
                         <button 
-                            onClick={() => setShowAllIncluded(!showAllIncluded)}
+                            type="button"
+                            onClick={(e) => { 
+                                e.preventDefault(); 
+                                if (showAllIncluded) {
+                                    // Anchoring view when closing so the user sees the list shrink
+                                    document.getElementById('included-section')?.scrollIntoView({ behavior: 'smooth' });
+                                }
+                                setShowAllIncluded(!showAllIncluded); 
+                            }}
                             className="w-full mt-8 flex items-center justify-center gap-2 py-4 border-2 border-[#E8F5EE] rounded-2xl text-[#1F1B2C] font-bold text-sm hover:bg-white hover:border-[#0DAC87] transition-all cursor-pointer group"
                         >
                             {showAllIncluded ? (
@@ -144,7 +152,14 @@ const Includeditem = ({ trip }: { trip: any }) => {
 
                     {NotIncludedItem.length > 4 && (
                         <button 
-                            onClick={() => setShowAllExcluded(!showAllExcluded)}
+                            type="button"
+                            onClick={(e) => { 
+                                e.preventDefault(); 
+                                if (showAllExcluded) {
+                                    document.getElementById('included-section')?.scrollIntoView({ behavior: 'smooth' });
+                                }
+                                setShowAllExcluded(!showAllExcluded); 
+                            }}
                             className="w-full mt-8 flex items-center justify-center gap-2 py-4 border-2 border-[#FBEAEA] rounded-2xl text-[#1F1B2C] font-bold text-sm hover:bg-white hover:border-[#EF4444] transition-all cursor-pointer group"
                         >
                             {showAllExcluded ? (

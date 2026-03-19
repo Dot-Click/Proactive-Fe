@@ -14,9 +14,6 @@ const CommonFund = ({ trip }: { trip?: any }) => {
                 <p className="text-[#221E33] text-base leading-relaxed font-quicksand max-w-3xl">
                     {fundText}
                 </p>
-                <button className="px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-quicksand">
-                    Show all {count} included
-                </button>
             </div>
         </div>
     );

@@ -88,8 +88,36 @@ const BookingCard = ({ trip, showApplyButton }: BookingCardProps) => {
                             );
                         }, [paymentData, data?.id]);
 
+                        const isComingSoon = data?.status === 'coming soon';
+
+                        if (isComingSoon) {
+                            return (
+                                <Button
+                                    disabled
+                                    className="w-full bg-[#FAFAFE] text-[#666373] border border-[#ECECF1] h-14 rounded-xl text-lg font-bold shadow-sm flex items-center justify-center gap-2 cursor-default"
+                                >
+                                    <Clock size={20} />
+                                    Coming Soon
+                                </Button>
+                            );
+                        }
+
                         const categoryName = (data?.categoryName || data?.category || data?.type || "").toLowerCase();
-                        const isDirectPayment = ['wild weekends', 'wild weekend', 'internal events', 'internal event'].some(c => categoryName.includes(c));
+                        const isErasmus = ['erasmus+', 'erasmus', 'erasmus +'].some(c => categoryName.includes(c));
+                        
+                        const isWildTrip = ['wild trip', 'wild trips'].some(c => categoryName.includes(c));
+                        const isWildWeekend = ['wild weekends', 'wild weekend', 'internal events', 'internal event'].some(c => categoryName.includes(c));
+                        
+                        // Erasmus+ always uses the video selection process, never direct payment.
+                        // Wild Trip uses direct payment ONLY if applicationType is "payment".
+                        const isDirectPayment = !isErasmus && (
+                            isWildWeekend ||
+                            (isWildTrip && data?.applicationType === 'payment')
+                        );
+
+                        const paymentAmount = isWildTrip && data?.applicationType === 'payment' && data?.depositAmount 
+                            ? Number(data.depositAmount) 
+                            : Number(data?.perHeadPrice || data?.price || 0);
 
                         if (isPaid) {
                             return (
@@ -109,10 +137,10 @@ const BookingCard = ({ trip, showApplyButton }: BookingCardProps) => {
                                     <DialogTrigger asChild>
                                         <Button className="w-full bg-[#0DAC87] hover:bg-[#119b7b] text-white h-14 rounded-xl text-lg font-bold shadow-md transition-all flex items-center justify-center gap-2">
                                             <Wallet size={20} />
-                                            Pay Now to Join
+                                            {isWildTrip ? `Pay Deposit (€${paymentAmount})` : `Pay Now to Join (€${paymentAmount})`}
                                         </Button>
                                     </DialogTrigger>
-                                    <TripPaymentModal tripId={data?.id} />
+                                    <TripPaymentModal tripId={data?.id} paymentAmount={paymentAmount} />
                                 </Dialog>
                             );
                         }

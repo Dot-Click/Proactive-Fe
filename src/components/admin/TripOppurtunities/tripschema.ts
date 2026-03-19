@@ -144,6 +144,9 @@ export const tripSchema = z
       )
       .optional()
       .default([]),
+    applicationType: z.string().optional().default("video"),
+    depositAmount: z.string().optional().default(""),
+    status: z.enum(["active", "coming soon", "pending", "completed"]).default("active"),
   })
   .passthrough(); // Allow extra fields but validate schema fields
 

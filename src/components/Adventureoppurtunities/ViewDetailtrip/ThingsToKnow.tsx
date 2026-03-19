@@ -1,4 +1,5 @@
 import { Bus } from "lucide-react";
+import { useState } from "react";
 
 interface InfoItemProps {
     icon: React.ReactNode;
@@ -21,6 +22,7 @@ const InfoItem = ({ icon, title, description }: InfoItemProps) => (
 );
 
 const ThingsToKnow = ({ trip: _trip }: { trip?: any }) => {
+    const [showAll, setShowAll] = useState(false);
     // normalize to top-level object
     const data = _trip?.trip?.[0] || _trip?.trip || _trip;
 
@@ -62,8 +64,10 @@ const ThingsToKnow = ({ trip: _trip }: { trip?: any }) => {
                   },
               ];
 
+    const visibleItems = showAll ? items : items.slice(0, 2);
+
     return (
-        <div className="border-t border-[#ECECF1] pt-12 mt-16 pb-12">
+        <div id="things-to-know-section" className="border-t border-[#ECECF1] pt-12 mt-16 pb-12">
             <h3 className="text-[#221E33] font-extrabold text-3xl mb-4 font-quicksand tracking-tight">
                 Cosas que saber
             </h3>
@@ -72,7 +76,7 @@ const ThingsToKnow = ({ trip: _trip }: { trip?: any }) => {
             </p>
 
             <div className="space-y-10 max-w-4xl">
-                {items.map((item, idx) => (
+                {visibleItems.map((item, idx) => (
                     <InfoItem
                         key={idx}
                         icon={<Bus size={24} />}
@@ -82,9 +86,21 @@ const ThingsToKnow = ({ trip: _trip }: { trip?: any }) => {
                 ))}
             </div>
 
-            <button className="mt-12 px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-quicksand">
-                Mostrar menos
-            </button>
+            {items.length > 2 && (
+                <button 
+                    type="button"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        if (showAll) {
+                            document.getElementById('things-to-know-section')?.scrollIntoView({ behavior: 'smooth' });
+                        }
+                        setShowAll(!showAll);
+                    }}
+                    className="mt-12 px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-quicksand"
+                >
+                    {showAll ? "Mostrar menos" : `Mostrar todos (${items.length})`}
+                </button>
+            )}
         </div>
     );
 };

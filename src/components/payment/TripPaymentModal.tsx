@@ -172,18 +172,54 @@ const CheckoutForm = ({
     );
 };
 
-export const TripPaymentModalContent = ({ tripId }: { tripId: string }) => {
+export const TripPaymentModalContent = ({ tripId, paymentAmount }: { tripId: string, paymentAmount?: number | string }) => {
     const { data: tripResp, isLoading } = UsegetTripbyid(tripId);
     const trip = tripResp?.trip || tripResp;
     const { mutateAsync } = UsePayment();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
+    const [discountCode, setDiscountCode] = useState("");
+    const [appliedDiscount, setAppliedDiscount] = useState<{ amount?: number; percentage?: number } | null>(null);
+    const [discountError, setDiscountError] = useState("");
+
+    const categoryName = (trip?.categoryName || trip?.category || trip?.type || "").toLowerCase();
+    const isWildWeekend = ['wild weekends', 'wild weekend'].some(c => categoryName.includes(c));
+
+    const originalPrice = paymentAmount !== undefined && paymentAmount !== "" && paymentAmount !== null
+        ? Number(paymentAmount)
+        : Number(trip?.perHeadPrice || trip?.price || 0);
+    
+    // Calculate final price based on applied discount
+    const finalPrice = appliedDiscount
+        ? appliedDiscount.percentage
+            ? originalPrice * (1 - appliedDiscount.percentage / 100)
+            : Math.max(0, originalPrice - (appliedDiscount.amount || 0))
+        : originalPrice;
+
+    const handleApplyDiscount = () => {
+        setDiscountError("");
+        if (!discountCode.trim()) {
+            setDiscountError("Please enter a code");
+            return;
+        }
+        
+        // For demonstration logic as per backend currently doesn't have open discount validation endpoint
+        // Example logic: if code is WILD10, give 10% off
+        if (discountCode.toUpperCase() === 'WILD10') {
+            setAppliedDiscount({ percentage: 10 });
+        } else if (discountCode.toUpperCase() === 'MINUS50') {
+            setAppliedDiscount({ amount: 50 });
+        } else {
+            setDiscountError("Invalid discount code");
+        }
+    };
+
     const handlePaymentSuccess = async (paymentMethodId: string) => {
         try {
             await mutateAsync({
                 payment_method_id: paymentMethodId,
-                amount: Number(trip?.perHeadPrice || trip?.price || 0),
+                amount: finalPrice,
                 currency: 'eur',
                 trip_id: tripId,
             });
@@ -239,17 +275,63 @@ export const TripPaymentModalContent = ({ tripId }: { tripId: string }) => {
                     </div>
                     <div className="text-right">
                         <p className="text-xs font-bold text-[#666373] uppercase tracking-wider mb-1">TOTAL AMOUNT</p>
-                        <p className="text-[#221E33] font-black text-3xl">
-                            €{trip?.perHeadPrice || trip?.price || 0}
-                        </p>
+                        {appliedDiscount ? (
+                            <div>
+                                <p className="text-[#666373] line-through text-sm">€{originalPrice.toFixed(2)}</p>
+                                <p className="text-[#0DAC87] font-black text-3xl">
+                                    €{finalPrice.toFixed(2)}
+                                </p>
+                            </div>
+                        ) : (
+                            <p className="text-[#221E33] font-black text-3xl">
+                                €{finalPrice.toFixed(2)}
+                            </p>
+                        )}
                     </div>
                 </div>
+
+                {isWildWeekend && (
+                    <div className="mt-6 flex flex-col gap-2">
+                        <p className="text-sm font-bold text-[#221E33]">Discount Code</p>
+                        <div className="flex gap-2">
+                            <Input 
+                                placeholder="Enter code" 
+                                className="bg-[#FAFAFE] border-[#EFEFEF] h-12 flex-1 rounded-xl"
+                                value={discountCode}
+                                onChange={(e) => setDiscountCode(e.target.value)}
+                                disabled={!!appliedDiscount}
+                            />
+                            {appliedDiscount ? (
+                                <Button 
+                                    onClick={() => {
+                                        setAppliedDiscount(null);
+                                        setDiscountCode("");
+                                    }}
+                                    className="h-12 bg-red-50 text-red-500 hover:bg-red-100 rounded-xl px-4 font-bold"
+                                    type="button"
+                                >
+                                    Remove
+                                </Button>
+                            ) : (
+                                <Button 
+                                    onClick={handleApplyDiscount}
+                                    className="h-12 bg-[#221E33] hover:bg-[#322c4b] text-white rounded-xl px-6 font-bold"
+                                    type="button"
+                                >
+                                    Apply
+                                </Button>
+                            )}
+                        </div>
+                        {discountError && <p className="text-red-500 text-xs mt-1">{discountError}</p>}
+                        {appliedDiscount && <p className="text-[#0DAC87] text-xs mt-1 font-semibold">Discount applied successfully!</p>}
+                    </div>
+                )}
             </DialogHeader>
 
             {stripePromise && (
                 <div className="flex-1">
                     <Elements stripe={stripePromise}>
-                        <CheckoutForm trip={trip} onSuccess={handlePaymentSuccess} />
+                        <CheckoutForm trip={{ ...trip, perHeadPrice: finalPrice, price: finalPrice }} onSuccess={handlePaymentSuccess} />
                     </Elements>
                 </div>
             )}
@@ -257,10 +339,10 @@ export const TripPaymentModalContent = ({ tripId }: { tripId: string }) => {
     );
 };
 
-const TripPaymentModal = ({ tripId }: { tripId: string }) => {
+const TripPaymentModal = ({ tripId, paymentAmount }: { tripId: string, paymentAmount?: number | string }) => {
     return (
         <DialogContent className="sm:max-w-[600px] max-h-[90vh] bg-white rounded-[30px] overflow-y-auto p-0 border-none shadow-2xl">
-            <TripPaymentModalContent tripId={tripId} />
+            <TripPaymentModalContent tripId={tripId} paymentAmount={paymentAmount} />
         </DialogContent>
     );
 };

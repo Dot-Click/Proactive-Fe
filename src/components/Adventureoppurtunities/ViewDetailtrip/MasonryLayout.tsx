@@ -201,17 +201,46 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
           const isPending = userApp?.status === 'pending';
           const isRejected = userApp?.status === 'rejected';
 
-          const isPaid = useMemo(() => {
-            const tripPayments = paymentData?.tripPayments || [];
-            const OK_STATUSES = new Set(["completed", "paid", "confirmed", "succeeded", "success"]);
-            return tripPayments.some((p: any) =>
-              String(p.tripId) === String(data?.id) &&
-              OK_STATUSES.has((p.status || "").toString().toLowerCase())
-            );
-          }, [paymentData, data?.id]);
+            const isPaid = useMemo(() => {
+              const tripPayments = paymentData?.tripPayments || [];
+              const OK_STATUSES = new Set(["completed", "paid", "confirmed", "succeeded", "success"]);
+              return tripPayments.some((p: any) =>
+                String(p.tripId) === String(data?.id) &&
+                OK_STATUSES.has((p.status || "").toString().toLowerCase())
+              );
+            }, [paymentData, data?.id]);
 
-          const categoryName = (data?.categoryName || data?.category || data?.type || "").toLowerCase();
-          const isDirectPayment = ['wild weekends', 'wild weekend', 'internal events', 'internal event'].some(c => categoryName.includes(c));
+            const isComingSoon = data?.status === 'coming soon';
+
+            if (isComingSoon) {
+              return (
+                <div className="mb-4 flex justify-end">
+                  <Button
+                    disabled
+                    className="bg-[#FAFAFE] text-[#666373] border border-[#ECECF1] rounded-full px-10 py-6 text-lg font-bold shadow-sm flex items-center gap-2 cursor-default"
+                  >
+                    <Clock size={20} />
+                    Coming Soon
+                  </Button>
+                </div>
+              );
+            }
+
+            const categoryName = (data?.categoryName || data?.category || data?.type || "").toLowerCase();
+          const isErasmus = ['erasmus+', 'erasmus', 'erasmus +'].some(c => categoryName.includes(c));
+          
+          const isWildTrip = ['wild trip', 'wild trips'].some(c => categoryName.includes(c));
+          const isWildWeekend = ['wild weekends', 'wild weekend', 'internal events', 'internal event'].some(c => categoryName.includes(c));
+          
+          // Erasmus+ always uses the video selection process, never direct payment.
+          const isDirectPayment = !isErasmus && (
+            isWildWeekend ||
+            (isWildTrip && data?.applicationType === 'payment')
+          );
+
+          const paymentAmount = isWildTrip && data?.applicationType === 'payment' && data?.depositAmount 
+            ? Number(data.depositAmount) 
+            : Number(data?.perHeadPrice || data?.price || 0);
 
           if (isPaid) {
             return (
@@ -234,10 +263,10 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
                   <DialogTrigger asChild>
                     <Button className="bg-[#0DAC87] hover:bg-[#119b7b] text-white cursor-pointer rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
                       <Wallet size={20} />
-                      Pay Now to Join
+                      {isWildTrip ? `Pay Deposit (€${paymentAmount})` : `Pay Now to Join (€${paymentAmount})`}
                     </Button>
                   </DialogTrigger>
-                  <TripPaymentModal tripId={data?.id} />
+                  <TripPaymentModal tripId={data?.id} paymentAmount={paymentAmount} />
                 </Dialog>
               </div>
             );

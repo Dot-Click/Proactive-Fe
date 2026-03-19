@@ -42,6 +42,10 @@ const Reviewsave = () => {
             <span className="text-[#221E33] font-bold">Price:</span>
             <span>{values.BestPrice}</span>
           </div>
+          <div className="flex gap-2">
+            <span className="text-[#221E33] font-bold">Status:</span>
+            <span className="capitalize">{values.status}</span>
+          </div>
         </div>
 
         <div className="flex flex-col gap-3">

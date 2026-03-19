@@ -58,6 +58,9 @@ export const updateTripSchema = z.object({
       })
     )
     .optional(),
+  applicationType: z.string().optional(),
+  depositAmount: z.string().optional(),
+  status: z.enum(["active", "coming soon", "pending", "completed"]).optional(),
 });
 
 export type UpdateTripFormType = z.infer<typeof updateTripSchema>;

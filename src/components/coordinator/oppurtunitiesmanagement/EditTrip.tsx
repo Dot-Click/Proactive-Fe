@@ -73,6 +73,9 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       commonFundCount: undefined,
       thingsToKnow: [],
       coordinators: [],
+      applicationType: "video",
+      depositAmount: "",
+      status: "active",
     },
   });
 
@@ -238,6 +241,9 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       commonFundDescription: trip.commonFundDescription ?? "",
       commonFundCount: trip.commonFundCount ?? undefined,
       thingsToKnow: Array.isArray(trip.thingsToKnow) ? trip.thingsToKnow : [],
+      applicationType: trip.applicationType ?? "video",
+      depositAmount: trip.depositAmount ?? "",
+      status: trip.status ?? "active",
       coordinators: Array.isArray(trip.coordinators)
         ? trip.coordinators.map((c: any) => typeof c === 'string' ? c : (c.id || c._id || c.userId || ""))
         : [coordinatorId || ""].filter(Boolean),
@@ -267,6 +273,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         "startDate",
         "endDate",
         "duration",
+        "status",
       ]);
     }
 
@@ -417,6 +424,9 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         commonFundDescription: data.commonFundDescription,
         commonFundCount: data.commonFundCount,
         thingsToKnow: data.thingsToKnow,
+        applicationType: data.applicationType || "video",
+        depositAmount: data.depositAmount || "",
+        status: data.status || "active",
         // Days itinerary data
         daysItinerary: daysItinerary,
       };

@@ -5,6 +5,8 @@ import { useFormContext } from "react-hook-form";
 import gallery from "@/assets/sidebaricon/gallery.png"
 import { Input } from "@/components/ui/input";
 import type { TripFormType } from "./tripschema";
+import { UsegetCategory } from "@/hooks/getCategoryhook";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const GALLERY_SLOTS = 8;
 
@@ -26,6 +28,19 @@ const Mediaprice = () => {
   const videoPreviewRef = useRef<string>("");
   const promotionalVideoValue = watch("PromotionalVideo");
   const galleryImagesValue = watch("GalleryImages");
+  
+  const selectedCategoryId = watch("categoryId");
+  const { data } = UsegetCategory();
+  
+  const isWildTripsCategory = selectedCategoryId && data?.categories
+    ? data.categories.some(
+      (cat: any) =>
+        cat.id === selectedCategoryId &&
+        cat.name.toLowerCase().includes("wild trip")
+    )
+    : false;
+
+  const applicationType = watch("applicationType");
 
   const handleUploadVideo = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -277,6 +292,74 @@ const Mediaprice = () => {
           </FormItem>
         )}
       />
+
+      {isWildTripsCategory && (
+        <div className="mt-8 bg-[#FAFAFE] border border-[#EFEFEF] rounded-[10px] p-6">
+          <h3 className="text-[#242E2F] font-bold text-[18px] mb-4">Wild Trip Application Settings</h3>
+          
+          <FormField
+            control={control}
+            name="applicationType"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <FormLabel className="text-[#242E2F] font-semibold">
+                  How should users apply for this Wild Trip?
+                </FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex flex-col space-y-1"
+                  >
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="video" />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">
+                        Video Selection (User uploads a video)
+                      </FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0 text-sm">
+                      <FormControl>
+                        <RadioGroupItem value="payment" />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">
+                        Direct Payment (User pays deposit immediately)
+                      </FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {applicationType === "payment" && (
+            <FormField
+              control={control}
+              name="depositAmount"
+              render={({ field }) => (
+                <FormItem className="mt-6">
+                  <FormLabel className="text-[#242E2F] font-semibold">
+                    Deposit Amount
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        placeholder="e.g. 150"
+                        {...field}
+                        className="bg-white border border-[#EFEFEF] px-4 py-6 placeholder:text-gray-400 w-auto"
+                      />
+                      <span className="text-[#242E2F] font-semibold">€ initial deposit</span>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+        </div>
+      )}
     </div>
   )
 }

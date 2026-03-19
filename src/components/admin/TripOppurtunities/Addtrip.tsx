@@ -64,6 +64,9 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       commonFundDescription: "",
       commonFundCount: undefined,
       thingsToKnow: [],
+      applicationType: "video",
+      depositAmount: "",
+      status: "active",
     },
   });
   const steps = [
@@ -92,6 +95,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         "startDate",
         "endDate",
         "duration",
+        "status",
       ]);
     }
 
@@ -257,40 +261,58 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         console.warn("failed to parse customNotIncludedItems from localStorage", e);
       }
 
+      // map to store files for multi-part upload
+      const includedIconFiles: File[] = [];
+      const notIncludedIconFiles: File[] = [];
+
       // Transform included IDs to objects with title, description, and img
-      const includedItems = (data.included ?? []).map((id: string) => {
-        const lookup = INCLUDED_LOOKUP[id] || customIncludedMap[id];
-        if (lookup) {
-          return {
-            title: lookup.title,
-            description: lookup.description,
-            img: lookup.img, // Image path will be handled by backend or can be set if needed
+      const includedItems = (data.included ?? []).map((item: any) => {
+        let transformedItem;
+        if (typeof item === "string") {
+          const lookup = INCLUDED_LOOKUP[item] || customIncludedMap[item];
+          if (lookup) {
+            transformedItem = { title: lookup.title, description: lookup.description, img: lookup.img };
+          } else {
+            transformedItem = { title: String(item), description: "", img: "" };
+          }
+        } else if (item && typeof item === "object") {
+          transformedItem = {
+            title: String(item.title || ""),
+            description: String(item.description || item.desc || ""),
+            img: String(item.icon || item.img || ""),
           };
+          if (item.iconFile instanceof File) {
+            includedIconFiles.push(item.iconFile);
+          }
+        } else {
+          transformedItem = { title: "", description: "", img: "" };
         }
-        // Fallback if ID not found in lookup
-        return {
-          title: id,
-          description: "",
-          img: "",
-        };
+        return transformedItem;
       });
 
       // Transform notIncluded IDs to objects with title, description, and img
-      const notIncludedItems = (data.notIncluded ?? []).map((id: string) => {
-        const lookup = NOT_INCLUDED_LOOKUP[id] || customNotIncludedMap[id];
-        if (lookup) {
-          return {
-            title: lookup.title,
-            description: lookup.description,
-            img: lookup.img, // Image path will be handled by backend or can be set if needed
+      const notIncludedItems = (data.notIncluded ?? []).map((item: any) => {
+        let transformedItem;
+        if (typeof item === "string") {
+          const lookup = NOT_INCLUDED_LOOKUP[item] || customNotIncludedMap[item];
+          if (lookup) {
+            transformedItem = { title: lookup.title, description: lookup.description, img: lookup.img };
+          } else {
+            transformedItem = { title: String(item), description: "", img: "" };
+          }
+        } else if (item && typeof item === "object") {
+          transformedItem = {
+            title: String(item.title || ""),
+            description: String(item.description || item.desc || ""),
+            img: String(item.icon || item.img || ""),
           };
+          if (item.iconFile instanceof File) {
+            notIncludedIconFiles.push(item.iconFile);
+          }
+        } else {
+          transformedItem = { title: "", description: "", img: "" };
         }
-        // Fallback if ID not found in lookup
-        return {
-          title: id,
-          description: "",
-          img: "",
-        };
+        return transformedItem;
       });
 
       // Send all trip fields as one JSON string so backend gets real arrays (fixes "expected array, received string").
@@ -328,6 +350,9 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         commonFundDescription: data.commonFundDescription || "",
         commonFundCount: data.commonFundCount || undefined,
         thingsToKnow: data.thingsToKnow || [],
+        applicationType: data.applicationType || "video",
+        depositAmount: data.depositAmount || "",
+        status: data.status || "active",
         // Days itinerary data
         daysItinerary: daysItinerary,
       };
@@ -373,6 +398,14 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
             formData.append("day_image_indices", index.toString());
           }
         });
+      }
+
+      // Append included/notIncluded icon files
+      if (includedIconFiles.length > 0) {
+        includedIconFiles.forEach((file) => formData.append("included_icons", file));
+      }
+      if (notIncludedIconFiles.length > 0) {
+        notIncludedIconFiles.forEach((file) => formData.append("not_included_icons", file));
       }
 
       console.log("🚀 Calling API mutation...");

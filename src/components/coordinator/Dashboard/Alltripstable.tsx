@@ -57,6 +57,7 @@ type User = {
   category: string;
   startDate: string;
   location: string;
+  status: string;
 };
 
 const userData: ColumnDef<User>[] = [
@@ -106,6 +107,22 @@ const userData: ColumnDef<User>[] = [
         {/* <span className="text-[#666373] text-[12px]">8/16 joined</span> */}
       </div>
     ),
+  },
+  {
+    accessorKey: "status",
+    header: () => <div className="font-semibold text-center">Status</div>,
+    cell: ({ row }) => {
+      const isComingSoon = row.original.status === 'coming soon';
+      return (
+        <div className="flex justify-center w-full">
+          <span
+            className={`${isComingSoon ? 'bg-[#FD8B3A]/10 text-[#FD8B3A] border-[#FD8B3A]/20' : 'bg-[#0DAC87]/10 text-[#0DAC87] border-[#0DAC87]/20'} border px-4 py-1.5 rounded-full text-xs font-bold capitalize whitespace-nowrap`}
+          >
+            {row.original.status}
+          </span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "actions",
@@ -326,22 +343,6 @@ const TripDetailsModal = ({
                 <p className="text-sm font-semibold text-[#666373]">Status</p>
                 <div className="text-center bg-[#FD8B3A] text-white rounded-full py-2 font-semibold text-sm w-fit px-4 capitalize">
                   {tripDetails.status || "N/A"}
-                </div>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-[#666373]">
-                  Approval Status
-                </p>
-                <div
-                  className={`text-center rounded-full py-2 font-semibold text-sm w-fit px-4 capitalize ${
-                    tripDetails.approvalStatus === "approved"
-                      ? "bg-green-500 text-white"
-                      : tripDetails.approvalStatus === "rejected"
-                        ? "bg-red-500 text-white"
-                        : "bg-yellow-500 text-white"
-                  }`}
-                >
-                  {tripDetails.approvalStatus || "N/A"}
                 </div>
               </div>
             </div>

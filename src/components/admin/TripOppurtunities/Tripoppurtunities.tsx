@@ -20,7 +20,6 @@ type trip = {
   category: string;
   startDate: string;
   endDate: string;
-  approvalStatus: string;
   status: string;
   coverImage: string;
   description: string
@@ -143,14 +142,14 @@ const Tripoppurtunities = () => {
         </div>
       ),
       cell: ({ row }) => {
+        const isComingSoon = row.original.status === 'coming soon';
         return (
           <div className="text-center">
-            <Button
-              className={`${row.original.status === 'Pending' ? 'bg-[#CE5600]/10 text-[#CE5600] border border-[#CE5600] hover:bg-[#CE5600]/20 px-6 py-4' : 'bg-[#35FF62]/10 text-[#077B21] border border-[#077B21] hover:bg-[#35FF62]/20 px-10 py-4'} text-center cursor-pointer rounded-full
-          font-semibold`}
+            <span
+              className={`${isComingSoon ? 'bg-[#FD8B3A]/10 text-[#FD8B3A] border-[#FD8B3A]/20' : 'bg-[#0DAC87]/10 text-[#0DAC87] border-[#0DAC87]/20'} border px-4 py-1 rounded-full text-xs font-bold capitalize whitespace-nowrap`}
             >
               {row.original.status}
-            </Button>
+            </span>
           </div>
         )
       }
@@ -165,25 +164,7 @@ const Tripoppurtunities = () => {
         </div>
       ),
       cell: ({ row }) => {
-        const { mutateAsync } = Useupdatetripstatus();
-        const { mutateAsync: mutateAsync2 } = UseupdateRejectedtripStatus();
         const { mutateAsync: deleteTrip } = UseDeleteTrip();
-
-        const HandleApproveTrip = async (id: string) => {
-          try {
-            await mutateAsync({ id });
-          } catch (error) {
-            toast.error('Failed to Approve Trip')
-          }
-        }
-
-        const HandleRejectTrip = async (id: string) => {
-          try {
-            await mutateAsync2({ id });
-          } catch (error) {
-            toast.error('Failed to Reject Trip')
-          }
-        }
 
         const HandleDeleteTrip = async (id: string) => {
           if (window.confirm('Are you sure you want to delete this trip? This action cannot be undone.')) {
@@ -204,8 +185,6 @@ const Tripoppurtunities = () => {
             >
               View
             </Button>
-            <Button className="cursor-pointer px-7 h-10 rounded-full" onClick={() => HandleApproveTrip(row.original.id)}>{row.original.status === "live" ? "Approved" : "Approve"}</Button>
-            <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] font-bold" onClick={() => HandleRejectTrip(row.original.id)}>{row.original.status === "pending" ? "Rejected" : "Reject"}</Button>
             <Button
               variant="ghost"
               size="sm"

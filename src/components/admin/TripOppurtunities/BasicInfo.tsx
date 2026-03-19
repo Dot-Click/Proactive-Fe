@@ -966,6 +966,34 @@ const BasicInfo = () => {
               }}
             />
 
+            {/* Trip Status */}
+            <FormField
+              control={control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#242E2F] font-semibold">
+                    Trip Status
+                  </FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || "active"}
+                    >
+                      <SelectTrigger className="w-full bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6">
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="coming soon">Coming Soon</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             {/* Trip Title */}
             <FormField
               control={control}
@@ -986,6 +1014,8 @@ const BasicInfo = () => {
                 </FormItem>
               )}
             />
+
+
 
             {/* Days Itinerary Section - Shown only when "Wild Trips" category is selected */}
             {isWildTripsCategory && (
