@@ -1,9 +1,10 @@
-import { useAdminGoogleReviews } from "@/hooks/adminGoogleReviewHook";
+import { useAdminGoogleReviews, useGoogleReviewStats } from "@/hooks/adminGoogleReviewHook";
 import { Loader2, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const ReviewsSection = () => {
     const { data: reviews, isLoading, isError } = useAdminGoogleReviews();
+    const { data: stats } = useGoogleReviewStats();
 
     if (isLoading) {
         return (
@@ -32,7 +33,7 @@ const ReviewsSection = () => {
                             <Star key={i} size={18} fill="currentColor" />
                         ))}
                     </div>
-                    <span className="text-gray-600 font-medium">Over 500+ Happy Adventurers</span>
+                    <span className="text-gray-600 font-medium">Over {stats?.totalReviews || 92}+ Happy Adventurers</span>
                 </div>
             </div>
 
@@ -69,7 +70,7 @@ const ReviewsSection = () => {
                     rel="noopener noreferrer"
                     className="text-[#108700] font-bold text-sm hover:underline flex items-center gap-2 justify-center lg:justify-end"
                 >
-                    View all 150+ reviews on Google <Star size={14} fill="currentColor" />
+                    View all {stats?.totalReviews || 92}+ reviews on Google <Star size={14} fill="currentColor" />
                 </a>
             </div>
         </div>

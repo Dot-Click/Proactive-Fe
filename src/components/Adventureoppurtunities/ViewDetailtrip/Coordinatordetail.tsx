@@ -58,9 +58,6 @@ const Coordinatordetail = ({ trip }: CoordinatordetailProps) => {
                     <p className="text-[#646464] text-base leading-relaxed font-quicksand">
                         Nuestros coordinadores son elegidos porque son personas como tú: viajeros apasionados, capaces de compartir la experiencia de forma auténtica y con la preparación necesaria para que vivas tu viaje al máximo.
                     </p>
-                    <button className="px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-quicksand">
-                        Descubre más sobre nuestros coordinadores
-                    </button>
                 </div>
 
                 {/* Overlapping Avatars with Hover-Gif and Modal */}

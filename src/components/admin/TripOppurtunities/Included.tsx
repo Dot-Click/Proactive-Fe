@@ -75,7 +75,7 @@ const SelectCard = ({
   desc,
   onIconChange,
   onDescChange,
-  isCustom,
+  // isCustom,
 }: {
   selected: boolean;
   onClick: () => void;

@@ -10,6 +10,7 @@ import { ChevronRight, Home, Share2, Zap, Wallet, Clock } from "lucide-react";
 import { UsegetMyApplications } from "@/hooks/UsegetMyApplicationshook";
 import { UsegetPayment } from "@/hooks/getPaymenthook";
 import TripPaymentModal from "@/components/payment/TripPaymentModal";
+import { useGoogleReviewStats } from "@/hooks/adminGoogleReviewHook";
 
 type MasonryLayoutProps = {
   trip: any;
@@ -22,6 +23,7 @@ type MasonryLayoutProps = {
 const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-oppurtunities", backLabel: _backLabel = "Back", showApplyButton = true, headerAction: _headerAction }: MasonryLayoutProps) => {
   const navigate = useNavigate();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const { data: stats } = useGoogleReviewStats();
 
   // Extract trip data - handle both direct trip object and nested structure
   const data = trip?.trip?.[0] || trip?.trip || trip;
@@ -100,8 +102,8 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
                 ))}
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-[#221E33] text-sm">4.8</span>
-                <span className="text-[#666373] text-sm">(2352 reviews)</span>
+                <span className="font-bold text-[#221E33] text-sm">{stats?.rating || 4.9}</span>
+                <span className="text-[#666373] text-sm">({stats?.totalReviews || 92} reviews)</span>
               </div>
             </div>
           </div>

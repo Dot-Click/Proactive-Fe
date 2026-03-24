@@ -267,3 +267,26 @@ export const useDeleteGoogleReview = () => {
         },
     });
 };
+
+// Public aggregate stats for Google Reviews
+export const useGoogleReviewStats = () => {
+    return useQuery({
+        queryKey: ["google-review-stats"],
+        queryFn: async () => {
+            try {
+                const response = await api.get("/api/user/google-reviews/stats");
+                return {
+                    rating: response.data?.data?.rating || 4.9,
+                    totalReviews: response.data?.data?.totalReviews || 92
+                };
+            } catch (err) {
+                // Fallback to client-provided values if endpoint doesn't exist yet
+                return {
+                    rating: 4.9,
+                    totalReviews: 92
+                };
+            }
+        },
+        staleTime: 1000 * 60 * 60 * 24, // 24 hours as requested
+    });
+};

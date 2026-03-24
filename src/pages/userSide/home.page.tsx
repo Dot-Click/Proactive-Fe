@@ -8,12 +8,12 @@ import Whatwedo from "@/components/userSide/Home/whatwedo/Whatwedo"
 const HomePage = () => {
   return (
     <div>
-      <AdventureOppurtunities/>
-      <Adventuremoments/>
-      <Whatwedo/>
-      <ImpactNumber/>
-      <Follow/>
-      <OurMerchant/>
+      <AdventureOppurtunities />
+      <Adventuremoments />
+      <Whatwedo />
+      <ImpactNumber />
+      <Follow />
+      <OurMerchant />
     </div>
   )
 }

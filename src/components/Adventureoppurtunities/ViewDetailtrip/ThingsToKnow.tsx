@@ -1,4 +1,4 @@
-import { Bus } from "lucide-react";
+import { Info } from "lucide-react";
 import { useState } from "react";
 
 interface InfoItemProps {
@@ -66,8 +66,21 @@ const ThingsToKnow = ({ trip: _trip }: { trip?: any }) => {
 
     const visibleItems = showAll ? items : items.slice(0, 2);
 
+    const toggleShow = () => {
+        if (showAll) {
+            // Scroll back to top of section when closing
+            const element = document.getElementById('things-to-know-section');
+            if (element) {
+                const yOffset = -100; // Account for sticky header
+                const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+        }
+        setShowAll(!showAll);
+    };
+
     return (
-        <div id="things-to-know-section" className="border-t border-[#ECECF1] pt-12 mt-16 pb-12">
+        <div id="things-to-know-section" className="border-t border-[#ECECF1] pt-12 mt-16 pb-12 transition-all duration-500">
             <h3 className="text-[#221E33] font-extrabold text-3xl mb-4 font-quicksand tracking-tight">
                 Cosas que saber
             </h3>
@@ -75,11 +88,11 @@ const ThingsToKnow = ({ trip: _trip }: { trip?: any }) => {
                 Descubre más sobre alojamientos, medios de transporte e información extra útil para el viaje.
             </p>
 
-            <div className="space-y-10 max-w-4xl">
+            <div className={`space-y-10 max-w-4xl transition-all duration-500`}>
                 {visibleItems.map((item, idx) => (
                     <InfoItem
                         key={idx}
-                        icon={<Bus size={24} />}
+                        icon={<Info size={24} />}
                         title={item.title}
                         description={item.description}
                     />
@@ -87,19 +100,15 @@ const ThingsToKnow = ({ trip: _trip }: { trip?: any }) => {
             </div>
 
             {items.length > 2 && (
-                <button 
-                    type="button"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        if (showAll) {
-                            document.getElementById('things-to-know-section')?.scrollIntoView({ behavior: 'smooth' });
-                        }
-                        setShowAll(!showAll);
-                    }}
-                    className="mt-12 px-6 py-2.5 border border-[#D1D5DB] rounded-lg text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm font-quicksand"
-                >
-                    {showAll ? "Mostrar menos" : `Mostrar todos (${items.length})`}
-                </button>
+                <div className="mt-12">
+                    <button 
+                        type="button"
+                        onClick={toggleShow}
+                        className="px-8 py-3 border border-[#D1D5DB] rounded-full text-[#221E33] font-bold text-sm hover:bg-gray-50 transition-all bg-white shadow-sm font-quicksand active:scale-95 cursor-pointer"
+                    >
+                        {showAll ? "Mostrar menos" : `Mostrar todo (${items.length})`}
+                    </button>
+                </div>
             )}
         </div>
     );

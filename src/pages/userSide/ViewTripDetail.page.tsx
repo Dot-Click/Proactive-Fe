@@ -3,7 +3,8 @@ import Daybyday from "@/components/Adventureoppurtunities/ViewDetailtrip/Daybyda
 import Includeditem from "@/components/Adventureoppurtunities/ViewDetailtrip/Includeditem";
 // import Locationmeetingpoint from "@/components/Adventureoppurtunities/ViewDetailtrip/Locationmeetingpoint";
 import MasonryLayout from "@/components/Adventureoppurtunities/ViewDetailtrip/MasonryLayout";
-import ParticipantsCards from "@/components/Adventureoppurtunities/ViewDetailtrip/ParticipantsCards";
+// import ParticipantsCards from "@/components/Adventureoppurtunities/ViewDetailtrip/ParticipantsCards";
+import OurMerchant from "@/components/userSide/Home/Merchant/OurMerchant"
 // import SurfaceCamp from "@/components/Adventureoppurtunities/ViewDetailtrip/SurfaceCamp";
 import Tripmood from "@/components/Adventureoppurtunities/ViewDetailtrip/Tripmood";
 import VideoSection from "@/components/Adventureoppurtunities/ViewDetailtrip/VideoSection";
@@ -99,7 +100,8 @@ const ViewTripDetailPage = () => {
             <ReviewsSection />
             <Faqs />
             <ConfirmedParticipants trip={trip} />
-            <ParticipantsCards />
+            {/* <ParticipantsCards /> */}
+            <OurMerchant />
           </div>
 
           {/* Sidebar Column (33%) */}
