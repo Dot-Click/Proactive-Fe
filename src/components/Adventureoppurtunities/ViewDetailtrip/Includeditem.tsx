@@ -1,56 +1,77 @@
 
-import { CheckCircle2, XCircle, ChevronDown, ChevronUp, PackageCheck, PackageX, Info } from "lucide-react";
-import { useState } from "react";
+import { PackageCheck, PackageX, Info } from "lucide-react";
+import included1 from "../../../assets/included1.png";
+import included2 from "../../../assets/included2.png";
+import included3 from "../../../assets/included3.png";
+import included4 from "../../../assets/included4.png";
+import included5 from "../../../assets/included5.png";
 
-const INCLUDED_LOOKUP: Record<string, { title: string; description: string; color: string }> = {
-    camp: { title: "Accommodation", description: "Boutique stays with cozy shared spaces.", color: "bg-[#E6F7F3] text-[#0DAC87]" },
-    breakfast: { title: "Meals Provided", description: "Daily fresh and healthy breakfasts included.", color: "bg-[#FFF9E6] text-[#FFB800]" },
-    transfer: { title: "Transfers", description: "Arrival & departure transfers for a smooth start.", color: "bg-[#E6F0FF] text-[#0066FF]" },
-    coordinator: { title: "Guide Support", description: "Professional English-speaking coordinator.", color: "bg-[#F3E6FF] text-[#9900FF]" },
-    tour: { title: "Guided Experiences", description: "Skip-the-line entries and local tours.", color: "bg-[#FFE6E6] text-[#FF0000]" },
+const getImageUrl = (img: string | null) => {
+    if (!img) return null;
+    if (typeof img !== "string") return null;
+    if (img.trim() === "") return null;
+
+    // If it's a full URL, Base64 data, or a local Vite asset path
+    if (img.startsWith("http") || img.startsWith("data:") || img.startsWith("/") || img.startsWith("./") || img.startsWith("src/")) {
+        return img;
+    }
+
+    // Trim potential duplicate uploads/ prefix
+    const cleanPath = img.replace(/^uploads\//, "");
+
+    // Assume it's a relative filename from the backend uploads folder
+    const apiBase = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    return `${apiBase}/uploads/${cleanPath}`;
 };
 
-const NOT_INCLUDED_LOOKUP: Record<string, { title: string; description: string }> = {
-    flight: { title: "International Flights", description: "Flights to/from the destination not covered." },
-    insurance: { title: "Travel Insurance", description: "Personal insurance must be arranged separately." },
-    shopping: { title: "Personal Expenses", description: "Personal purchases and souvenirs." },
+const INCLUDED_LOOKUP: Record<string, { title: string; description: string; color: string; icon: string }> = {
+    camp: { title: "Accommodation", description: "Boutique stays with cozy shared spaces.", color: "text-[#0DAC87]", icon: included1 },
+    accommodation: { title: "Accommodation", description: "Boutique stays with cozy shared spaces.", color: "text-[#0DAC87]", icon: included1 },
+    breakfast: { title: "Daily Breakfasts", description: "Fresh and healthy breakfasts included.", color: "text-[#FFB800]", icon: included2 },
+    "daily breakfasts": { title: "Daily Breakfasts", description: "Fresh and healthy breakfasts included.", color: "text-[#FFB800]", icon: included2 },
+    transfer: { title: "Transfers", description: "Arrival & departure transfers for a smooth start.", color: "text-[#0066FF]", icon: included3 },
+    coordinator: { title: "Guide Support", description: "Professional English-speaking coordinator.", color: "text-[#9900FF]", icon: included4 },
+    tour: { title: "Guided Experiences", description: "Skip-the-line entries and local tours.", color: "text-[#FF0000]", icon: included5 },
+};
+
+const NOT_INCLUDED_LOOKUP: Record<string, { title: string; description: string; icon: string }> = {
+    flight: { title: "International Flights", description: "Flights to/from the destination not covered.", icon: included1 },
+    insurance: { title: "Travel Insurance", description: "Personal insurance must be arranged separately.", icon: included2 },
+    shopping: { title: "Personal Expenses", description: "Personal purchases and souvenirs.", icon: included3 },
 };
 
 function normalizeItems(raw: any[] | null | undefined, lookup: any) {
     if (!raw || !Array.isArray(raw)) return [];
     return raw.map((item: any) => {
         if (item && typeof item === "object") {
-            const id = item.id ?? item.title;
-            const fromLookup = typeof id === "string" ? lookup[id.toLowerCase()] : undefined;
-            
-            let title = item.title ?? fromLookup?.title ?? String(id);
-            let description = item.description ?? item.desc ?? fromLookup?.description ?? "";
-            let color = item.color ?? fromLookup?.color ?? "bg-gray-100 text-gray-500";
+            const id = (item.id || item.title || "").toString().toLowerCase().trim();
+            const fromLookup = lookup[id];
 
-            if (description.toLowerCase().startsWith(title.toLowerCase())) {
+            let title = item.title ?? fromLookup?.title ?? String(id || "");
+            let description = item.description ?? item.desc ?? fromLookup?.description ?? "";
+
+            // Collect all possible image properties from backend payload or local state
+            let img = item.img ?? item.icon ?? item.image ?? item.iconFile ?? item.iconPreview ?? fromLookup?.icon ?? null;
+
+            if (description && title && description.toLowerCase().startsWith(title.toLowerCase())) {
                 description = description.substring(title.length).replace(/^[:\s-]+/, "").trim();
             }
 
-            return {
-                title,
-                description,
-                color,
-            };
+            return { title, description, img };
         }
-        const id = typeof item === "string" ? item : String(item);
-        const fromLookup = lookup[id.toLowerCase()];
+
+        const id = (item || "").toString().toLowerCase().trim();
+        const fromLookup = lookup[id];
         return {
             title: fromLookup?.title ?? id,
             description: fromLookup?.description ?? "",
-            color: fromLookup?.color ?? "bg-gray-100 text-gray-500"
+            img: fromLookup?.icon ?? null
         };
     });
 }
 
 const Includeditem = ({ trip }: { trip: any }) => {
     const data = trip?.trip?.[0] || trip?.trip || trip;
-    const [showAllIncluded, setShowAllIncluded] = useState(false);
-    const [showAllExcluded, setShowAllExcluded] = useState(false);
 
     let rawIncluded = data?.included ?? data?.Included ?? [];
     let rawNotIncluded = data?.notIncluded ?? data?.not_included ?? data?.NotIncluded ?? [];
@@ -58,131 +79,96 @@ const Includeditem = ({ trip }: { trip: any }) => {
     const IncludedItem = normalizeItems(rawIncluded, INCLUDED_LOOKUP);
     const NotIncludedItem = normalizeItems(rawNotIncluded, NOT_INCLUDED_LOOKUP);
 
-    const visibleIncluded = showAllIncluded ? IncludedItem : IncludedItem.slice(0, 4);
-    const visibleExcluded = showAllExcluded ? NotIncludedItem : NotIncludedItem.slice(0, 4);
-
     return (
-        <div id="included-section" className="space-y-12 mt-12 bg-white">
-            <div className="flex flex-col lg:flex-row gap-10">
-                {/* Included Column */}
-                <div className="flex-1 bg-[#F9FEFB] rounded-[32px] p-8 border border-[#E8F5EE] shadow-sm transition-all hover:shadow-md">
-                    <div className="flex items-center gap-3 mb-8">
-                        <div className="bg-[#0DAC87] p-2.5 rounded-2xl shadow-lg shadow-[#0DAC87]/20">
-                            <PackageCheck className="text-white" size={24} />
-                        </div>
-                        <div>
-                            <h3 className="text-[#1F1B2C] font-black text-2xl tracking-tight leading-none">Included</h3>
-                            <p className="text-[#0DAC87] text-xs font-bold uppercase tracking-widest mt-1">What's Covered</p>
-                        </div>
-                    </div>
+        <div id="included-section" className="space-y-20 mt-16 bg-white">
 
-                    <div className="grid grid-cols-1 gap-6">
-                        {IncludedItem.length > 0 ? visibleIncluded.map((item, index) => (
-                            <div key={index} className="flex gap-4 group bg-white p-4 rounded-2xl border border-transparent hover:border-[#0DAC87]/20 hover:shadow-sm transition-all">
-                                <div className={`shrink-0 w-12 h-12 flex items-center justify-center rounded-xl ${item.color} shadow-sm group-hover:scale-110 transition-transform`}>
-                                    <CheckCircle2 size={24} className="opacity-90" />
-                                </div>
-                                <div className="space-y-0.5">
-                                    <h4 className="font-bold text-[#221E33] text-lg leading-tight">{item.title}</h4>
-                                    <p className="text-[#666373] text-sm leading-relaxed font-medium">{item.description}</p>
-                                </div>
-                            </div>
-                        )) : (
-                            <div className="flex flex-col items-center justify-center py-10 opacity-30">
-                                <Info size={40} />
-                                <p className="text-sm font-bold mt-2">See description for details</p>
-                            </div>
-                        )}
-                    </div>
-
-                    {IncludedItem.length > 4 && (
-                        <button 
-                            type="button"
-                            onClick={(e) => { 
-                                e.preventDefault(); 
-                                if (showAllIncluded) {
-                                    // Anchoring view when closing so the user sees the list shrink
-                                    document.getElementById('included-section')?.scrollIntoView({ behavior: 'smooth' });
-                                }
-                                setShowAllIncluded(!showAllIncluded); 
-                            }}
-                            className="w-full mt-8 flex items-center justify-center gap-2 py-4 border-2 border-[#E8F5EE] rounded-2xl text-[#1F1B2C] font-bold text-sm hover:bg-white hover:border-[#0DAC87] transition-all cursor-pointer group"
-                        >
-                            {showAllIncluded ? (
-                                <><ChevronUp size={18} className="group-hover:-translate-y-1 transition-transform" /> Show Less</>
-                            ) : (
-                                <><ChevronDown size={18} className="group-hover:translate-y-1 transition-transform" /> Show All {IncludedItem.length} Items</>
-                            )}
-                        </button>
-                    )}
+            {/* Included Section */}
+            <div className="space-y-10">
+                <div className="flex items-center gap-4">
+                    <h3 className="text-[#221E33] font-extrabold text-3xl tracking-tight font-quicksand">What's Included</h3>
                 </div>
 
-                {/* Not Included Column */}
-                <div className="flex-1 bg-[#FFF9F9] rounded-[32px] p-8 border border-[#FBEAEA] shadow-sm transition-all hover:shadow-md">
-                    <div className="flex items-center gap-3 mb-8">
-                        <div className="bg-[#EF4444] p-2.5 rounded-2xl shadow-lg shadow-[#EF4444]/20">
-                            <PackageX className="text-white" size={24} />
-                        </div>
-                        <div>
-                            <h3 className="text-[#1F1B2C] font-black text-2xl tracking-tight leading-none">Excluded</h3>
-                            <p className="text-[#EF4444] text-xs font-bold uppercase tracking-widest mt-1">What's Not Covered</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-6">
-                        {NotIncludedItem.length > 0 ? visibleExcluded.map((item, index) => (
-                            <div key={index} className="flex gap-4 group bg-white p-4 rounded-2xl border border-transparent hover:border-[#EF4444]/20 hover:shadow-sm transition-all">
-                                <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-red-50 text-red-400 shadow-sm group-hover:scale-110 transition-transform">
-                                    <XCircle size={24} className="opacity-90" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {IncludedItem.length > 0 ? IncludedItem.map((item, index) => {
+                        const iconUrl = getImageUrl(item.img);
+                        return (
+                            <div key={index} className="flex flex-col items-center text-center p-10 bg-[#FFFFFF] border border-[#ECECF1] rounded-[24px] transition-all duration-300">
+                                <div className="w-16 h-12 mb-8 flex items-center justify-center">
+                                    {iconUrl ? (
+                                        <img src={iconUrl} alt={item.title} className="max-w-full max-h-full object-contain" />
+                                    ) : (
+                                        <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center">
+                                            <PackageCheck className="text-gray-300" size={24} />
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="space-y-0.5">
-                                    <h4 className="font-bold text-[#221E33] text-lg leading-tight">{item.title}</h4>
-                                    <p className="text-[#666373] text-sm leading-relaxed font-medium">{item.description}</p>
-                                </div>
+                                <h4 className="font-bold text-[#221E33] text-[18px] mb-3 font-quicksand">
+                                    {item.title}
+                                </h4>
+                                <p className="text-[#646464] text-[13px] leading-relaxed font-quicksand overflow-hidden line-clamp-2">
+                                    {item.description}
+                                </p>
                             </div>
-                        )) : (
-                            <div className="flex flex-col items-center justify-center py-10 text-[#0DAC87] opacity-60">
-                                <div className="w-16 h-16 bg-[#E6F7F3] rounded-full flex items-center justify-center mb-4">
-                                    <CheckCircle2 size={32} />
-                                </div>
-                                <p className="text-sm font-bold uppercase tracking-widest text-center">Everything is Included!</p>
-                            </div>
-                        )}
-                    </div>
-
-                    {NotIncludedItem.length > 4 && (
-                        <button 
-                            type="button"
-                            onClick={(e) => { 
-                                e.preventDefault(); 
-                                if (showAllExcluded) {
-                                    document.getElementById('included-section')?.scrollIntoView({ behavior: 'smooth' });
-                                }
-                                setShowAllExcluded(!showAllExcluded); 
-                            }}
-                            className="w-full mt-8 flex items-center justify-center gap-2 py-4 border-2 border-[#FBEAEA] rounded-2xl text-[#1F1B2C] font-bold text-sm hover:bg-white hover:border-[#EF4444] transition-all cursor-pointer group"
-                        >
-                            {showAllExcluded ? (
-                                <><ChevronUp size={18} className="group-hover:-translate-y-1 transition-transform" /> Show Less</>
-                            ) : (
-                                <><ChevronDown size={18} className="group-hover:translate-y-1 transition-transform" /> Show All {NotIncludedItem.length} Items</>
-                            )}
-                        </button>
+                        );
+                    }) : (
+                        <p className="text-[#A3A1AC] text-sm italic">Refer to trip description for details.</p>
                     )}
                 </div>
             </div>
-            
-            {/* Information Note */}
-            <div className="bg-[#F8F9FB] rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-4 border border-[#ECECF1]">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
-                    <Info className="text-[#666373]" size={20} />
+
+            {/* Not Included Section */}
+            <div className="space-y-10">
+                <div className="flex items-center gap-4">
+                    <h3 className="text-[#221E33] font-extrabold text-3xl tracking-tight font-quicksand">What's Not Included</h3>
                 </div>
-                <p className="text-[#646464] text-sm font-medium leading-relaxed text-center sm:text-left">
-                    Prices and inclusions are based on group bookings. For custom requirements or special accommodations, please contact our support team.
-                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {NotIncludedItem.length > 0 ? NotIncludedItem.map((item, index) => {
+                        const iconUrl = getImageUrl(item.img);
+                        return (
+                            <div key={index} className="flex flex-col items-center text-center p-10 bg-[#FFFFFF] border border-[#ECECF1] rounded-[24px] transition-all duration-300">
+                                <div className="w-16 h-12 mb-8 flex items-center justify-center">
+                                    {iconUrl ? (
+                                        <img src={iconUrl} alt={item.title} className="max-w-full max-h-full object-contain" />
+                                    ) : (
+                                        <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center">
+                                            <PackageX className="text-gray-300" size={24} />
+                                        </div>
+                                    )}
+                                </div>
+                                <h4 className="font-bold text-[#221E33] text-[18px] mb-3 font-quicksand">
+                                    {item.title}
+                                </h4>
+                                <p className="text-[#646464] text-[13px] leading-relaxed font-quicksand overflow-hidden line-clamp-2">
+                                    {item.description}
+                                </p>
+                            </div>
+                        );
+                    }) : (
+                        <div className="col-span-full py-10 text-center bg-[#F8F9FB] rounded-[24px] border border-dashed border-[#ECECF1]">
+                            <span className="text-sm font-bold uppercase tracking-widest text-[#666373] font-quicksand">Everything is included!</span>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Information Note */}
+            <div className="bg-[#FFFFFF] rounded-[30px] p-10 flex items-start gap-8 border border-[#ECECF1]">
+                <div className="w-14 h-14 bg-[#F8F9FB] rounded-2xl flex items-center justify-center shrink-0 border border-[#ECECF1]">
+                    <Info className="text-[#221E33]" size={28} />
+                </div>
+                <div className="space-y-2">
+                    <h5 className="text-[#221E33] font-bold text-xl font-quicksand tracking-tight">Terms & Conditions</h5>
+                    <p className="text-[#646464] text-[15px] font-medium leading-[1.8] font-quicksand max-w-2xl">
+                        Prices and inclusions are based on group dynamics. For customized requirements or
+                        special accommodations, please message our coordinator team directly before booking.
+                    </p>
+                </div>
             </div>
         </div>
     );
 };
 
 export default Includeditem;
+
+

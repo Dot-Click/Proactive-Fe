@@ -18,6 +18,7 @@ import BookingCard from "@/components/Adventureoppurtunities/ViewDetailtrip/Book
 import CommonFund from "@/components/Adventureoppurtunities/ViewDetailtrip/CommonFund";
 import ThingsToKnow from "@/components/Adventureoppurtunities/ViewDetailtrip/ThingsToKnow";
 import ConfirmedParticipants from "@/components/Adventureoppurtunities/ViewDetailtrip/ConfirmedParticipants";
+import ReviewsSection from "@/components/Adventureoppurtunities/ViewDetailtrip/ReviewsSection";
 
 /**
  * Public trip detail page - accessible without authentication.
@@ -95,6 +96,7 @@ const ViewTripDetailPage = () => {
             <VideoSection trip={trip} />
             <Coordinatordetail trip={trip} />
             <HowItWorks />
+            <ReviewsSection />
             <Faqs />
             <ConfirmedParticipants trip={trip} />
             <ParticipantsCards />

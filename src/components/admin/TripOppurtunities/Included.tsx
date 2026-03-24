@@ -16,7 +16,7 @@ import type { TripFormType } from "./tripschema";
 const INCLUDED_ITEMS = [
   {
     id: "camp",
-    title: "3 Nights Camp Stay",
+    title: "Accommodation",
     desc: "Boutique camp accommodation with cozy shared spaces.",
     icon: included1,
   },
@@ -74,6 +74,7 @@ const SelectCard = ({
   title,
   desc,
   onIconChange,
+  onDescChange,
   isCustom,
 }: {
   selected: boolean;
@@ -82,52 +83,75 @@ const SelectCard = ({
   title: string;
   desc: string;
   onIconChange?: (file: File) => void;
+  onDescChange?: (newDesc: string) => void;
   isCustom?: boolean;
 }) => (
   <div
+    onClick={onClick}
     className={clsx(
-      "relative rounded-[15px] border px-2 py-4 transition-all flex flex-col items-center justify-between min-h-[220px]",
+      "relative rounded-[24px] border-2 transition-all flex flex-col items-center min-h-[280px] overflow-hidden group cursor-pointer",
       selected
-        ? "border-[#108700] ring-2 ring-[#108700]/20 bg-[#F5FFF5]"
-        : "border-[#C1C1C1] bg-white"
+        ? "border-[#108700] bg-[#F5FFF5] shadow-lg scale-[1.02]"
+        : "border-[#ECECF1] bg-white hover:border-[#D1D1D6]"
     )}
   >
-    {/* Clickable area for selection */}
-    <div
-      onClick={onClick}
-      className="absolute inset-0 z-0 cursor-pointer"
-    />
-
+    {/* Active Header Color */}
     {selected && (
-      <span className="absolute top-2 right-2 rounded-full bg-[#108700] p-1 text-white z-10">
-        <Check size={14} />
-      </span>
+      <div className="absolute top-0 left-0 right-0 h-1 bg-[#108700]" />
     )}
 
-    <div className="flex flex-col gap-4 py-4 justify-center items-center text-center relative z-10">
-      {icon && <img src={icon} alt={title} className="w-10 h-8 object-contain" />}
-      <h4 className="font-semibold text-sm px-2">{title}</h4>
-      <span className="text-[#606066] text-[11px] px-2">{desc}</span>
+    {selected && (
+      <div className="absolute top-3 right-3 rounded-full bg-[#108700] p-1.5 text-white z-10 shadow-sm animate-in zoom-in-50 duration-300">
+        <Check size={14} strokeWidth={3} />
+      </div>
+    )}
+
+    <div className="flex flex-col gap-4 pt-8 pb-4 justify-center items-center text-center relative z-10 w-full px-4">
+      <div className="w-16 h-12 flex items-center justify-center mb-1">
+        {icon ? (
+            <img src={icon} alt={title} className="max-w-full max-h-full object-contain" />
+        ) : (
+            <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center opacity-20">
+                <Plus size={24} />
+            </div>
+        )}
+      </div>
+      <h4 className={clsx("font-bold text-sm tracking-tight font-quicksand", selected ? "text-[#108700]" : "text-[#221E33]")}>{title}</h4>
+      
+      {selected ? (
+        <textarea
+          value={desc}
+          onChange={(e) => onDescChange?.(e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+          className="w-full text-[12px] p-3 rounded-xl border border-[#108700]/30 bg-white focus:outline-none focus:ring-2 focus:ring-[#108700]/20 font-quicksand resize-none h-24 text-[#606066] leading-relaxed mb-2"
+          placeholder="Enter item description..."
+        />
+      ) : (
+        <span className="text-[#646464] text-[11px] leading-relaxed font-quicksand px-2 h-14 overflow-hidden line-clamp-3">
+          {desc}
+        </span>
+      )}
     </div>
 
-    {selected && isCustom && (
-      <div className="relative z-20 mt-2">
-        <input
-          type="file"
-          id={`icon-upload-${title.replace(/\s+/g, "-")}`}
-          className="hidden"
-          accept="image/*"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file && onIconChange) onIconChange(file);
-          }}
-        />
-        <label
-          htmlFor={`icon-upload-${title.replace(/\s+/g, "-")}`}
-          className="cursor-pointer bg-white border border-[#108700] text-[#108700] text-[10px] px-3 py-1.5 rounded-full hover:bg-[#108700] hover:text-white transition-colors flex items-center gap-1 font-medium shadow-sm"
-        >
-          <Plus size={10} /> Change Image
-        </label>
+    {selected && (
+      <div className="relative z-20 mt-auto pb-4 w-full flex justify-center gap-2">
+           <input
+            type="file"
+            id={`icon-upload-${title.replace(/\s+/g, "-")}`}
+            className="hidden"
+            accept="image/*"
+            onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file && onIconChange) onIconChange(file);
+            }}
+            />
+            <label
+            htmlFor={`icon-upload-${title.replace(/\s+/g, "-")}`}
+            onClick={(e) => e.stopPropagation()}
+            className="cursor-pointer bg-white/80 backdrop-blur-sm border border-[#108700] text-[#108700] text-[10px] px-4 py-1.5 rounded-full hover:bg-[#108700] hover:text-white transition-all flex items-center gap-1.5 font-bold uppercase tracking-wider shadow-sm"
+            >
+            <Upload size={10} strokeWidth={3} /> Icon
+            </label>
       </div>
     )}
   </div>
@@ -315,104 +339,137 @@ const Included = () => {
             </div>
           </div>
         )}
-
         {
           ShowIncludedItems && (
             <Controller
               name="included"
               control={control}
-              render={({ field, fieldState }) => (
-                <div>
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                    {INCLUDED_ITEMS.map((item) => {
-                      const existing = field.value.find((v: any) =>
-                        (typeof v === "string" ? v : v.id) === item.id
-                      );
-                      const isSelected = !!existing;
-                      const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
+              render={({ field, fieldState }) => {
+                const values = Array.isArray(field.value) ? field.value : [];
+                const hasNone = values.some((v: any) => (typeof v === "string" ? v : v.id) === "none");
+                
+                return (
+                  <div>
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                      {/* None Option */}
+                      <SelectCard
+                        selected={hasNone}
+                        onClick={() => {
+                          if (hasNone) {
+                            field.onChange([]);
+                          } else {
+                            field.onChange([{ id: "none", title: "None", description: "No items included.", icon: "" }]);
+                          }
+                        }}
+                        title="None"
+                        desc="Select this if nothing is included."
+                      />
 
-                      return (
-                        <SelectCard
-                          key={item.id}
-                          selected={isSelected}
-                          onClick={() => {
-                            if (isSelected) {
-                              field.onChange(field.value.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id));
-                            } else {
-                              field.onChange([...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
-                            }
-                          }}
-                          icon={displayIcon}
-                          title={item.title}
-                          desc={item.desc}
-                          onIconChange={(file) => {
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                              const newValue = field.value.map((v: any) => {
-                                if ((typeof v === "string" ? v : v.id) === item.id) {
-                                  return { ...item, description: item.desc, icon: reader.result, iconFile: file };
+                      {INCLUDED_ITEMS.map((item) => {
+                        const existingIdx = values.findIndex((v: any) =>
+                          (typeof v === "string" ? v : v.id) === item.id
+                        );
+                        const isSelected = existingIdx !== -1;
+                        const existing = isSelected ? values[existingIdx] : null;
+                        const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
+                        const displayDesc = (existing && typeof existing === 'object' && existing.description) || (existing && typeof existing === 'object' && existing.desc) || item.desc;
+
+                        return (
+                          <div key={item.id} className={clsx(hasNone && "opacity-40 pointer-events-none")}>
+                            <SelectCard
+                              selected={isSelected}
+                              onClick={() => {
+                                if (isSelected) {
+                                  field.onChange(values.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id));
+                                } else {
+                                  field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
                                 }
-                                return v;
-                              });
-                              field.onChange(newValue);
-                            };
-                            reader.readAsDataURL(file);
-                          }}
-                        />
-                      );
-                    })}
-                    {customIncluded.map((item) => {
-                      const existing = field.value.find((v: any) =>
-                        (v.id === item.id || v.title === item.title)
-                      );
-                      const isSelected = !!existing;
-                      const displayIcon = (existing && existing.icon) || item.icon;
+                              }}
+                              onDescChange={(newDesc) => {
+                                const newValues = [...values];
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: existing } : existing), description: newDesc };
+                                field.onChange(newValues);
+                              }}
+                              icon={displayIcon}
+                              title={item.title}
+                              desc={displayDesc}
+                              onIconChange={(file) => {
+                                const reader = new FileReader();
+                                reader.onload = () => {
+                                  const newValues = values.map((v: any) => {
+                                    if ((typeof v === "string" ? v : v.id) === item.id) {
+                                      return { ...item, description: displayDesc, icon: reader.result, iconFile: file };
+                                    }
+                                    return v;
+                                  });
+                                  field.onChange(newValues);
+                                };
+                                reader.readAsDataURL(file);
+                              }}
+                            />
+                          </div>
+                        );
+                      })}
+                      {customIncluded.map((item) => {
+                        const existingIdx = values.findIndex((v: any) =>
+                          (v.id === item.id || v.title === item.title)
+                        );
+                        const isSelected = existingIdx !== -1;
+                        const existing = isSelected ? values[existingIdx] : null;
+                        const displayIcon = (existing && existing.icon) || item.icon;
+                        const displayDesc = (existing && (existing.description || existing.desc)) || item.desc;
 
-                      return (
-                        <div key={item.id} className="relative group">
-                          <SelectCard
-                            selected={isSelected}
-                            isCustom={true}
-                            onClick={() => {
-                              if (isSelected) {
-                                field.onChange(field.value.filter((v: any) => (v.id !== item.id && v.title !== item.title)));
-                              } else {
-                                field.onChange([...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
-                              }
-                            }}
-                            icon={displayIcon}
-                            title={item.title}
-                            desc={item.desc}
-                            onIconChange={(file) => {
-                              const reader = new FileReader();
-                              reader.onload = () => {
-                                const newValue = field.value.map((v: any) => {
-                                  if (v.id === item.id || v.title === item.title) {
-                                    return { ...v, icon: reader.result, iconFile: file };
-                                  }
-                                  return v;
-                                });
-                                field.onChange(newValue);
-                              };
-                              reader.readAsDataURL(file);
-                            }}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => removeCustomItem(item.id, true)}
-                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors z-30 shadow-md opacity-0 group-hover:opacity-100"
-                          >
-                            <X size={12} />
-                          </button>
-                        </div>
-                      );
-                    })}
+                        return (
+                          <div key={item.id} className={clsx("relative group", hasNone && "opacity-40 pointer-events-none")}>
+                            <SelectCard
+                              selected={isSelected}
+                              isCustom={true}
+                              onClick={() => {
+                                if (isSelected) {
+                                  field.onChange(values.filter((v: any) => (v.id !== item.id && v.title !== item.title)));
+                                } else {
+                                  field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
+                                }
+                              }}
+                              onDescChange={(newDesc) => {
+                                const newValues = [...values];
+                                newValues[existingIdx] = { ...existing, description: newDesc };
+                                field.onChange(newValues);
+                              }}
+                              icon={displayIcon}
+                              title={item.title}
+                              desc={displayDesc}
+                              onIconChange={(file) => {
+                                const reader = new FileReader();
+                                reader.onload = () => {
+                                  const newValues = values.map((v: any) => {
+                                    if (v.id === item.id || v.title === item.title) {
+                                      return { ...v, icon: reader.result, iconFile: file };
+                                    }
+                                    return v;
+                                  });
+                                  field.onChange(newValues);
+                                };
+                                reader.readAsDataURL(file);
+                              }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeCustomItem(item.id, true)}
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors z-30 shadow-md opacity-0 group-hover:opacity-100"
+                            >
+                              <X size={12} />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {fieldState.error && (
+                      <FormMessage className="mt-2">{fieldState.error.message}</FormMessage>
+                    )}
                   </div>
-                  {fieldState.error && (
-                    <FormMessage className="mt-2">{fieldState.error.message}</FormMessage>
-                  )}
-                </div>
-              )}
+                );
+              }}
             />
           )
         }
@@ -511,98 +568,132 @@ const Included = () => {
             <Controller
               name="notIncluded"
               control={control}
-              render={({ field, fieldState }) => (
-                <div>
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                    {NOT_INCLUDED_ITEMS.map((item) => {
-                      const existing = field.value.find((v: any) =>
-                        (typeof v === "string" ? v : v.id) === item.id
-                      );
-                      const isSelected = !!existing;
-                      const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
+              render={({ field, fieldState }) => {
+                const values = Array.isArray(field.value) ? field.value : [];
+                const hasNone = values.some((v: any) => (typeof v === "string" ? v : v.id) === "none");
 
-                      return (
-                        <SelectCard
-                          key={item.id}
-                          selected={isSelected}
-                          onClick={() => {
-                            if (isSelected) {
-                              field.onChange(field.value.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id));
-                            } else {
-                              field.onChange([...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
-                            }
-                          }}
-                          icon={displayIcon}
-                          title={item.title}
-                          desc={item.desc}
-                          onIconChange={(file) => {
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                              const newValue = field.value.map((v: any) => {
-                                if ((typeof v === "string" ? v : v.id) === item.id) {
-                                  return { ...item, description: item.desc, icon: reader.result, iconFile: file };
+                return (
+                  <div>
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                      {/* None Option */}
+                      <SelectCard
+                        selected={hasNone}
+                        onClick={() => {
+                          if (hasNone) {
+                            field.onChange([]);
+                          } else {
+                            field.onChange([{ id: "none", title: "None", description: "No items listed here.", icon: "" }]);
+                          }
+                        }}
+                        title="None"
+                        desc="Select this if no items category is empty."
+                      />
+
+                      {NOT_INCLUDED_ITEMS.map((item) => {
+                        const existingIdx = values.findIndex((v: any) =>
+                          (typeof v === "string" ? v : v.id) === item.id
+                        );
+                        const isSelected = existingIdx !== -1;
+                        const existing = isSelected ? values[existingIdx] : null;
+                        const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
+                        const displayDesc = (existing && (existing.description || existing.desc)) || item.desc;
+
+                        return (
+                          <div key={item.id} className={clsx(hasNone && "opacity-40 pointer-events-none")}>
+                            <SelectCard
+                              selected={isSelected}
+                              onClick={() => {
+                                if (isSelected) {
+                                  field.onChange(values.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id));
+                                } else {
+                                  field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
                                 }
-                                return v;
-                              });
-                              field.onChange(newValue);
-                            };
-                            reader.readAsDataURL(file);
-                          }}
-                        />
-                      );
-                    })}
-                    {customNotIncluded.map((item) => {
-                      const existing = field.value.find((v: any) =>
-                        (v.id === item.id || v.title === item.title)
-                      );
-                      const isSelected = !!existing;
-                      const displayIcon = (existing && existing.icon) || item.icon;
+                              }}
+                              onDescChange={(newDesc) => {
+                                const newValues = [...values];
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: existing } : existing), description: newDesc };
+                                field.onChange(newValues);
+                              }}
+                              icon={displayIcon}
+                              title={item.title}
+                              desc={displayDesc}
+                              onIconChange={(file) => {
+                                const reader = new FileReader();
+                                reader.onload = () => {
+                                  const newValues = values.map((v: any) => {
+                                    if ((typeof v === "string" ? v : v.id) === item.id) {
+                                      return { ...item, description: displayDesc, icon: reader.result, iconFile: file };
+                                    }
+                                    return v;
+                                  });
+                                  field.onChange(newValues);
+                                };
+                                reader.readAsDataURL(file);
+                              }}
+                            />
+                          </div>
+                        );
+                      })}
+                      {customNotIncluded.map((item) => {
+                        const existingIdx = values.findIndex((v: any) =>
+                          (v.id === item.id || v.title === item.title)
+                        );
+                        const isSelected = existingIdx !== -1;
+                        const existing = isSelected ? values[existingIdx] : null;
+                        const displayIcon = (existing && existing.icon) || item.icon;
+                        const displayDesc = (existing && (existing.description || existing.desc)) || item.desc;
 
-                      return (
-                        <div key={item.id} className="relative group">
-                          <SelectCard
-                            selected={isSelected}
-                            isCustom={true}
-                            onClick={() => {
-                              if (isSelected) {
-                                field.onChange(field.value.filter((v: any) => (v.id !== item.id && v.title !== item.title)));
-                              } else {
-                                field.onChange([...field.value, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
-                              }
-                            }}
-                            icon={displayIcon}
-                            title={item.title}
-                            desc={item.desc}
-                            onIconChange={(file) => {
-                              const reader = new FileReader();
-                              reader.onload = () => {
-                                const newValue = field.value.map((v: any) => {
-                                  if (v.id === item.id || v.title === item.title) {
-                                    return { ...v, icon: reader.result, iconFile: file };
-                                  }
-                                  return v;
-                                });
-                                field.onChange(newValue);
-                              };
-                              reader.readAsDataURL(file);
-                            }}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => removeCustomItem(item.id, false)}
-                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors z-30 shadow-md opacity-0 group-hover:opacity-100"
-                          >
-                            <X size={12} />
-                          </button>
-                        </div>
-                      );
-                    })}
+                        return (
+                          <div key={item.id} className={clsx("relative group", hasNone && "opacity-40 pointer-events-none")}>
+                            <SelectCard
+                              selected={isSelected}
+                              isCustom={true}
+                              onClick={() => {
+                                if (isSelected) {
+                                  field.onChange(values.filter((v: any) => (v.id !== item.id && v.title !== item.title)));
+                                } else {
+                                  field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
+                                }
+                              }}
+                              onDescChange={(newDesc) => {
+                                const newValues = [...values];
+                                newValues[existingIdx] = { ...existing, description: newDesc };
+                                field.onChange(newValues);
+                              }}
+                              icon={displayIcon}
+                              title={item.title}
+                              desc={displayDesc}
+                              onIconChange={(file) => {
+                                const reader = new FileReader();
+                                reader.onload = () => {
+                                  const newValues = values.map((v: any) => {
+                                    if (v.id === item.id || v.title === item.title) {
+                                      return { ...v, icon: reader.result, iconFile: file };
+                                    }
+                                    return v;
+                                  });
+                                  field.onChange(newValues);
+                                };
+                                reader.readAsDataURL(file);
+                              }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeCustomItem(item.id, false)}
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors z-30 shadow-md opacity-0 group-hover:opacity-100"
+                            >
+                              <X size={12} />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {fieldState.error && (
+                      <FormMessage className="mt-2">{fieldState.error.message}</FormMessage>
+                    )}
                   </div>
-                  {fieldState.error && (
-                    <FormMessage className="mt-2">{fieldState.error.message}</FormMessage>
-                  )}
-                </div>
-              )}
+                );
+              }}
             />
           )}
       </div>

@@ -66,7 +66,7 @@ const Reviewsave = () => {
           </div>
           <div className="flex gap-2">
             <span className="text-[#221E33] font-bold">Coordinators:</span>
-            <span>1</span>
+            <span>{values.coordinators?.length || 0}</span>
           </div>
           <div className="flex gap-2">
             <span className="text-[#221E33] font-bold">Included Items:</span>

@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Upload, Plus, Trash2 } from "lucide-react";
+import { Upload, Plus, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -723,6 +723,7 @@ const BasicInfo = () => {
     fields: daysFields,
     append: appendDay,
     remove: removeDay,
+    move: moveDay,
   } = useFieldArray<any, any>({
     control,
     name: "daysItinerary",
@@ -901,6 +902,40 @@ const BasicInfo = () => {
       return newPreviews;
     });
     removeDay(index);
+    // Update the 'day' number in each remaining item
+    daysFields.forEach((_, idx) => {
+      setValue(`daysItinerary.${idx}.day`, idx + 1);
+    });
+  };
+
+  // Move a day in itinerary
+  const handleMoveDay = (from: number, to: number) => {
+    if (to < 0 || to >= daysFields.length) return;
+
+    // Update image previews
+    setDayImagePreviews((prev) => {
+      const previewArray: (string | undefined)[] = [];
+      for (let i = 0; i < daysFields.length; i++) {
+        previewArray[i] = prev[i];
+      }
+
+      // Move element in array
+      const [movedItem] = previewArray.splice(from, 1);
+      previewArray.splice(to, 0, movedItem);
+
+      const newPreviews: Record<number, string> = {};
+      previewArray.forEach((img, idx) => {
+        if (img !== undefined) newPreviews[idx] = img;
+      });
+      return newPreviews;
+    });
+
+    moveDay(from, to);
+
+    // Update the 'day' number in each item to match its new index
+    daysFields.forEach((_, idx) => {
+      setValue(`daysItinerary.${idx}.day`, idx + 1);
+    });
   };
 
   return (
@@ -1052,9 +1087,33 @@ const BasicInfo = () => {
                         className="bg-[#FAFAFE] border border-[#EFEFEF] rounded-[10px] p-4"
                       >
                         <div className="flex items-center justify-between mb-4">
-                          <span className="text-[#242E2F] font-semibold text-[14px]">
-                            Day {index + 1}
-                          </span>
+                          <div className="flex items-center gap-3">
+                            <span className="text-[#242E2F] font-semibold text-[14px]">
+                              Day {index + 1}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <Button
+                                type="button"
+                                onClick={() => handleMoveDay(index, index - 1)}
+                                disabled={index === 0}
+                                variant="ghost"
+                                className="h-8 w-8 p-0 text-[#666373] hover:text-[#0DAC87] disabled:opacity-30"
+                                title="Move Up"
+                              >
+                                <ChevronUp size={18} />
+                              </Button>
+                              <Button
+                                type="button"
+                                onClick={() => handleMoveDay(index, index + 1)}
+                                disabled={index === daysFields.length - 1}
+                                variant="ghost"
+                                className="h-8 w-8 p-0 text-[#666373] hover:text-[#0DAC87] disabled:opacity-30"
+                                title="Move Down"
+                              >
+                                <ChevronDown size={18} />
+                              </Button>
+                            </div>
+                          </div>
                           <Button
                             type="button"
                             onClick={() => handleRemoveDay(index)}
@@ -1311,8 +1370,10 @@ const BasicInfo = () => {
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
+                          key={openStart ? "open" : "closed"}
                           mode="single"
                           selected={field.value}
+                          defaultMonth={field.value ? new Date(field.value) : new Date()}
                           onSelect={(date) => {
                             if (!date) return;
                             setStartDate(date);
@@ -1351,8 +1412,16 @@ const BasicInfo = () => {
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
+                          key={openEnd ? "opened" : "closed"}
                           mode="single"
                           selected={field.value}
+                          defaultMonth={
+                            field.value
+                              ? new Date(field.value)
+                              : startDateCal
+                                ? new Date(startDateCal)
+                                : new Date()
+                          }
                           onSelect={(date) => {
                             if (!date) return;
                             setendDate(date);

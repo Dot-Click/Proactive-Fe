@@ -16,6 +16,8 @@ import { UsegetTripbyid } from "@/hooks/gettripbyidhook";
 import { UsegetCategory } from "@/hooks/getCategoryhook";
 import { LoaderIcon } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
+import Faqs from "@/components/Adventureoppurtunities/ViewDetailtrip/Faqs";
+import ReviewsSection from "@/components/Adventureoppurtunities/ViewDetailtrip/ReviewsSection";
 
 
 const ViewTripPage = () => {
@@ -102,6 +104,8 @@ const ViewTripPage = () => {
       <Includeditem trip={trip} />
       <VideoSection trip={trip} />
       <ThingsToKnow trip={trip} />
+      <ReviewsSection />
+      <Faqs />
       <Coordinatordetail trip={trip} />
     </div>
   );
