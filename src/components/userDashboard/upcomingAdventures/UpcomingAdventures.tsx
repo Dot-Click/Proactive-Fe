@@ -198,10 +198,10 @@ const UpcomingAdventures = () => {
                                     <div className="bg-[#C4FFF0] px-3 py-1.5 rounded-lg text-[#156250] text-xs font-bold uppercase tracking-wider">{trip.category}</div>
                                 )}
                                 <div className={`border px-3 py-1.5 rounded-lg font-bold text-xs flex items-center gap-2 uppercase tracking-wider ${isPast
-                                        ? (trip.applicationRejected ? "border-red-100 bg-red-50 text-red-500" : "border-gray-100 bg-gray-50 text-gray-500")
-                                        : (trip.applicationPending ? "border-amber-100 bg-amber-50 text-amber-600"
-                                            : trip.applicationRejected ? "border-red-100 bg-red-50 text-red-500"
-                                                : "border-green-100 bg-green-50 text-green-600")
+                                    ? (trip.applicationRejected ? "border-red-100 bg-red-50 text-red-500" : "border-gray-100 bg-gray-50 text-gray-500")
+                                    : (trip.applicationPending ? "border-amber-100 bg-amber-50 text-amber-600"
+                                        : trip.applicationRejected ? "border-red-100 bg-red-50 text-red-500"
+                                            : "border-green-100 bg-green-50 text-green-600")
                                     }`}>
                                     <div className={`w-1.5 h-1.5 rounded-full ${isPast
                                         ? (trip.applicationRejected ? "bg-red-500" : "bg-gray-400")

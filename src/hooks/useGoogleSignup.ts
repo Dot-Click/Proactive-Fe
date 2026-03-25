@@ -6,7 +6,7 @@ const googleSignup = async () => {
         provider: "google",
         
         options: {
-            redirectTo: `${window.location.origin}/`,
+            redirectTo: `${window.location.origin}/user-dashboard`,
             queryParams: {
                 prompt: "select_account",
                 access_type: "offline",

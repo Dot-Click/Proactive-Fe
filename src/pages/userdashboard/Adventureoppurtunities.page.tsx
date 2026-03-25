@@ -6,7 +6,11 @@ import Upcomingtrips from "@/components/Adventureoppurtunities/Upcomingtrips";
 import Carousel from "@/components/userDashboard/Carousel/Carousel";
 import { useState } from "react";
 
+import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
+
 const AdventureOppurtunitiesPage = () => {
+  const { data: userData } = UsegetCurrentUser();
+  const userName = userData?.data?.user?.FirstName || "User";
   const [view, setView] = useState("list");
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
@@ -16,7 +20,7 @@ const AdventureOppurtunitiesPage = () => {
     <>
       <div className="md:px-16 px-4 overflow-x-hidden">
         <Carousel
-          UserName={"Alex"}
+          UserName={userName}
           subHeading={
             "Discover amazing destinations and join our community of adventurers"
           }

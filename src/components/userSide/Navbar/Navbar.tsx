@@ -23,7 +23,7 @@ import { RiCheckDoubleLine } from "react-icons/ri";
 import { FaCheckDouble } from "react-icons/fa";
 import { UsegetNotifications } from "@/hooks/getNotificationhook";
 import { useMarkAsReadNotification } from "@/hooks/MarkAsReadNotification";
-import { LayoutDashboard, Settings, LogOut, Compass } from "lucide-react";
+import { LayoutDashboard, Settings, LogOut } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
 import NotificationIconAsset from "../../../assets/sidebaricon/notification.png";
 import TripPaymentModal from "@/components/payment/TripPaymentModal";
@@ -40,7 +40,6 @@ const UserSideNavbar = () => {
         ...UserSideDrawerItems,
         ...(userData?.role === "user" ? [
             { label: "My Dashboard", href: "/user-dashboard" },
-            { label: "Adventure Opportunities", href: "/user-dashboard/adventure-oppurtunities" }
         ] : [])
     ];
 
@@ -327,9 +326,6 @@ const UserSideNavbar = () => {
                                     <DropdownMenuContent className="w-56">
                                         <DropdownMenuItem onClick={() => navigate('/user-dashboard')} className="cursor-pointer gap-2">
                                             <LayoutDashboard className="w-4 h-4 text-[#0DAC87]" /> My Dashboard
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => navigate('/user-dashboard/adventure-oppurtunities')} className="cursor-pointer gap-2">
-                                            <Compass className="w-4 h-4 text-[#0DAC87]" /> Adventure Opportunities
                                         </DropdownMenuItem>
                                         <DropdownMenuItem onClick={() => navigate('/user-dashboard/user-settings')} className="cursor-pointer gap-2">
                                             <Settings className="w-4 h-4 text-gray-400" /> Settings

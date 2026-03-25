@@ -5,14 +5,14 @@ import layer from "../../../assets/carouselLayer.png"
 import { Button } from "@/components/ui/button";
 
 interface CarouselProps {
-  UserName: string;
-  subHeading: string;
+    UserName: string;
+    subHeading: string;
 }
 
-const Carousel = ({UserName, subHeading}: CarouselProps) => {
-const location = useLocation();
-const Heading = location.pathname.split("/")[2]?.split("-").join(" ");
-const navigate = useNavigate()
+const Carousel = ({ UserName, subHeading }: CarouselProps) => {
+    const location = useLocation();
+    const Heading = location.pathname.split("/")[2]?.split("-").join(" ");
+    const navigate = useNavigate()
     return (
         <div className="relative w-full h-70 md:min-w-[40px] rounded-[25px] overflow-hidden lg:mt-4 mt-4 mb-4">
 
@@ -26,12 +26,12 @@ const navigate = useNavigate()
 
             <div className="flex justify-between absolute inset-0 lg:px-8 px-4 py-12">
                 <div className="flex flex-col lg:gap-3 gap-2 items-start">
-                <span className="text-[#FFFFFF] font-bold lg:text-xl">Good Morning, {UserName}!</span>
-                <span className="text-[#F7ECBE] font-semibold lg:text-5xl text-md uppercase text-nowrap">{Heading ? Heading : 'Dashboard'}</span>
-                <span className="text-[#E5DFFF] ">{subHeading}</span>
-                    <Button onClick={()=> navigate("/user-dashboard/adventure-oppurtunities")} className="rounded-full px-6 lg:py-7 bg-[#0DAC87] hover:bg-[#0f9b7a] cursor-pointer mt-2">Browse Adventures</Button>
+                    <span className="text-[#FFFFFF] font-bold lg:text-xl">Good Morning, {UserName}!</span>
+                    <span className="text-[#F7ECBE] font-semibold lg:text-5xl text-md uppercase text-nowrap">{Heading ? Heading : 'Dashboard'}</span>
+                    <span className="text-[#E5DFFF] ">{subHeading}</span>
+                    <Button onClick={() => navigate("/user-dashboard/adventure-oppurtunities")} className="rounded-full px-6 lg:py-7 bg-[#0DAC87] hover:bg-[#0f9b7a] cursor-pointer mt-2">Browse Adventures</Button>
                 </div>
-                <img src={layer} alt="layer" className="h-60"/>
+                <img src={layer} alt="layer" className="h-60" />
             </div>
         </div>
     )

@@ -1,6 +1,7 @@
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
+import { useMemo } from "react"
+import { useNavigate } from "react-router-dom"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { AvatarFallback } from "@radix-ui/react-avatar"
 import goldmember from "../../../assets/goldmember.png"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
@@ -9,18 +10,38 @@ import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
 
 const UserProfile = () => {
     const { data: userData } = UsegetCurrentUser();
+    const navigate = useNavigate();
     const user = userData?.data?.user;
+
+    // Calculate profile completeness based on filled fields
+    const completeness = useMemo(() => {
+        if (!user) return 0;
+        const fields = [
+            user.FirstName,
+            user.LastName,
+            user.NickName,
+            user.PhoneNumber,
+            user.dob,
+            user.Gender,
+            user.Address,
+            user.EmergencyContact,
+            user.DNI,
+            user.DietRestrictions
+        ];
+        const filled = fields.filter(val => val && val.toString().trim() !== "").length;
+        return Math.round((filled / fields.length) * 100);
+    }, [user]);
 
     // Format member since date nicely
     const formatMemberSince = (dateString: string | null | undefined): string => {
         if (!dateString) return "Member";
-        
+
         try {
             const date = new Date(dateString);
-            const options: Intl.DateTimeFormatOptions = { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+            const options: Intl.DateTimeFormatOptions = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
             };
             return `Member since ${date.toLocaleDateString('en-US', options)}`;
         } catch (error) {
@@ -33,19 +54,17 @@ const UserProfile = () => {
         const firstName = user?.FirstName || "";
         const lastName = user?.LastName || "";
         const fullName = `${firstName} ${lastName}`.trim();
-        
+
         // Fallback to nickname only if no first/last name available
         if (!fullName && user?.NickName) {
             return user.NickName;
         }
-        
+
         return fullName || "User";
     };
 
     // Get avatar URL - prioritize Google avatar, then regular avatar, then fallback
     const getAvatarUrl = (): string | undefined => {
-        // Google login sets avatar in user.avatar, so it should already be there
-        // But we can also check if provider is google and use the avatar directly
         if (user?.avatar) {
             return user.avatar;
         }
@@ -56,7 +75,7 @@ const UserProfile = () => {
     const getAvatarInitials = (): string => {
         const fullName = getFullName();
         if (!fullName || fullName === "User") return "U";
-        
+
         const parts = fullName.trim().split(" ");
         if (parts.length >= 2) {
             return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
@@ -76,7 +95,7 @@ const UserProfile = () => {
                     </Avatar>
 
                     <div className="flex flex-col justify-center items-center mt-4">
-                        <span className="text-[#141E20] font-semibold text-lg">{getFullName()}</span>
+                        <span className="text-[#141E20] font-semibold text-lg text-center">{getFullName()}</span>
                         <span className="text-[#332A2A] text-[12px]">{user?.email}</span>
                         {user?.createdAt && (
                             <span className="text-[#666373] text-[11px] mt-1">
@@ -86,9 +105,11 @@ const UserProfile = () => {
                     </div>
 
                     <div className="mt-4">
-                        <Badge className="flex gap-2 py-2 px-4 bg-[#FFEEC2] border border-[#D79511]">
-                            <img src={goldmember} alt="goldmember" className="h-6" />
-                            <span className="text-[#D79511] font-bold">GOLD MEMBER</span>
+                        <Badge className={`flex gap-2 py-2 px-4 rounded-full ${user?.membershipAvailable ? 'bg-[#FFEEC2] border-[#D79511]' : 'bg-[#EFEFEF] border-[#D4D4D4]'}`}>
+                            {user?.membershipAvailable && <img src={goldmember} alt="goldmember" className="h-6" />}
+                            <span className={user?.membershipAvailable ? 'text-[#D79511] font-bold' : 'text-[#666373] font-bold'}>
+                                {user?.membershipAvailable ? 'PRO MEMBER' : 'FREE MEMBER'}
+                            </span>
                         </Badge>
                     </div>
                 </div>
@@ -97,14 +118,20 @@ const UserProfile = () => {
                 <div className="px-4 py-6">
                     <div className="flex justify-between mb-1">
                         <span className="text-[#332A2A] font-semibold">Profile Completeness</span>
-                        <span className="text-[#332A2A] font-semibold">85%</span>
+                        <span className="text-[#332A2A] font-semibold">{completeness}%</span>
                     </div>
-                    <Progress value={80} className="[&>div]:bg-[#030213]" />
+                    <Progress value={completeness} className="[&>div]:bg-[#030213]" />
                     <div className="flex flex-col mt-3 gap-3">
-                        <span className="text-[#4A5565] text-[12px] font-medium">Add emergency contact and preferences to reach 100%</span>
-                        <Button className="text-[#221E33] font-medium rounded-full py-6 bg-linear-to-b from-[#FFFFFF] to-[#F2F2F2] 
-                        border border-[#FFFFFF] cursor-pointer hover:bg-[#E6E6E6]
-                        ">Complete Profile</Button>
+                        <span className="text-[#4A5565] text-[12px] font-medium">
+                            {completeness < 100 ? "Add emergency contact and preferences to reach 100%" : "Profile fully complete! Keep it updated."}
+                        </span>
+                        <Button
+                            onClick={() => navigate("/user-dashboard/user-settings")}
+                            className="text-[#221E33] font-medium rounded-full py-6 bg-linear-to-b from-[#FFFFFF] to-[#F2F2F2] 
+                            border border-[#D4D4D4] cursor-pointer hover:bg-[#E6E6E6] transform transition-all hover:scale-[1.02]
+                        ">
+                            {completeness < 100 ? "Complete Profile" : "Edit Profile"}
+                        </Button>
                     </div>
                 </div>
             </div>

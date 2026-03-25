@@ -26,9 +26,9 @@ const Achievement = () =>
     // Define badge configuration mapping with descriptions
     const badgeConfig = [
         {
-            name: "Mountain Climber",
+            name: "WW Master",
             image: ShadowMountain,
-            imageAlt: "ShadowMountain",
+            imageAlt: "Wild Weekend Master",
             imageClass: "w-16 h-20",
             borderColor: "#0DAC87",
             bgColor: "#0DAC87/5",
@@ -36,17 +36,17 @@ const Achievement = () =>
             containerClass: "py-2 px-3",
             contentClass: "-mt-[16px]",
             textClass: "mt-2",
-            description: "Complete mountain climbing adventures and reach new heights! This achievement is unlocked by participating in mountain-related trips and outdoor climbing activities.",
+            description: "Assist in 5 Wild Weekends (WW). You're becoming a true master of weekend exploration!",
             howToGet: [
-                "Join mountain climbing trips",
-                "Complete at least 3 mountain adventures",
-                "Reach elevation milestones during trips"
+                "Join and assist in 5 Wild Weekend trips",
+                "Successfully complete weekend challenges",
+                "Maintain a high rating for weekend coordination"
             ]
         },
         {
-            name: "Culture Explorer",
+            name: "WT Master",
             image: AchievementExplorer,
-            imageAlt: "AchievementExplorer",
+            imageAlt: "Wild Trip Master",
             imageClass: "w-16 h-16",
             borderColor: "#DDAC24",
             bgColor: "#DDAC24/5",
@@ -54,17 +54,17 @@ const Achievement = () =>
             containerClass: "py-4 px-4",
             contentClass: "-mt-[26px]",
             textClass: "mt-5",
-            description: "Discover new cultures and explore diverse destinations! This achievement rewards your curiosity and passion for cultural experiences.",
+            description: "Assist in 3 Wild Trips (WT). Your commitment to deep exploration and long-haul adventures is unmatched!",
             howToGet: [
-                "Visit different countries and cities",
-                "Participate in cultural tours and activities",
-                "Complete trips in at least 5 different cultural destinations"
+                "Join and assist in 3 full-length Wild Trips",
+                "Coordinate logistics for international destinations",
+                "Achieve multi-day trip completion milestones"
             ]
         },
         {
-            name: "Nature Lover",
+            name: "Ambassador",
             image: Nature,
-            imageAlt: "Nature",
+            imageAlt: "Ambassador",
             imageClass: "w-16 h-16",
             borderColor: "#A04CD9",
             bgColor: "#A04CD9/10",
@@ -72,11 +72,11 @@ const Achievement = () =>
             containerClass: "py-4 px-3",
             contentClass: "-mt-[28px]",
             textClass: "mt-6",
-            description: "Connect with nature and explore the great outdoors! This achievement celebrates your love for natural environments and wildlife.",
+            description: "Build the community! Invite 5 people to the Proactive project. Each profile use of your 5% discount code earns you 1 point (20%).",
             howToGet: [
-                "Join nature-focused adventures",
-                "Complete outdoor activities and hikes",
-                "Participate in eco-friendly trips"
+                "Share your unique 5% discount code from your profile",
+                "Invite 5 new users who successfully use the code",
+                "Each code use = 20% progress toward completion"
             ]
         }
     ];
@@ -152,10 +152,10 @@ const Achievement = () =>
                             };
                             const percentage = Math.round(progress.percentage || 0);
                             
-                            const bgOpacity = badge.name === "Nature Lover" ? 0.1 : 0.05;
+                            const bgOpacity = badge.name === "Ambassador" ? 0.1 : 0.05;
                             const progressId = 
-                                badge.name === "Mountain Climber" ? "mountain" :
-                                badge.name === "Culture Explorer" ? "culture" :
+                                badge.name === "WW Master" ? "mountain" :
+                                badge.name === "WT Master" ? "culture" :
                                 "nature";
                             
                             return (

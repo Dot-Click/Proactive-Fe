@@ -91,7 +91,7 @@ export const useSupabaseAuth = () => {
                 // If the user was just at home or specifically on login/signup, we should move them.
                 // However, if they are already deep in a trip page or info page, let's keep them there so we don't disrupt their reading.
                 const currentPath = window.location.pathname;
-                const isAuthPath = currentPath === "/" || currentPath === "/login" || currentPath === "/signup";
+                const isAuthPath = currentPath === "/" || currentPath === "/login" || currentPath === "/signup" || currentPath === "/user-dashboard";
                 
                 // Store Supabase token for Axios usage
                 localStorage.setItem("token", session.access_token);
