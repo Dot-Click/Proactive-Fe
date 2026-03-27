@@ -53,17 +53,15 @@ function normalizeItems(raw: any[] | null | undefined, lookup: any) {
     return raw.map((item: any) => {
         if (item && typeof item === "object") {
             const id = (item.id || item.title || "").toString().toLowerCase().trim();
-            const fromLookup = lookup[id];
+            const fromLookup = lookup[id] || {};
 
-            let title = item.title || fromLookup?.title || String(id || "");
-            let description = item.description || item.desc || fromLookup?.description || "";
+            let title = item.title || fromLookup.title || String(id || "");
+            
+            // Collect description from all possible properties
+            let description = item.description || item.desc || fromLookup.description || fromLookup.desc || "";
 
             // Collect all possible image properties from backend payload or local state
-            let img = item.img || item.icon || item.image || item.iconFile || item.iconPreview || fromLookup?.icon || null;
-
-            if (description && title && description.toLowerCase().startsWith(title.toLowerCase())) {
-                description = description.substring(title.length).replace(/^[:\s-]+/, "").trim();
-            }
+            let img = item.img || item.icon || item.image || item.iconFile || item.iconPreview || fromLookup.icon || fromLookup.img || null;
 
             return { title, description, img };
         }
@@ -72,8 +70,8 @@ function normalizeItems(raw: any[] | null | undefined, lookup: any) {
         const fromLookup = lookup[id];
         return {
             title: fromLookup?.title ?? id,
-            description: fromLookup?.description ?? "",
-            img: fromLookup?.icon ?? null
+            description: fromLookup?.description ?? fromLookup?.desc ?? "",
+            img: fromLookup?.icon ?? fromLookup?.img ?? null
         };
     });
 }

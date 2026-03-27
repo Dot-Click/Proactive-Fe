@@ -13,59 +13,61 @@ import type { TripFormType } from "./tripschema";
 
 
 
-const INCLUDED_ITEMS = [
+export const INCLUDED_ITEMS = [
   {
     id: "camp",
     title: "Accommodation",
-    desc: "Boutique camp accommodation with cozy shared spaces.",
-    icon: included1,
+    description: "Boutique camp accommodation with cozy shared spaces.",
+    img: included1,
   },
   {
     id: "breakfast",
     title: "Daily Breakfasts",
-    desc: "Fresh and healthy breakfasts included throughout the trip",
-    icon: included2,
+    description: "Fresh and healthy breakfasts included throughout the trip",
+    img: included2,
   },
   {
     id: "transfer",
     title: "Airport Transfers",
-    desc: "Arrival & departure transfers for a smooth start & end.",
-    icon: included3,
+    description: "Arrival & departure transfers for a smooth start & end.",
+    img: included3,
   },
   {
     id: "coordinator",
     title: "Trip Coordinator",
-    desc: "Professional English-speaking coordinator for full guidance.",
-    icon: included4,
+    description: "Professional English-speaking coordinator for full guidance.",
+    img: included4,
   },
   {
     id: "tour",
     title: "Sagrada Familia Tour",
-    desc: "Skip-the-line entry with guided experience.",
-    icon: included5,
+    description: "Skip-the-line entry with guided experience.",
+    img: included5,
   },
 ];
 
-const NOT_INCLUDED_ITEMS = [
+export const NOT_INCLUDED_ITEMS = [
   {
     id: "flight",
     title: "International Flights",
-    desc: "Flights to/from Barcelona not covered.",
-    icon: included1,
+    description: "Flights to/from Barcelona not covered.",
+    img: included1,
   },
   {
     id: "insurance",
     title: "Travel Insurance",
-    desc: "Personal insurance must be arranged separately.",
-    icon: included2,
+    description: "Personal insurance must be arranged separately.",
+    img: included2,
   },
   {
     id: "shopping",
     title: "Shopping & Souvenirs",
-    desc: "Personal purchases not included.",
-    icon: included3,
+    description: "Personal purchases not included.",
+    img: included3,
   },
 ];
+export const INCLUDED_LOOKUP: Record<string, any> = INCLUDED_ITEMS.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
+export const NOT_INCLUDED_LOOKUP: Record<string, any> = NOT_INCLUDED_ITEMS.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
 
 const SelectCard = ({
   selected,
@@ -241,8 +243,8 @@ const Included = () => {
     const newItem = {
       id,
       title: newItemName.trim(),
-      desc: "",
-      icon: newItemIconPreview || "",
+      description: "",
+      img: newItemIconPreview || "",
     };
 
     if (forIncluded) {
@@ -389,8 +391,8 @@ const Included = () => {
                         });
                         const isSelected = existingIdx !== -1;
                         const existing = isSelected ? values[existingIdx] : null;
-                        const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
-                        const displayDesc = (existing && typeof existing === 'object' && existing.description) || (existing && typeof existing === 'object' && existing.desc) || item.desc;
+                        const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.img;
+                        const displayDesc = (existing && typeof existing === 'object' && existing.description) || (existing && typeof existing === 'object' && existing.desc) || item.description;
 
                         return (
                           <div key={item.id} className={clsx(hasNone && "opacity-40 pointer-events-none")}>
@@ -403,17 +405,17 @@ const Included = () => {
                                     return v.id !== item.id && v.title !== item.title;
                                   }));
                                 } else {
-                                  field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
+                                  field.onChange([...values, { id: item.id, title: item.title, description: item.description, icon: item.img }]);
                                 }
                               }}
                               onTitleChange={(newTitle) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.icon } : existing), title: newTitle };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.img } : existing), title: newTitle };
                                 field.onChange(newValues);
                               }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.img } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}
@@ -443,8 +445,8 @@ const Included = () => {
                         });
                         const isSelected = existingIdx !== -1;
                         const existing = isSelected ? values[existingIdx] : null;
-                        const displayIcon = (existing && existing.icon) || item.icon;
-                        const displayDesc = (existing && (existing.description || existing.desc)) || item.desc;
+                        const displayIcon = (existing && existing.icon) || item.img;
+                        const displayDesc = (existing && (existing.description || existing.desc)) || item.description;
 
                         return (
                           <div key={item.id} className={clsx("relative group", hasNone && "opacity-40 pointer-events-none")}>
@@ -458,17 +460,17 @@ const Included = () => {
                                     return v.id !== item.id && v.title !== item.title;
                                   }));
                                 } else {
-                                  field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
+                                  field.onChange([...values, { id: item.id, title: item.title, description: item.description, icon: item.img }]);
                                 }
                               }}
                               onTitleChange={(newTitle) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.icon } : existing), title: newTitle };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.img } : existing), title: newTitle };
                                 field.onChange(newValues);
                               }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.img } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}
@@ -631,8 +633,8 @@ const Included = () => {
                         });
                         const isSelected = existingIdx !== -1;
                         const existing = isSelected ? values[existingIdx] : null;
-                        const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
-                        const displayDesc = (existing && (existing.description || existing.desc)) || item.desc;
+                        const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.img;
+                        const displayDesc = (existing && (existing.description || existing.desc)) || item.description;
 
                         return (
                           <div key={item.id} className={clsx(hasNone && "opacity-40 pointer-events-none")}>
@@ -645,17 +647,17 @@ const Included = () => {
                                     return v.id !== item.id && v.title !== item.title;
                                   }));
                                 } else {
-                                  field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
+                                  field.onChange([...values, { id: item.id, title: item.title, description: item.description, icon: item.img }]);
                                 }
                               }}
                               onTitleChange={(newTitle) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.icon } : existing), title: newTitle };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.img } : existing), title: newTitle };
                                 field.onChange(newValues);
                               }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.img } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}

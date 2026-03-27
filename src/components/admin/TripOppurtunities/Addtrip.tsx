@@ -128,18 +128,38 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
 
       const getValidImg = (imgStr: any) => {
         if (!imgStr || typeof imgStr !== "string") return "";
-        if (imgStr.includes('/src/assets/') || imgStr.includes('/assets/')) return "";
+        // Allow data URLs (custom uploads) and standard relative/asset paths
         return imgStr;
       };
 
       const includedItems = (data.included ?? []).map((item: any) => {
-        if (typeof item === "string") return INCLUDED_LOOKUP[item] || { title: item, description: "", img: "" };
-        return { title: item.title, description: item.description || item.desc, img: getValidImg(item.icon || item.img) };
+        if (typeof item === "string") {
+          const defaults = INCLUDED_LOOKUP[item] || { title: item, description: "", img: "" };
+          return { id: item, ...defaults };
+        }
+        const id = item.id || item.title?.toLowerCase()?.replace(/\s+/g, '-');
+        const defaults = INCLUDED_LOOKUP[id] || {};
+        return { 
+          id,
+          title: item.title || defaults.title || id, 
+          description: item.description || item.desc || defaults.description || "", 
+          img: getValidImg(item.icon || item.img || defaults.img) 
+        };
       });
 
       const notIncludedItems = (data.notIncluded ?? []).map((item: any) => {
-        if (typeof item === "string") return NOT_INCLUDED_LOOKUP[item] || { title: item, description: "", img: "" };
-        return { title: item.title, description: item.description || item.desc, img: getValidImg(item.icon || item.img) };
+        if (typeof item === "string") {
+          const defaults = NOT_INCLUDED_LOOKUP[item] || { title: item, description: "", img: "" };
+          return { id: item, ...defaults };
+        }
+        const id = item.id || item.title?.toLowerCase()?.replace(/\s+/g, '-');
+        const defaults = NOT_INCLUDED_LOOKUP[id] || {};
+        return { 
+          id,
+          title: item.title || defaults.title || id, 
+          description: item.description || item.desc || defaults.description || "", 
+          img: getValidImg(item.icon || item.img || defaults.img) 
+        };
       });
 
       const payloadDaysItinerary = (data.daysItinerary ?? []).map((day, index) => ({

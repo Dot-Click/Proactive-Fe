@@ -8,7 +8,7 @@ import {
 import { useState, useEffect } from "react";
 import BasicInfo from "@/components/admin/TripOppurtunities/BasicInfo";
 import TripDetail from "@/components/admin/TripOppurtunities/Tripdetail";
-import Included from "@/components/admin/TripOppurtunities/Included";
+import Included, { INCLUDED_LOOKUP, NOT_INCLUDED_LOOKUP } from "@/components/admin/TripOppurtunities/Included";
 import Coordinator from "@/components/admin/TripOppurtunities/Coordinator";
 import Mediaprice from "@/components/admin/TripOppurtunities/Mediaprice";
 import Reviewsave from "@/components/admin/TripOppurtunities/Reviewsave";
@@ -130,20 +130,33 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         ? trip.coordinators[0]
         : null);
 
-    const includedIds =
+    const includedItemsData =
       trip.included != null && Array.isArray(trip.included)
         ? trip.included
-          .map((item: any) =>
-            typeof item === "string" ? item : item?.title ?? item?.id ?? ""
-          )
+          .map((item: any) => {
+            if (typeof item === "string") return item;
+             // Ensure it has all properties needed for correctly displaying selection state
+            return {
+              id: item.id || item.title?.toLowerCase()?.replace(/\s+/g, '-'),
+              title: item.title,
+              description: item.description || item.desc,
+              icon: item.img || item.icon
+            };
+          })
           .filter(Boolean)
         : [];
-    const notIncludedIds =
+    const notIncludedItemsData =
       trip.notIncluded != null && Array.isArray(trip.notIncluded)
         ? trip.notIncluded
-          .map((item: any) =>
-            typeof item === "string" ? item : item?.title ?? item?.id ?? ""
-          )
+          .map((item: any) => {
+            if (typeof item === "string") return item;
+            return {
+              id: item.id || item.title?.toLowerCase()?.replace(/\s+/g, '-'),
+              title: item.title,
+              description: item.description || item.desc,
+              icon: item.img || item.icon
+            };
+          })
           .filter(Boolean)
         : [];
 
@@ -221,8 +234,8 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       GroupSize: trip.groupSize != null ? String(trip.groupSize) : "",
       rhythm: trip.rhythm ?? "",
       SportsLevel: trip.sportLvl ?? "",
-      included: includedIds,
-      notIncluded: notIncludedIds,
+      included: includedItemsData,
+      notIncluded: notIncludedItemsData,
       CoordinatorName: coordinatorId || "", // Use ID for dropdown selection
       CoordinatorRole: coord?.CoordinatorRole ?? coord?.role ?? "",
       CoordinatorBio: coord?.CoordinatorBio ?? coord?.bio ?? "",
@@ -359,7 +372,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
 
       const getValidImg = (imgStr: any) => {
         if (!imgStr || typeof imgStr !== "string") return "";
-        if (imgStr.includes('/src/assets/') || imgStr.includes('/assets/')) return "";
+        // Allow data URLs (custom uploads) and standard relative/asset paths
         return imgStr;
       };
 
@@ -367,50 +380,42 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       const includedIconFiles: File[] = [];
       const notIncludedIconFiles: File[] = [];
 
-      // Transform included IDs to objects with title, description, and img
+      // Transform included items to full payload structure
       const includedItems = (data.included ?? []).map((item: any) => {
-        let transformedItem;
         if (typeof item === "string") {
-          transformedItem = {
-            title: String(item),
-            description: "",
-            img: "",
-          };
-        } else if (item && typeof item === "object") {
-          transformedItem = {
-            title: String(item.title || ""),
-            description: String(item.description || item.desc || ""),
-            img: getValidImg(item.icon || item.img),
-          };
-          if (item.iconFile instanceof File) {
-            includedIconFiles.push(item.iconFile);
-          }
-        } else {
-          transformedItem = { title: "", description: "", img: "" };
+          const defaults = INCLUDED_LOOKUP[item] || { title: item, description: "", img: "" };
+          return { id: item, ...defaults };
+        }
+        const id = item.id || item.title?.toLowerCase()?.replace(/\s+/g, '-');
+        const defaults = INCLUDED_LOOKUP[id] || {};
+        const transformedItem = { 
+          id,
+          title: item.title || defaults.title || id, 
+          description: item.description || item.desc || defaults.description || "", 
+          img: getValidImg(item.icon || item.img || defaults.img) 
+        };
+        if (item.iconFile instanceof File) {
+          includedIconFiles.push(item.iconFile);
         }
         return transformedItem;
       });
 
-      // Transform notIncluded IDs to objects with title, description, and img
+      // Transform notIncluded items to full payload structure
       const notIncludedItems = (data.notIncluded ?? []).map((item: any) => {
-        let transformedItem;
         if (typeof item === "string") {
-          transformedItem = {
-            title: String(item),
-            description: "",
-            img: "",
-          };
-        } else if (item && typeof item === "object") {
-          transformedItem = {
-            title: String(item.title || ""),
-            description: String(item.description || item.desc || ""),
-            img: getValidImg(item.icon || item.img),
-          };
-          if (item.iconFile instanceof File) {
-            notIncludedIconFiles.push(item.iconFile);
-          }
-        } else {
-          transformedItem = { title: "", description: "", img: "" };
+          const defaults = NOT_INCLUDED_LOOKUP[item] || { title: item, description: "", img: "" };
+          return { id: item, ...defaults };
+        }
+        const id = item.id || item.title?.toLowerCase()?.replace(/\s+/g, '-');
+        const defaults = NOT_INCLUDED_LOOKUP[id] || {};
+        const transformedItem = { 
+          id,
+          title: item.title || defaults.title || id, 
+          description: item.description || item.desc || defaults.description || "", 
+          img: getValidImg(item.icon || item.img || defaults.img) 
+        };
+        if (item.iconFile instanceof File) {
+          notIncludedIconFiles.push(item.iconFile);
         }
         return transformedItem;
       });
