@@ -40,6 +40,15 @@ export const useValidateDiscount = () => {
   });
 };
 
+export const useUpdateDiscount = () => {
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: any }) => {
+      const response = await axiosInstance.patch(`/api/discounts/${id}`, data);
+      return response.data.data;
+    },
+  });
+};
+
 export const useDeleteDiscount = () => {
   return useMutation({
     mutationFn: async (id: string) => {

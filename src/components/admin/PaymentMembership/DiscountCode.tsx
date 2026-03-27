@@ -3,9 +3,9 @@ import { Progress } from "@/components/ui/progress";
 import ReusableTable from "@/Table/ReusableTable"
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
-import {  LoaderIcon, Plus, Trash2,  Tag, Percent, Euro, Clock } from "lucide-react"
+import {  LoaderIcon, Plus, Trash2,  Tag, Percent, Euro, Clock, Edit2, AlertTriangle } from "lucide-react"
 import { useState } from "react";
-import { useGetAllDiscounts, useCreateDiscount, useDeleteDiscount } from "@/hooks/useDiscountshook";
+import { useGetAllDiscounts, useCreateDiscount, useDeleteDiscount, useUpdateDiscount } from "@/hooks/useDiscountshook";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -198,36 +198,89 @@ const userData: ColumnDef<User>[] = [
                 <h1>Actions</h1>
             </div>
         ),
-        cell: ({ row }) => {
-            const { mutateAsync: deleteDiscount } = useDeleteDiscount();
-            const { refetch } = useGetAllDiscounts();
-
-            const handleDelete = async () => {
-                if (!confirm("Delete this discount code permanently?")) return;
-                try {
-                    await deleteDiscount(row.original.id as any);
-                    toast.success("Discount code removed");
-                    refetch();
-                } catch (e) {
-                    toast.error("Failed to delete discount");
-                }
-            };
-
-            return (
-                <div className="flex gap-2 justify-center">
-                    <Button 
-                        onClick={handleDelete}
-                        variant={'outline'} 
-                        className="cursor-pointer h-10 px-5 rounded-full border-red-200 text-[#9C0000] hover:bg-red-50 font-black flex items-center gap-1.5 transition-all active:scale-95 shadow-sm"
-                    >
-                        <Trash2 size={16} />
-                        Delete
-                    </Button>
-                </div>
-            )
-        }
+        cell: ({ row }) => <ActionCell discount={row.original} />
     },
 ]
+
+const ActionCell = ({ discount }: { discount: User }) => {
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const { mutateAsync: deleteDiscount, isPending: isDeleting } = useDeleteDiscount();
+    const { refetch } = useGetAllDiscounts();
+
+    const handleDelete = async () => {
+        try {
+            await deleteDiscount(discount.id);
+            toast.success("Discount code removed successfully");
+            setIsDeleteOpen(false);
+            refetch();
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || "Failed to delete discount");
+        }
+    };
+
+    return (
+        <div className="flex gap-2 justify-center">
+            <Button 
+                onClick={() => setIsEditOpen(true)}
+                variant="outline" 
+                className="h-10 w-10 p-0 rounded-full border-[#0DAC87]/20 text-[#0DAC87] hover:bg-[#0DAC87]/5 hover:border-[#0DAC87] transition-all"
+                title="Edit Discount"
+            >
+                <Edit2 size={16} />
+            </Button>
+            <Button 
+                onClick={() => setIsDeleteOpen(true)}
+                variant="outline" 
+                className="h-10 w-10 p-0 rounded-full border-red-100 text-[#FF4d4f] hover:bg-red-50 hover:border-red-200 transition-all"
+                title="Delete Discount"
+            >
+                <Trash2 size={16} />
+            </Button>
+
+            <EditDiscountModal 
+                isOpen={isEditOpen} 
+                onClose={() => setIsEditOpen(false)} 
+                discount={discount}
+                onSuccess={() => {
+                    setIsEditOpen(false);
+                    refetch();
+                }}
+            />
+
+            <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+                <DialogContent className="sm:max-w-[450px] bg-white rounded-[30px] p-8 border-none shadow-2xl">
+                    <div className="flex flex-col items-center text-center">
+                        <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mb-6">
+                            <AlertTriangle size={40} className="text-red-500" />
+                        </div>
+                        <h3 className="text-2xl font-black text-[#221E33] mb-2">Delete Discount Code?</h3>
+                        <p className="text-[#666373] mb-8">
+                            Are you sure you want to delete <span className="font-bold text-[#221E33]">"{discount.discountCode}"</span>? This action cannot be undone and will prevent users from using this code.
+                        </p>
+                        <div className="flex gap-3 w-full">
+                            <Button 
+                                variant="outline" 
+                                onClick={() => setIsDeleteOpen(false)}
+                                className="flex-1 h-14 rounded-2xl font-bold border-2"
+                                disabled={isDeleting}
+                            >
+                                No, Keep it
+                            </Button>
+                            <Button 
+                                onClick={handleDelete}
+                                className="flex-1 h-14 rounded-2xl font-bold bg-[#FF4d4f] hover:bg-[#ff7875] text-white shadow-lg shadow-red-500/20"
+                                disabled={isDeleting}
+                            >
+                                {isDeleting ? "Deleting..." : "Yes, Delete"}
+                            </Button>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
+};
 
 const DiscountCode = () => {
     const { data: discounts, isLoading, isError, refetch } = useGetAllDiscounts();
@@ -454,4 +507,166 @@ const AddDiscountModal = ({ isOpen, onClose, onSuccess }: { isOpen: boolean, onC
     );
 };
 
-export default DiscountCode
+const EditDiscountModal = ({ isOpen, onClose, onSuccess, discount }: { isOpen: boolean, onClose: () => void, onSuccess: () => void, discount: User }) => {
+    const { data: tripsResp } = UsegetTrips();
+    const { mutateAsync: updateDiscount, isPending } = useUpdateDiscount();
+    
+    const [formData, setFormData] = useState({
+        tripId: discount.tripId || "global",
+        discountCode: discount.discountCode,
+        validTill: discount.validTill ? new Date(discount.validTill).toISOString().split('T')[0] : "",
+        description: discount.description,
+        discountPercentage: discount.percentage,
+        amount: discount.amount,
+        maxUsage: discount.maxUsage || "0",
+        status: discount.status,
+    });
+
+    const trips = tripsResp?.trips || tripsResp || [];
+
+    const handleUpdate = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            await updateDiscount({
+                id: discount.id,
+                data: {
+                    ...formData,
+                    tripId: formData.tripId === "global" ? null : formData.tripId,
+                    discountPercentage: formData.discountPercentage ? Number(formData.discountPercentage) : 0,
+                    amount: formData.amount ? Number(formData.amount) : 0,
+                    maxUsage: formData.maxUsage ? Number(formData.maxUsage) : 0,
+                }
+            });
+            toast.success("Discount code updated!");
+            onSuccess();
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || "Failed to update");
+        }
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent className="sm:max-w-[550px] bg-white rounded-[30px] p-8 border-none shadow-2xl overflow-y-auto max-h-[90vh]">
+                <DialogHeader className="mb-6">
+                    <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+                        <Edit2 className="text-[#0DAC87]" size={24} />
+                        Edit Discount Code
+                    </DialogTitle>
+                </DialogHeader>
+
+                <form onSubmit={handleUpdate} className="space-y-5">
+                    <div className="space-y-2">
+                        <Label className="font-bold text-[#666373]">ASSIGN TO</Label>
+                        <Select value={formData.tripId} onValueChange={(val) => setFormData({ ...formData, tripId: val })}>
+                            <SelectTrigger className="h-14 rounded-2xl bg-[#FAFAFE]">
+                                <SelectValue placeholder="Select Trip or Global" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white">
+                                <SelectItem value="global" className="font-bold text-blue-600">Global (Membership / All Trips)</SelectItem>
+                                {trips.map((t: any) => (
+                                    <SelectItem key={t.id} value={t.id}>{t.title || t.name}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label className="font-bold text-[#666373]">CODE</Label>
+                            <Input 
+                                placeholder="PROACTIVE10" 
+                                className="h-14 rounded-2xl bg-[#FAFAFE]"
+                                value={formData.discountCode}
+                                onChange={(e) => setFormData({ ...formData, discountCode: e.target.value.toUpperCase() })}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label className="font-bold text-[#666373]">EXPIRY DATE</Label>
+                            <Input 
+                                type="date"
+                                className="h-14 rounded-2xl bg-[#FAFAFE]"
+                                value={formData.validTill}
+                                onChange={(e) => setFormData({ ...formData, validTill: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label className="font-bold text-[#666373]">DESCRIPTION</Label>
+                        <Input 
+                            placeholder="Spring Sale 2024" 
+                            className="h-14 rounded-2xl bg-[#FAFAFE]"
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label className="font-bold text-[#666373]">STATUS</Label>
+                            <Select value={formData.status} onValueChange={(val) => setFormData({ ...formData, status: val })}>
+                                <SelectTrigger className="h-14 rounded-2xl bg-[#FAFAFE] font-bold">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white">
+                                    <SelectItem value="active" className="text-green-600 font-bold">Active</SelectItem>
+                                    <SelectItem value="inactive" className="text-gray-500 font-bold">Inactive</SelectItem>
+                                    <SelectItem value="expired" className="text-red-600 font-bold">Expired</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label className="font-bold text-[#666373]">MAX USAGE</Label>
+                            <Input 
+                                type="number"
+                                className="h-14 rounded-2xl bg-[#FAFAFE]"
+                                value={formData.maxUsage}
+                                onChange={(e) => setFormData({ ...formData, maxUsage: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label className="font-bold text-[#666373]">PERCENTAGE (%)</Label>
+                            <div className="relative">
+                                <Percent className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                                <Input 
+                                    type="number"
+                                    className="h-14 rounded-2xl bg-[#FAFAFE] pl-10"
+                                    disabled={Number(formData.amount) > 0}
+                                    value={formData.discountPercentage}
+                                    onChange={(e) => setFormData({ ...formData, discountPercentage: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label className="font-bold text-[#666373]">FIXED AMOUNT (€)</Label>
+                            <div className="relative">
+                                <Euro className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                                <Input 
+                                    type="number"
+                                    className="h-14 rounded-2xl bg-[#FAFAFE] pl-10"
+                                    disabled={Number(formData.discountPercentage) > 0}
+                                    value={formData.amount}
+                                    onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-3 pt-6">
+                        <Button type="button" variant="outline" onClick={onClose} className="flex-1 h-14 rounded-2xl font-bold border-2">
+                            Cancel
+                        </Button>
+                        <Button type="submit" disabled={isPending} className="flex-1 h-14 rounded-2xl font-bold bg-[#221E33] hover:bg-[#322c4b] text-white">
+                            {isPending ? <LoaderIcon className="animate-spin" /> : "Save Changes"}
+                        </Button>
+                    </div>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+export default DiscountCode;
