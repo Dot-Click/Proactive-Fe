@@ -12,6 +12,7 @@ import { useState } from "react";
 import { UsegetAllPayments } from "@/hooks/getAllPaymentshook";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import MembershipDetailModal from "./MembershipDetailModal";
 // import { Badge } from "@/components/ui/badge";
 
 type User = any;
@@ -140,16 +141,36 @@ const userData: ColumnDef<User>[] = [
         accessorKey: 'Actions',
         enableColumnFilter: true,
         enableSorting: true,
-        cell: () => {
-            return (
-                <div className="flex gap-2">
-                    <Button className="cursor-pointer px-6 h-10 rounded-full">View Detail</Button>
-                    <Button variant={'outline'} className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] font-bold">Cancel</Button>
-                </div>
-            )
-        }
+        cell: ({ row }) => <ActionCell member={row.original} />
     },
 ]
+
+const ActionCell = ({ member }: { member: any }) => {
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
+    return (
+        <div className="flex gap-2">
+            <Button 
+                onClick={() => setIsDetailModalOpen(true)}
+                className="cursor-pointer px-6 h-10 rounded-full bg-[#0DAC87] hover:bg-[#119b7b]"
+            >
+                View Detail
+            </Button>
+            <Button 
+                variant={'outline'} 
+                className="cursor-pointer px-7 h-10 rounded-full border border-[#9C0000] text-[#9C0000] font-bold hover:bg-[#9C0000]/5 transition-colors"
+            >
+                Cancel
+            </Button>
+            
+            <MembershipDetailModal
+                isOpen={isDetailModalOpen}
+                onClose={setIsDetailModalOpen}
+                member={member}
+            />
+        </div>
+    )
+}
 
 const MembershipTracker = () => {
     const { data: MembershipData, isLoading, isError } = UsegetAllPayments();
