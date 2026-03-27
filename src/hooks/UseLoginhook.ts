@@ -23,7 +23,11 @@ export const useLoginUser = () => {
         mutationFn: mutationFunction,
 
         onSuccess: (response) => {
-            queryClient.invalidateQueries({ queryKey: ["users"] });
+            // Prime the cache immediately with the user data from the login response
+            // This prevents stale data from causing role-based redirect flickers.
+            queryClient.setQueryData(["currentUser"], { data: { user: response?.data?.user } });
+            queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+            
             const role = response?.data?.user?.role
             const token = response?.data?.accessToken
             const userId = response?.data?.user.id

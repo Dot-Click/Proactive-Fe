@@ -1,6 +1,6 @@
 import api from "@/config/axios";
 import { supabase } from "@/config/supabase";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -13,11 +13,13 @@ const mutationFunction = async (_vars?: { role?: string }): Promise<AxiosRespons
 
 export const useLogoutUser = () => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     return useMutation<AxiosResponse<any, any, {}>, Error, { role?: string }>(
         {
             mutationFn: mutationFunction,
             onSettled: (data, error, variables) => {
-                // Always clear local storage and redirect, even if the API call fails
+                // Clear all caches and local storage to prevent session leakage and flickers
+                queryClient.clear();
                 localStorage.clear();
                 if (data) {
                     toast.success(data?.data?.message);

@@ -113,7 +113,8 @@ export const useSupabaseAuth = () => {
                         localStorage.setItem("userId", response?.data?.data?.user.id)
                     }
 
-                    // Invalidate currentUser query to refresh user data (including avatar)
+                    // Prime the cache with the new profile to avoid flicker
+                    queryClient.setQueryData(["currentUser"], { data: { user: response?.data?.data?.user } });
                     queryClient.invalidateQueries({ queryKey: ["currentUser"] });
 
                     toast.success("Logged in successfully!");
