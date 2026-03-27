@@ -4,14 +4,19 @@ import Carousel from "@/components/userDashboard/Carousel/Carousel"
 import UserProfile from "@/components/userDashboard/profile/userprofile"
 import Stats from "@/components/userDashboard/Stats/Stats"
 import UpcomingAdventures from "@/components/userDashboard/upcomingAdventures/UpcomingAdventures"
-// import Pastadventures from "@/components/userSide/OpenOppurtunities/PastAdventure/Pastadventures"
-
-
-
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
+import { UsegetPayment } from "@/hooks/getPaymenthook"
+import { UsegetallAchievementsForUser } from "@/hooks/getallAchievementhook"
+import { BrandedLoader } from "@/components/loaders/BrandedLoader"
 
 const UserdashboardPage = () => {
-  const { data: userData } = UsegetCurrentUser();
+  const { data: userData, isLoading: userLoading } = UsegetCurrentUser();
+  const { isLoading: paymentLoading } = UsegetPayment();
+  const { isLoading: achievementsLoading } = UsegetallAchievementsForUser();
+
+  if (userLoading || paymentLoading || achievementsLoading) {
+    return <BrandedLoader title="Welcome to ProActive" subtitle="Preparing your travel dashboard..." />;
+  }
   const userName = userData?.data?.user?.FirstName || "User";
 
   return (

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
+import { BrandedLoader } from "@/components/loaders/BrandedLoader";
 
 type UserRole = "admin" | "coordinator" | "user";
 
@@ -30,13 +31,9 @@ export const ProtectedRoute = ({
   const userRole = user?.role as UserRole | undefined;
 
   // Show loading state while verifying auth
-if (isLoading) {
-  return (
-    <div className="flex h-screen w-screen items-center justify-center">
-      <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-    </div>
-  );
-}
+  if (isLoading) {
+    return <BrandedLoader title="Verifying Session" subtitle="Checking your credentials..." />;
+  }
 
   // Not authenticated - redirect to login
   if (isError || !user) {

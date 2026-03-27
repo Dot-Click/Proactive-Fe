@@ -3,8 +3,15 @@ import CategoriesDistribution from "@/components/coordinator/Dashboard/Categorie
 import CoordinatorStates from "@/components/coordinator/Dashboard/CoordinatorStates"
 import Header from "@/components/coordinator/Dashboard/Header"
 import Recentactivity from "@/components/coordinator/Dashboard/Recentactivity"
+import { UsegetcoordinatordashboardStats } from "@/hooks/getcoordinatordashboardStats"
+import { BrandedLoader } from "@/components/loaders/BrandedLoader"
 
 const CoordinatorDashboard = () => {
+  const { isLoading } = UsegetcoordinatordashboardStats();
+
+  if (isLoading) {
+    return <BrandedLoader title="Loading Dashboard" subtitle="Accessing your coordinator metrics..." />;
+  }
   return (
     <div>
       <Header />

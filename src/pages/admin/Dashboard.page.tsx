@@ -4,9 +4,16 @@ import { Chart } from "@/components/admin/Dashboard/Chart"
 import Recentactivity from "@/components/admin/Dashboard/Recentactivity"
 import Tripcategories from "@/components/admin/Dashboard/Tripcategories"
 import { Calendar } from "@/components/ui/calendar"
+import { UsegetdashboardStats } from "@/hooks/getdashboardStats"
+import { BrandedLoader } from "@/components/loaders/BrandedLoader"
 
 const DashboardPage = () => {
+  const { isLoading } = UsegetdashboardStats();
   const date = new Date(2026, 1, 1)
+
+  if (isLoading) {
+    return <BrandedLoader title="Loading Dashboard" subtitle="Fetching latest statistics..." />;
+  }
   return (
     <div className="flex flex-col gap-2">
       <div className="flex lg:flex-row flex-col gap-2 min-h-[40vh]">
