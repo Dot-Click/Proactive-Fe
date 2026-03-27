@@ -366,9 +366,10 @@ const Included = () => {
                       />
 
                       {INCLUDED_ITEMS.map((item) => {
-                        const existingIdx = values.findIndex((v: any) =>
-                          (typeof v === "string" ? v : v.id) === item.id
-                        );
+                        const existingIdx = values.findIndex((v: any) => {
+                          if (typeof v === "string") return v === item.id || v === item.title;
+                          return v.id === item.id || v.title === item.title;
+                        });
                         const isSelected = existingIdx !== -1;
                         const existing = isSelected ? values[existingIdx] : null;
                         const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
@@ -380,7 +381,10 @@ const Included = () => {
                               selected={isSelected}
                               onClick={() => {
                                 if (isSelected) {
-                                  field.onChange(values.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id));
+                                  field.onChange(values.filter((v: any) => {
+                                    if (typeof v === "string") return v !== item.id && v !== item.title;
+                                    return v.id !== item.id && v.title !== item.title;
+                                  }));
                                 } else {
                                   field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
                                 }
@@ -411,9 +415,10 @@ const Included = () => {
                         );
                       })}
                       {customIncluded.map((item) => {
-                        const existingIdx = values.findIndex((v: any) =>
-                          (v.id === item.id || v.title === item.title)
-                        );
+                        const existingIdx = values.findIndex((v: any) => {
+                          if (typeof v === "string") return v === item.id || v === item.title;
+                          return v.id === item.id || v.title === item.title;
+                        });
                         const isSelected = existingIdx !== -1;
                         const existing = isSelected ? values[existingIdx] : null;
                         const displayIcon = (existing && existing.icon) || item.icon;
@@ -426,7 +431,10 @@ const Included = () => {
                               isCustom={true}
                               onClick={() => {
                                 if (isSelected) {
-                                  field.onChange(values.filter((v: any) => (v.id !== item.id && v.title !== item.title)));
+                                  field.onChange(values.filter((v: any) => {
+                                    if (typeof v === "string") return v !== item.id && v !== item.title;
+                                    return v.id !== item.id && v.title !== item.title;
+                                  }));
                                 } else {
                                   field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
                                 }
@@ -590,9 +598,10 @@ const Included = () => {
                       />
 
                       {NOT_INCLUDED_ITEMS.map((item) => {
-                        const existingIdx = values.findIndex((v: any) =>
-                          (typeof v === "string" ? v : v.id) === item.id
-                        );
+                        const existingIdx = values.findIndex((v: any) => {
+                          if (typeof v === "string") return v === item.id || v === item.title;
+                          return v.id === item.id || v.title === item.title;
+                        });
                         const isSelected = existingIdx !== -1;
                         const existing = isSelected ? values[existingIdx] : null;
                         const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
@@ -604,7 +613,10 @@ const Included = () => {
                               selected={isSelected}
                               onClick={() => {
                                 if (isSelected) {
-                                  field.onChange(values.filter((v: any) => (typeof v === "string" ? v : v.id) !== item.id));
+                                  field.onChange(values.filter((v: any) => {
+                                    if (typeof v === "string") return v !== item.id && v !== item.title;
+                                    return v.id !== item.id && v.title !== item.title;
+                                  }));
                                 } else {
                                   field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
                                 }
@@ -635,9 +647,10 @@ const Included = () => {
                         );
                       })}
                       {customNotIncluded.map((item) => {
-                        const existingIdx = values.findIndex((v: any) =>
-                          (v.id === item.id || v.title === item.title)
-                        );
+                        const existingIdx = values.findIndex((v: any) => {
+                          if (typeof v === "string") return v === item.id || v === item.title;
+                          return v.id === item.id || v.title === item.title;
+                        });
                         const isSelected = existingIdx !== -1;
                         const existing = isSelected ? values[existingIdx] : null;
                         const displayIcon = (existing && existing.icon) || item.icon;
@@ -650,7 +663,10 @@ const Included = () => {
                               isCustom={true}
                               onClick={() => {
                                 if (isSelected) {
-                                  field.onChange(values.filter((v: any) => (v.id !== item.id && v.title !== item.title)));
+                                  field.onChange(values.filter((v: any) => {
+                                    if (typeof v === "string") return v !== item.id && v !== item.title;
+                                    return v.id !== item.id && v.title !== item.title;
+                                  }));
                                 } else {
                                   field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
                                 }
