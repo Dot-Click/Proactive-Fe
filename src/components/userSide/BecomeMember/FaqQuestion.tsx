@@ -32,7 +32,7 @@ import { useTranslation } from "react-i18next";
 
 // ];
 
-const FaqQuestion = ({ role }: { role: string }) => {
+const FaqQuestion = ({ role, onEdit }: { role: string; onEdit?: (faq: any) => void }) => {
     const { t } = useTranslation();
     const [openIndex, setOpenIndex] = useState(null);
     const { data, isLoading, isError } = UsegetallFaqs();
@@ -97,17 +97,21 @@ const FaqQuestion = ({ role }: { role: string }) => {
                                                 <DropdownMenuTrigger asChild>
                                                     <EllipsisVerticalIcon className="cursor-pointer" />
                                                 </DropdownMenuTrigger>
-                                                <DropdownMenuContent
-                                                    onClick={() => HandleDelete(faq.id)}
-                                                    className="cursor-pointer flex justify-center items-center py-2">
-                                                    {
-                                                        isPending ? <LoaderIcon className="animate-spin h-4 w-4" /> :
-                                                            <>
-                                                                <Trash className="mx-2 text-red-600" />
-                                                                <p className="text-red-600">Delete FAQ</p>
-                                                            </>
-                                                    }
-
+                                                <DropdownMenuContent className="cursor-pointer py-2 px-3 w-40">
+                                                    <div className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md" onClick={() => onEdit && onEdit(faq)}>
+                                                        <LoaderIcon className="h-4 w-4 invisible" />
+                                                        <p className="text-blue-600 font-medium cursor-pointer">Edit FAQ</p>
+                                                    </div>
+                                                    <div className="border-b my-1" />
+                                                    <div className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md" onClick={() => HandleDelete(faq.id)}>
+                                                        {
+                                                            isPending ? <LoaderIcon className="animate-spin h-4 w-4" /> :
+                                                                <>
+                                                                    <Trash className="mx-2 text-red-600 h-4 w-4" />
+                                                                    <p className="text-red-600 font-medium cursor-pointer">Delete FAQ</p>
+                                                                </>
+                                                        }
+                                                    </div>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </div>
