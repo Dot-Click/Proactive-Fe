@@ -66,21 +66,21 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
     }
 
     // Apply tab status filter (backend uses "completed" for closed trips)
-    const statusFilterKey =
-        activeTab === "all"
-            ? undefined
-            : activeTab === "coming-soon"
-                ? "live"
-                : activeTab === "closed"
-                    ? "completed"
-                    : activeTab;
-
-    const statusFilteredTrips = statusFilterKey
-        ? baseTrips.filter((trip: any) => {
+    const statusFilteredTrips = activeTab === "all"
+        ? baseTrips
+        : baseTrips.filter((trip: any) => {
             const tripStatus = (trip.status || "").toLowerCase();
-            return tripStatus === statusFilterKey.toLowerCase();
-        })
-        : baseTrips;
+            if (activeTab === "open") {
+              return tripStatus === "open" || tripStatus === "active";
+            }
+            if (activeTab === "coming-soon") {
+              return tripStatus === "live" || tripStatus === "coming soon";
+            }
+            if (activeTab === "closed") {
+              return tripStatus === "completed";
+            }
+            return false;
+        });
 
     // Apply category filter
     const normalizedCategory = category?.toLowerCase().trim();
