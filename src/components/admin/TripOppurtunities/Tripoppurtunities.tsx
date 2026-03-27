@@ -1,5 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { UsegetTrips } from "@/hooks/gettriphook";
 import { UseSearchTrips } from "@/hooks/searchTripshook";
 // import { UseupdateRejectedtripStatus } from "@/hooks/updatetripRejectedstatushook";
@@ -164,16 +174,16 @@ const Tripoppurtunities = () => {
         </div>
       ),
       cell: ({ row }) => {
-        const { mutateAsync: deleteTrip } = UseDeleteTrip();
+        const { mutateAsync: deleteTrip, isPending: isDeleting } = UseDeleteTrip();
+        const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
         const HandleDeleteTrip = async (id: string) => {
-          if (window.confirm('Are you sure you want to delete this trip? This action cannot be undone.')) {
-            try {
-              await deleteTrip(id);
-              toast.success('Trip deleted successfully');
-            } catch (error) {
-              toast.error('Failed to delete trip');
-            }
+          try {
+            await deleteTrip(id);
+            toast.success('Trip deleted successfully');
+            setIsDeleteDialogOpen(false);
+          } catch (error) {
+            toast.error('Failed to delete trip');
           }
         }
 
@@ -185,15 +195,42 @@ const Tripoppurtunities = () => {
             >
               View
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => HandleDeleteTrip(row.original.id)}
-              className="cursor-pointer h-10 px-2 text-[#9C0000] hover:bg-[#9C0000]/10"
-              title="Delete trip"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            
+            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="cursor-pointer h-10 px-2 text-[#9C0000] hover:bg-[#9C0000]/10"
+                  title="Delete trip"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle className="text-xl text-[#221E33]">Delete Trip</DialogTitle>
+                  <DialogDescription className="mt-3 text-[#646464] text-[15px]">
+                    Are you sure you want to delete <span className="font-bold text-[#221E33]">{row.original.name}</span>? This action cannot be undone.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="mt-6 flex gap-3 sm:justify-end">
+                  <DialogClose asChild>
+                    <Button variant="outline" className="font-bold rounded-full px-6" disabled={isDeleting}>
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <Button 
+                    variant="destructive" 
+                    className="bg-[#9C0000] font-bold text-white hover:bg-[#7a0000] rounded-full px-6" 
+                    onClick={() => HandleDeleteTrip(row.original.id)}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? "Deleting..." : "Delete"}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         )
       }
