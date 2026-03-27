@@ -357,6 +357,12 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
     try {
       const formData = new FormData();
 
+      const getValidImg = (imgStr: any) => {
+        if (!imgStr || typeof imgStr !== "string") return "";
+        if (imgStr.includes('/src/assets/') || imgStr.includes('/assets/')) return "";
+        return imgStr;
+      };
+
       // map to store files for multi-part upload
       const includedIconFiles: File[] = [];
       const notIncludedIconFiles: File[] = [];
@@ -374,7 +380,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
           transformedItem = {
             title: String(item.title || ""),
             description: String(item.description || item.desc || ""),
-            img: String(item.icon || item.img || ""),
+            img: getValidImg(item.icon || item.img),
           };
           if (item.iconFile instanceof File) {
             includedIconFiles.push(item.iconFile);
@@ -398,7 +404,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
           transformedItem = {
             title: String(item.title || ""),
             description: String(item.description || item.desc || ""),
-            img: String(item.icon || item.img || ""),
+            img: getValidImg(item.icon || item.img),
           };
           if (item.iconFile instanceof File) {
             notIncludedIconFiles.push(item.iconFile);

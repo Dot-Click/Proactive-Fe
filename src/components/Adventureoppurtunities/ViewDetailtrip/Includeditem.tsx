@@ -27,17 +27,25 @@ const getImageUrl = (img: string | null) => {
 const INCLUDED_LOOKUP: Record<string, { title: string; description: string; color: string; icon: string }> = {
     camp: { title: "Accommodation", description: "Boutique stays with cozy shared spaces.", color: "text-[#0DAC87]", icon: included1 },
     accommodation: { title: "Accommodation", description: "Boutique stays with cozy shared spaces.", color: "text-[#0DAC87]", icon: included1 },
+    "3 nights camp stay": { title: "3 Nights Camp Stay", description: "Boutique camp accommodation.", color: "text-[#0DAC87]", icon: included1 },
     breakfast: { title: "Daily Breakfasts", description: "Fresh and healthy breakfasts included.", color: "text-[#FFB800]", icon: included2 },
     "daily breakfasts": { title: "Daily Breakfasts", description: "Fresh and healthy breakfasts included.", color: "text-[#FFB800]", icon: included2 },
     transfer: { title: "Transfers", description: "Arrival & departure transfers for a smooth start.", color: "text-[#0066FF]", icon: included3 },
+    "airport transfers": { title: "Airport Transfers", description: "Arrival & departure transfers for a smooth start.", color: "text-[#0066FF]", icon: included3 },
     coordinator: { title: "Guide Support", description: "Professional English-speaking coordinator.", color: "text-[#9900FF]", icon: included4 },
+    "trip coordinator": { title: "Trip Coordinator", description: "Professional English-speaking coordinator.", color: "text-[#9900FF]", icon: included4 },
     tour: { title: "Guided Experiences", description: "Skip-the-line entries and local tours.", color: "text-[#FF0000]", icon: included5 },
+    "sagrada familia tour": { title: "Sagrada Familia Tour", description: "Skip-the-line entries and local tours.", color: "text-[#FF0000]", icon: included5 },
 };
 
 const NOT_INCLUDED_LOOKUP: Record<string, { title: string; description: string; icon: string }> = {
     flight: { title: "International Flights", description: "Flights to/from the destination not covered.", icon: included1 },
+    "international flights": { title: "International Flights", description: "Flights to/from the destination not covered.", icon: included1 },
     insurance: { title: "Travel Insurance", description: "Personal insurance must be arranged separately.", icon: included2 },
+    "travel insurance": { title: "Travel Insurance", description: "Personal insurance must be arranged separately.", icon: included2 },
     shopping: { title: "Personal Expenses", description: "Personal purchases and souvenirs.", icon: included3 },
+    "shopping & souvenirs": { title: "Shopping & Souvenirs", description: "Personal purchases and souvenirs.", icon: included3 },
+    "personal expenses": { title: "Personal Expenses", description: "Personal purchases and souvenirs.", icon: included3 },
 };
 
 function normalizeItems(raw: any[] | null | undefined, lookup: any) {
@@ -47,11 +55,11 @@ function normalizeItems(raw: any[] | null | undefined, lookup: any) {
             const id = (item.id || item.title || "").toString().toLowerCase().trim();
             const fromLookup = lookup[id];
 
-            let title = item.title ?? fromLookup?.title ?? String(id || "");
-            let description = item.description ?? item.desc ?? fromLookup?.description ?? "";
+            let title = item.title || fromLookup?.title || String(id || "");
+            let description = item.description || item.desc || fromLookup?.description || "";
 
             // Collect all possible image properties from backend payload or local state
-            let img = item.img ?? item.icon ?? item.image ?? item.iconFile ?? item.iconPreview ?? fromLookup?.icon ?? null;
+            let img = item.img || item.icon || item.image || item.iconFile || item.iconPreview || fromLookup?.icon || null;
 
             if (description && title && description.toLowerCase().startsWith(title.toLowerCase())) {
                 description = description.substring(title.length).replace(/^[:\s-]+/, "").trim();

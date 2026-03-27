@@ -126,14 +126,20 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         shopping: { title: "Shopping & Souvenirs", description: "Personal purchases not included.", img: included3 },
       };
 
+      const getValidImg = (imgStr: any) => {
+        if (!imgStr || typeof imgStr !== "string") return "";
+        if (imgStr.includes('/src/assets/') || imgStr.includes('/assets/')) return "";
+        return imgStr;
+      };
+
       const includedItems = (data.included ?? []).map((item: any) => {
         if (typeof item === "string") return INCLUDED_LOOKUP[item] || { title: item, description: "", img: "" };
-        return { title: item.title, description: item.description || item.desc, img: item.icon || item.img };
+        return { title: item.title, description: item.description || item.desc, img: getValidImg(item.icon || item.img) };
       });
 
       const notIncludedItems = (data.notIncluded ?? []).map((item: any) => {
         if (typeof item === "string") return NOT_INCLUDED_LOOKUP[item] || { title: item, description: "", img: "" };
-        return { title: item.title, description: item.description || item.desc, img: item.icon || item.img };
+        return { title: item.title, description: item.description || item.desc, img: getValidImg(item.icon || item.img) };
       });
 
       const payloadDaysItinerary = (data.daysItinerary ?? []).map((day, index) => ({
