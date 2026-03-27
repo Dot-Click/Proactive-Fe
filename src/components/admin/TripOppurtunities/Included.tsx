@@ -391,7 +391,7 @@ const Included = () => {
                               }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: existing } : existing), description: newDesc };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}
@@ -401,8 +401,9 @@ const Included = () => {
                                 const reader = new FileReader();
                                 reader.onload = () => {
                                   const newValues = values.map((v: any) => {
-                                    if ((typeof v === "string" ? v : v.id) === item.id) {
-                                      return { ...item, description: displayDesc, icon: reader.result, iconFile: file };
+                                    const matches = typeof v === "string" ? v === item.id || v === item.title : v.id === item.id || v.title === item.title;
+                                    if (matches) {
+                                      return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
                                     }
                                     return v;
                                   });
@@ -441,7 +442,7 @@ const Included = () => {
                               }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...existing, description: newDesc };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}
@@ -451,8 +452,9 @@ const Included = () => {
                                 const reader = new FileReader();
                                 reader.onload = () => {
                                   const newValues = values.map((v: any) => {
-                                    if (v.id === item.id || v.title === item.title) {
-                                      return { ...v, icon: reader.result, iconFile: file };
+                                    const matches = typeof v === "string" ? v === item.id || v === item.title : v.id === item.id || v.title === item.title;
+                                    if (matches) {
+                                      return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
                                     }
                                     return v;
                                   });
@@ -623,7 +625,7 @@ const Included = () => {
                               }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: existing } : existing), description: newDesc };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}
@@ -633,8 +635,9 @@ const Included = () => {
                                 const reader = new FileReader();
                                 reader.onload = () => {
                                   const newValues = values.map((v: any) => {
-                                    if ((typeof v === "string" ? v : v.id) === item.id) {
-                                      return { ...item, description: displayDesc, icon: reader.result, iconFile: file };
+                                    const matches = typeof v === "string" ? v === item.id || v === item.title : v.id === item.id || v.title === item.title;
+                                    if (matches) {
+                                      return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
                                     }
                                     return v;
                                   });
@@ -673,7 +676,7 @@ const Included = () => {
                               }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...existing, description: newDesc };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}
@@ -683,8 +686,9 @@ const Included = () => {
                                 const reader = new FileReader();
                                 reader.onload = () => {
                                   const newValues = values.map((v: any) => {
-                                    if (v.id === item.id || v.title === item.title) {
-                                      return { ...v, icon: reader.result, iconFile: file };
+                                    const matches = typeof v === "string" ? v === item.id || v === item.title : v.id === item.id || v.title === item.title;
+                                    if (matches) {
+                                      return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
                                     }
                                     return v;
                                   });
