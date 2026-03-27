@@ -70,7 +70,37 @@ const Reviewsave = () => {
           </div>
           <div className="flex gap-2">
             <span className="text-[#221E33] font-bold">Included Items:</span>
-            <span>{values.included.join(", ")}</span>
+            <span className="flex gap-1 flex-wrap">
+              {Array.isArray(values.included)
+                ? values.included.length > 0
+                  ? values.included.map((item: any, i) => (
+                      <span key={i}>
+                        {typeof item === "string" 
+                          ? (item === "[object Object]" ? "Custom/Added Item" : item) 
+                          : item && item.title ? item.title : JSON.stringify(item)}
+                        {i < values.included.length - 1 ? ", " : ""}
+                      </span>
+                    ))
+                  : "None"
+                : "None"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="text-[#221E33] font-bold">Not Included Items:</span>
+            <span className="flex gap-1 flex-wrap">
+              {Array.isArray(values.notIncluded)
+                ? values.notIncluded.length > 0
+                  ? values.notIncluded.map((item: any, i) => (
+                      <span key={i}>
+                        {typeof item === "string" 
+                          ? (item === "[object Object]" ? "Custom/Added Item" : item) 
+                          : item && item.title ? item.title : JSON.stringify(item)}
+                        {i < values.notIncluded.length - 1 ? ", " : ""}
+                      </span>
+                    ))
+                  : "None"
+                : "None"}
+            </span>
           </div>
         </div>
       </div>
