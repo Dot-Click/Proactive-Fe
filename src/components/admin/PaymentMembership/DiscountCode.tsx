@@ -3,7 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import ReusableTable from "@/Table/ReusableTable"
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
-import {  LoaderIcon, Plus, Trash2,  Tag, Percent, Euro } from "lucide-react"
+import {  LoaderIcon, Plus, Trash2,  Tag, Percent, Euro, Clock } from "lucide-react"
 import { useState } from "react";
 import { useGetAllDiscounts, useCreateDiscount, useDeleteDiscount } from "@/hooks/useDiscountshook";
 import { toast } from "sonner";
@@ -15,11 +15,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 type User = {
     id: string;
-    code: string;
+    discountCode: string;
     description: string;
     percentage: string;
     validTill: string;
     maxUsage: string;
+    currentUsage: number;
     status: string;
     amount: string;
     tripId?: string;
@@ -30,10 +31,9 @@ type User = {
 //     { Code: 'SUMMER2024', Discount: '15%', ValidUntil: '2024-08-31', ExpiryDate: '89/100', Status: 'Active', Action: 'Pause' },
 //     { Code: 'SUMMER2024', Discount: '15%', ValidUntil: '2024-08-31', ExpiryDate: '89/100', Status: 'Expired', Action: 'Activate' },
 // ]
-
 const userData: ColumnDef<User>[] = [
     {
-        accessorKey: 'code',
+        accessorKey: 'discountCode',
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
@@ -45,19 +45,24 @@ const userData: ColumnDef<User>[] = [
             return (
                 <div className="flex items-center gap-3">
                     <div className="flex flex-col justify-center cursor-pointer">
-                        <span className="font-bold text-[15px] text-[#221E33]">
-                            {row.original.code}
-                        </span>
-                        <span className="text-[12px] text-[#666373] font-medium">
+                        <div className="flex items-center gap-2">
+                             <div className="bg-[#221E33]/5 p-1.5 rounded-lg border border-[#221E33]/10">
+                                <Tag size={14} className="text-[#221E33]" />
+                            </div>
+                            <span className="font-black text-[15px] text-[#221E33] tracking-wider font-mono">
+                                {row.original.discountCode}
+                            </span>
+                        </div>
+                        <span className="text-[12px] text-[#666373] font-medium mt-1">
                             {row.original.description}
                         </span>
                         {row.original.tripTitle && (
-                            <span className="text-[10px] bg-[#0DAC87]/10 text-[#0DAC87] px-2 py-0.5 rounded-full w-fit mt-1 font-bold">
+                            <span className="text-[10px] bg-[#0DAC87]/10 text-[#0DAC87] px-2 py-0.5 rounded-full w-fit mt-1.5 font-bold uppercase tracking-tight">
                                 Trip: {row.original.tripTitle}
                             </span>
                         )}
                         {!row.original.tripId && (
-                            <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full w-fit mt-1 font-bold">
+                            <span className="text-[10px] bg-[#0DAC87]/5 text-[#565070] px-2 py-0.5 rounded-full w-fit mt-1.5 font-bold uppercase border border-[#0DAC87]/10">
                                 Global / Membership
                             </span>
                         )}
@@ -76,14 +81,25 @@ const userData: ColumnDef<User>[] = [
             </div>
         ),
         cell: ({ row }) => {
+            const isPercentage = Number(row.original.percentage) > 0;
             return (
                 <div className="flex items-center gap-3">
                     <div className="flex flex-col justify-center cursor-pointer">
-                        <span className="font-bold text-[14px] text-[#0DAC87]">
-                            {Number(row.original.percentage) > 0 ? `${row.original.percentage}%` : `€${Number(row.original.amount).toFixed(2)}`}
-                        </span>
-                        <span className="text-[11px] text-[#BEBEBE] font-medium">
-                            {Number(row.original.percentage) > 0 ? "Percentage discount" : "Fixed amount"}
+                        <div className="flex items-center gap-1.5 font-bold text-[18px] text-[#0DAC87]">
+                            {isPercentage ? (
+                                <>
+                                    <span>{row.original.percentage}</span>
+                                    <Percent size={14} className="mt-0.5" />
+                                </>
+                            ) : (
+                                <>
+                                    <Euro size={14} className="mt-0.5" />
+                                    <span>{Number(row.original.amount).toFixed(2)}</span>
+                                </>
+                            )}
+                        </div>
+                        <span className="text-[11px] text-[#BEBEBE] font-bold uppercase tracking-wide">
+                            {isPercentage ? "Percentage" : "Fixed Amount"}
                         </span>
                     </div>
                 </div>
@@ -100,13 +116,16 @@ const userData: ColumnDef<User>[] = [
             </div>
         ),
         cell: ({ row }) => {
+            const date = new Date(row.original.validTill);
+            const isToday = new Date().toDateString() === date.toDateString();
             return (
                 <div className="flex flex-col justify-center cursor-pointer pl-2">
-                    <span className="font-semibold text-[14px] text-[#666373]">
-                        {new Date(row.original.validTill).toLocaleDateString("en-Us", { year: "numeric", month: "2-digit", day: "2-digit" })}
+                    <span className="font-bold text-[14px] text-[#221E33]">
+                        {date.toLocaleDateString("en-Us", { year: "numeric", month: "long", day: "2-digit" })}
                     </span>
-                    <span className="text-[12px] text-[#666373]">
-                        Created: {new Date(row.original.validTill).toLocaleDateString("en-Us", { year: "numeric", month: "2-digit", day: "2-digit" })}
+                    <span className="text-[11px] text-[#666373] mt-0.5 flex items-center gap-1">
+                        <Clock size={10} />
+                        {isToday ? "Expires today" : "Active status"}
                     </span>
                 </div>
             )
@@ -118,19 +137,29 @@ const userData: ColumnDef<User>[] = [
         enableSorting: true,
         header: () => (
             <div>
-                <h1>Usage</h1>
+                <h1>Usage Tracker</h1>
             </div>
         ),
         cell: ({ row }) => {
-        const usagePercentage = (parseInt(row.original.maxUsage) / 100) * 100;
+            const max = parseInt(row.original.maxUsage) || 0;
+            const current = row.original.currentUsage || 0;
+            const usagePercentage = max > 0 ? (current / max) * 100 : 0;
+            const isFull = current >= max && max > 0;
+
             return (
-                <div className="flex flex-col justify-center cursor-pointer gap-1">
-                    <span className="font-semibold text-[14px] text-[#666373]">
-                        {row.original.maxUsage}
-                    </span>
-                    <span className="text-[12px] text-[#666373]">
-                        <Progress value={usagePercentage} className="[&>div]:bg-[#16A34A] lg:w-[270%] w-[150px]" />
-                    </span>
+                <div className="flex flex-col justify-center cursor-pointer gap-2 min-w-[150px]">
+                    <div className="flex justify-between items-end">
+                        <span className="font-black text-[15px] text-[#221E33]">
+                            {current} <span className="text-[#BEBEBE] font-medium text-xs">/ {max === 0 ? "∞" : max} utilized</span>
+                        </span>
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${isFull ? 'bg-red-50 text-red-500' : 'bg-[#0DAC87]/5 text-[#0DAC87]'}`}>
+                            {Math.round(usagePercentage)}%
+                        </span>
+                    </div>
+                    <Progress 
+                        value={max === 0 ? 0 : usagePercentage} 
+                        className={`[&>div]:${isFull ? 'bg-red-500' : 'bg-[#0DAC87]'} h-2 bg-gray-100 rounded-full w-full shadow-inner`} 
+                    />
                 </div>
             )
         }
@@ -140,18 +169,24 @@ const userData: ColumnDef<User>[] = [
         enableColumnFilter: true,
         enableSorting: true,
         header: () => (
-            <div className="pl-22">
+            <div className="text-center">
                 <h1>Status</h1>
             </div>
         ),
         cell: ({ row }) => {
+            const isExpired = row.original.status?.toLowerCase() === "expired";
             return (
-                <div className="pl-16">
-                    <Button
-                        className={`${row.original.status === "Expired" ? "font-bold rounded-full bg-[#FF3535]/10 text-[#7B0707] border border-[#7B0707] hover:bg-[#FF3535]/20 px-8 py-5" : "font-bold rounded-full bg-[#35FF62]/10 text-[#077B21] border border-[#077B21] hover:bg-[#35FF62]/20 px-8 py-5"} `}
+                <div className="flex justify-center">
+                    <span
+                        className={`inline-flex items-center px-6 py-2 rounded-full text-[12px] font-black uppercase tracking-wide border-2 ${
+                            isExpired 
+                            ? "bg-[#FF3535]/5 text-[#7B0707] border-[#FF3535]/10" 
+                            : "bg-[#35FF62]/5 text-[#077B21] border-[#35FF62]/10"
+                        }`}
                     >
+                        <div className={`w-1.5 h-1.5 rounded-full mr-2 ${isExpired ? 'bg-[#7B0707]' : 'bg-[#077B21]'}`} />
                         {row.original.status}
-                    </Button>
+                    </span>
                 </div>
             )
         }
@@ -168,13 +203,13 @@ const userData: ColumnDef<User>[] = [
             const { refetch } = useGetAllDiscounts();
 
             const handleDelete = async () => {
-                if (!confirm("Delete this discount?")) return;
+                if (!confirm("Delete this discount code permanently?")) return;
                 try {
                     await deleteDiscount(row.original.id as any);
-                    toast.success("Discount deleted");
+                    toast.success("Discount code removed");
                     refetch();
                 } catch (e) {
-                    toast.error("Failed to delete");
+                    toast.error("Failed to delete discount");
                 }
             };
 
@@ -183,9 +218,9 @@ const userData: ColumnDef<User>[] = [
                     <Button 
                         onClick={handleDelete}
                         variant={'outline'} 
-                        className="cursor-pointer px-4 h-9 rounded-full border-red-100 text-red-500 hover:text-red-600 hover:bg-red-50 font-bold flex items-center gap-1.5"
+                        className="cursor-pointer h-10 px-5 rounded-full border-red-200 text-[#9C0000] hover:bg-red-50 font-black flex items-center gap-1.5 transition-all active:scale-95 shadow-sm"
                     >
-                        <Trash2 size={14} />
+                        <Trash2 size={16} />
                         Delete
                     </Button>
                 </div>
@@ -267,6 +302,7 @@ const AddDiscountModal = ({ isOpen, onClose, onSuccess }: { isOpen: boolean, onC
         description: "",
         discountPercentage: "",
         amount: "",
+        maxUsage: "0",
     });
 
     const trips = tripsResp?.trips || tripsResp || [];
@@ -284,6 +320,7 @@ const AddDiscountModal = ({ isOpen, onClose, onSuccess }: { isOpen: boolean, onC
                 tripId: (formData.tripId === "global" || !formData.tripId) ? null : formData.tripId,
                 discountPercentage: formData.discountPercentage ? Number(formData.discountPercentage) : 0,
                 amount: formData.amount ? Number(formData.amount) : 0,
+                maxUsage: formData.maxUsage ? Number(formData.maxUsage) : 0,
             });
             toast.success("Discount created!");
             onSuccess();
@@ -294,6 +331,7 @@ const AddDiscountModal = ({ isOpen, onClose, onSuccess }: { isOpen: boolean, onC
                 description: "",
                 discountPercentage: "",
                 amount: "",
+                maxUsage: "0",
             });
         } catch (error: any) {
             toast.error(error?.response?.data?.message || "Failed to create");
@@ -385,6 +423,20 @@ const AddDiscountModal = ({ isOpen, onClose, onSuccess }: { isOpen: boolean, onC
                                     onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                                 />
                             </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label className="font-bold text-[#666373]">MAXIMUM USAGE LIMIT (0 for Unlimited)</Label>
+                        <div className="relative">
+                            <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                            <Input 
+                                type="number"
+                                placeholder="100" 
+                                className="h-14 rounded-2xl bg-[#FAFAFE] pl-10"
+                                value={formData.maxUsage}
+                                onChange={(e) => setFormData({ ...formData, maxUsage: e.target.value })}
+                            />
                         </div>
                     </div>
 

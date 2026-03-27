@@ -231,6 +231,7 @@ export const TripPaymentModalContent = ({ tripId, paymentAmount }: { tripId: str
                 amount: finalPrice,
                 currency: 'eur',
                 trip_id: tripId,
+                discount_id: appliedDiscount?.id || null,
             });
 
             // Invalidate relevant queries
