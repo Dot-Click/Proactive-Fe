@@ -75,6 +75,7 @@ const SelectCard = ({
   desc,
   onIconChange,
   onDescChange,
+  onTitleChange,
   // isCustom,
 }: {
   selected: boolean;
@@ -84,6 +85,7 @@ const SelectCard = ({
   desc: string;
   onIconChange?: (file: File) => void;
   onDescChange?: (newDesc: string) => void;
+  onTitleChange?: (newTitle: string) => void;
   isCustom?: boolean;
 }) => (
   <div
@@ -116,7 +118,19 @@ const SelectCard = ({
             </div>
         )}
       </div>
-      <h4 className={clsx("font-bold text-sm tracking-tight font-quicksand", selected ? "text-[#108700]" : "text-[#221E33]")}>{title}</h4>
+      
+      {selected ? (
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => onTitleChange?.(e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+          className="w-full text-center font-bold text-sm tracking-tight font-quicksand bg-transparent border-b border-[#108700]/30 focus:border-[#108700] focus:outline-none text-[#108700] mb-1"
+          placeholder="Item title..."
+        />
+      ) : (
+        <h4 className={clsx("font-bold text-sm tracking-tight font-quicksand", selected ? "text-[#108700]" : "text-[#221E33]")}>{title}</h4>
+      )}
       
       {selected ? (
         <textarea
@@ -134,7 +148,10 @@ const SelectCard = ({
     </div>
 
     {selected && (
-      <div className="relative z-20 mt-auto pb-4 w-full flex justify-center gap-2">
+      <div 
+        className="relative z-20 mt-auto pb-4 w-full flex justify-center gap-2"
+        onClick={(e) => e.stopPropagation()}
+      >
            <input
             type="file"
             id={`icon-upload-${title.replace(/\s+/g, "-")}`}
@@ -389,20 +406,24 @@ const Included = () => {
                                   field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
                                 }
                               }}
+                              onTitleChange={(newTitle) => {
+                                const newValues = [...values];
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.icon } : existing), title: newTitle };
+                                field.onChange(newValues);
+                              }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
                                 newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}
-                              title={item.title}
+                              title={isSelected && typeof existing === 'object' && existing.title ? existing.title : item.title}
                               desc={displayDesc}
                               onIconChange={(file) => {
                                 const reader = new FileReader();
                                 reader.onload = () => {
-                                  const newValues = values.map((v: any) => {
-                                    const matches = typeof v === "string" ? v === item.id || v === item.title : v.id === item.id || v.title === item.title;
-                                    if (matches) {
+                                  const newValues = values.map((v: any, idx: number) => {
+                                    if (idx === existingIdx) {
                                       return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
                                     }
                                     return v;
@@ -440,20 +461,24 @@ const Included = () => {
                                   field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
                                 }
                               }}
+                              onTitleChange={(newTitle) => {
+                                const newValues = [...values];
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.icon } : existing), title: newTitle };
+                                field.onChange(newValues);
+                              }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
                                 newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}
-                              title={item.title}
+                              title={isSelected && typeof existing === 'object' && existing.title ? existing.title : item.title}
                               desc={displayDesc}
                               onIconChange={(file) => {
                                 const reader = new FileReader();
                                 reader.onload = () => {
-                                  const newValues = values.map((v: any) => {
-                                    const matches = typeof v === "string" ? v === item.id || v === item.title : v.id === item.id || v.title === item.title;
-                                    if (matches) {
+                                  const newValues = values.map((v: any, idx: number) => {
+                                    if (idx === existingIdx) {
                                       return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
                                     }
                                     return v;
@@ -623,20 +648,24 @@ const Included = () => {
                                   field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
                                 }
                               }}
+                              onTitleChange={(newTitle) => {
+                                const newValues = [...values];
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.icon } : existing), title: newTitle };
+                                field.onChange(newValues);
+                              }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
                                 newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}
-                              title={item.title}
+                              title={isSelected && typeof existing === 'object' && existing.title ? existing.title : item.title}
                               desc={displayDesc}
                               onIconChange={(file) => {
                                 const reader = new FileReader();
                                 reader.onload = () => {
-                                  const newValues = values.map((v: any) => {
-                                    const matches = typeof v === "string" ? v === item.id || v === item.title : v.id === item.id || v.title === item.title;
-                                    if (matches) {
+                                  const newValues = values.map((v: any, idx: number) => {
+                                    if (idx === existingIdx) {
                                       return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
                                     }
                                     return v;
@@ -674,20 +703,24 @@ const Included = () => {
                                   field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
                                 }
                               }}
+                              onTitleChange={(newTitle) => {
+                                const newValues = [...values];
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.icon } : existing), title: newTitle };
+                                field.onChange(newValues);
+                              }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
                                 newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}
-                              title={item.title}
+                              title={isSelected && typeof existing === 'object' && existing.title ? existing.title : item.title}
                               desc={displayDesc}
                               onIconChange={(file) => {
                                 const reader = new FileReader();
                                 reader.onload = () => {
-                                  const newValues = values.map((v: any) => {
-                                    const matches = typeof v === "string" ? v === item.id || v === item.title : v.id === item.id || v.title === item.title;
-                                    if (matches) {
+                                  const newValues = values.map((v: any, idx: number) => {
+                                    if (idx === existingIdx) {
                                       return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
                                     }
                                     return v;
