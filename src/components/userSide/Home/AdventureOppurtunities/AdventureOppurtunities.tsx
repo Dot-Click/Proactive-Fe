@@ -9,9 +9,8 @@ const AdventureOppurtunities = () => {
     const { t } = useTranslation();
     const { data: trip } = UsegetTrips()
     const tripsData = trip?.trips
-    console.log('tripsData',tripsData)
     return (
-      <div className="bg-linear-to-r    md:mt-[290px]  lg:mt-28 xl:mt-20 sm:mt-[80px]  mt-[250px] from-[#F0F5FD]/18 to-[#F0F5FD]">
+      <div className="bg-linear-to-r    md:mt-[290px]  lg:mt-28 xl:mt-15 sm:mt-[80px]  mt-[250px] from-[#F0F5FD]/18 to-[#F0F5FD]">
         <div className="relative flex flex-col lg:gap-8 gap-4 py-20 px-4">
           <h1 className="z-10 text-center lg:text-4xl text-2xl font-bold bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">
             {t("home.adventureOpportunities")}
