@@ -10,10 +10,11 @@ const getTrips = async () => {
     };
 };
 
-export const UsegetTrips = () => {
+export const UsegetTrips = (options = {}) => {
     return useQuery({
         queryKey: ["trips"],
         queryFn: getTrips,
         staleTime: 60 * 3 * 1000,
+        ...options
     });
 };

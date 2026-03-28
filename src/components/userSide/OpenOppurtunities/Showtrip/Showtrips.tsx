@@ -31,6 +31,9 @@ const Showtrips = ({
     const { t } = useTranslation()
     const navigate = useNavigate()
 
+    const hasSearch = !!searchQuery && searchQuery.trim().length > 0;
+    const useAllTrips = activeTab === "all" || activeTab === "closed";
+
     // Backend search (debounced inside hook)
     const {
         data: searchData,
@@ -43,19 +46,19 @@ const Showtrips = ({
         data: openTripsData,
         isLoading: isOpenTripsLoading,
         isError: isOpenTripsError,
-    } = UsegetOpenTrips();
+    } = UsegetOpenTrips(undefined, {
+        enabled: !useAllTrips || hasSearch
+    });
 
     // All trips (for all/closed tabs)
     const {
         data: allTripsData,
         isLoading: isAllTripsLoading,
         isError: isAllTripsError,
-    } = UsegetTrips();
+    } = UsegetTrips({
+        enabled: useAllTrips || hasSearch
+    });
 
-    const hasSearch = !!searchQuery && searchQuery.trim().length > 0;
-
-    // Use all trips for "all" and "closed" tabs, open trips for "open" and "coming-soon" tabs
-    const useAllTrips = activeTab === "all" || activeTab === "closed";
     const openTrips = openTripsData?.trips ?? [];
     const allTrips = allTripsData?.trips ?? [];
     const sourceTrips = useAllTrips ? allTrips : openTrips;

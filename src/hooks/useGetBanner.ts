@@ -1,5 +1,4 @@
-// hooks/useGetBanner.ts
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from '../config/axios';
 
 interface BannerData {
@@ -10,76 +9,57 @@ interface BannerData {
 interface UseBannerReturn {
   banner: BannerData | null;
   isLoading: boolean;
-  uploadBanner: (file: File) => Promise<void>;
+  uploadBanner: (file: File) => Promise<any>;
   isUploading: boolean;
   error: string | null;
 }
 
-const useGetBanner = (): UseBannerReturn => {
-  const [banner, setBanner] = useState<BannerData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchBanner = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const response = await axios.get('/api/admin/banner');
-      
-      // Handle your API response: { success: true, message: "...", data: { banner: "url" } }
-      const responseData = response.data;
-      
-      if (responseData?.success && responseData?.data?.banner) {
-        setBanner({ 
-          url: responseData.data.banner, 
-          alt: 'Banner' 
-        });
-      } else {
-        setBanner(null);
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to load banner');
-      setBanner(null);
-    } finally {
-      setIsLoading(false);
+const fetchBannerData = async (): Promise<BannerData | null> => {
+    const response = await axios.get('/api/admin/banner');
+    const responseData = response.data;
+    if (responseData?.success && responseData?.data?.banner) {
+        return { 
+            url: responseData.data.banner, 
+            alt: 'Banner' 
+        };
     }
-  }, []);
-
-  const uploadBanner = async (file: File) => {
-    setIsUploading(true);
-    setError(null);
-    
-    const formData = new FormData();
-    formData.append('banner', file);
-
-    try {
-      const response = await axios.patch('/api/admin/banner', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      
-      // Handle PATCH response with same structure
-      const responseData = response.data;
-      
-      if (responseData?.success && responseData?.data?.banner) {
-        setBanner({ 
-          url: responseData.data.banner, 
-          alt: 'Banner' 
-        });
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Upload failed');
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchBanner();
-  }, [fetchBanner]);
-
-  return { banner, isLoading, uploadBanner, isUploading, error };
+    return null;
 };
 
-export default useGetBanner;
+const useGetBanner = (): UseBannerReturn => {
+    const queryClient = useQueryClient();
+
+    const { data: banner, isLoading, error: queryError } = useQuery({
+        queryKey: ['adminBanner'],
+        queryFn: fetchBannerData,
+        staleTime: 1000 * 60 * 10, // 10 minutes
+        gcTime: 1000 * 60 * 15,    // 15 minutes
+    });
+
+    const mutation = useMutation({
+        mutationFn: async (file: File) => {
+            const formData = new FormData();
+            formData.append('banner', file);
+            const response = await axios.patch('/api/admin/banner', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            return response.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['adminBanner'] });
+        }
+    });
+
+    const error = queryError ? (queryError as any).response?.data?.message || 'Failed to load banner' : null;
+    const uploadError = mutation.error ? (mutation.error as any).response?.data?.message || 'Upload failed' : null;
+
+    return { 
+        banner: banner || null, 
+        isLoading, 
+        uploadBanner: mutation.mutateAsync, 
+        isUploading: mutation.isPending, 
+        error: error || uploadError 
+    };
+};
+
+export default useGetBanner;

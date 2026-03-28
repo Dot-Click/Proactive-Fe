@@ -28,10 +28,11 @@ const getOpenTrips = async (type?: string) => {
   };
 };
 
-export const UsegetOpenTrips = (type?: string) => {
+export const UsegetOpenTrips = (type?: string, options = {}) => {
   return useQuery({
     queryKey: ["open-trips", type],
     queryFn: () => getOpenTrips(type),
     staleTime: 60 * 3 * 1000,
+    ...options
   });
 };

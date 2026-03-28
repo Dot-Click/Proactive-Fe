@@ -31,6 +31,8 @@ export const UsegetCurrentUser = (
   >({
     queryKey: ["currentUser"],
     queryFn: getCurrentUser,
+    staleTime: 1000 * 60 * 5, // 5 minutes (user profile doesn't change often)
+    gcTime: 1000 * 60 * 10,   // 10 minutes
     ...options,
   });
 };

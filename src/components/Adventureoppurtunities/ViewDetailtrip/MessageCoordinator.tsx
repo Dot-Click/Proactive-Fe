@@ -8,6 +8,8 @@ import { Usegetmessagebyid } from "@/hooks/getmessagehook"
 import { LoaderIcon } from "lucide-react"
 import send from "@/assets/sidebaricon/send.avif"
 import api from "@/config/axios"
+import { Usegetchat } from "@/hooks/getchathook"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 interface MessageCoordinatorProps {
   coordinator: {
@@ -29,71 +31,61 @@ const MessageCoordinator = ({ coordinator, tripId, tripTitle, open, onOpenChange
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState<Array<any>>([])
   const [chatId, setChatId] = useState<string | null>(null)
-  const [isLoadingChat, setIsLoadingChat] = useState(false)
+  // const [isLoadingChat, setIsLoadingChat] = useState(false)
   const [isSending, setIsSending] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
+cls
   const coordinatorId = coordinator.id
   const coordinatorName = coordinator.fullName || coordinator.CoordinatorName || "Coordinator"
   const coordinatorImage = coordinator.profilePicture || coordinator.CoordinatorPhoto
 
+  const { data: allChats, isLoading: isLoadingAllChats } = Usegetchat()
+  const queryClient = useQueryClient()
+
+  const createChatMutation = useMutation({
+    mutationFn: async (data: { participantIds: string[], tripId: string }) => {
+      const response = await api.post("/api/chat/", data)
+      return response.data.data || response.data
+    },
+    onSuccess: (newChat) => {
+      setChatId(newChat.id || newChat._id)
+      queryClient.invalidateQueries({ queryKey: ["chat"] })
+    }
+  })
+
   useEffect(() => {
-    if (open && coordinatorId && loggedInUserId && tripId) {
-      setIsLoadingChat(true)
+    if (open && coordinatorId && loggedInUserId && tripId && allChats) {
+      const existingChat = allChats.find((chat: any) => {
+        if (chat.tripId !== tripId && chat.trip?.id !== tripId) return false
+        const hasCoordinator = chat.participants?.some((p: any) =>
+          p.userId === coordinatorId || p.user?.id === coordinatorId || p._id === coordinatorId || p.id === coordinatorId
+        )
+        const hasCurrentUser = chat.participants?.some((p: any) =>
+          p.userId === loggedInUserId || p.user?.id === loggedInUserId || p._id === loggedInUserId || p.id === loggedInUserId
+        )
+        return hasCoordinator && hasCurrentUser
+      })
 
-      const createOrFindChat = async () => {
-        try {
-          const chatsResponse = await api.get("/api/chat/")
-          const chats = chatsResponse.data.data || []
-
-          const existingChat = chats.find((chat: any) => {
-            if (chat.tripId !== tripId && chat.trip?.id !== tripId) return false
-
-            const hasCoordinator = chat.participants?.some((p: any) =>
-              p.userId === coordinatorId ||
-              p.user?.id === coordinatorId ||
-              p._id === coordinatorId ||
-              p.id === coordinatorId
-            )
-
-            const hasCurrentUser = chat.participants?.some((p: any) =>
-              p.userId === loggedInUserId ||
-              p.user?.id === loggedInUserId ||
-              p._id === loggedInUserId ||
-              p.id === loggedInUserId
-            )
-
-            return hasCoordinator && hasCurrentUser
-          })
-
-          if (existingChat) {
-            setChatId(existingChat.id || existingChat._id)
-            setIsLoadingChat(false)
-            return
-          }
-
-          const createResponse = await api.post("/api/chat/", {
-            participantIds: [coordinatorId],
-            tripId: tripId
-          })
-
-          const chat = createResponse.data.data || createResponse.data
-          setChatId(chat.id || chat._id)
-          setIsLoadingChat(false)
-        } catch (error: any) {
-          console.error("Error creating/fetching chat:", error)
-          setIsLoadingChat(false) 
-        }
+      if (existingChat) {
+        setChatId(existingChat.id || existingChat._id)
+        return
       }
 
-      createOrFindChat()
-    } else {
+      // Only create if not already creating/loading
+      if (!createChatMutation.isPending && !chatId) {
+        createChatMutation.mutate({
+          participantIds: [coordinatorId],
+          tripId: tripId
+        })
+      }
+    } else if (!open) {
       setChatId(null)
       setMessages([])
     }
-  }, [open, coordinatorId, loggedInUserId, tripId])
+  }, [open, coordinatorId, loggedInUserId, tripId, allChats])
+
 
   const { data: messagesData } = Usegetmessagebyid(chatId || "")
 
@@ -352,7 +344,7 @@ const MessageCoordinator = ({ coordinator, tripId, tripTitle, open, onOpenChange
 
         <div className="flex-1 flex flex-col min-h-0">
           <div className="flex-1 overflow-y-auto px-2 py-4 space-y-4 border border-[#E0E1E2] rounded-[10px] bg-[#FAFAFE] mb-4">
-            {isLoadingChat ? (
+            {(isLoadingAllChats || createChatMutation.isPending) ? (
               <div className="flex items-center justify-center py-10">
                 <LoaderIcon className="animate-spin" />
               </div>
