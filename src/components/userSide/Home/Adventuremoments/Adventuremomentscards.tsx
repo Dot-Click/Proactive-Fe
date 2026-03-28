@@ -1,8 +1,8 @@
-// // import Play from "../../../../assets/play2.png";
-// // import momentscard1 from "../../../../assets/momentscard1.png";
-// // import momentscard2 from "../../../../assets/momentscard2.png";
-// // import momentscard3 from "../../../../assets/momentscard3.png";
-// // import location from "../../../../assets/footerlocation.png";
+// // import Play from "../../../../assets/play2.avif";
+// // import momentscard1 from "../../../../assets/momentscard1.avif";
+// // import momentscard2 from "../../../../assets/momentscard2.avif";
+// // import momentscard3 from "../../../../assets/momentscard3.avif";
+// // import location from "../../../../assets/footerlocation.avif";
 // // const Adventuremomentscards = () => {
 // //   return (
 // //     <div className="flex flex-col lg:flex-row gap-2 mb-8">
@@ -61,11 +61,11 @@
 
 
 // import { useState } from "react";
-// import Play from "../../../../assets/play2.png";
-// import momentscard1 from "../../../../assets/momentscard1.png";
-// import momentscard2 from "../../../../assets/momentscard2.png";
-// import momentscard3 from "../../../../assets/momentscard3.png";
-// import location from "../../../../assets/footerlocation.png";
+// import Play from "../../../../assets/play2.avif";
+// import momentscard1 from "../../../../assets/momentscard1.avif";
+// import momentscard2 from "../../../../assets/momentscard2.avif";
+// import momentscard3 from "../../../../assets/momentscard3.avif";
+// import location from "../../../../assets/footerlocation.avif";
 // // import video1 from "../../../../assets/6010648_Couple_Man_3840x2160.mp4"
 // // import video2 from "../../../../assets/4911591_Sandstone_Landscape_3840x2160.mp4"
 // // import video3 from "../../../../assets/457098_United_States_Fish_And_Wildlife_Service_USFWS_1920x1080.mp4";
@@ -208,10 +208,10 @@
 
 
 import { useRef, useState } from "react";
-import momentscard1 from "../../../../assets/momentscard1.png";
-import momentscard2 from "../../../../assets/momentscard2.png";
-import momentscard3 from "../../../../assets/momentscard3.png";
-import location from "../../../../assets/footerlocation.png";
+import momentscard1 from "../../../../assets/momentscard1.avif";
+import momentscard2 from "../../../../assets/momentscard2.avif";
+import momentscard3 from "../../../../assets/momentscard3.avif";
+import location from "../../../../assets/footerlocation.avif";
 // import video1 from "../../../../assets/6010648_Couple_Man_3840x2160.mp4"
 // import video2 from "../../../../assets/4911591_Sandstone_Landscape_3840x2160.mp4"
 // import video3 from "../../../../assets/457098_United_States_Fish_And_Wildlife_Service_USFWS_1920x1080.mp4";

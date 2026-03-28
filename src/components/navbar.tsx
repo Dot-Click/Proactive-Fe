@@ -1,6 +1,6 @@
 import { ChevronDown, LogOut } from "lucide-react"
-import Country from "@/assets/sidebaricon/country.png"
-import Notification from "@/assets/sidebaricon/notification.png"
+import Country from "@/assets/sidebaricon/country.avif"
+import Notification from "@/assets/sidebaricon/notification.avif"
 import { Badge } from "./ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"

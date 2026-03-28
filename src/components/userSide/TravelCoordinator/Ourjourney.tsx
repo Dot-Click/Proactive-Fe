@@ -1,5 +1,5 @@
-import box1 from "../../../assets/box.png"
-import journey2 from "../../../assets/Ourjourney2.png"
+import box1 from "../../../assets/box.avif"
+import journey2 from "../../../assets/Ourjourney2.avif"
 import { useTranslation } from "react-i18next"
 
 const Ourjourney = () => {

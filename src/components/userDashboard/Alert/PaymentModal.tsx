@@ -9,9 +9,9 @@ import { Button } from '@/components/ui/button';
 import { DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { UseMembership } from '@/hooks/UseMembershiphook';
-import logo from "../../../assets/sidebaricon/favicon.png"
+import logo from "../../../assets/sidebaricon/favicon.avif"
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import PaymentSuccess from "../../../assets/SuccessPayment.png"
+import PaymentSuccess from "../../../assets/SuccessPayment.avif"
 import { toast } from 'sonner';
 import { useValidateDiscount } from '@/hooks/useDiscountshook';
 import { Loader2, Tag, Percent } from 'lucide-react';

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod"
-import cloudupload from "../../../assets/cloudupload.png"
+import cloudupload from "../../../assets/cloudupload.avif"
 import { XIcon } from "lucide-react";
 import { FaCircleExclamation } from "react-icons/fa6";
 import { toast } from "sonner";

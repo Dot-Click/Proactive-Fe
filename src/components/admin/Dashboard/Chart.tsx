@@ -5,7 +5,7 @@ import {
     ChartTooltipContent,
     type ChartConfig,
 } from "@/components/ui/chart"
-import arrowup from "../../../assets/sidebaricon/arrowup.png"
+import arrowup from "../../../assets/sidebaricon/arrowup.avif"
 import { UsegetdashboardStats } from "@/hooks/getdashboardStats"
 
 // const chartData = [

@@ -1,8 +1,8 @@
 import CountUp from 'react-countup';
-import ourvalues1 from "../../../../assets/Ourvalues1.png"
-import ourvalues2 from "../../../../assets/Ourvalues2.png"
-import ourvalues3 from "../../../../assets/Ourvalues3.png"
-import ourvalues4 from "../../../../assets/Ourvalues4.png"
+import ourvalues1 from "../../../../assets/Ourvalues1.avif"
+import ourvalues2 from "../../../../assets/Ourvalues2.avif"
+import ourvalues3 from "../../../../assets/Ourvalues3.avif"
+import ourvalues4 from "../../../../assets/Ourvalues4.avif"
 import { useTranslation } from "react-i18next"
 
 const OurValuesCard = () => {

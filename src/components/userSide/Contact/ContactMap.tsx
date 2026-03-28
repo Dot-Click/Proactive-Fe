@@ -7,9 +7,9 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
-import CustomMarkerIcon from "../../../assets/CustomMarker.png";
-import getintouch from "../../../assets/GetInTouchbg.png";
-import getintouchlayer from "../../../assets/getintouchlayer.png";
+import CustomMarkerIcon from "../../../assets/CustomMarker.avif";
+import getintouch from "../../../assets/GetInTouchbg.avif";
+import getintouchlayer from "../../../assets/getintouchlayer.avif";
 import { useContactInfo } from "@/hooks/getContactInfohook";
 import { useTranslation } from "react-i18next";
 

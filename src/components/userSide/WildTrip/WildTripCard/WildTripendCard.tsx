@@ -1,6 +1,6 @@
-import What from "../../../../assets/Whatis.png"
-import Howdo from "../../../../assets/Howdo.png"
-import when from "../../../../assets/When.png"
+import What from "../../../../assets/Whatis.avif"
+import Howdo from "../../../../assets/Howdo.avif"
+import when from "../../../../assets/When.avif"
 import { useTranslation } from "react-i18next"
 
 const WildTripCard = () => {

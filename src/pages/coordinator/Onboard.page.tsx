@@ -20,10 +20,10 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
 // Theme Assets
-import login from "../../assets/login.png"
-import loginLayer from "../../assets/loginLayer.png"
-import loginformbg from "../../assets/loginformbg.png"
-import proactivelogo from "../../assets/proactive-logo.png"
+import login from "../../assets/login.avif"
+import loginLayer from "../../assets/loginLayer.avif"
+import loginformbg from "../../assets/loginformbg.avif"
+import proactivelogo from "../../assets/proactive-logo.avif"
 
 type FormValues = {
   fullName: string;

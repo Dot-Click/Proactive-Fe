@@ -1,4 +1,4 @@
-import box2 from "../../../assets/box2.png"
+import box2 from "../../../assets/box2.avif"
 import OurCollabrationCard from "./OurCollabrationCard"
 import { useTranslation } from "react-i18next"
 

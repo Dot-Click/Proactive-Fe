@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import openoppurtunitiesbg from "../../../assets/openoppurtunitiesbg.png"
+import openoppurtunitiesbg from "../../../assets/openoppurtunitiesbg.avif"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import PaymentModal from "@/components/userDashboard/Alert/PaymentModal"
 const MemberToday = () => {

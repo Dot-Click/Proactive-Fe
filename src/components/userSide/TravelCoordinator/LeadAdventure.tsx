@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
-import leadadventurebg from "../../../assets/LeadAdventure.png"
-import leadadventurebgcolor from "../../../assets/leadadventurebg.png"
+import leadadventurebg from "../../../assets/LeadAdventure.avif"
+import leadadventurebgcolor from "../../../assets/leadadventurebg.avif"
 import { useTranslation } from "react-i18next"
 
 const LeadAdventure = () => {

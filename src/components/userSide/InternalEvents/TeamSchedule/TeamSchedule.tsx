@@ -1,6 +1,6 @@
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
-import SurfaceCamps from "../../../../assets/Surfacecamp.png"
+import SurfaceCamps from "../../../../assets/Surfacecamp.avif"
 import { useTranslation } from "react-i18next"
 
 const TeamSchedule = () => {

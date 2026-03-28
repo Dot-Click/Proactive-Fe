@@ -3,10 +3,10 @@ import ReusableTable from "@/Table/ReusableTable"
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
 import { Download, LoaderIcon, FileText } from "lucide-react"
-import TotalUsers from "@/assets/sidebaricon/totalusers.png"
-import Coordinator from "@/assets/sidebaricon/coordinators.png"
-import ActiveTrips from "@/assets/sidebaricon/activetrips.png"
-import CloseTrips from "@/assets/sidebaricon/closetrips.png"
+import TotalUsers from "@/assets/sidebaricon/totalusers.avif"
+import Coordinator from "@/assets/sidebaricon/coordinators.avif"
+import ActiveTrips from "@/assets/sidebaricon/activetrips.avif"
+import CloseTrips from "@/assets/sidebaricon/closetrips.avif"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import { UsegetAllPayments } from "@/hooks/getAllPaymentshook";

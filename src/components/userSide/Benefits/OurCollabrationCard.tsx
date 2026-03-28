@@ -1,7 +1,7 @@
-import collabration2 from "../../../assets/OurCollabration2.png"
-import collabration1 from "../../../assets/OurCollabration1.png"
-import iati from "../../../assets/iati.png"
-import AboutCarousel1 from "../../../assets/AboutCarousel1.png"
+import collabration2 from "../../../assets/OurCollabration2.avif"
+import collabration1 from "../../../assets/OurCollabration1.avif"
+import iati from "../../../assets/iati.avif"
+import AboutCarousel1 from "../../../assets/AboutCarousel1.avif"
 import { useTranslation } from "react-i18next"
 
 const OurCollabrationCard = () => {

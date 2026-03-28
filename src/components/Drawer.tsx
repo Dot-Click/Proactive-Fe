@@ -6,7 +6,7 @@ import {
     DrawerTrigger,
 } from "./ui/drawer"
 import { Link } from "react-router-dom";
-import Proactivelogo from "@/assets/proactive-logo.png";
+import Proactivelogo from "@/assets/proactive-logo.avif";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./userSide/LanguageSwitcher/LanguageSwitcher";
 

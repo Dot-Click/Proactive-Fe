@@ -1,4 +1,4 @@
-import AdventureMoment from "../../../../assets/Adventuremoment.png"
+import AdventureMoment from "../../../../assets/Adventuremoment.avif"
 import Adventuremomentscards from "./Adventuremomentscards"
 import { useTranslation } from "react-i18next"
 

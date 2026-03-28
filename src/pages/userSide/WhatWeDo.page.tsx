@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import Whatwedo1 from "@/assets/whatwedo1.png";
-import Whatwedo2 from "@/assets/whatwedo2.png";
-import Whatwedo3 from "@/assets/whatwedo3.png";
-import Whatwedo4 from "@/assets/whatwedo4.png";
-import Whatwedo5 from "@/assets/whatwedo5.png";
-import Whatwedo6 from "@/assets/whatwedo6.png";
+import Whatwedo1 from "@/assets/whatwedo1.avif";
+import Whatwedo2 from "@/assets/whatwedo2.avif";
+import Whatwedo3 from "@/assets/whatwedo3.avif";
+import Whatwedo4 from "@/assets/whatwedo4.avif";
+import Whatwedo5 from "@/assets/whatwedo5.avif";
+import Whatwedo6 from "@/assets/whatwedo6.avif";
 import { ArrowRight } from "lucide-react";
 
 const whatWeDoItems = [

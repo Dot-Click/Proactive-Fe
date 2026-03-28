@@ -1,6 +1,6 @@
-import importantMask from "../../../../assets/importantmask.png"
-import importantbg from "../../../../assets/importantbg.png"
-import importantlayer from "../../../../assets/importantlayer.png"
+import importantMask from "../../../../assets/importantmask.avif"
+import importantbg from "../../../../assets/importantbg.avif"
+import importantlayer from "../../../../assets/importantlayer.avif"
 import OurValuesCard from "./OurValuesCard"
 import { useTranslation } from "react-i18next"
 

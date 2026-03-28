@@ -2,7 +2,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Video } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useFormContext } from "react-hook-form";
-import gallery from "@/assets/sidebaricon/gallery.png"
+import gallery from "@/assets/sidebaricon/gallery.avif"
 import { Input } from "@/components/ui/input";
 import type { TripFormType } from "./tripschema";
 import { UsegetCategory } from "@/hooks/getCategoryhook";

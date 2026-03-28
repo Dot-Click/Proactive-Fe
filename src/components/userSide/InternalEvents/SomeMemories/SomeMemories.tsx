@@ -1,4 +1,4 @@
-import WonderPeoplebg from "../../../../assets/WonderPeoplebg.png"
+import WonderPeoplebg from "../../../../assets/WonderPeoplebg.avif"
 import SomeMemoriesCard from "./SomeMemoriesCard"
 import { useTranslation } from "react-i18next"
 

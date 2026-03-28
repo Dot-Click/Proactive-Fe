@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import Travellingbg from "../../../assets/Travellingbg.png";
-import TravellingIcon from "../../../assets/Travellingicon.png";
+import Travellingbg from "../../../assets/Travellingbg.avif";
+import TravellingIcon from "../../../assets/Travellingicon.avif";
 
 const TravellingWithUs = () => {
   return (

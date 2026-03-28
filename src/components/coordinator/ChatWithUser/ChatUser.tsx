@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import send from "@/assets/sidebaricon/send.png"
+import send from "@/assets/sidebaricon/send.avif"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Search } from "lucide-react"
 import { Badge } from "@/components/ui/badge"

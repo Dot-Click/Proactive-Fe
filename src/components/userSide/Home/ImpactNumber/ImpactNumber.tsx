@@ -1,5 +1,5 @@
-// import importantMask from "../../../../assets/importantmask.png"
-// import importantlayer from "../../../../assets/importantlayer.png"
+// import importantMask from "../../../../assets/importantmask.avif"
+// import importantlayer from "../../../../assets/importantlayer.avif"
 // import ImpactCard from "./ImpactCard";
 // const ImpactNumber = () => {
 //     return (
@@ -33,8 +33,8 @@
 
 // export default ImpactNumber
 
-import importantMask from "../../../../assets/importantmask.png";
-import importantlayer from "../../../../assets/importantlayer.png";
+import importantMask from "../../../../assets/importantmask.avif";
+import importantlayer from "../../../../assets/importantlayer.avif";
 import ImpactCard from "./ImpactCard";
 import { useTranslation } from "react-i18next";
 

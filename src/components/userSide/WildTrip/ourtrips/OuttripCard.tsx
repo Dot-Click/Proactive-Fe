@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button"
-import adventureoppurunities1 from "../../../../assets/adventureoppurtunities1.png"
-import adventureoppurunities2 from "../../../../assets/adventureoppurtunities2.png"
-import adventureoppurunities3 from "../../../../assets/adventureoppurtunities3.png"
-import clock from "../../../../assets/clock.png"
-import Shadowblack from "../../../../assets/blackshadow.png"
+import adventureoppurunities1 from "../../../../assets/adventureoppurtunities1.avif"
+import adventureoppurunities2 from "../../../../assets/adventureoppurtunities2.avif"
+import adventureoppurunities3 from "../../../../assets/adventureoppurtunities3.avif"
+import clock from "../../../../assets/clock.avif"
+import Shadowblack from "../../../../assets/blackshadow.avif"
 
 const OuttripCard = () => {
     return (

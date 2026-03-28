@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import Review from "../../../assets/Review.png"
+import Review from "../../../assets/Review.avif"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import ReviewReminderDialog from "./ReviewReminderDialog"
 const ReviewReminder = () => {

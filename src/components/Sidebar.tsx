@@ -15,9 +15,9 @@ import {
   TooltipTrigger,
   TooltipProvider
 } from "@/components/ui/tooltip"
-import Proactivelogo from "@/assets/proactive-logo.png";
-import Favicon from "@/assets/sidebaricon/favicon.png";
-import SidebarIcon from "@/assets/sidebaricon/sidebarIcon.png";
+import Proactivelogo from "@/assets/proactive-logo.avif";
+import Favicon from "@/assets/sidebaricon/favicon.avif";
+import SidebarIcon from "@/assets/sidebaricon/sidebarIcon.avif";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,4 +1,4 @@
-import box1 from "../../../assets/box.png"
+import box1 from "../../../assets/box.avif"
 import FaqQuestion from "./FaqQuestion"
 
 const FAQ = () => {

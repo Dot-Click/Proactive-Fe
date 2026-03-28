@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
-import Explore1 from "../../../../assets/Explore1.png"
-import Explore2 from "../../../../assets/Explore2.png"
+import Explore1 from "../../../../assets/Explore1.avif"
+import Explore2 from "../../../../assets/Explore2.avif"
 import { FaPause, FaPlay } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 

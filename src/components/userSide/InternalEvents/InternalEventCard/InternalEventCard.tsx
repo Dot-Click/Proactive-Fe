@@ -1,6 +1,6 @@
-import What from "../../../../assets/Whatis.png"
-import Howdo from "../../../../assets/Howdo.png"
-import when from "../../../../assets/When.png"
+import What from "../../../../assets/Whatis.avif"
+import Howdo from "../../../../assets/Howdo.avif"
+import when from "../../../../assets/When.avif"
 const InternalEventCard = () => {
     return (
         <div className="flex lg:flex-row flex-col justify-center items-center gap-6 py-6 lg:mb-30 lg:-mt-10 md:mt-10 mb-20 -mt-10">

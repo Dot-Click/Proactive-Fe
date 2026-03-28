@@ -1,4 +1,4 @@
-import box2 from "../../../../assets/box2.png"
+import box2 from "../../../../assets/box2.avif"
 import Carousel from "./Carousel"
 
 const OurCollaboration = () => {

@@ -4,11 +4,11 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import z from "zod";
 import { Button } from "../ui/button";
-import google from "../../assets/google.png"
-import login from "../../assets/login.png"
-import loginLayer from "../../assets/loginLayer.png"
-import loginformbg from "../../assets/loginformbg.png"
-import proactivelogo from "../../assets/proactive-logo.png"
+import google from "../../assets/google.avif"
+import login from "../../assets/login.avif"
+import loginLayer from "../../assets/loginLayer.avif"
+import loginformbg from "../../assets/loginformbg.avif"
+import proactivelogo from "../../assets/proactive-logo.avif"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { useNavigate } from "react-router-dom";

@@ -1,10 +1,10 @@
 
 
 import { Button } from "@/components/ui/button"
-import Instagram from "../../../../assets/Instagram.png"
-import Instagram2 from "../../../../assets/Instagram2.png"
+import Instagram from "../../../../assets/Instagram.avif"
+import Instagram2 from "../../../../assets/Instagram2.avif"
 import FollowCard from "./FollowCard"
-import box1 from "../../../../assets/box.png"
+import box1 from "../../../../assets/box.avif"
 import { useInstagramInfo } from "@/hooks/getInstaInfohook"
 import { useTranslation } from "react-i18next"
 

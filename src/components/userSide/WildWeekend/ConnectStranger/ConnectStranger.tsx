@@ -1,6 +1,6 @@
-import setting from "../../../../assets/setting.png"
-import connect1 from "../../../../assets/connect1.png"
-import connect2 from "../../../../assets/connect2.png"
+import setting from "../../../../assets/setting.avif"
+import connect1 from "../../../../assets/connect1.avif"
+import connect2 from "../../../../assets/connect2.avif"
 import { useTranslation } from "react-i18next";
 
 const ConnectStranger = () => {

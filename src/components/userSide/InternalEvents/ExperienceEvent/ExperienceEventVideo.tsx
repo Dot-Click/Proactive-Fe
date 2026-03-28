@@ -1,5 +1,5 @@
 import { useRef, useState } from "react"
-import ExperienceVideo from "../../../../assets/ExperienceVideo.png"
+import ExperienceVideo from "../../../../assets/ExperienceVideo.avif"
 import { FaPause, FaPlay } from "react-icons/fa";
 
 const ExperienceEventVideo = () => {

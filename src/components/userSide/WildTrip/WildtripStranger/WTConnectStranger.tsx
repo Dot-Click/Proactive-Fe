@@ -1,6 +1,6 @@
-import setting from "../../../../assets/setting.png"
-import WT1 from "../../../../assets/WT1.png"
-import WT2 from "../../../../assets/WT2.png"
+import setting from "../../../../assets/setting.avif"
+import WT1 from "../../../../assets/WT1.avif"
+import WT2 from "../../../../assets/WT2.avif"
 import { useTranslation } from "react-i18next"
 
 const WTConnectStranger = () => {

@@ -9,7 +9,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { LoaderIcon } from "lucide-react";
 import { useState } from "react";
 import ApplicantsVideo from "./ApplicantsVideo";
-import play from "../../../assets/play.png";
+import play from "../../../assets/play.avif";
 
 type User = {
   id: string;

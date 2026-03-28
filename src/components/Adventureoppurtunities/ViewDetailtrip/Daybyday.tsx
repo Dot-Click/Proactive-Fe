@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import day1 from "../../../assets/day1.png";
+import day1 from "../../../assets/day1.avif";
 import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";

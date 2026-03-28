@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import CarouselImg from "../../../assets/carouselimg.png"
-import CarouselImg1 from "../../../assets/Carousel1.png"
-import layer from "../../../assets/carouselLayer.png"
+import CarouselImg from "../../../assets/carouselimg.avif"
+import CarouselImg1 from "../../../assets/Carousel1.avif"
+import layer from "../../../assets/carouselLayer.avif"
 import { Button } from "@/components/ui/button";
 
 interface CarouselProps {

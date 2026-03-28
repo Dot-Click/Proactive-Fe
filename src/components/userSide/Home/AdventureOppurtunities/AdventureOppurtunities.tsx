@@ -1,7 +1,7 @@
-// import linearline from "../../../assets/linearline.png"
-// import Box from "../../../assets/box.png"
+// import linearline from "../../../assets/linearline.avif"
+// import Box from "../../../assets/box.avif"
 import Adventureoppurtunitiescard from "./Adventureoppurtunitiescard"
-import box1 from "../../../../assets/box.png"
+import box1 from "../../../../assets/box.avif"
 import { UsegetTrips } from "@/hooks/gettriphook"
 import { useTranslation } from "react-i18next"
 

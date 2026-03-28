@@ -1,7 +1,7 @@
 import { FaLocationDot } from "react-icons/fa6";
 import { MdArrowOutward } from "react-icons/md";
 import { SearchX, Inbox, LoaderIcon } from "lucide-react";
-// import trip1 from "../../assets/trip1.png"
+// import trip1 from "../../assets/trip1.avif"
 import { useNavigate } from "react-router-dom";
 import { UseSearchTrips } from "@/hooks/searchTripshook";
 import { UsegetOpenTrips } from "@/hooks/getOpenTripshook";

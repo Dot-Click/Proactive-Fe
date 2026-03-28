@@ -4,8 +4,8 @@ import { useRef, useEffect } from "react"
 import { LoaderIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import Marquee from "react-fast-marquee"
-import calender from "../../../../assets/calenderwhite.png"
-import location from "../../../../assets/locationwhite.png"
+import calender from "../../../../assets/calenderwhite.avif"
+import location from "../../../../assets/locationwhite.avif"
 
 const Adventureoppurtunitiescard = () => {
     const { data, isLoading } = UsegetTrips();

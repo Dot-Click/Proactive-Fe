@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Plus, Check, X, Upload } from "lucide-react";
-import included1 from "../../../assets/included1.png";
-import included2 from "../../../assets/included2.png";
-import included3 from "../../../assets/included3.png";
-import included4 from "../../../assets/included4.png";
-import included5 from "../../../assets/included5.png";
+import included1 from "../../../assets/included1.avif";
+import included2 from "../../../assets/included2.avif";
+import included3 from "../../../assets/included3.avif";
+import included4 from "../../../assets/included4.avif";
+import included5 from "../../../assets/included5.avif";
 import { Controller, useFormContext } from "react-hook-form";
 import { FormMessage } from "@/components/ui/form";
 import clsx from "clsx";

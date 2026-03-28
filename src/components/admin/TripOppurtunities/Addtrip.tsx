@@ -10,15 +10,15 @@ import Mediaprice from "./Mediaprice";
 import Reviewsave from "./Reviewsave";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import arrowBack from "@/assets/sidebaricon/arrow.png";
+import arrowBack from "@/assets/sidebaricon/arrow.avif";
 import { UseCreateTrip } from "@/hooks/UseCreateTriphook";
 import { AlertCircle } from "lucide-react";
 import TripWizardProgress from "./TripWizardProgress";
-import included1 from "@/assets/included1.png";
-import included2 from "@/assets/included2.png";
-import included3 from "@/assets/included3.png";
-import included4 from "@/assets/included4.png";
-import included5 from "@/assets/included5.png";
+import included1 from "@/assets/included1.avif";
+import included2 from "@/assets/included2.avif";
+import included3 from "@/assets/included3.avif";
+import included4 from "@/assets/included4.avif";
+import included5 from "@/assets/included5.avif";
 
 const AddTrip = ({ backUrl }: { backUrl: string }) => {
   const methods = useForm<TripFormType>({

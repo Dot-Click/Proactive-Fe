@@ -1,4 +1,4 @@
-import SurfaceCamps from "../../../assets/Surfacecamp.png"
+import SurfaceCamps from "../../../assets/Surfacecamp.avif"
 
 const SurfaceCamp = () => {
     return (

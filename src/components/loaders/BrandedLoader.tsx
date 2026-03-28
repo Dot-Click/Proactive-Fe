@@ -1,4 +1,4 @@
-import proactivelogo from "@/assets/proactive-logo.png";
+import proactivelogo from "@/assets/proactive-logo.avif";
 
 interface BrandedLoaderProps {
   title?: string;

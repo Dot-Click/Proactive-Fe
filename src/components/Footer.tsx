@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import FooterLogo from "../assets/FooterLogo.png";
+import FooterLogo from "../assets/FooterLogo.avif";
 import { FaLinkedinIn, FaPhoneAlt } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import { RiInstagramFill } from "react-icons/ri";

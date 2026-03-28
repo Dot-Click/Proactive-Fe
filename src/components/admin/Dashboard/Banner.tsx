@@ -1,6 +1,6 @@
 // Banner.tsx
-import BannerImg from "@/assets/sidebaricon/bannerImg.png";
-import bannericon from "@/assets/sidebaricon/bannericon.png";
+import BannerImg from "@/assets/sidebaricon/bannerImg.avif";
+import bannericon from "@/assets/sidebaricon/bannericon.avif";
 import useGetBanner from "@/hooks/useGetBanner";
 
 const Banner = () => {

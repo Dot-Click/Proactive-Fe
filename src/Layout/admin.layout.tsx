@@ -6,13 +6,13 @@ import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useIsMobile } from "../hooks/use-mobile";
 import Dashboard from "@/assets/sidebaricon/dashboard.svg";
-import UserManagement from "@/assets/sidebaricon/user-management.png";
-import Coordinator from "@/assets/sidebaricon/coordinator-management.png";
-import Star from "@/assets/sidebaricon/star.png";
-import Trip from "@/assets/sidebaricon/trip-oppurtunities.png";
-import Chat from "@/assets/sidebaricon/chat-management.png";
-import Payment from "@/assets/sidebaricon/payment-membership.png";
-import Settings from "@/assets/sidebaricon/settings.png";
+import UserManagement from "@/assets/sidebaricon/user-management.avif";
+import Coordinator from "@/assets/sidebaricon/coordinator-management.avif";
+import Star from "@/assets/sidebaricon/star.avif";
+import Trip from "@/assets/sidebaricon/trip-oppurtunities.avif";
+import Chat from "@/assets/sidebaricon/chat-management.avif";
+import Payment from "@/assets/sidebaricon/payment-membership.avif";
+import Settings from "@/assets/sidebaricon/settings.avif";
 
 const AdminItems = [
   { label: "sidebar.dashboard", href: "/dashboard", Icon: Dashboard },

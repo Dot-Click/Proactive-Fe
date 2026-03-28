@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
-import WonderPeoplebg from "../../../../assets/WonderPeoplebg.png"
-import WonderPeopleVideo from "../../../../assets/WonderPeopleVideo.png"
+import WonderPeoplebg from "../../../../assets/WonderPeoplebg.avif"
+import WonderPeopleVideo from "../../../../assets/WonderPeopleVideo.avif"
 import { FaPause, FaPlay } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 

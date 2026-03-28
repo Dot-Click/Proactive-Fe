@@ -1,9 +1,9 @@
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
-import AboutCarousel1 from "../../../../assets/AboutCarousel1.png"
-import AboutCarousel2 from "../../../../assets/AboutCarousel2.png"
-import AboutCarousel3 from "../../../../assets/AboutCarousel3.png"
-import AboutCarousel4 from "../../../../assets/AboutCarousel4.png"
+import AboutCarousel1 from "../../../../assets/AboutCarousel1.avif"
+import AboutCarousel2 from "../../../../assets/AboutCarousel2.avif"
+import AboutCarousel3 from "../../../../assets/AboutCarousel3.avif"
+import AboutCarousel4 from "../../../../assets/AboutCarousel4.avif"
 import { useState } from "react";
 const Carousel = () => {
 const [index, Setindex] = useState(0)

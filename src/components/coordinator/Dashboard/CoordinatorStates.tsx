@@ -1,7 +1,7 @@
-import TotalUsers from "@/assets/sidebaricon/totalusers.png"
-import Coordinator from "@/assets/sidebaricon/coordinators.png"
-import ActiveTrips from "@/assets/sidebaricon/activetrips.png"
-import CloseTrips from "@/assets/sidebaricon/closetrips.png"
+import TotalUsers from "@/assets/sidebaricon/totalusers.avif"
+import Coordinator from "@/assets/sidebaricon/coordinators.avif"
+import ActiveTrips from "@/assets/sidebaricon/activetrips.avif"
+import CloseTrips from "@/assets/sidebaricon/closetrips.avif"
 import { Badge } from "@/components/ui/badge"
 import { UsegetcoordinatordashboardStats } from "@/hooks/getcoordinatordashboardStats"
 

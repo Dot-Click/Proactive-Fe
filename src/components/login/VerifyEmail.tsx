@@ -1,7 +1,7 @@
-import login from "../../assets/login.png"
-import loginLayer from "../../assets/loginLayer.png"
-import loginformbg from "../../assets/loginformbg.png"
-import proactivelogo from "../../assets/proactive-logo.png"
+import login from "../../assets/login.avif"
+import loginLayer from "../../assets/loginLayer.avif"
+import loginformbg from "../../assets/loginformbg.avif"
+import proactivelogo from "../../assets/proactive-logo.avif"
 // --- Manual code entry: no longer used; user verifies by clicking link only ---
 // import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 // import { Input } from "../ui/input";

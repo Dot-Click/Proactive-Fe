@@ -1,9 +1,9 @@
 
 
-import Play from "../../../../assets/play2.png"
-import momentscard1 from "../../../../assets/momentscard1.png"
-import momentscard2 from "../../../../assets/momentscard2.png"
-import momentscard3 from "../../../../assets/momentscard3.png"
+import Play from "../../../../assets/play2.avif"
+import momentscard1 from "../../../../assets/momentscard1.avif"
+import momentscard2 from "../../../../assets/momentscard2.avif"
+import momentscard3 from "../../../../assets/momentscard3.avif"
 import { useInstagramInfo } from "@/hooks/getInstaInfohook"
 import type { InstagramPost } from "@/hooks/getInstaInfohook"
 

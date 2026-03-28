@@ -4,10 +4,10 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import proactivefavicon from "../../../assets/sidebaricon/favicon.png"
+import proactivefavicon from "../../../assets/sidebaricon/favicon.avif"
 import { FaLocationDot } from "react-icons/fa6"
-import calender from "../../../assets/calenderblack.png"
-import detailtrip1 from "../../../assets/detailtrip1.png"
+import calender from "../../../assets/calenderblack.avif"
+import detailtrip1 from "../../../assets/detailtrip1.avif"
 import { useState } from "react"
 import z from "zod"
 import { useForm } from "react-hook-form"

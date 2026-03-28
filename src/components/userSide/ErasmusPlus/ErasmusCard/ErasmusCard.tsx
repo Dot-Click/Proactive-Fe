@@ -1,12 +1,12 @@
-import Erasmus1 from "../../../../assets/Erasmus1.png";
-import Erasmus2 from "../../../../assets/Erasmus2.png";
-import Erasmus3 from "../../../../assets/Erasmus3.png";
-import Erasmus4 from "../../../../assets/Erasmus4.png";
-import Erasmus5 from "../../../../assets/Erasmus5.png";
-import Erasmus6 from "../../../../assets/Erasmus6.png";
-import Erasmus7 from "../../../../assets/Erasmus7.png";
-import Erasmus8 from "../../../../assets/Erasmus8.png";
-import Erasmus9 from "../../../../assets/Erasmus9.png";
+import Erasmus1 from "../../../../assets/Erasmus1.avif";
+import Erasmus2 from "../../../../assets/Erasmus2.avif";
+import Erasmus3 from "../../../../assets/Erasmus3.avif";
+import Erasmus4 from "../../../../assets/Erasmus4.avif";
+import Erasmus5 from "../../../../assets/Erasmus5.avif";
+import Erasmus6 from "../../../../assets/Erasmus6.avif";
+import Erasmus7 from "../../../../assets/Erasmus7.avif";
+import Erasmus8 from "../../../../assets/Erasmus8.avif";
+import Erasmus9 from "../../../../assets/Erasmus9.avif";
 const ErasmusCard = () => {
   return (
     <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 py-6 mb-8">

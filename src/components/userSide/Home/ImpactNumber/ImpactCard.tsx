@@ -1,5 +1,5 @@
-// import impact2 from "../../../../assets/impact2.png"
-// import impact4 from "../../../../assets/impact4.png"
+// import impact2 from "../../../../assets/impact2.avif"
+// import impact4 from "../../../../assets/impact4.avif"
 // import CountUp from 'react-countup';
 // import { Tent, Users } from 'lucide-react';
 

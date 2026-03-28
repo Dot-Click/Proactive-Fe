@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import proactive from "../../../assets/proactive-logo.png";
+import proactive from "../../../assets/proactive-logo.avif";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import {
@@ -25,7 +25,7 @@ import { UsegetNotifications } from "@/hooks/getNotificationhook";
 import { useMarkAsReadNotification } from "@/hooks/MarkAsReadNotification";
 import { LayoutDashboard, Settings, LogOut } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
-import NotificationIconAsset from "../../../assets/sidebaricon/notification.png";
+import NotificationIconAsset from "../../../assets/sidebaricon/notification.avif";
 import TripPaymentModal from "@/components/payment/TripPaymentModal";
 // import { UserDashboardDrawerItems } from "@/components/DrawerItems";
 

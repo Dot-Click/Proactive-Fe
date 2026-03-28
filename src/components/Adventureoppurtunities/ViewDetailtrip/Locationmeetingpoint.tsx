@@ -1,7 +1,7 @@
-import locationmeeting1 from "../../../assets/locationmeeting1.png"
-import locationmeeting2 from "../../../assets/locationmeeting2.png"
-import locationmeeting3 from "../../../assets/locationmeeting3.png"
-import locationmeeting4 from "../../../assets/locationmeeting4.png"
+import locationmeeting1 from "../../../assets/locationmeeting1.avif"
+import locationmeeting2 from "../../../assets/locationmeeting2.avif"
+import locationmeeting3 from "../../../assets/locationmeeting3.avif"
+import locationmeeting4 from "../../../assets/locationmeeting4.avif"
 
 const Locationmeetingpoint = ({ trip }: { trip: any }) => {
     // Extract trip data - handle both direct trip object and nested structure

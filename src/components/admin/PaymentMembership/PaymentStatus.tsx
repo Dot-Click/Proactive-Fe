@@ -4,7 +4,7 @@ import ReusableTable from "@/Table/ReusableTable"
 import TableHeader from "@/Table/TableHeader"
 import type { ColumnDef } from "@tanstack/react-table";
 import { Download, LoaderIcon, FileText } from "lucide-react"
-import credit from "@/assets/sidebaricon/credit.png"
+import credit from "@/assets/sidebaricon/credit.avif"
 import { useState } from "react";
 import { UsegetAllPayments } from "@/hooks/getAllPaymentshook";
 import jsPDF from "jspdf";

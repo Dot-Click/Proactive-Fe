@@ -1,5 +1,5 @@
-import OurMissionImg from "../../../../assets/OurMission.png"
-import box2 from "../../../../assets/box2.png"
+import OurMissionImg from "../../../../assets/OurMission.avif"
+import box2 from "../../../../assets/box2.avif"
 import { useTranslation } from "react-i18next"
 
 const OurMission = () => {

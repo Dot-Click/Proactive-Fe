@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import openoppurtunitiesbg from "../../../assets/openoppurtunitiesbg.png"
+import openoppurtunitiesbg from "../../../assets/openoppurtunitiesbg.avif"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 

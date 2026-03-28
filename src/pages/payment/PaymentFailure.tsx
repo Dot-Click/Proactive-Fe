@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { XCircle, AlertCircle, RefreshCcw, Home } from "lucide-react";
-import logo from "@/assets/sidebaricon/favicon.png";
+import logo from "@/assets/sidebaricon/favicon.avif";
 
 const PaymentFailurePage = () => {
     const navigate = useNavigate();

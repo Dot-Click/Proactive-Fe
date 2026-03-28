@@ -1,7 +1,7 @@
-import setting from "../../../../assets/setting.png"
-import AboutPart1 from "../../../../assets/AboutPart1.png"
-import AboutPart2 from "../../../../assets/AboutPart2.png"
-import box1 from "../../../../assets/box.png"
+import setting from "../../../../assets/setting.avif"
+import AboutPart1 from "../../../../assets/AboutPart1.avif"
+import AboutPart2 from "../../../../assets/AboutPart2.avif"
+import box1 from "../../../../assets/box.avif"
 import { useTranslation } from "react-i18next"
 
 const Part = () => {

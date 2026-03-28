@@ -1,8 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Badge } from "../ui/badge"
-import goldmember from "../../assets/goldmember.png"
-import email from "../../assets/email.png"
-import calender from "../../assets/calenderblack.png"
+import goldmember from "../../assets/goldmember.avif"
+import email from "../../assets/email.avif"
+import calender from "../../assets/calenderblack.avif"
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
 import { useTranslation } from "react-i18next";
 

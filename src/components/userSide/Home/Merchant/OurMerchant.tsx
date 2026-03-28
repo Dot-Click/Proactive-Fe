@@ -1,5 +1,5 @@
 // import Testimonial from "./Testimonial"
-// import box1 from "../../../../assets/box.png"
+// import box1 from "../../../../assets/box.avif"
 
 // const OurMerchant = () => {
 //   return (
@@ -24,7 +24,7 @@
 
 
 // import Testimonial from "./Testimonial"
-// import box1 from "../../../../assets/box.png"
+// import box1 from "../../../../assets/box.avif"
 
 // const OurMerchant = () => {
 //   return (

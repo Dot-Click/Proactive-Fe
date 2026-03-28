@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import zigzagbottom from "../../../assets/zigzagbottom.png"
+import zigzagbottom from "../../../assets/zigzagbottom.avif"
 import { UsegetallFaqs } from "@/hooks/getallFaqs";
 import { LoaderIcon } from "lucide-react";
 

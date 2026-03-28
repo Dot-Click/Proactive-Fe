@@ -1,7 +1,7 @@
 // import { Button } from "@/components/ui/button";
 // import { useNavigate, useParams } from "react-router-dom";
-// import arrowBack from "@/assets/sidebaricon/arrow.png";
-// import imgupload from "@/assets/sidebaricon/imgupload.png";
+// import arrowBack from "@/assets/sidebaricon/arrow.avif";
+// import imgupload from "@/assets/sidebaricon/imgupload.avif";
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import { useForm } from "react-hook-form";
 // import { z } from "zod";
@@ -827,8 +827,8 @@
 
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
-import arrowBack from "@/assets/sidebaricon/arrow.png";
-import imgupload from "@/assets/sidebaricon/imgupload.png";
+import arrowBack from "@/assets/sidebaricon/arrow.avif";
+import imgupload from "@/assets/sidebaricon/imgupload.avif";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

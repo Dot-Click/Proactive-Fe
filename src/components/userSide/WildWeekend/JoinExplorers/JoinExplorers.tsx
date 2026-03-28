@@ -1,4 +1,4 @@
-import Explore1 from "../../../../assets/Explore1.png";
+import Explore1 from "../../../../assets/Explore1.avif";
 import { useTranslation } from "react-i18next";
 
 const JOIN_WHATSAPP_URL = "https://chat.whatsapp.com/";

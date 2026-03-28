@@ -1,5 +1,5 @@
-import connectingPeople from "../../../../assets/ConnectingPeople.png"
-import box2 from "../../../../assets/box2.png"
+import connectingPeople from "../../../../assets/ConnectingPeople.avif"
+import box2 from "../../../../assets/box2.avif"
 import { useTranslation } from "react-i18next"
 
 const ConnectingPeople = () => {

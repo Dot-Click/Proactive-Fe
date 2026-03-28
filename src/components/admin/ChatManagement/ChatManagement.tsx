@@ -1,5 +1,5 @@
 import { Switch } from "@/components/ui/switch"
-import message from "@/assets/sidebaricon/message.png"
+import message from "@/assets/sidebaricon/message.avif"
 import TableHeader from "@/Table/TableHeader"
 import { Download, FileText, LoaderIcon } from "lucide-react"
 import ReusableTable from "@/Table/ReusableTable"

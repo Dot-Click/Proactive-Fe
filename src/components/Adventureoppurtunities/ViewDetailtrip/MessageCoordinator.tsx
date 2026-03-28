@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from "react"
 import { socket, connectSocket } from "@/Socket"
 import { Usegetmessagebyid } from "@/hooks/getmessagehook"
 import { LoaderIcon } from "lucide-react"
-import send from "@/assets/sidebaricon/send.png"
+import send from "@/assets/sidebaricon/send.avif"
 import api from "@/config/axios"
 
 interface MessageCoordinatorProps {

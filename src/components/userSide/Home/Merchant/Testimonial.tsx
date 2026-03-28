@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import bottomimg from "../../../../assets/participantsbottom.png"
+import bottomimg from "../../../../assets/participantsbottom.avif"
 import Marquee from "react-fast-marquee";
 import { FaStar } from "react-icons/fa";
 import { useReviews } from "@/hooks/getReviewshook";

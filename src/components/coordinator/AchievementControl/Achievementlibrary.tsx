@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
-import AchievementExplorer from "../../../assets/AchievementExplorer.png";
-import ShadowMountain from "../../../assets/ShadowMountain.png";
-import Nature from "../../../assets/Naturelover.png";
-import Leader from "../../../assets/LeaderLibrary.png";
+import AchievementExplorer from "../../../assets/AchievementExplorer.avif";
+import ShadowMountain from "../../../assets/ShadowMountain.avif";
+import Nature from "../../../assets/Naturelover.avif";
+import Leader from "../../../assets/LeaderLibrary.avif";
 
 type AchievementItem = {
   id: string;

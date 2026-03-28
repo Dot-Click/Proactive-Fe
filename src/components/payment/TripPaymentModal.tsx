@@ -10,7 +10,7 @@ import { DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/c
 import { Input } from '@/components/ui/input';
 import { UsePayment } from '@/hooks/UsePaymenthook';
 import { UsegetTripbyid } from '@/hooks/gettripbyidhook';
-import logo from "@/assets/sidebaricon/favicon.png";
+import logo from "@/assets/sidebaricon/favicon.avif";
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';

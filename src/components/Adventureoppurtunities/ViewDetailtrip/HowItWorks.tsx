@@ -1,5 +1,5 @@
 import { Calendar, UserPlus, Map, Users, Heart } from 'lucide-react';
-import zigzagbottom from "../../../assets/zigzagbottom.png"
+import zigzagbottom from "../../../assets/zigzagbottom.avif"
 
 const HowItWorks = () => {
     const steps = [

@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
-import WonderPeoplebg from "../../../../assets/WonderPeoplebg.png";
+import WonderPeoplebg from "../../../../assets/WonderPeoplebg.avif";
 import { FaPlay } from "react-icons/fa";
-import Youtube1 from "../../../../assets/Youtube1.png";
-import Youtube2 from "../../../../assets/Youtube2.png";
-import locationIcon from "../../../../assets/footerlocation.png";
+import Youtube1 from "../../../../assets/Youtube1.avif";
+import Youtube2 from "../../../../assets/Youtube2.avif";
+import locationIcon from "../../../../assets/footerlocation.avif";
 
 const VIDEO_CARDS = [
   {

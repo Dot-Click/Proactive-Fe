@@ -1,8 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Calendar, MapPin, ArrowRight } from "lucide-react";
-import logo from "@/assets/sidebaricon/favicon.png";
-import successBg from "@/assets/SuccessPayment.png";
+import logo from "@/assets/sidebaricon/favicon.avif";
+import successBg from "@/assets/SuccessPayment.avif";
 
 const PaymentSuccessPage = () => {
     const navigate = useNavigate();
