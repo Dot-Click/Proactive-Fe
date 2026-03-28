@@ -36,7 +36,6 @@ const MessageCoordinator = ({ coordinator, tripId, tripTitle, open, onOpenChange
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-cls
   const coordinatorId = coordinator.id
   const coordinatorName = coordinator.fullName || coordinator.CoordinatorName || "Coordinator"
   const coordinatorImage = coordinator.profilePicture || coordinator.CoordinatorPhoto
