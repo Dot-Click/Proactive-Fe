@@ -7,6 +7,7 @@ import { LoaderIcon, User } from "lucide-react";
 import { UseSearchTrips } from "@/hooks/searchTripshook";
 import type { TabId } from "../Tabs/Tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useTranslation, Trans } from "react-i18next"
 
 interface ShowTripsProps {
     view: string;
@@ -27,6 +28,7 @@ const Showtrips = ({
     countryFilter, 
     activeOnly 
 }: ShowTripsProps) => {
+    const { t } = useTranslation()
     const navigate = useNavigate()
 
     // Backend search (debounced inside hook)
@@ -111,7 +113,11 @@ const Showtrips = ({
         <div className="py-6 min-h-[400px]">
             <div className="flex justify-between items-center mb-6">
                 <span className="text-[#221E33] font-bold text-lg">
-                    Showing <span className="text-[#D40004]">{filteredTrips.length}</span> expeditions
+                    <Trans 
+                        i18nKey="openOpportunitiesPage.showingXExpeditions" 
+                        values={{ count: filteredTrips.length }}
+                        components={[<span key="0" className="text-[#D40004]" />]}
+                    />
                 </span>
             </div>
 
@@ -121,7 +127,9 @@ const Showtrips = ({
                 </div>
             ) : isError ? (
                 <div className="w-full flex items-center justify-center py-20 bg-red-50 rounded-3xl border border-red-100">
-                    <p className="text-red-600 font-medium">An error occurred while loading trips.</p>
+                    <p className="text-red-600 font-medium">
+                        {t("openOpportunitiesPage.errorLoading")}
+                    </p>
                 </div>
             ) : (filteredTrips.length === 0) ? (
                 <div className="w-full flex flex-col items-center justify-center py-32 bg-gray-50 rounded-[40px] border border-dashed border-gray-200">
@@ -130,14 +138,14 @@ const Showtrips = ({
                     </div>
                     <p className="text-[#666373] text-lg font-medium text-center">
                         {searchQuery || category || countryFilter || coordinatorId
-                            ? "No expeditions match your current filters."
-                            : "More expeditions coming soon."}
+                            ? t("openOpportunitiesPage.noTripsFound")
+                            : t("openOpportunitiesPage.upcomingSoon")}
                     </p>
                     <button 
                         onClick={() => window.location.reload()}
                         className="mt-4 text-[#D40004] font-bold text-sm hover:underline"
                     >
-                        Clear all filters
+                        {t("openOpportunitiesPage.clearFilters")}
                     </button>
                 </div>
             ) : (
@@ -177,7 +185,7 @@ const Showtrips = ({
                                     <div className="flex items-center gap-2 mb-2">
                                         <div className={`w-2 h-2 rounded-full ${trip.status === 'open' ? 'bg-[#34AB7F] animate-pulse' : 'bg-red-500'}`} />
                                         <span className={`text-[10px] font-bold uppercase tracking-widest ${view === 'list' ? 'text-gray-400' : 'text-gray-300'}`}>
-                                            {trip.status === 'open' ? 'Available' : 'Sold Out'}
+                                            {trip.status === 'open' ? t("openOpportunitiesPage.available") : t("openOpportunitiesPage.soldOut")}
                                         </span>
                                     </div>
                                     <h3 className={`font-bold leading-tight mb-2 ${view === "list" ? "text-2xl text-[#221E33]" : "text-3xl text-white md:text-3xl"}`}>
@@ -198,9 +206,11 @@ const Showtrips = ({
                                             </AvatarFallback>
                                         </Avatar>
                                         <div className="text-left">
-                                            <p className={`text-[10px] font-bold uppercase tracking-wider ${view === 'list' ? 'text-gray-400' : 'text-white/50'}`}>Leader</p>
+                                            <p className={`text-[10px] font-bold uppercase tracking-wider ${view === 'list' ? 'text-gray-400' : 'text-white/50'}`}>
+                                                {t("openOpportunitiesPage.leader")}
+                                            </p>
                                             <p className={`text-xs font-bold ${view === 'list' ? 'text-[#221E33]' : 'text-white'}`}>
-                                                {trip.coordinator?.fullName || trip.coordinator?.username || "Lead Explorer"}
+                                                {trip.coordinator?.fullName || trip.coordinator?.username || t("openOpportunitiesPage.leadExplorer")}
                                             </p>
                                         </div>
                                     </div>
@@ -211,7 +221,7 @@ const Showtrips = ({
                                                 ? 'bg-[#D40004] text-white hover:bg-[#b00003] hover:scale-105 shadow-lg shadow-red-900/20' 
                                                 : 'bg-white text-black hover:bg-gray-100 hover:scale-105 shadow-lg shadow-gray-200'}`}
                                     >
-                                        {trip.status === 'open' ? 'Reservar' : 'Ver expedición'}
+                                        {trip.status === 'open' ? t("openOpportunitiesPage.bookNow") : t("openOpportunitiesPage.viewExpedition")}
                                         <MdArrowOutward />
                                     </button>
                                 </div>

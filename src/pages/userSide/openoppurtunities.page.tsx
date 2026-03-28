@@ -8,8 +8,10 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
+import { useTranslation } from "react-i18next"
 
 const OpenOppurtunitiesPage = () => {
+  const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState("")
   const [activeTab, setActiveTab] = useState<TabId>("all")
   const [showActiveOnly, setShowActiveOnly] = useState(false)
@@ -31,7 +33,7 @@ const OpenOppurtunitiesPage = () => {
                 <div className="relative mb-8">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <Input 
-                        placeholder="Search Expedition..." 
+                        placeholder={t("openOpportunitiesPage.searchExpedition")} 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-12 py-6 rounded-2xl border-[#EDEDED] bg-[#FAFAFA] focus:ring-red-500 font-quicksand"
@@ -39,7 +41,9 @@ const OpenOppurtunitiesPage = () => {
                 </div>
 
                 <div className="mb-10">
-                    <h2 className="text-[#D40004] font-bold text-3xl mb-6 tracking-tight">Expediciones</h2>
+                    <h2 className="text-[#D40004] font-bold text-3xl mb-6 tracking-tight">
+                        {t("openOpportunitiesPage.expeditions")}
+                    </h2>
                     
                     <div className="flex items-center space-x-3 mb-8">
                         <Checkbox 
@@ -49,22 +53,24 @@ const OpenOppurtunitiesPage = () => {
                             className="w-5 h-5 border-[#EDEDED] data-[state=checked]:bg-[#D40004] data-[state=checked]:border-[#D40004] rounded-md transition-all"
                         />
                         <label htmlFor="active-enrollment" className="text-sm font-semibold text-[#221E33] cursor-pointer" onClick={() => setShowActiveOnly(!showActiveOnly)}>
-                            Inscripción abierta
+                            {t("openOpportunitiesPage.openEnrollment")}
                         </label>
                     </div>
 
                     <div className="space-y-4 text-gray-400">
                         <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold uppercase tracking-widest pl-1">Filtrar por estado</label>
+                            <label className="text-[10px] font-bold uppercase tracking-widest pl-1">
+                                {t("openOpportunitiesPage.filterByStatus")}
+                            </label>
                             <Select value={activeTab} onValueChange={(v) => setActiveTab(v as TabId)}>
                                 <SelectTrigger className="w-full bg-[#FAFAFA] border-[#EDEDED] py-6 rounded-2xl font-bold text-[#221E33]">
-                                    <SelectValue placeholder="Estado de expedición" />
+                                    <SelectValue placeholder={t("openOpportunitiesPage.expeditionStatus")} />
                                 </SelectTrigger>
                                 <SelectContent className="rounded-2xl shadow-xl border-[#EDEDED]">
-                                    <SelectItem value="all">Todas las expediciones</SelectItem>
-                                    <SelectItem value="open">Abiertas</SelectItem>
-                                    <SelectItem value="coming-soon">Próximamente</SelectItem>
-                                    <SelectItem value="closed">Finalizadas</SelectItem>
+                                    <SelectItem value="all">{t("openOpportunitiesPage.allExpeditions")}</SelectItem>
+                                    <SelectItem value="open">{t("openOpportunitiesPage.open")}</SelectItem>
+                                    <SelectItem value="coming-soon">{t("openOpportunitiesPage.comingSoon")}</SelectItem>
+                                    <SelectItem value="closed">{t("openOpportunitiesPage.closed")}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -75,7 +81,7 @@ const OpenOppurtunitiesPage = () => {
                     onClick={handleResetFilters}
                     className="w-full py-7 rounded-2xl bg-[#D40004] hover:bg-[#b00003] text-white font-bold text-lg shadow-lg shadow-red-100 transition-all hover:scale-[1.02] cursor-pointer"
                 >
-                    Ver todas
+                    {t("openOpportunitiesPage.viewAll")}
                 </Button>
             </div>
           </aside>

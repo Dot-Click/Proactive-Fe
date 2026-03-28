@@ -300,8 +300,9 @@ import { type OpenTrip } from "@/hooks/getOpenTripshook";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
+import { useTranslation } from "react-i18next";
 
-const WEEKDAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+const WEEKDAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
 
 // Extended color palette for unique trip colors
 const TRIP_COLORS = [
@@ -418,6 +419,7 @@ function getTripsForDate(trips: OpenTrip[], date: Date): OpenTrip[] {
 }
 
 const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [viewDate, setViewDate] = useState(() => {
         const d = new Date();
@@ -435,7 +437,7 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
     const startDayIndex = (firstDaySundayBased + 6) % 7;
     const { weeks, totalCells } = buildMonthGrid(year, monthIndex, daysInMonth, startDayIndex);
 
-    const monthTitle = new Intl.DateTimeFormat(undefined, { month: "short", year: "numeric" }).format(viewDate);
+    const monthTitle = new Intl.DateTimeFormat(i18n.language, { month: "short", year: "numeric" }).format(viewDate);
 
     function goToPrevMonth() {
         setViewDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
@@ -476,19 +478,22 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
     // Get trips that overlap each date (for coloring calendar cells) - show ALL trips (past + upcoming)
     const tripsByDate = useMemo(() => {
         const map = new Map<string, OpenTrip[]>();
-        const flatCells = weeks.flat();
-
-        flatCells.forEach((cell) => {
-            if (!cell.date) return;
-            const dateStr = getLocalDateString(cell.date);
-            const tripsForDate = getTripsForDate(allTrips, cell.date);
-            if (tripsForDate.length > 0) {
-                map.set(dateStr, tripsForDate);
+        allTrips.forEach((trip: OpenTrip) => {
+            if (!trip.startDate || !trip.endDate) return;
+            const start = new Date(trip.startDate);
+            const end = new Date(trip.endDate);
+            const curr = new Date(start);
+            while (curr <= end) {
+                const dateStr = getLocalDateString(curr);
+                if (!map.has(dateStr)) {
+                    map.set(dateStr, []);
+                }
+                map.get(dateStr)!.push(trip);
+                curr.setDate(curr.getDate() + 1);
             }
         });
-
         return map;
-    }, [allTrips, weeks]);
+    }, [allTrips]);
 
     // Get trips starting on each date (for badges) - show ALL trips (past + upcoming)
     const tripsByStartDate = useMemo(() => {
@@ -529,8 +534,8 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
     return (
         <div className="bg-[#F6F8FD] px-4 sm:px-16 py-8">
             <div className="flex flex-col justify-center items-center gap-2">
-                <h4 className="text-center bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold lg:text-4xl">Upcoming Wild Weekends & Trips</h4>
-                <span className="text-center text-[#221E33] text-[12px] lg:text-[14px]">Browse all our upcoming adventures at a glance. See available weekends and trips directly on the <br className="hidden lg:block" /> calendar.</span>
+                <h4 className="text-center bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-bold lg:text-4xl">{t("openOpportunitiesPage.upcomingWildWeekends")}</h4>
+                <span className="text-center text-[#221E33] text-[12px] lg:text-[14px]">{t("openOpportunitiesPage.browseUpcomingAdventures")}</span>
             </div>
 
             <div className="mt-8 flex lg:flex-row flex-col justify-center lg:items-start items-center gap-6">
@@ -549,9 +554,9 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
                             </div>
                         </div>
                         <div className="grid grid-cols-7 text-[11px] text-[#565070] mb-1">
-                            {WEEKDAY_LABELS.map((label) => (
-                                <div key={`mini-label-${label}`} className="text-center py-1">
-                                    {label}
+                            {WEEKDAY_KEYS.map((key) => (
+                                <div key={`mini-label-${key}`} className="text-center py-1">
+                                    {t(`openOpportunitiesPage.calendar.${key}`)}
                                 </div>
                             ))}
                         </div>
@@ -581,7 +586,7 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full pl-10 pr-3 py-2 bg-white rounded-[12px] shadow-sm placeholder-[#A0A3AD] text-sm text-[#221E33] outline-none"
-                            placeholder="Search Place"
+                            placeholder={t("openOpportunitiesPage.searchPlace")}
                         />
                     </div>
                 </div>
@@ -591,9 +596,9 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
                     <div className="bg-white rounded-2xl">
 
                         <div className="mt-6 grid grid-cols-7 text-sm text-[#565070] bg-[#F6F6F6] rounded-tl-[12px] rounded-tr-[12px]">
-                            {WEEKDAY_LABELS.map((label) => (
-                                <div key={`label-${label}`} className="py-6 text-center border-l">
-                                    {label}
+                            {WEEKDAY_KEYS.map((key) => (
+                                <div key={`label-${key}`} className="py-6 text-center border-l">
+                                    {t(`openOpportunitiesPage.calendar.${key}`)}
                                 </div>
                             ))}
                         </div>
@@ -700,14 +705,14 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
                                                             }
                                                         }}
                                                     >
-                                                        +{tripsStartingHere.length - 2} more
+                                                        +{tripsStartingHere.length - 2} {t("openOpportunitiesPage.more")}
                                                     </div>
                                                 )}
                                             </div>
                                         )}
 
                                         {isWildWeekend && tripsForThisDate.length === 0 && cell.dayNumber === secondWeekend.saturday && (
-                                            <span className="absolute bottom-1.5 left-1.5 text-xs text-[#2A7765] font-medium z-10">Wild Weekend</span>
+                                            <span className="absolute bottom-1.5 left-1.5 text-xs text-[#2A7765] font-medium z-10">{t("openOpportunitiesPage.wildWeekend")}</span>
                                         )}
                                     </div>
                                 );
@@ -731,7 +736,7 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
                         <div className="flex items-center justify-between p-5 border-b border-[#ECECF1]">
                             <div>
                                 <h3 className="text-lg font-bold text-[#221E33]">
-                                    {clickedDate.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
+                                    {clickedDate.toLocaleDateString(i18n.language, { month: 'long', day: 'numeric' })}
                                 </h3>
                                 <p className="text-sm text-[#666373] mt-0.5">
                                     {clickedDate.getFullYear()}
@@ -798,7 +803,7 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
                                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                                 </svg>
                                                                 <span>
-                                                                    {new Date(trip.startDate).toLocaleDateString(undefined, { day: "numeric", month: "short" })} - {new Date(trip.endDate).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}
+                                                                    {new Date(trip.startDate).toLocaleDateString(i18n.language, { day: "numeric", month: "short" })} - {new Date(trip.endDate).toLocaleDateString(i18n.language, { day: "numeric", month: "short", year: "numeric" })}
                                                                 </span>
                                                             </div>
                                                         )}

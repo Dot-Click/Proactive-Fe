@@ -11,21 +11,11 @@ import { Button } from "@/components/ui/button"
 import { useState, useMemo } from "react"
 import { UsegetPastTrips, type PastTrip } from "@/hooks/getPastTripshook"
 import { LoaderIcon } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 const FALLBACK_IMAGES = [
     Pastadventure1, Pastadventure2, Pastadventure3, Pastadventure4,
     Pastadventure5, Pastadventure6, Pastadventure7, Pastadventure8,
-]
-
-const FALLBACK_PAST_ADVENTURES = [
-    { id: "f1", img: Pastadventure1, category: "Wild Weekend", title: "Cayoning Barcelona", date: "05 October 2024" },
-    { id: "f2", img: Pastadventure2, category: "Wild Trip", title: "Iceland Northern Lights", date: "15 November 2024" },
-    { id: "f3", img: Pastadventure3, category: "Erasmus+", title: "Berlin Youth Exchange", date: "5 octubre de 2025" },
-    { id: "f4", img: Pastadventure4, category: "Wild Weekend", title: "Portuguese Coast Adventure", date: "08 August 2024" },
-    { id: "f5", img: Pastadventure5, category: "Wild Weekend", title: "Romanian Carpathians Trek", date: "05 October 2024" },
-    { id: "f6", img: Pastadventure6, category: "Erasmus+", title: "French Culture Immersion", date: "15 November 2024" },
-    { id: "f7", img: Pastadventure7, category: "Wild Trip", title: "Swiss Alpine Weekend", date: "5 octubre de 2025" },
-    { id: "f8", img: Pastadventure8, category: "Wild Weekend", title: "Greek Islands Expedition", date: "5 octubre de 2025" },
 ]
 
 function getCategoryButtonClass(category: string): string {
@@ -45,18 +35,30 @@ type DisplayItem = {
 }
 
 const Pastadventures = () => {
+    const { t, i18n } = useTranslation()
     const [loadmore, setLoadmore] = useState(false)
     const { data, isLoading } = UsegetPastTrips()
     const apiTrips = data?.trips ?? []
 
+    const FALLBACK_PAST_ADVENTURES = useMemo(() => [
+        { id: "f1", img: Pastadventure1, category: t("openOpportunitiesPage.wildWeekend"), title: "Cayoning Barcelona", date: "05 October 2024" },
+        { id: "f2", img: Pastadventure2, category: "Wild Trip", title: "Iceland Northern Lights", date: "15 November 2024" },
+        { id: "f3", img: Pastadventure3, category: "Erasmus+", title: "Berlin Youth Exchange", date: "5 octubre de 2025" },
+        { id: "f4", img: Pastadventure4, category: t("openOpportunitiesPage.wildWeekend"), title: "Portuguese Coast Adventure", date: "08 August 2024" },
+        { id: "f5", img: Pastadventure5, category: t("openOpportunitiesPage.wildWeekend"), title: "Romanian Carpathians Trek", date: "05 October 2024" },
+        { id: "f6", img: Pastadventure6, category: "Erasmus+", title: "French Culture Immersion", date: "15 November 2024" },
+        { id: "f7", img: Pastadventure7, category: "Wild Trip", title: "Swiss Alpine Weekend", date: "5 octubre de 2025" },
+        { id: "f8", img: Pastadventure8, category: t("openOpportunitiesPage.wildWeekend"), title: "Greek Islands Expedition", date: "5 octubre de 2025" },
+    ], [t]);
+
     const displayItems = useMemo((): DisplayItem[] => {
         if (apiTrips.length > 0) {
-            return apiTrips.map((t: PastTrip, index: number) => ({
-                id: t.id,
-                imageUrl: t.coverImage || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length],
-                category: t.category || t.type || "Adventure",
-                title: t.name || t.title || "Past Adventure",
-                date: t.startDate ? new Date(t.startDate).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }) : "",
+            return apiTrips.map((t_item: PastTrip, index: number) => ({
+                id: t_item.id,
+                imageUrl: t_item.coverImage || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length],
+                category: t_item.category || t_item.type || t("openOpportunitiesPage.adventure"),
+                title: t_item.name || t_item.title || t("openOpportunitiesPage.pastAdventure"),
+                date: t_item.startDate ? new Date(t_item.startDate).toLocaleDateString(i18n.language, { day: "2-digit", month: "long", year: "numeric" }) : "",
             }))
         }
 
@@ -68,7 +70,7 @@ const Pastadventures = () => {
             title: f.title,
             date: f.date,
         }))
-    }, [apiTrips, loadmore])
+    }, [apiTrips, loadmore, FALLBACK_PAST_ADVENTURES, t, i18n.language])
 
     const useFallback = apiTrips.length === 0
     const showLoadMore = useFallback && !loadmore
@@ -76,8 +78,12 @@ const Pastadventures = () => {
     return (
         <div className="bg-[#FAFAFA] px-4 sm:px-16 py-8">
             <div className="flex flex-col gap-2 justify-center items-center">
-                <h4 className="bg-linear-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold text-4xl">Past Adventures</h4>
-                <span className="text-[#221E33] text-sm text-center">Explore our completed adventures and see the amazing experiences we&apos;ve created</span>
+                <h4 className="bg-linear-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold text-4xl">
+                    {t("openOpportunitiesPage.pastAdventures")}
+                </h4>
+                <span className="text-[#221E33] text-sm text-center">
+                    {t("openOpportunitiesPage.exploreCompletedAdventures")}
+                </span>
             </div>
 
             {isLoading ? (
@@ -106,12 +112,16 @@ const Pastadventures = () => {
                     </div>
                     {showLoadMore && (
                         <div className="flex justify-center items-center py-6">
-                            <Button onClick={() => setLoadmore(true)} className="bg-[#0DAC87] hover:bg-[#0ca07d] cursor-pointer rounded-full px-10 py-6">Load More Adventures</Button>
+                            <Button onClick={() => setLoadmore(true)} className="bg-[#0DAC87] hover:bg-[#0ca07d] cursor-pointer rounded-full px-10 py-6">
+                                {t("openOpportunitiesPage.loadMoreAdventures")}
+                            </Button>
                         </div>
                     )}
                     {useFallback && loadmore && (
                         <div className="flex justify-center items-center py-6">
-                            <Button className="bg-[#0DAC87] hover:bg-[#0ca07d] cursor-pointer rounded-full px-10 py-6">No More Adventures Available</Button>
+                            <Button className="bg-[#0DAC87] hover:bg-[#0ca07d] cursor-pointer rounded-full px-10 py-6">
+                                {t("openOpportunitiesPage.noMoreAdventures")}
+                            </Button>
                         </div>
                     )}
                 </>
