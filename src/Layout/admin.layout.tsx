@@ -15,14 +15,14 @@ import Payment from "@/assets/sidebaricon/payment-membership.png";
 import Settings from "@/assets/sidebaricon/settings.png";
 
 const AdminItems = [
-  { label: "Dashboard", href: "/dashboard", Icon: Dashboard },
-  { label: "User Management", href: "/dashboard/user-management", Icon: UserManagement },
-  { label: "Coordinator Management", href: "/dashboard/coordinator-management", Icon: Coordinator },
-  { label: "Trip Opportunities", href: "/dashboard/trip-management", Icon: Trip },
-  { label: "Google Reviews", href: "/dashboard/google-reviews", Icon: Star },
-  { label: "Chat Management", href: "/dashboard/chat-management", Icon: Chat },
-  { label: "Payment & Membership", href: "/dashboard/payment-membership", Icon: Payment },
-  { label: "Settings", href: "/dashboard/settings", Icon: Settings },
+  { label: "sidebar.dashboard", href: "/dashboard", Icon: Dashboard },
+  { label: "sidebar.userManagement", href: "/dashboard/user-management", Icon: UserManagement },
+  { label: "sidebar.coordinatorManagement", href: "/dashboard/coordinator-management", Icon: Coordinator },
+  { label: "sidebar.tripOpportunities", href: "/dashboard/trip-management", Icon: Trip },
+  { label: "sidebar.googleReviews", href: "/dashboard/google-reviews", Icon: Star },
+  { label: "sidebar.chatManagement", href: "/dashboard/chat-management", Icon: Chat },
+  { label: "sidebar.paymentMembership", href: "/dashboard/payment-membership", Icon: Payment },
+  { label: "sidebar.settings", href: "/dashboard/settings", Icon: Settings },
 ]
 
 

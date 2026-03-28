@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CheckCircle, Clock } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface Participant {
   userId: string;
@@ -14,6 +15,7 @@ interface ConfirmedParticipantsProps {
 }
 
 const ConfirmedParticipants = ({ trip }: ConfirmedParticipantsProps) => {
+  const { t } = useTranslation();
   const participants = trip?.participants || [];
 
   if (participants.length === 0) {
@@ -30,7 +32,7 @@ const ConfirmedParticipants = ({ trip }: ConfirmedParticipantsProps) => {
 
   return (
     <div className="px-4 sm:px-16 py-4">
-      <h4 className="text-[#000000] font-bold text-lg mb-6">Confirmed Participants</h4>
+      <h4 className="text-[#000000] font-bold text-lg mb-6">{t("trips.confirmedParticipants")}</h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {uniqueParticipants.map((participant: Participant, index: number) => {
           
@@ -51,18 +53,18 @@ const ConfirmedParticipants = ({ trip }: ConfirmedParticipantsProps) => {
                   {participant.userFirstName} {participant.userLastName ? participant.userLastName.charAt(0) + "." : ""}
                 </span>
                 <span className="text-xs text-[#666373]">
-                  Confirmed Member
+                  {t("trips.confirmedMember")}
                 </span>
               </div>
 
               {isWildTrips && (
-                <div 
-                  className={`flex flex-col items-center justify-center gap-1 px-2 py-1 rounded ${isPaid ? 'text-[#108700] bg-[#EAF7E8]' : 'text-[#666373] bg-[#F1F1F1]'}`} 
-                  title={isPaid ? "Payment Done" : "Payment Pending"}
-                >
-                  {isPaid ? <CheckCircle size={16} /> : <Clock size={16} />}
-                  <span className="text-[10px] font-bold uppercase tracking-wider">{isPaid ? 'Paid' : 'Pending'}</span>
-                </div>
+                  <span 
+                    className={`flex flex-col items-center justify-center gap-1 px-2 py-1 rounded ${isPaid ? 'text-[#108700] bg-[#EAF7E8]' : 'text-[#666373] bg-[#F1F1F1]'}`} 
+                    title={isPaid ? t("trips.paymentDone") : t("trips.paymentPending")}
+                  >
+                    {isPaid ? <CheckCircle size={16} /> : <Clock size={16} />}
+                    <span className="text-[10px] font-bold uppercase tracking-wider">{isPaid ? t("trips.paid") : t("trips.pending")}</span>
+                  </span>
               )}
             </div>
           );

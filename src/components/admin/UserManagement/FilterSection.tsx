@@ -18,6 +18,7 @@ import { UseSearchUsers } from "@/hooks/searchUserhook";
 import { useUpdateUserStatus } from "@/hooks/updateUserStatushook";
 import { useUpdateMembership } from "@/hooks/updateMembershipHook";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type User = {
   id: string;
@@ -52,12 +53,12 @@ const getInitials = (value?: string) => {
   );
 };
 
-const getDisplayName = (user: User) => {
+const getDisplayName = (user: User, t: any) => {
   const composedName = [user.firstName, user.lastName]
     .filter(Boolean)
     .join(" ")
     .trim();
-  return user.nickName || composedName || "Unknown User";
+  return user.nickName || composedName || t("profile.user");
 };
 
 const getShortId = (id: string, index: number) => {
@@ -73,6 +74,7 @@ const getShortId = (id: string, index: number) => {
 // };
 
 const StatusCell = ({ row }: { row: any }) => {
+  const { t } = useTranslation();
   const { mutate } = useUpdateUserStatus();
   // Default to lower case "active"
   const status = row.original.userStatus || "active";
@@ -93,15 +95,15 @@ const StatusCell = ({ row }: { row: any }) => {
               : "text-[#D14343] bg-[#D14343]/10 border-[#D14343]"
           } font-bold w-[120px] rounded-full text-[13px] px-4 py-4 border gap-1`}
         >
-          <SelectValue placeholder="Status" />
+          <SelectValue placeholder={t("userManagement.table.status")} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectItem value="active" className="font-bold">
-              Active
+              {t("userManagement.table.active")}
             </SelectItem>
             <SelectItem value="inactive" className="font-bold">
-              Inactive
+              {t("userManagement.table.inactive")}
             </SelectItem>
           </SelectGroup>
         </SelectContent>
@@ -111,15 +113,18 @@ const StatusCell = ({ row }: { row: any }) => {
 };
 
 const MembershipCell = ({ row }: { row: any }) => {
+  const { t } = useTranslation();
   const { mutate, isPending } = useUpdateMembership();
-  const membershipExpiry = row.original.membershipExpiry;
+  const membershipExpiry = row.original.memberExpiry;
   const isMember = membershipExpiry && new Date(membershipExpiry) > new Date();
 
   return (
     <div className="flex justify-center items-center gap-2">
       {isMember ? (
         <div className="flex flex-col items-center gap-1">
-          <span className="text-[10px] text-[#077B21] font-bold">Expires: {new Date(membershipExpiry).toLocaleDateString()}</span>
+          <span className="text-[10px] text-[#077B21] font-bold">
+            {t("userManagement.table.expires")} {new Date(membershipExpiry).toLocaleDateString()}
+          </span>
           <Button 
             variant="outline"
             size="sm"
@@ -127,7 +132,7 @@ const MembershipCell = ({ row }: { row: any }) => {
             onClick={() => mutate({ userId: row.original.id, action: "remove" })}
             className="text-[#D14343] border-[#D14343] hover:bg-red-50 rounded-full h-8 text-xs font-bold"
           >
-            Remove
+            {t("userManagement.table.remove")}
           </Button>
         </div>
       ) : (
@@ -138,7 +143,7 @@ const MembershipCell = ({ row }: { row: any }) => {
           onClick={() => mutate({ userId: row.original.id, action: "activate" })}
           className="text-[#0DAC87] border-[#0DAC87] hover:bg-green-50 rounded-full h-8 text-xs font-bold"
         >
-          Activate
+          {t("userManagement.table.activate")}
         </Button>
       )}
     </div>
@@ -152,14 +157,14 @@ const MembershipCell = ({ row }: { row: any }) => {
 //   return parsed.toLocaleDateString();
 // };
 
-const userColumns: ColumnDef<User>[] = [
+const getUserColumns = (t: any): ColumnDef<User>[] => [
   {
     accessorKey: "id",
     enableColumnFilter: true,
     enableSorting: true,
     header: () => (
       <div className="pl-6">
-        <h1>ID</h1>
+        <h1>{t("userManagement.table.id")}</h1>
       </div>
     ),
     cell: ({ row }) => <span>{getShortId(row.original.id, row.index)}</span>,
@@ -170,11 +175,11 @@ const userColumns: ColumnDef<User>[] = [
     enableSorting: true,
     header: () => (
       <div className="pl-10">
-        <h1>Name</h1>
+        <h1>{t("userManagement.table.name")}</h1>
       </div>
     ),
     cell: ({ row }) => {
-      const name = getDisplayName(row.original);
+      const name = getDisplayName(row.original, t);
       return (
         <div className="flex items-center gap-2 pl-6">
           <Avatar className="h-12 w-12">
@@ -192,7 +197,7 @@ const userColumns: ColumnDef<User>[] = [
     enableSorting: true,
     header: () => (
       <div>
-        <h1>Email</h1>
+        <h1>{t("userManagement.table.email")}</h1>
       </div>
     ),
     cell: ({ row }) => (
@@ -205,7 +210,7 @@ const userColumns: ColumnDef<User>[] = [
     accessorKey: "membership",
     header: () => (
       <div className="text-center">
-        <h1>Membership</h1>
+        <h1>{t("userManagement.table.membership")}</h1>
       </div>
     ),
     cell: ({ row }) => <MembershipCell row={row} />,
@@ -216,7 +221,7 @@ const userColumns: ColumnDef<User>[] = [
     enableSorting: true,
     header: () => (
       <div className="text-start">
-        <h1>Phone</h1>
+        <h1>{t("userManagement.table.phone")}</h1>
       </div>
     ),
     cell: ({ row }) => (
@@ -231,7 +236,7 @@ const userColumns: ColumnDef<User>[] = [
     enableSorting: true,
     header: () => (
       <div className="text-center">
-        <h1>Status</h1>
+        <h1>{t("userManagement.table.status")}</h1>
       </div>
     ),
     /* @ts-ignore */
@@ -241,7 +246,7 @@ const userColumns: ColumnDef<User>[] = [
     accessorKey: "actions",
     header: () => (
       <div>
-        <h1>Actions</h1>
+        <h1>{t("userManagement.table.actions")}</h1>
       </div>
     ),
     cell: ({ row }) => {
@@ -252,7 +257,7 @@ const userColumns: ColumnDef<User>[] = [
           <Dialog>
             <DialogTrigger asChild>
               <Button className="hover:bg-[#000000] cursor-pointer rounded-full px-8 py-6 font-semibold">
-                View Detail
+                {t("userManagement.table.viewDetail")}
               </Button>
             </DialogTrigger>
             <Modal userId={userId} />
@@ -264,6 +269,7 @@ const userColumns: ColumnDef<User>[] = [
 ];
 
 const FilterSection = () => {
+  const { t } = useTranslation();
   const { data: getAllUser, isLoading, isError } = UseGetAllUser();
   const [columnsMenu, setColumnsMenu] = useState<{
     items: { id: string; label?: string; checked: boolean }[];
@@ -272,6 +278,8 @@ const FilterSection = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [pageSize, setPageSize] = useState<number>(10);
   const { data: searchResults, isLoading: isSearchLoading } = UseSearchUsers(searchQuery);
+
+  const userColumns = useMemo(() => getUserColumns(t), [t]);
 
   const users = useMemo(() => {
     // If search query is active, use search results
@@ -290,7 +298,7 @@ const FilterSection = () => {
         columnsMenuItems={columnsMenu?.items ?? []}
         onColumnMenuToggle={(id, v) => columnsMenu?.toggle(id, v)}
         showFilter={false}
-        searchPlaceholder="Search users by name or email"
+        searchPlaceholder={t("userManagement.filter.searchPlaceholder")}
         onSearch={(query) => setSearchQuery(query)}
         defaultLimit={pageSize}
         limitOptions={[10, 20, 50]}
@@ -300,13 +308,13 @@ const FilterSection = () => {
         {isError ? (
           <div className="flex items-center justify-center px-4 py-6">
             <span className="text-[#D14343] font-semibold text-[16px]">
-              Failed to load users.
+              {t("userManagement.filter.failed")}
             </span>
           </div>
         ) : isLoading || isSearchLoading ? (
           <div className="flex items-center justify-center px-4 py-6">
             <span className="text-[#221E33] font-semibold text-[16px]">
-              Loading users...
+              {t("userManagement.filter.loading")}
             </span>
           </div>
         ) : (

@@ -7,6 +7,7 @@ import { UseSearchTrips } from "@/hooks/searchTripshook";
 import { UsegetOpenTrips } from "@/hooks/getOpenTripshook";
 import { UsegetTrips } from "@/hooks/gettriphook";
 import type { TabId } from "./Tabs";
+import { useTranslation } from "react-i18next";
 
 interface ShowTripsProps {
     view: string;
@@ -24,6 +25,7 @@ interface ShowTripsProps {
 // ];
 
 const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTripsProps) => {
+    const { t } = useTranslation()
     const navigate = useNavigate()
 
     // Backend search (debounced inside hook)
@@ -118,9 +120,9 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
     // Get tab label for messages
     const getTabLabel = () => {
         switch (activeTab) {
-            case "open": return "Open";
-            case "coming-soon": return "Coming Soon";
-            case "closed": return "Closed";
+            case "open": return t("trips.tabs.open");
+            case "coming-soon": return t("trips.tabs.comingSoon");
+            case "closed": return t("trips.tabs.closed");
             default: return "";
         }
     };
@@ -133,7 +135,7 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                             <div>
                                 <span
                                     className="bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold text-lg">
-                                    Showing {upcomingtrip ? upcomingtrip.length : 0} trips
+                                    {t("trips.showingXTrips", { count: upcomingtrip ? upcomingtrip.length : 0 })}
                                 </span>
 
                                 <div className="border-b border-[#D9D9D9] mt-[16px]" />
@@ -148,7 +150,7 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                             <Inbox className="h-8 w-8 text-[#DC2626]" />
                                         </div>
                                         <p className="text-[#666373] text-sm font-medium">
-                                            Unable to load trips. Please try again later.
+                                            {t("trips.unableToLoad")}
                                         </p>
                                     </div>
                                 )}
@@ -160,10 +162,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                     <SearchX className="h-8 w-8 text-[#666373]" />
                                                 </div>
                                                 <p className="text-[#666373] text-sm font-medium mb-1">
-                                                    No {getTabLabel().toLowerCase()} trips found for &quot;{searchQuery}&quot;
+                                                    {t("trips.noTabTripsFound", { tab: getTabLabel().toLowerCase(), query: searchQuery })}
                                                 </p>
                                                 <p className="text-[#999999] text-xs">
-                                                    Try adjusting your search terms or selecting a different tab
+                                                    {t("trips.tryAdjustingFilters")}
                                                 </p>
                                             </>
                                         ) : hasNoTabAndCategoryResults ? (
@@ -172,10 +174,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                     <Inbox className="h-8 w-8 text-[#666373]" />
                                                 </div>
                                                 <p className="text-[#666373] text-sm font-medium mb-1">
-                                                    No {getTabLabel().toLowerCase()} trips in this category
+                                                    {t("trips.noTabTripsCategory", { tab: getTabLabel().toLowerCase() })}
                                                 </p>
                                                 <p className="text-[#999999] text-xs">
-                                                    Try selecting a different category or tab
+                                                    {t("trips.tryAdjustingFilters")}
                                                 </p>
                                             </>
                                         ) : hasNoTabResults ? (
@@ -184,10 +186,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                     <Inbox className="h-8 w-8 text-[#666373]" />
                                                 </div>
                                                 <p className="text-[#666373] text-sm font-medium mb-1">
-                                                    No {getTabLabel()} trips available
+                                                    {t("trips.noTabTripsAvailable", { tab: getTabLabel() })}
                                                 </p>
                                                 <p className="text-[#999999] text-xs">
-                                                    Check other tabs or come back later for new {getTabLabel().toLowerCase()} trips
+                                                    {t("trips.checkBackLater")}
                                                 </p>
                                             </>
                                         ) : hasNoSearchResults ? (
@@ -196,10 +198,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                     <SearchX className="h-8 w-8 text-[#666373]" />
                                                 </div>
                                                 <p className="text-[#666373] text-sm font-medium mb-1">
-                                                    No trips found for &quot;{searchQuery}&quot;
+                                                    {t("trips.noTripsFound", { query: searchQuery })}
                                                 </p>
                                                 <p className="text-[#999999] text-xs">
-                                                    Try adjusting your search terms or filters
+                                                    {t("trips.tryAdjustingFilters")}
                                                 </p>
                                             </>
                                         ) : hasNoCategoryResults ? (
@@ -208,10 +210,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                     <Inbox className="h-8 w-8 text-[#666373]" />
                                                 </div>
                                                 <p className="text-[#666373] text-sm font-medium mb-1">
-                                                    No trips found in this category
+                                                    {t("trips.noTripsCategory")}
                                                 </p>
                                                 <p className="text-[#999999] text-xs">
-                                                    Try selecting a different category or clearing filters
+                                                    {t("trips.tryAdjustingFilters")}
                                                 </p>
                                             </>
                                         ) : hasNoDataAtAll ? (
@@ -220,10 +222,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                     <Inbox className="h-8 w-8 text-[#666373]" />
                                                 </div>
                                                 <p className="text-[#666373] text-sm font-medium mb-1">
-                                                    No trips available at the moment
+                                                    {t("trips.noTripsAvailable")}
                                                 </p>
                                                 <p className="text-[#999999] text-xs">
-                                                    Check back later for new adventures
+                                                    {t("trips.checkBackLater")}
                                                 </p>
                                             </>
                                         ) : (
@@ -232,10 +234,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                     <Inbox className="h-8 w-8 text-[#666373]" />
                                                 </div>
                                                 <p className="text-[#666373] text-sm font-medium mb-1">
-                                                    No trips match your current filters
+                                                    {t("trips.noTripsAvailable")}
                                                 </p>
                                                 <p className="text-[#999999] text-xs">
-                                                    Try adjusting your filters or search terms
+                                                    {t("trips.tryAdjustingFilters")}
                                                 </p>
                                             </>
                                         )}
@@ -268,7 +270,7 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                                 <div className="flex lg:flex-row flex-col w-full justify-between gap-4">
                                                                     <div className="flex flex-col gap-1 ">
                                                                         <div onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
-                                                                            View Detail
+                                                                            {t("trips.viewDetail")}
                                                                             <MdArrowOutward color="#FFFFFF" />
                                                                         </div>
                                                                     </div>
@@ -287,7 +289,7 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                         <div>
                             <span
                                 className="bg-gradient-to-r from-[#221E33] to-[#565070]  text-transparent bg-clip-text font-bold text-lg">
-                                Showing {upcomingtrip ? upcomingtrip.length : 0} trips
+                                {t("trips.showingXTrips", { count: upcomingtrip ? upcomingtrip.length : 0 })}
                             </span>
 
                             <div className="border-b border-[#D9D9D9] mt-[16px]" />
@@ -303,7 +305,7 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                         <Inbox className="h-8 w-8 text-[#DC2626]" />
                                     </div>
                                     <p className="text-[#666373] text-sm font-medium">
-                                        Unable to load trips. Please try again later.
+                                        {t("trips.unableToLoad")}
                                     </p>
                                 </div>
                             )}
@@ -315,10 +317,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                 <SearchX className="h-8 w-8 text-[#666373]" />
                                             </div>
                                             <p className="text-[#666373] text-sm font-medium mb-1">
-                                                No {getTabLabel().toLowerCase()} trips found for &quot;{searchQuery}&quot;
+                                                {t("trips.noTabTripsFound", { tab: getTabLabel().toLowerCase(), query: searchQuery })}
                                             </p>
                                             <p className="text-[#999999] text-xs">
-                                                Try adjusting your search terms or selecting a different tab
+                                                {t("trips.tryAdjustingFilters")}
                                             </p>
                                         </>
                                     ) : hasNoTabAndCategoryResults ? (
@@ -327,10 +329,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                 <Inbox className="h-8 w-8 text-[#666373]" />
                                             </div>
                                             <p className="text-[#666373] text-sm font-medium mb-1">
-                                                No {getTabLabel().toLowerCase()} trips in this category
+                                                {t("trips.noTabTripsCategory", { tab: getTabLabel().toLowerCase() })}
                                             </p>
                                             <p className="text-[#999999] text-xs">
-                                                Try selecting a different category or tab
+                                                {t("trips.tryAdjustingFilters")}
                                             </p>
                                         </>
                                     ) : hasNoTabResults ? (
@@ -339,10 +341,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                 <Inbox className="h-8 w-8 text-[#666373]" />
                                             </div>
                                             <p className="text-[#666373] text-sm font-medium mb-1">
-                                                No {getTabLabel()} trips available
+                                                {t("trips.noTabTripsAvailable", { tab: getTabLabel() })}
                                             </p>
                                             <p className="text-[#999999] text-xs">
-                                                Check other tabs or come back later for new {getTabLabel().toLowerCase()} trips
+                                                {t("trips.checkBackLater")}
                                             </p>
                                         </>
                                     ) : hasNoSearchResults ? (
@@ -351,10 +353,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                 <SearchX className="h-8 w-8 text-[#666373]" />
                                             </div>
                                             <p className="text-[#666373] text-sm font-medium mb-1">
-                                                No trips found for &quot;{searchQuery}&quot;
+                                                {t("trips.noTripsFound", { query: searchQuery })}
                                             </p>
                                             <p className="text-[#999999] text-xs">
-                                                Try adjusting your search terms or filters
+                                                {t("trips.tryAdjustingFilters")}
                                             </p>
                                         </>
                                     ) : hasNoCategoryResults ? (
@@ -363,10 +365,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                 <Inbox className="h-8 w-8 text-[#666373]" />
                                             </div>
                                             <p className="text-[#666373] text-sm font-medium mb-1">
-                                                No trips found in this category
+                                                {t("trips.noTripsCategory")}
                                             </p>
                                             <p className="text-[#999999] text-xs">
-                                                Try selecting a different category or clearing filters
+                                                {t("trips.tryAdjustingFilters")}
                                             </p>
                                         </>
                                     ) : hasNoDataAtAll ? (
@@ -375,10 +377,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                 <Inbox className="h-8 w-8 text-[#666373]" />
                                             </div>
                                             <p className="text-[#666373] text-sm font-medium mb-1">
-                                                No trips available at the moment
+                                                {t("trips.noTripsAvailable")}
                                             </p>
                                             <p className="text-[#999999] text-xs">
-                                                Check back later for new adventures
+                                                {t("trips.checkBackLater")}
                                             </p>
                                         </>
                                     ) : (
@@ -387,10 +389,10 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                 <Inbox className="h-8 w-8 text-[#666373]" />
                                             </div>
                                             <p className="text-[#666373] text-sm font-medium mb-1">
-                                                No trips match your current filters
+                                                {t("trips.noTripsAvailable")}
                                             </p>
                                             <p className="text-[#999999] text-xs">
-                                                Try adjusting your filters or search terms
+                                                {t("trips.tryAdjustingFilters")}
                                             </p>
                                         </>
                                     )}
@@ -423,7 +425,7 @@ const Showtrips = ({ view, searchQuery, category, activeTab = "all" }: ShowTrips
                                                             <div className="flex lg:flex-row flex-col w-full justify-between gap-4">
                                                                 <div className="flex flex-col gap-1 w-full">
                                                                     <div onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)} className="font-semibold flex justify-center items-center gap-2 rounded-full cursor-pointer bg-[#0DAC87] hover:bg-[#10a17f] px-5 py-3 text-[#FFFFFF]">
-                                                                        View Detail
+                                                                        {t("trips.viewDetail")}
                                                                         <MdArrowOutward color="#FFFFFF" />
                                                                     </div>
                                                                 </div>

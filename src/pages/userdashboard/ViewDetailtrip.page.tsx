@@ -16,8 +16,10 @@ import { useParams } from "react-router-dom";
 import { UsegetTripbyid } from "@/hooks/gettripbyidhook";
 import { LoaderIcon } from "lucide-react";
 import { UsegetCategory } from "@/hooks/getCategoryhook";
+import { useTranslation } from "react-i18next";
 
 const ViewDetailTripPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const { data, isLoading, error } = UsegetTripbyid(id ?? "");
   const { data: categoriesData } = UsegetCategory();
@@ -25,10 +27,11 @@ const ViewDetailTripPage = () => {
     return (
       <div className="w-full flex items-center justify-center py-10">
         <LoaderIcon className="animate-spin" />
+        <span className="ml-2">{t("trips.loading")}</span>
       </div>
     );
   if (error || !data)
-    return <div className="text-center text-red-900">Trip not found</div>;
+    return <div className="text-center text-red-900">{t("trips.tripNotFound")}</div>;
 
   // Extract trip from API response structure: { trip: {...} }
   const trip: any = data?.trip || data;

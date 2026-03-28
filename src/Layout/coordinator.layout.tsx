@@ -13,12 +13,12 @@ import CoordinatorChat from "@/assets/sidebaricon/coordinatormsg.png";
 import CoordinatorSettings from "@/assets/sidebaricon/settings.png";
 
 const CoordinaItems = [
-  { label: "Dashboard", href: "/coordinator-dashboard", Icon: Dashboard },
-  { label: "Opportunity Management", href: "/coordinator-dashboard/oppurtunities-management", Icon: oppurtunityManagement },
-  { label: "Applicants Review", href: "/coordinator-dashboard/applicants-review", Icon: Applicants },
-  { label: "Achievement Control", href: "/coordinator-dashboard/achievements-control", Icon: Achievement },
-  { label: "Chats with Users", href: "/coordinator-dashboard/chat-users", Icon: CoordinatorChat },
-  { label: "Settings", href: "/coordinator-dashboard/settings", Icon: CoordinatorSettings },
+  { label: "sidebar.dashboard", href: "/coordinator-dashboard", Icon: Dashboard },
+  { label: "sidebar.opportunityManagement", href: "/coordinator-dashboard/oppurtunities-management", Icon: oppurtunityManagement },
+  { label: "sidebar.applicantsReview", href: "/coordinator-dashboard/applicants-review", Icon: Applicants },
+  { label: "sidebar.achievementControl", href: "/coordinator-dashboard/achievements-control", Icon: Achievement },
+  { label: "sidebar.chatsWithUsers", href: "/coordinator-dashboard/chat-users", Icon: CoordinatorChat },
+  { label: "sidebar.settings", href: "/coordinator-dashboard/settings", Icon: CoordinatorSettings },
 ]
 
 

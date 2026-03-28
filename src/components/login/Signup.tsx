@@ -1,5 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import z from "zod";
 import { Button } from "../ui/button";
 import google from "../../assets/google.png"
@@ -19,7 +21,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useState } from "react";
 import {
     Popover,
     PopoverContent,
@@ -31,37 +32,32 @@ import { toast } from "sonner";
 import { useCreateUser } from "@/hooks/UserRegisterhook";
 import { useGoogleSignup } from "@/hooks/useGoogleSignup";
 
-const allowedGenders = ["Male", "Female", "Other"];
-
-const SignupSchema = z.object({
-    FirstName: z.string().min(2, 'FirstName is required'),
-    LastName: z.string().min(2, 'LastName is required'),
-    NickName: z.string().optional(),
-    PhoneNumber: z.string().regex(/^\+?\d{9,15}$/, "Invalid phone number"),
-    DOB: z.string()
-        .min(1, "DOB is required")
-        .regex(/^\d{4}-\d{2}-\d{2}$/, "DOB must be in YYYY-MM-DD format")
-        .refine((date) => {
-            const d = new Date(date);
-            return !isNaN(d.getTime());
-        }, "DOB must be a valid date"),
-    Gender: z.enum(allowedGenders, "Gender must be Male, Female, or Other"),
-    Address: z.string().min(1, "Address is required"),
-    EmergencyContact: z.string().max(100, "Emergency contact must be less than 100 characters").optional(),
-    DNI: z.string().max(50, "DNI must be less than 50 characters").optional(),
-    DietRestrictions: z.string().max(200, "Diet restrictions must be less than 200 characters").optional(),
-    email: z.string().email("Invalid email address"),
-    Password: z.string()
-        .min(8, "Password must be at least 8 characters long")
-        .refine((val) => /[A-Z]/.test(val), "Password must contain at least one uppercase letter")
-        .refine((val) => /[0-9]/.test(val), "Password must contain at least one number")
-        .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), "Password must contain at least one special character"),
-});
-
+const allowedGenders = ["Male", "Female", "Other"] as const;
 
 const Signup = () => {
-    type SignupSchemaType = z.infer<typeof SignupSchema>
-    const form = useForm<SignupSchemaType>({
+    const { t } = useTranslation();
+    const SignupSchema = useMemo(() => z.object({
+        FirstName: z.string().min(2, t("auth.errors.somethingWentWrong")), // Fallback or more specific if needed
+        LastName: z.string().min(2, t("auth.errors.somethingWentWrong")),
+        NickName: z.string().optional(),
+        PhoneNumber: z.string().regex(/^\+?\d{9,15}$/, t("auth.errors.somethingWentWrong")),
+        DOB: z.string()
+            .min(1, t("auth.errors.somethingWentWrong"))
+            .regex(/^\d{4}-\d{2}-\d{2}$/, t("auth.errors.somethingWentWrong")),
+        Gender: z.enum(allowedGenders, { message: t("auth.signup.selectGender") }),
+        Address: z.string().min(1, t("auth.errors.somethingWentWrong")),
+        EmergencyContact: z.string().max(100).optional(),
+        DNI: z.string().max(50).optional(),
+        DietRestrictions: z.string().max(200).optional(),
+        email: z.string().email(t("auth.errors.invalidEmail")),
+        Password: z.string()
+            .min(8, t("auth.errors.passwordMin"))
+            .refine((val) => /[A-Z]/.test(val), t("auth.errors.passwordUpper"))
+            .refine((val) => /[0-9]/.test(val), t("auth.errors.passwordNumber"))
+            .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), t("auth.errors.passwordSpecial")),
+    }), [t]);
+
+    const form = useForm<z.infer<typeof SignupSchema>>({
         resolver: zodResolver(SignupSchema) as any,
         defaultValues: {
             FirstName: "",
@@ -69,7 +65,7 @@ const Signup = () => {
             NickName: "",
             PhoneNumber: "",
             DOB: "",
-            Gender: "",
+            Gender: undefined,
             Address: "",
             EmergencyContact: "",
             DNI: "",
@@ -117,31 +113,10 @@ const Signup = () => {
             if (response.data.user.role === "user") {
                 navigate("/login")
             }
-            toast.success("Account Created Successfully")
+            toast.success(t("applicationForm.successToast")); // Reusing a success message or defining new one
         } catch (error: any) {
-            const responseData = error?.response?.data;
-
-            // Handle validation errors with field-specific messages
-            if (responseData?.errors) {
-                const firstErrorKey = Object.keys(responseData.errors)[0];
-                const firstError = responseData.errors[firstErrorKey];
-                const fieldName = firstErrorKey
-                    .replace(/([A-Z])/g, " $1")
-                    .replace(/^./, (str) => str.toUpperCase())
-                    .trim();
-
-                if (Array.isArray(firstError) && firstError.length > 0) {
-                    toast.error(`${fieldName}: ${firstError[0]}`);
-                } else {
-                    toast.error(responseData?.message || "Please check your input and try again.");
-                }
-            } else {
-                // Handle other errors
-                const errorMessage = responseData?.message ||
-                    error?.message ||
-                    "Unable to create your account. Please try again.";
-                toast.error(errorMessage);
-            }
+            const message = error?.response?.data?.message || t("auth.errors.somethingWentWrong");
+            toast.error(message);
         }
     };
 
@@ -168,10 +143,10 @@ const Signup = () => {
 
                         <div className="flex flex-col justify-center items-center">
                             <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text text-3xl font-bold px-8">
-                                Welcome Back
+                                {t("auth.signup.createAccount")}
                             </h1>
                             <p className="text-[#221E33] text-[14px] mt-2">
-                                Sign up to continue your adventure journey
+                                {t("auth.signup.signUpSubtitle")}
                             </p>
                         </div>
 
@@ -185,12 +160,12 @@ const Signup = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="text-[#242E2F] font-semibold">
-                                                        Email Address
+                                                        {t("auth.login.email")}
                                                     </FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             type="email"
-                                                            placeholder="Enter your email"
+                                                            placeholder={t("auth.login.emailPlaceholder")}
                                                             {...field}
                                                             className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
                                                         />
@@ -206,12 +181,12 @@ const Signup = () => {
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="text-[#242E2F] font-semibold">
-                                                            First Name
+                                                            {t("auth.signup.firstName")}
                                                         </FormLabel>
                                                         <FormControl>
                                                             <Input
-                                                                type="First Name"
-                                                                placeholder="Enter your First Name"
+                                                                type="text"
+                                                                placeholder={t("auth.signup.firstName")}
                                                                 {...field}
                                                                 className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
                                                             />
@@ -226,12 +201,12 @@ const Signup = () => {
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="text-[#242E2F] font-semibold">
-                                                            Last Name
+                                                            {t("auth.signup.lastName")}
                                                         </FormLabel>
                                                         <FormControl>
                                                             <Input
-                                                                type="Last Name"
-                                                                placeholder="Enter your Last Name"
+                                                                type="text"
+                                                                placeholder={t("auth.signup.lastName")}
                                                                 {...field}
                                                                 className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5 w-full"
                                                             />
@@ -284,13 +259,13 @@ const Signup = () => {
                                             />
                                         </div>
                                         <div className="grid md:grid-cols-2 gap-4">
-                                            <FormField
+                                                <FormField
                                                 control={form.control}
                                                 name="DOB"
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="text-[#242E2F] font-semibold">
-                                                            DOB
+                                                            {t("auth.signup.dob")}
                                                         </FormLabel>
                                                         <FormControl>
                                                             <Popover {...field} open={open} onOpenChange={setOpen}>
@@ -300,7 +275,7 @@ const Signup = () => {
                                                                         id="date"
                                                                         className="w-full justify-between text-[#242E2F] bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-5"
                                                                     >
-                                                                        {date ? date.toLocaleDateString() : "Select date"}
+                                                                        {date ? date.toLocaleDateString() : t("auth.signup.selectDate")}
                                                                         <ChevronDownIcon />
                                                                     </Button>
                                                                 </PopoverTrigger>
@@ -334,18 +309,19 @@ const Signup = () => {
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="text-[#242E2F] font-semibold">
-                                                            Gender
+                                                            {t("auth.signup.gender")}
                                                         </FormLabel>
                                                         <FormControl>
                                                             <Select value={field.value} onValueChange={field.onChange}>
                                                                 <SelectTrigger {...field} className="md:w-[220px] w-full py-5 bg-[#FAFAFE] border border-[#EFEFEF]">
-                                                                    <SelectValue placeholder="Select a Gender" />
+                                                                    <SelectValue placeholder={t("auth.signup.selectGender")} />
                                                                 </SelectTrigger>
                                                                 <SelectContent>
                                                                     <SelectGroup>
-                                                                        <SelectLabel>Select Gender</SelectLabel>
-                                                                        <SelectItem value="Male">Male</SelectItem>
-                                                                        <SelectItem value="Female">Female</SelectItem>
+                                                                        <SelectLabel>{t("auth.signup.selectGender")}</SelectLabel>
+                                                                        <SelectItem value="Male">{t("auth.signup.genders.male")}</SelectItem>
+                                                                        <SelectItem value="Female">{t("auth.signup.genders.female")}</SelectItem>
+                                                                        <SelectItem value="Other">{t("auth.signup.genders.other")}</SelectItem>
                                                                     </SelectGroup>
                                                                 </SelectContent>
                                                             </Select>
@@ -461,14 +437,14 @@ const Signup = () => {
                                     <div className="mt-8">
                                         <Button className="bg-[#0DAC87] hover:bg-[#11a180] hover:scale-105 w-full rounded-full py-6 cursor-pointer font-semibold transition-all delay-150 duration-200 ease-in">
                                             {
-                                                createUserMutation.isPending ? "...Loading" : "Sign Up"
+                                                createUserMutation.isPending ? t("auth.signup.creatingAccount") : t("auth.signup.signUp")
                                             }
                                         </Button>
                                     </div>
 
                                     <div className="flex items-center mt-4 space-x-4">
                                         <div className="flex-1 h-[0.2px] bg-[#97A4A4]" />
-                                        <span className="text-[#97A4A4] text-[12px]">Or</span>
+                                        <span className="text-[#97A4A4] text-[12px]">{t("auth.login.or")}</span>
                                         <div className="flex-1 h-[0.2px] bg-[#97A4A4]" />
                                     </div>
                                 </form>
@@ -477,15 +453,15 @@ const Signup = () => {
                             <div className="mt-4">
                                 <Button onClick={() => mutate()} disabled={isPending} className="bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#221E33] font-bold hover:scale-105 w-full rounded-full py-6 cursor-pointer transition-all delay-150 duration-200 ease-in flex items-center justify-center gap-2">
                                     <img src={google} alt="google" />
-                                    {isPending ? "..." : "Continue with Google"}
+                                    {isPending ? "..." : t("auth.login.continueWithGoogle")}
                                 </Button>
                             </div>
 
                             <div className="mt-6 mb-10">
                                 <p className="text-center text-[12px]">
-                                    Already have an account?
+                                    {t("auth.signup.alreadyHaveAccount")}
                                     <span onClick={() => navigate("/login")} className="text-[#0DAC87] underline font-semibold cursor-pointer mx-1">
-                                        Sign In
+                                        {t("auth.signup.logIn")}
                                     </span>
                                 </p>
                             </div>
@@ -498,27 +474,27 @@ const Signup = () => {
                 <div className="lg:flex lg:flex-col justify-end items-center lg:mb-16 px-8 py-8">
                     <div className="flex flex-col gap-4 justify-center items-center text-center">
                         <span className="text-[#F7ECBE] lg:text-5xl text-xl font-bold">
-                            Adventure Awaits
+                            {t("auth.login.adventureAwaits")}
                         </span>
-                        <span className="text-[#FFFFFF] lg:text-[18px] lg:tracking-tighter">Join thousands of adventurers exploring the world's <br /> most incredible destinations</span>
+                        <span className="text-[#FFFFFF] lg:text-[18px] lg:tracking-tighter">{t("auth.login.adventureSubtitle")}</span>
                     </div>
                     <div className="grid lg:grid-cols-3 mt-8 lg:gap-2 gap-3">
                         <div className="bg-linear-to-b from-[#000000]/63 to-[#00000000]/0 px-14 py-4 border border-[#FFFFFF]/20 rounded-lg">
                             <div className="flex flex-col text-center">
                                 <span className="text-4xl text-white font-bold">150+</span>
-                                <span className="text-md text-white">Adventures</span>
+                                <span className="text-md text-white">{t("auth.login.adventures")}</span>
                             </div>
                         </div>
                         <div className="bg-linear-to-b from-[#000000]/63 to-[#00000000]/0  py-4 border border-[#FFFFFF]/20 rounded-lg">
                             <div className="flex flex-col text-center">
                                 <span className="text-4xl text-white font-bold">2500+</span>
-                                <span className="text-md text-white">Members</span>
+                                <span className="text-md text-white">{t("auth.login.members")}</span>
                             </div>
                         </div>
                         <div className="bg-linear-to-b from-[#000000]/63 to-[#00000000]/0 py-4 border border-[#FFFFFF]/20 rounded-lg">
                             <div className="flex flex-col text-center">
                                 <span className="text-4xl text-white font-bold">50+</span>
-                                <span className="text-md text-white">Countries Visited</span>
+                                <span className="text-md text-white">{t("auth.login.countriesVisited")}</span>
                             </div>
                         </div>
                     </div>

@@ -14,18 +14,21 @@ import { UseApplication } from "@/hooks/UseApplicationSubmithook";
 import { useParams } from "react-router-dom";
 import { UsegetTripbyid } from "@/hooks/gettripbyidhook";
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
+import { useTranslation, Trans } from "react-i18next";
 
-const formSchema = z
+const formSchema = (t: any) => z
     .object({
         introVideo: z.instanceof(File, {
-            message: "Intro video is required",
+            message: t("applicationForm.errors.videoRequired"),
         }),
     })
 
 const ApplicationForm = () => {
-    type FormSchemaType = z.infer<typeof formSchema>;
+    const { t } = useTranslation();
+    const currentSchema = formSchema(t);
+    type FormSchemaType = z.infer<typeof currentSchema>;
     const form = useForm<FormSchemaType>({
-        resolver: zodResolver(formSchema) as any,
+        resolver: zodResolver(currentSchema) as any,
         defaultValues: {
             introVideo: undefined,
         },
@@ -58,16 +61,16 @@ const ApplicationForm = () => {
                 formData.append("introVideo", val.introVideo);
             }
             await mutateAsync(formData as any);
-            toast.success("Application submitted successfully");
+            toast.success(t("applicationForm.errors.successToast"));
             setShowHide(false);
         } catch (error) {
-            toast.error("Something went wrong");
+            toast.error(t("applicationForm.errors.somethingWentWrong"));
         }
     };
 
     const onError = (errors: any) => {
         console.error("Form validation errors:", errors);
-        toast.error("Please fill in all required fields including the intro video.");
+        toast.error(t("applicationForm.errors.validationError"));
     };
 
     return (
@@ -77,7 +80,7 @@ const ApplicationForm = () => {
                     <>
                         <DialogHeader>
                             <DialogTitle className="flex justify-between items-center font-bold text-[24px] bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">
-                                Application Form
+                                {t("applicationForm.title")}
                                 <DialogClose asChild>
                                     <XIcon color="#000000" className="cursor-pointer" />
                                 </DialogClose>
@@ -88,21 +91,21 @@ const ApplicationForm = () => {
                                 <form onSubmit={form.handleSubmit(onSubmit, onError)}>
                                     <div className="flex flex-col gap-5">
                                         <FormLabel className="text-[#242E2F] font-semibold">
-                                            Name
-                                            <span className="text-[#666373] text-[10px] mt-1">(from Profile)</span>
+                                            {t("applicationForm.name")}
+                                            <span className="text-[#666373] text-[10px] mt-1"> {t("applicationForm.fromProfile")}</span>
                                         </FormLabel>
                                         <Input
-                                            placeholder="Name"
+                                            placeholder={t("applicationForm.name")}
                                             readOnly
                                             value={userdetail?.FirstName}
                                             className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
                                         />
 
                                         <FormLabel className="text-[#242E2F] font-semibold">
-                                            Email<span className="text-[#666373] text-[10px] mt-1">(from Profile)</span>
+                                            {t("applicationForm.email")}<span className="text-[#666373] text-[10px] mt-1"> {t("applicationForm.fromProfile")}</span>
                                         </FormLabel>
                                         <Input
-                                            placeholder="Email"
+                                            placeholder={t("applicationForm.email")}
                                             readOnly
                                             value={userdetail?.email}
                                             className="bg-[#FFFFFF] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
@@ -115,7 +118,7 @@ const ApplicationForm = () => {
                                             render={() => (
                                                 <FormItem className="md:col-span-3">
                                                     <FormLabel className="text-[#242E2F] font-semibold">
-                                                        Introduction video
+                                                        {t("applicationForm.introVideo")}
                                                     </FormLabel>
                                                     <FormControl>
                                                         <div className="bg-[#F4F4F4] border-[2.5px] border-dashed border-[#979797] rounded-[10px]">
@@ -142,9 +145,9 @@ const ApplicationForm = () => {
                                                                         <>
                                                                             <img src={cloudupload} alt="cloudupload" />
                                                                             <span className=" text-[#696284] text-[13px] text-center font-semibold">
-                                                                                Upload a short introduction video
+                                                                                {t("applicationForm.uploadVideo")}
                                                                             </span>
-                                                                            <span className="text-[#97A4A4] text-center text-[12px]">Max 2 minutes, MP4/MOV format, <br /> 50MB max</span>
+                                                                            <span className="text-[#97A4A4] text-center text-[12px]">{t("applicationForm.videoRequirements")}</span>
                                                                         </>
                                                                     )}
                                                                 </div>
@@ -159,11 +162,11 @@ const ApplicationForm = () => {
                                     </div>
                                     <div className="mt-8">
                                         <Button type="submit" className="rounded-full cursor-pointer w-full mt-6 bg-[#0DAC87] hover:bg-[#129b7b] text-white px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
-                                            {isPending ? "Submitting..." : "Submit Application"}
+                                            {isPending ? t("applicationForm.submitting") : t("applicationForm.submit")}
                                         </Button>
                                         <DialogClose asChild>
                                             <Button type="button" className="rounded-full cursor-pointer w-full mt-4 bg-transparent border border-[#0DAC87] hover:bg-[#0DAC87] hover:text-white text-[#0DAC87] px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
-                                                Back to Details
+                                                {t("applicationForm.backToDetails")}
                                             </Button>
                                         </DialogClose>
                                     </div>
@@ -175,21 +178,27 @@ const ApplicationForm = () => {
                     <>
                         <DialogHeader>
                             <DialogTitle className="text-center pt-10 lg:text-3xl font-bold bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">
-                                Awaiting Coordinator Approval
+                                {t("applicationForm.awaitingApproval")}
                             </DialogTitle>
                         </DialogHeader>
                         <div className="px-7 py-7 flex flex-col lg:gap-10 gap-4 justify-center items-center">
-                            <span className="text-[#666373] lg:text-center text-center">Your application for <span className="font-bold text-[#221E33]">{titleName}</span> has been submitted successfully. Our coordinator will review your application and get back to you within 48 hours.</span>
+                            <span className="text-[#666373] lg:text-center text-center">
+                                <Trans
+                                    i18nKey="applicationForm.successMessage"
+                                    values={{ trip: titleName }}
+                                    components={[<span key="0" className="font-bold text-[#221E33]" />]}
+                                />
+                            </span>
                             <div className="bg-[#F4F4F4] rounded-[15px] px-7 py-6 flex flex-col justify-center items-center gap-2">
                                 <div className="flex gap-2 items-center">
                                     <FaCircleExclamation color="#666373" />
-                                    <span className="text-[#666373]">What's next?</span>
+                                    <span className="text-[#666373]">{t("applicationForm.whatsNext")}</span>
                                 </div>
-                                <span className="lg:text-center text-[#BEBEBE] text-[11px]">You'll receive an email notification once your application is reviewed. If approved, you'll be  able to proceed with payment.</span>
+                                <span className="lg:text-center text-[#BEBEBE] text-[11px]">{t("applicationForm.whatsNextDesc")}</span>
                             </div>
                             <DialogClose asChild onClick={() => setShowHide(true)}>
                                 <Button type="button" className="rounded-full cursor-pointer lg:w-110 w-full mt-4 bg-[#0DAC87] border border-[#0DAC87] hover:bg-transparent text-white hover:text-[#0DAC87] px-4 py-6 font-semibold hover:scale-105 transition-all duration-300">
-                                    Back to Details
+                                    {t("applicationForm.backToDetails")}
                                 </Button>
                             </DialogClose>
                         </div>

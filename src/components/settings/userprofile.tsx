@@ -4,9 +4,10 @@ import goldmember from "../../assets/goldmember.png"
 import email from "../../assets/email.png"
 import calender from "../../assets/calenderblack.png"
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
+import { useTranslation } from "react-i18next";
 
 // Format date to nice readable format
-const formatMemberDate = (dateString: string | undefined): string => {
+const formatMemberDate = (dateString: string | undefined, lng: string): string => {
     if (!dateString) return "N/A";
     
     try {
@@ -16,20 +17,21 @@ const formatMemberDate = (dateString: string | undefined): string => {
             month: 'long', 
             day: 'numeric' 
         };
-        return date.toLocaleDateString('en-US', options);
+        return date.toLocaleDateString(lng === 'es' ? 'es-ES' : 'en-US', options);
     } catch (error) {
         return dateString;
     }
 };
 
 const Userprofile = () => {
+    const { t, i18n } = useTranslation();
     const { data: userData } = UsegetCurrentUser();
     const user = userData?.data?.user;
     
     // Get full name for alias
     const fullName = user?.FirstName && user?.LastName 
         ? `${user.FirstName} ${user.LastName}`.trim()
-        : user?.NickName || user?.email?.split('@')[0] || "User";
+        : user?.NickName || user?.email?.split('@')[0] || t("profile.user");
     
     // Get avatar - prioritize Google avatar if available
     const avatarUrl = user?.avatar || user?.profilePicture || null;
@@ -53,7 +55,7 @@ const Userprofile = () => {
                     <div className="mt-4">
                         <Badge className="flex gap-2 py-2 px-4 bg-[#FFEEC2] border border-[#D79511]">
                             <img src={goldmember} alt="goldmember" className="h-6" />
-                            <span className="text-[#D79511] font-bold">GOLD MEMBER</span>
+                            <span className="text-[#D79511] font-bold">{t("profile.goldMember")}</span>
                         </Badge>
                     </div>
 
@@ -70,7 +72,7 @@ const Userprofile = () => {
                         </div>
                         <div className="flex gap-2 items-center">
                             <img src={calender} alt="calender" />
-                            <span className="text-[#666373] text-[12px]">Member since {formatMemberDate(user?.createdAt)}</span>
+                            <span className="text-[#666373] text-[12px]">{t("profile.memberSince")} {formatMemberDate(user?.createdAt, i18n.language)}</span>
                         </div>
                     </div>
                 </div>

@@ -5,9 +5,11 @@ import userstats3 from "../../../assets/userstats3.png"
 import { UsegetPayment } from "@/hooks/getPaymenthook"
 import { UsegetallAchievementsForUser } from "@/hooks/getallAchievementhook"
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next";
 
 const Stats = () => {
-    // const /{ data: userData } = UsegetCurrentUser();
+    const { t } = useTranslation();
+    // const { data: userData } = UsegetCurrentUser();
     const { data: paymentData } = UsegetPayment();
     const { data: achievementsData } = UsegetallAchievementsForUser();
 
@@ -58,17 +60,20 @@ const Stats = () => {
     return (
         <div className="border border-[#D9D9D9] bg-[#FAFAFA] rounded-[16px] w-full mt-6 ">
             <div className="px-4 py-8">
-                <span className="font-bold">Key States</span>
+                <span className="font-bold">{t("stats.keyStats")}</span>
                 <div className="mt-4 grid lg:grid-cols-3 gap-4">
                     <div className="flex gap-4 border border-[#0DAC87] bg-[#F0FFFC] rounded-[20px] px-8 py-4">
                         <div className="bg-[#0DAC87] rounded-full w-20 h-20 flex items-center justify-center mt-4 mb-2">
                             <img src={userstats1} alt="userstats1" />
                         </div>
                         <div className="flex flex-col justify-center">
-                            <span className="font-medium text-[12px]">Trips Attended</span>
+                            <span className="font-medium text-[12px]">{t("stats.tripsAttended")}</span>
                             <span className="font-bold text-2xl">{stats.tripsAttended}</span>
                             <span className="text-[#332A2A] text-[10px]">
-                                {stats.countriesCount > 0 ? `Across ${stats.countriesCount} ${stats.countriesCount === 1 ? 'country' : 'countries'}` : 'Start your adventure'}
+                                {stats.countriesCount > 0 ? t("stats.acrossCountries", {
+                                    count: stats.countriesCount,
+                                    unit: stats.countriesCount === 1 ? t("stats.country") : t("stats.countries")
+                                }) : t("stats.startAdventure")}
                             </span>
                         </div>
                     </div>
@@ -77,9 +82,9 @@ const Stats = () => {
                             <img src={userstats2} alt="userstats2" />
                         </div>
                         <div className="flex flex-col justify-center">
-                            <span className="font-medium text-[12px]">Achievements</span>
+                            <span className="font-medium text-[12px]">{t("stats.achievements")}</span>
                             <span className="font-bold text-2xl">{String(stats.achievements).padStart(2, '0')}</span>
-                            <span className="text-[#332A2A] text-[10px]">badges earned</span>
+                            <span className="text-[#332A2A] text-[10px]">{t("stats.badgesEarned")}</span>
                         </div>
                     </div>
                     <div className="flex gap-4 border border-[#C29605] bg-[#FFFEF0] rounded-[20px] px-8 py-4">
@@ -87,10 +92,12 @@ const Stats = () => {
                             <img src={userstats3} alt="userstats3" />
                         </div>
                         <div className="flex flex-col justify-center">
-                            <span className="font-medium text-[12px] text-nowrap">Adventure Points</span>
+                            <span className="font-medium text-[12px] text-nowrap">{t("stats.adventurePoints")}</span>
                             <span className="font-bold text-2xl">{stats.adventurePoints}</span>
                             <span className="text-[#332A2A] text-[10px]">
-                                {stats.pointsToNextLevel > 0 ? `${stats.pointsToNextLevel} to next level` : 'Max level reached'}
+                                {stats.pointsToNextLevel > 0 
+                                    ? t("stats.toNextLevel", { count: stats.pointsToNextLevel }) 
+                                    : t("stats.maxLevel")}
                             </span>
                         </div>
                     </div>

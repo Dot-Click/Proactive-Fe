@@ -6,6 +6,7 @@ import grid from "../../assets/grid.png"
 import { BsFillGrid3X3GapFill } from "react-icons/bs"
 import { FaList } from "react-icons/fa"
 import { UsegetTrips } from "@/hooks/gettriphook"
+import { useTranslation } from "react-i18next";
 
 interface SearchbarProps {
     view: string;
@@ -24,6 +25,7 @@ const Searchbar = ({
     category,
     setCategory,
 }: SearchbarProps) => {
+    const { t } = useTranslation();
     const { data } = UsegetTrips();
     const rawCategories = data?.trips?.map((trip: any) => trip.category) ?? [];
     const categories = Array.from(new Set(rawCategories)).filter(Boolean);
@@ -34,7 +36,7 @@ const Searchbar = ({
                 <div className="relative">
                     <Search color="#666373" size={20} className="absolute left-4 top-1/2 -translate-y-1/2" />
                     <Input
-                        placeholder="Search Place"
+                        placeholder={t("openOpportunities.searchPlace")}
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -46,12 +48,12 @@ const Searchbar = ({
                     onValueChange={(v) => setCategory(v === "all" ? "" : v)}
                 >
                     <SelectTrigger className="lg:w-[150px] data-[placeholder]:text-[#666373] py-5 px-4 rounded-[10px] bg-[#EDEDED]">
-                        <SelectValue placeholder="All Category" className="placeholder:text-[#666373]" />
+                        <SelectValue placeholder={t("openOpportunities.allCategory")} className="placeholder:text-[#666373]" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
-                            <SelectLabel>Select Category</SelectLabel>
-                            <SelectItem value="all">All Category</SelectItem>
+                            <SelectLabel>{t("openOpportunities.selectCategory")}</SelectLabel>
+                            <SelectItem value="all">{t("openOpportunities.all")}</SelectItem>
                             {categories.map((cat: any) => (
                                 <SelectItem key={cat} value={cat}>
                                     {cat}

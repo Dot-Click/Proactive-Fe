@@ -20,6 +20,7 @@ import Favicon from "@/assets/sidebaricon/favicon.png";
 import SidebarIcon from "@/assets/sidebaricon/sidebarIcon.png";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Urlprops {
   Url: string
@@ -29,13 +30,14 @@ interface Urlprops {
 }
 
 export function SidebarNav({ collapsed, setCollapsed, items, Url }: Urlprops) {
+  const { t } = useTranslation();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState("");
 
   useEffect(() => {
     const current = items.find(item => item.href === location.pathname);
     if (current) setActiveItem(current.label);
-  }, [location.pathname]);
+  }, [location.pathname, items]); // Added items to dependency array
 
   return (
     <>
@@ -72,7 +74,7 @@ export function SidebarNav({ collapsed, setCollapsed, items, Url }: Urlprops) {
         <SidebarContent className="bg-[#FFFFFF] font-quicksand">
           <SidebarGroup>
             <SidebarGroupLabel className="text-[#666373] text-[14px] px-6 mb-2">
-              Menu
+              {t("sidebar.menu")}
             </SidebarGroupLabel>
             {items.map(({ label, href, Icon }) => (
               <SidebarGroupContent key={href}>
@@ -86,7 +88,7 @@ export function SidebarNav({ collapsed, setCollapsed, items, Url }: Urlprops) {
                     >
                       <Link to={href} className="flex items-center gap-3 w-full">
                         {!collapsed && <img src={Icon} className="w-4 h-4" />}
-                        {!collapsed && <span>{label}</span>}
+                        {!collapsed && <span>{t(label)}</span>}
 
                         {collapsed && (
                           <TooltipProvider>
@@ -95,7 +97,7 @@ export function SidebarNav({ collapsed, setCollapsed, items, Url }: Urlprops) {
                                 <img src={Icon} className="w-4 h-4" />
                               </TooltipTrigger>
                               <TooltipContent side="right">
-                                <span>{label}</span>
+                                <span>{t(label)}</span>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>

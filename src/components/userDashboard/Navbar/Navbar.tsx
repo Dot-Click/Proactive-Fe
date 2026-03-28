@@ -43,7 +43,7 @@ const Navbar = ({ role }: NavbarProps) => {
   const Logoutmutation = useLogoutUser();
   const { data: user } = UsegetCurrentUser();
   const userData = user?.data?.user;
-  const displayName = userData?.role === "coordinator" ? userData?.coordinatorDetails?.fullName : userData?.FirstName || "Admin";
+  const displayName = userData?.role === "coordinator" ? userData?.coordinatorDetails?.fullName : userData?.FirstName || t("roles.admin");
 
   const Handlelogout = async () => {
     try {
@@ -67,7 +67,7 @@ const Navbar = ({ role }: NavbarProps) => {
                 : ""
                 }`}
             >
-              Home
+              {t("navbar.home")}
             </span>
           </Link>
 
@@ -78,7 +78,7 @@ const Navbar = ({ role }: NavbarProps) => {
                 : ""
                 }`}
             >
-              Open Opportunities
+              {t("navbar.openOpportunities")}
             </span>
           </Link>
 
@@ -89,7 +89,7 @@ const Navbar = ({ role }: NavbarProps) => {
                 : ""
                 }`}
             >
-              Dashboard
+              {t("navbar.dashboard")}
             </span>
           </Link>
 
@@ -101,7 +101,7 @@ const Navbar = ({ role }: NavbarProps) => {
                 : ""
                 }`}
             >
-              Opportunities
+              {t("navbar.opportunities")}
             </span>
           </Link>
         </div>
@@ -112,7 +112,7 @@ const Navbar = ({ role }: NavbarProps) => {
               <DialogTrigger asChild>
                 <Button className="hidden md:flex bg-[#0DAC87] hover:bg-[#11a180] text-white rounded-full px-6 py-2 font-bold text-sm shadow-md transition-all active:scale-95 cursor-pointer items-center gap-2">
                   <Wallet size={16} />
-                  Become a Member (€50)
+                  {t("dashboard.becomeMemberPrice")}
                 </Button>
               </DialogTrigger>
               <PaymentModal />

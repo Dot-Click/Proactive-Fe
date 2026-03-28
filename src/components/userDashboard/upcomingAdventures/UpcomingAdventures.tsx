@@ -15,8 +15,10 @@ import TripPaymentModal from "@/components/payment/TripPaymentModal"
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
 import PaymentModal from "../Alert/PaymentModal"
 import logoBadge from "@/assets/sidebaricon/favicon.png"
+import { useTranslation } from "react-i18next"
 
 const UpcomingAdventures = () => {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const { data: paymentData, isLoading } = UsegetPayment()
     const { data: applications } = UsegetMyApplications()
@@ -149,26 +151,26 @@ const UpcomingAdventures = () => {
                             <img src={logoBadge} alt="ProActive" className="h-10 w-10 object-contain" />
                         </div>
                         <div className="flex flex-col">
-                            <h3 className="text-white font-bold text-2xl mb-1 text-center lg:text-left">Unlock Instant Access</h3>
+                            <h3 className="text-white font-bold text-2xl mb-1 text-center lg:text-left">{t("dashboard.unlockInstantAccess")}</h3>
                             <p className="text-white/70 max-w-md text-sm text-center lg:text-left">
-                                Join the ProActive community today. Get exclusive access to wild trips, wild weekends, and member-only rewards.
+                                {t("dashboard.joinCommunityDesc")}
                             </p>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-8 lg:border-l lg:border-white/10 lg:pl-8">
                         <div className="flex flex-col items-end">
-                            <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest">ANNUAL PASS</span>
+                            <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest">{t("dashboard.annualPass")}</span>
                             <div className="flex items-baseline gap-1">
                                 <span className="text-[#0DAC87] font-black text-4xl">€50</span>
-                                <span className="text-white/40 text-xs font-medium">/ year</span>
+                                <span className="text-white/40 text-xs font-medium">/ {t("dashboard.year")}</span>
                             </div>
                         </div>
 
                         <Dialog>
                             <DialogTrigger asChild>
                                 <Button className="bg-[#0DAC87] hover:bg-[#11a180] text-white rounded-full px-10 py-7 font-bold text-lg shadow-lg shadow-[#0DAC87]/20 transition-all active:scale-95 cursor-pointer">
-                                    Become a Member
+                                    {t("dashboard.becomeMemberPrice")}
                                 </Button>
                             </DialogTrigger>
                             <PaymentModal />
@@ -208,8 +210,8 @@ const UpcomingAdventures = () => {
                                         : (trip.applicationPending ? "bg-amber-500" : trip.applicationRejected ? "bg-red-500" : "bg-green-500")
                                         }`} />
                                     {isPast
-                                        ? (trip.isApplication ? (trip.applicationRejected ? "Rejected" : "Expired") : "Completed")
-                                        : (trip.applicationPending ? "Under Review" : trip.applicationRejected ? "Rejected" : "Confirmed")
+                                        ? (trip.isApplication ? (trip.applicationRejected ? t("trips.status.rejected") : t("trips.status.expired")) : t("trips.status.completed"))
+                                        : (trip.applicationPending ? t("trips.status.underReview") : trip.applicationRejected ? t("trips.status.rejected") : t("trips.status.confirmed"))
                                     }
                                 </div>
                             </div>
@@ -231,10 +233,10 @@ const UpcomingAdventures = () => {
                                     <img src={time} alt="time" className="h-3.5 opacity-60" />
                                     <span className="text-[#666373] text-xs font-semibold">
                                         {isPast
-                                            ? `Completed ${getDaysAgo(trip.endDate)} ${getDaysAgo(trip.endDate) === 1 ? 'day' : 'days'} ago`
+                                            ? t("trips.completedAgo", { count: getDaysAgo(trip.endDate), unit: getDaysAgo(trip.endDate) === 1 ? t("trips.day") : t("trips.days") })
                                             : getDaysLeft(trip.startDate) <= 0
-                                                ? "Adventure is Ongoing!"
-                                                : `Starts in ${getDaysLeft(trip.startDate)} ${getDaysLeft(trip.startDate) === 1 ? 'day' : 'days'}`
+                                                ? t("trips.ongoing")
+                                                : t("trips.startsIn", { count: getDaysLeft(trip.startDate), unit: getDaysLeft(trip.startDate) === 1 ? t("trips.day") : t("trips.days") })
                                         }
                                     </span>
                                 </div>
@@ -246,7 +248,7 @@ const UpcomingAdventures = () => {
                                         <DialogTrigger asChild>
                                             <Button className="flex-1 lg:flex-none justify-center items-center gap-2 rounded-full cursor-pointer bg-[#FFB800] hover:bg-[#e6a600] px-8 py-6 text-[#221E33] font-bold shadow-lg shadow-[#FFB800]/10 transition-all active:scale-95">
                                                 <Wallet size={18} />
-                                                Pay Now
+                                                {t("trips.status.payNow")}
                                             </Button>
                                         </DialogTrigger>
                                         <TripPaymentModal tripId={trip.id} />
@@ -255,13 +257,13 @@ const UpcomingAdventures = () => {
                                 {!trip.isApplication && !trip.applicationApproved && (
                                     <div className="flex-1 lg:flex-none justify-center items-center gap-2 rounded-full px-8 py-6 bg-green-50 border border-green-200 text-green-600 font-bold text-sm cursor-default">
                                         <CheckCircle size={18} />
-                                        Already Paid
+                                        {t("dashboard.alreadyPaid")}
                                     </div>
                                 )}
                                 {trip.applicationPending && (
                                     <div className="flex-1 lg:flex-none justify-center items-center gap-2 rounded-full px-8 py-6 bg-[#F8F9FB] border border-[#ECECF1] text-[#666373] font-bold text-sm cursor-default">
                                         <Clock size={16} />
-                                        Application Under Review
+                                        {t("trips.status.applicationUnderReview")}
                                     </div>
                                 )}
                                 <Button
@@ -269,7 +271,7 @@ const UpcomingAdventures = () => {
                                     onClick={() => navigate(`/user-dashboard/viewdetail/${trip.id}`)}
                                     className="flex-1 lg:flex-none justify-center items-center gap-2 rounded-full border-2 border-[#0DAC87] text-[#0DAC87] hover:bg-[#0DAC87] hover:text-white px-8 py-6 font-bold shadow-sm transition-all active:scale-95"
                                 >
-                                    Details
+                                    {t("trips.details")}
                                     <MdArrowOutward size={18} />
                                 </Button>
                             </div>
@@ -286,14 +288,14 @@ const UpcomingAdventures = () => {
             <div className="bg-white rounded-[32px] border border-[#EEEEEE] overflow-hidden shadow-sm">
                 <div className="px-8 py-8 flex flex-col md:flex-row gap-4 justify-between items-center bg-[#FAFAFA]/50 border-b border-[#EEEEEE]">
                     <div className="flex flex-col items-center md:items-start">
-                        <h2 className="text-[#1F1B2C] font-black text-2xl tracking-tight">Upcoming Adventures</h2>
-                        <p className="text-[#666373] text-sm font-medium">Your next wild challenges await</p>
+                        <h2 className="text-[#1F1B2C] font-black text-2xl tracking-tight">{t("dashboard.upcomingAdventures")}</h2>
+                        <p className="text-[#666373] text-sm font-medium">{t("dashboard.nextWildChallenges")}</p>
                     </div>
                     <Button
                         onClick={() => navigate("/user-dashboard/adventure-oppurtunities")}
                         className="bg-[#1F1B2C] hover:bg-[#2F2942] text-white rounded-full py-6 px-8 font-bold shadow-lg transition-all active:scale-95"
                     >
-                        Explore More Trips
+                        {t("dashboard.exploreMoreTrips")}
                     </Button>
                 </div>
 
@@ -303,25 +305,24 @@ const UpcomingAdventures = () => {
                     {isLoading ? (
                         <div className="w-full flex flex-col items-center justify-center py-20 gap-4">
                             <LoaderIcon className="animate-spin text-[#0DAC87] w-12 h-12" />
-                            <p className="text-[#666373] font-bold animate-pulse">Loading adventure data...</p>
+                            <p className="text-[#666373] font-bold animate-pulse">{t("dashboard.loadingAdventureData")}</p>
                         </div>
                     ) : (
                         <div className="space-y-4 max-h-[700px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200">
                             {mergedUpcoming.length > 0 ? (
                                 mergedUpcoming.map((trip: any) => renderTripCard(trip, false))
                             ) : (
-                                <div className="text-center py-16 px-4 bg-[#F8F9FB] rounded-[24px] border-2 border-dashed border-[#EEEEEE]">
-                                    <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-4">
+                                <div className="text-center py-16 px-4 bg-[#F8F9FB] rounded-[24px] border-2 border-dashed border-[#EEEEEE]">                                     <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-4">
                                         <MdArrowOutward className="text-[#0DAC87] w-8 h-8" />
                                     </div>
-                                    <h3 className="text-[#1F1B2C] font-bold text-lg mb-1">No upcoming trips</h3>
-                                    <p className="text-[#666373] text-sm max-w-xs mx-auto mb-6">You haven't applied for any adventures yet. Time to start your journey!</p>
+                                    <h3 className="text-[#1F1B2C] font-bold text-lg mb-1">{t("dashboard.noUpcomingTrips")}</h3>
+                                    <p className="text-[#666373] text-sm max-w-xs mx-auto mb-6">{t("dashboard.noUpcomingTripsDesc")}</p>
                                     <Button
                                         onClick={() => navigate("/user-dashboard/adventure-oppurtunities")}
                                         variant="outline"
                                         className="rounded-full border-[#0DAC87] text-[#0DAC87] hover:bg-[#0DAC87] font-bold"
                                     >
-                                        Browse Opportunities
+                                        {t("dashboard.browseOpportunities")}
                                     </Button>
                                 </div>
                             )}
@@ -334,8 +335,8 @@ const UpcomingAdventures = () => {
             <div className="bg-white rounded-[32px] border border-[#EEEEEE] overflow-hidden shadow-sm">
                 <div className="px-8 py-6 flex flex-col md:flex-row gap-4 justify-between items-center bg-[#FAFAFA]/50 border-b border-[#EEEEEE]">
                     <div className="flex flex-col items-center md:items-start">
-                        <h2 className="text-[#1F1B2C] font-black text-xl tracking-tight">Past Adventures</h2>
-                        <p className="text-[#666373] text-xs font-medium uppercase tracking-widest">Completed Adventures</p>
+                        <h2 className="text-[#1F1B2C] font-black text-xl tracking-tight">{t("dashboard.pastAdventures")}</h2>
+                        <p className="text-[#666373] text-xs font-medium uppercase tracking-widest">{t("dashboard.completedAdventures")}</p>
                     </div>
                 </div>
 
@@ -345,8 +346,8 @@ const UpcomingAdventures = () => {
                             mergedPast.map((trip: any) => renderTripCard(trip, true))
                         ) : (
                             <div className="text-center py-12 text-[#666373]">
-                                <p className="font-bold">No past missions yet.</p>
-                                <p className="text-sm mt-1">Every great story has a beginning!</p>
+                                <p className="font-bold">{t("dashboard.noPastMissions")}</p>
+                                <p className="text-sm mt-1">{t("dashboard.everyStoryBegins")}</p>
                             </div>
                         )}
                     </div>

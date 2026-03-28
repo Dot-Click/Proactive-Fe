@@ -16,83 +16,86 @@ import { useMarkAsReadNotification } from "@/hooks/MarkAsReadNotification"
 import { useState } from "react"
 import PaymentModal from "@/components/payment/PaymentModal"
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook"
+import { useTranslation } from "react-i18next";
 
 interface NavbarProps {
   collapsed: boolean;
   role: string
 }
 
-const SubHeading = [
-  {
-    name: "/dashboard",
-    subHeading: 'Good afternoon, Will! Here’s what’s happening today.'
-  },
-  {
-    name: "/dashboard/user-management",
-    subHeading: 'All registered users and their details at a glance.'
-  },
-  {
-    name: "/dashboard/coordinator-management",
-    subHeading: 'Monitor performance and assigned responsibilities'
-  },
-  {
-    name: "/dashboard/add-new-coordinator",
-    subHeading: 'Fill in the details to onboard a new coordinator to the platform.'
-  },
-  {
-    name: "/dashboard/edit-coordinator/:id",
-    subHeading: 'Edit the details to update this coordinator’s profile'
-  },
-  {
-    name: "/dashboard/trip-management",
-    subHeading: 'Monitor, approve, and manage all trips created by coordinators.'
-  },
-  {
-    name: "/dashboard/add-new-trip",
-    subHeading: 'Manage all trips: add, edit, and update their status.'
-  },
-  {
-    name: "/dashboard/chat-management",
-    subHeading: 'Monitor and manage all user & coordinator conversations. Control chat widget visibility.'
-  },
-  {
-    name: "/dashboard/payment-membership",
-    subHeading: 'Manage all payments, membership statuses, and discount codes from one place.'
-  },
-  {
-    name: "/dashboard/settings",
-    subHeading: 'Welcome back, Admin'
-  },
-  {
-    name: "/coordinator-dashboard",
-    subHeading: 'Monitor, approve, and manage all trips created by coordinators.'
-  },
-  {
-    name: "/coordinator-dashboard/add-new-trip",
-    subHeading: 'Manage all trips: add, edit, and update their status.'
-  },
-  {
-    name: "/coordinator-dashboard/oppurtunities-management",
-    subHeading: 'Manage all trips: add, edit, and update their status.'
-  },
-  {
-    name: "/coordinator-dashboard/applicants-review",
-    subHeading: 'Review participant applications, watch intro videos, and approve or reject applicants for each trip.'
-  },
-  {
-    name: "/coordinator-dashboard/achievements-control",
-    subHeading: 'Assign and manage achievement badges and adventure points for participants.'
-  },
-  {
-    name: "/coordinator-dashboard/chat-users",
-    subHeading: 'Manage and respond to participant conversations'
-  },
-  {
-    name: "/coordinator-dashboard/settings",
-  }
-]
-
 const Navbar = ({ collapsed, role }: NavbarProps) => {
+  const { t } = useTranslation();
+  
+  const SubHeadingData = [
+    {
+      name: "/dashboard",
+      subHeading: t('dashboardHeader.subheadings.dashboard')
+    },
+    {
+      name: "/dashboard/user-management",
+      subHeading: t('dashboardHeader.subheadings.userManagement')
+    },
+    {
+      name: "/dashboard/coordinator-management",
+      subHeading: t('dashboardHeader.subheadings.coordinatorManagement')
+    },
+    {
+      name: "/dashboard/add-new-coordinator",
+      subHeading: t('dashboardHeader.subheadings.addNewCoordinator')
+    },
+    {
+      name: "/dashboard/edit-coordinator/:id",
+      subHeading: t('dashboardHeader.subheadings.editCoordinator')
+    },
+    {
+      name: "/dashboard/trip-management",
+      subHeading: t('dashboardHeader.subheadings.tripManagement')
+    },
+    {
+      name: "/dashboard/add-new-trip",
+      subHeading: t('dashboardHeader.subheadings.addNewTrip')
+    },
+    {
+      name: "/dashboard/chat-management",
+      subHeading: t('dashboardHeader.subheadings.chatManagement')
+    },
+    {
+      name: "/dashboard/payment-membership",
+      subHeading: t('dashboardHeader.subheadings.paymentMembership')
+    },
+    {
+      name: "/dashboard/settings",
+      subHeading: t('dashboardHeader.subheadings.settings')
+    },
+    {
+      name: "/coordinator-dashboard",
+      subHeading: t('dashboardHeader.subheadings.dashboard')
+    },
+    {
+      name: "/coordinator-dashboard/add-new-trip",
+      subHeading: t('dashboardHeader.subheadings.addNewTrip')
+    },
+    {
+      name: "/coordinator-dashboard/oppurtunities-management",
+      subHeading: t('dashboardHeader.subheadings.tripManagement')
+    },
+    {
+      name: "/coordinator-dashboard/applicants-review",
+      subHeading: t('dashboardHeader.subheadings.applicantsReview')
+    },
+    {
+      name: "/coordinator-dashboard/achievements-control",
+      subHeading: t('dashboardHeader.subheadings.achievementsControl')
+    },
+    {
+      name: "/coordinator-dashboard/chat-users",
+      subHeading: t('dashboardHeader.subheadings.chatUsers')
+    },
+    {
+      name: "/coordinator-dashboard/settings",
+    }
+  ]
+
   const { data, isLoading, isError } = UsegetNotifications()
   const markAsRead = useMarkAsReadNotification();
   const location = useLocation();
@@ -110,11 +113,27 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
     : role === "coordinator"
       ? CoordinatorDrawerItems
       : AdminDrawerItems;
-  const displayName = userData?.role === "coordinator" ? userData?.coordinatorDetails?.fullName : userData?.FirstName || "Admin";
+  const displayName = userData?.role === "coordinator" ? userData?.coordinatorDetails?.fullName : userData?.FirstName || t("roles.admin");
   const pathPart = location.pathname.split("/")[2];
   let NavHeading = pathPart ? pathPart.split("-").join(" ") : undefined;
   if (NavHeading === "payment membership") {
-    NavHeading = "Payment & Membership";
+    NavHeading = t("dashboardHeader.paymentMembership");
+  } else if (NavHeading === "settings") {
+    NavHeading = t("drawer.settings");
+  } else if (NavHeading === "user management") {
+    NavHeading = t("drawer.userManagement");
+  } else if (NavHeading === "coordinator management") {
+    NavHeading = t("drawer.coordinatorManagement");
+  } else if (NavHeading === "trip management") {
+    NavHeading = t("drawer.tripOpportunities");
+  } else if (NavHeading === "chat management") {
+    NavHeading = t("drawer.chatManagement");
+  } else if (NavHeading === "add new coordinator") {
+    NavHeading = t("drawer.coordinatorManagement");
+  } else if (NavHeading === "edit coordinator") {
+    NavHeading = t("drawer.coordinatorManagement");
+  } else if (NavHeading === "add new trip") {
+    NavHeading = t("drawer.tripOpportunities");
   }
 
   const containerPositionClass = isMobile
@@ -126,7 +145,7 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
     try {
       await Logoutmutation.mutateAsync({ role })
     } catch (error: any) {
-      const message = error?.response?.data?.message || "Error on logout";
+      const message = error?.response?.data?.message || t("dashboardHeader.error");
       toast.error(message)
     }
   }
@@ -138,10 +157,10 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
       {/* Left side */}
       <div className="flex flex-col min-w-0 flex-grow">
         <div className="flex md:items-start items-center justify-between gap-2 lg:gap-4">
-          <h1 className="text-[14px] lg:text-2xl font-semibold capitalize mt-2 mb-1 lg:mt-0"><span className="truncate max-w-[60vw] md:max-w-none">{NavHeading ? NavHeading : 'Dashboard'}</span></h1>
+          <h1 className="text-[14px] lg:text-2xl font-semibold capitalize mt-2 mb-1 lg:mt-0"><span className="truncate max-w-[60vw] md:max-w-none">{NavHeading ? NavHeading : t("dashboardHeader.dashboard")}</span></h1>
         </div>
         {
-          SubHeading.map((item) => {
+          SubHeadingData.map((item) => {
             if (item.name === location.pathname) {
               return <span key={item.name} className="text-[#666373] text-[10px] lg:text-[14px] hidden md:block">{item.subHeading}</span>
             }
@@ -172,15 +191,15 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
             onCloseAutoFocus={(e) => e.preventDefault()}
           >
             {isLoading && (
-              <div className="px-3 py-2 text-sm">Loading...</div>
+              <div className="px-3 py-2 text-sm">{t("dashboardHeader.loading")}</div>
             )}
             {isError && (
-              <div className="px-3 py-2 text-sm text-red-500">Error</div>
+              <div className="px-3 py-2 text-sm text-red-500">{t("dashboardHeader.error")}</div>
             )}
 
             {!isLoading && !isError && data?.length === 0 && (
               <div className="px-3 py-2 text-sm text-gray-500 text-center">
-                No Notification
+                {t("dashboardHeader.noNotifications")}
               </div>
             )}
 
@@ -221,11 +240,11 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
                             setPaymentNotificationId(val.id);
                             setPaymentModalOpen(true);
                           } else {
-                            toast.error("Unable to determine trip for payment");
+                            toast.error(t("dashboardHeader.error"));
                           }
                         }}
                       >
-                        Pay Now
+                        {t("dashboardHeader.payNow")}
                       </button>
                     </div>
                   )}
@@ -277,27 +296,27 @@ const Navbar = ({ collapsed, role }: NavbarProps) => {
                 {userData?.role === "admin" && (
                   <a href="/dashboard/profile" className="w-full">
                     <div className="flex justify-start items-center gap-3">
-                      <span>Profile</span>
+                      <span>{t("dashboardHeader.profile")}</span>
                     </div>
                   </a>
                 )}
                 {userData?.role === "coordinator" && (
                   <a href="/coordinator-dashboard/profile" className="w-full">
                     <div className="flex justify-start items-center gap-3">
-                      <span>Profile</span>
+                      <span>{t("dashboardHeader.profile")}</span>
                     </div>
                   </a>
                 )}
                 {userData?.role === "user" && (
                   <a href="/user-dashboard" className="w-full">
                     <div className="flex justify-start items-center gap-3">
-                      <span>My Dashboard</span>
+                      <span>{t("dashboardHeader.myDashboard")}</span>
                     </div>
                   </a>
                 )}
                 <div className="flex justify-start items-center gap-3" onClick={Handlelogout}>
                   <LogOut />
-                  Logout
+                  {t("dashboardHeader.logout")}
                 </div>
               </DropdownMenuItem>
             </DropdownMenuContent>
