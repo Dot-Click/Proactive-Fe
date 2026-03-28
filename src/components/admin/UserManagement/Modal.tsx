@@ -97,7 +97,7 @@ const Modal = ({ userId }: ModalProps) => {
     }
 
     try {
-      const result = await updateRoleMutation.mutateAsync({
+      await updateRoleMutation.mutateAsync({
         role: selectedRole as "user" | "coordinator" | "admin",
       });
 

@@ -2,13 +2,11 @@
 // import Box from "../../../assets/box.avif"
 import Adventureoppurtunitiescard from "./Adventureoppurtunitiescard"
 import box1 from "../../../../assets/box.avif"
-import { UsegetTrips } from "@/hooks/gettriphook"
 import { useTranslation } from "react-i18next"
 
 const AdventureOppurtunities = () => {
     const { t } = useTranslation();
-    const { data: trip } = UsegetTrips()
-    const tripsData = trip?.trips
+
     return (
       <div className="bg-linear-to-r    md:mt-[290px]  lg:mt-28 xl:mt-15 sm:mt-[80px]  mt-[250px] from-[#F0F5FD]/18 to-[#F0F5FD]">
         <div className="relative flex flex-col lg:gap-8 gap-4 py-20 px-4">

@@ -182,8 +182,8 @@ const Included = () => {
   const { control } = useFormContext<TripFormType>();
 
   // Persistent custom items stored in localStorage
-  const [customIncluded, setCustomIncluded] = useState<{ id: string; title: string; desc: string; icon: string }[]>([]);
-  const [customNotIncluded, setCustomNotIncluded] = useState<{ id: string; title: string; desc: string; icon: string }[]>([]);
+  const [customIncluded, setCustomIncluded] = useState<{ id: string; title: string; description: string; img: string }[]>([]);
+  const [customNotIncluded, setCustomNotIncluded] = useState<{ id: string; title: string; description: string; img: string }[]>([]);
 
   // Add item dialog states
   const [showAddIncludedDialog, setShowAddIncludedDialog] = useState(false);
@@ -200,7 +200,13 @@ const Included = () => {
 
     if (savedIncluded) {
       try {
-        setCustomIncluded(JSON.parse(savedIncluded));
+        const parsed = JSON.parse(savedIncluded);
+        const migrated = Array.isArray(parsed) ? parsed.map((item: any) => ({
+          ...item,
+          description: item.description || item.desc || "",
+          img: item.img || item.icon || "",
+        })) : [];
+        setCustomIncluded(migrated);
       } catch (e) {
         console.error("Error loading custom included items:", e);
       }
@@ -208,7 +214,13 @@ const Included = () => {
 
     if (savedNotIncluded) {
       try {
-        setCustomNotIncluded(JSON.parse(savedNotIncluded));
+        const parsed = JSON.parse(savedNotIncluded);
+        const migrated = Array.isArray(parsed) ? parsed.map((item: any) => ({
+          ...item,
+          description: item.description || item.desc || "",
+          img: item.img || item.icon || "",
+        })) : [];
+        setCustomNotIncluded(migrated);
       } catch (e) {
         console.error("Error loading custom not included items:", e);
       }
@@ -687,8 +699,8 @@ const Included = () => {
                         });
                         const isSelected = existingIdx !== -1;
                         const existing = isSelected ? values[existingIdx] : null;
-                        const displayIcon = (existing && existing.icon) || item.icon;
-                        const displayDesc = (existing && (existing.description || existing.desc)) || item.desc;
+                        const displayIcon = (existing && existing.icon) || item.img;
+                        const displayDesc = (existing && (existing.description || existing.desc)) || item.description;
 
                         return (
                           <div key={item.id} className={clsx("relative group", hasNone && "opacity-40 pointer-events-none")}>
@@ -702,17 +714,17 @@ const Included = () => {
                                     return v.id !== item.id && v.title !== item.title;
                                   }));
                                 } else {
-                                  field.onChange([...values, { id: item.id, title: item.title, description: item.desc, icon: item.icon }]);
+                                  field.onChange([...values, { id: item.id, title: item.title, description: item.description, icon: item.img }]);
                                 }
                               }}
                               onTitleChange={(newTitle) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.icon } : existing), title: newTitle };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.img } : existing), title: newTitle };
                                 field.onChange(newValues);
                               }}
                               onDescChange={(newDesc) => {
                                 const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.icon } : existing), description: newDesc };
+                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.img } : existing), description: newDesc };
                                 field.onChange(newValues);
                               }}
                               icon={displayIcon}

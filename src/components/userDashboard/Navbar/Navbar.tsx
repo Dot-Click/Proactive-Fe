@@ -18,6 +18,7 @@ import TripPaymentModal from "@/components/payment/TripPaymentModal";
 import { UserDashboardDrawerItems } from "@/components/DrawerItems";
 import DrawerBar from "@/components/Drawer";
 import { useLogoutUser } from "@/hooks/Uselogouthook";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
 import { FaCheckDouble } from "react-icons/fa";
@@ -30,6 +31,7 @@ interface NavbarProps {
 }
 
 const Navbar = ({ role }: NavbarProps) => {
+  const { t } = useTranslation();
   const DrawerItems = role === "user-dashboard"
     ? UserDashboardDrawerItems
     : [];

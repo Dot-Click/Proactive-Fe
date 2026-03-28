@@ -50,7 +50,7 @@ const ApplicationForm = () => {
         }
     };
 
-    const onSubmit = async (val: z.infer<typeof formSchema>) => {
+    const onSubmit = async (val: FormSchemaType) => {
         try {
             const formData = new FormData();
             if (id) {
