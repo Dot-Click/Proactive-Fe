@@ -2,11 +2,15 @@ import { supabase } from "@/config/supabase";
 import { useMutation } from "@tanstack/react-query";
 
 const googleSignup = async () => {
+    const redirectTo =
+        import.meta.env.VITE_GOOGLE_REDIRECT_URL ||
+        `${window.location.origin}/user-dashboard`;
+
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
-        
+
         options: {
-            redirectTo: `${window.location.origin}/user-dashboard`,
+            redirectTo,
             queryParams: {
                 prompt: "select_account",
                 access_type: "offline",
