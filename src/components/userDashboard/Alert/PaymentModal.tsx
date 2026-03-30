@@ -15,6 +15,8 @@ import PaymentSuccess from "../../../assets/SuccessPayment.avif"
 import { toast } from 'sonner';
 import { useValidateDiscount } from '@/hooks/useDiscountshook';
 import { Loader2, Tag, Percent } from 'lucide-react';
+import { UsegetCurrentUser } from '@/hooks/getCurrentUserhook';
+import { useNavigate } from 'react-router-dom';
 
 const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
@@ -151,6 +153,10 @@ const CheckoutForm = ({ onSuccess, amount, isProcessing }: { onSuccess: (payment
 };
 
 const PaymentModal = () => {
+    const navigate = useNavigate();
+    const { data: currentUserData, isLoading: currentUserLoading } = UsegetCurrentUser({ retry: false, staleTime: 1000 * 60 * 5 });
+    const currentUser = currentUserData?.data?.user;
+
     const [showhide, setShowHide] = useState(true);
     const { mutateAsync: createMembership, data: membershipResp } = UseMembership();
     const membershipData = membershipResp?.data || membershipResp;
@@ -187,6 +193,13 @@ const PaymentModal = () => {
 
     const handlePaymentSuccess = async (paymentMethodId: string) => {
         setIsProcessing(true);
+
+        if (!currentUser) {
+            toast.error("Please login to complete the payment.");
+            setIsProcessing(false);
+            return;
+        }
+
         try {
             await createMembership({
                 payment_method_id: paymentMethodId,
@@ -203,6 +216,33 @@ const PaymentModal = () => {
             setIsProcessing(false);
         }
     };
+
+    if (currentUserLoading) {
+        return (
+            <DialogContent className="sm:max-w-[650px] max-h-[90vh] border-10 bg-[#FAFAFA] border-[#ECFBF6] rounded-[20px] overflow-y-auto p-0">
+                <div className="p-10 text-center">Verifying your login status...</div>
+            </DialogContent>
+        );
+    }
+
+    if (!currentUser) {
+        return (
+            <DialogContent className="sm:max-w-[650px] max-h-[90vh] border-10 bg-[#FAFAFA] border-[#ECFBF6] rounded-[20px] overflow-y-auto p-0">
+                <div className="p-8 text-center">
+                    <p className="mb-4 text-lg font-semibold">Login required</p>
+                    <p className="mb-6 text-sm text-gray-600">Please log in to become a member and complete your payment.</p>
+                    <div className="flex justify-center gap-3">
+                        <Button onClick={() => navigate('/login')} className="bg-[#0DAC87] hover:bg-[#11a180]">
+                            Go to Login
+                        </Button>
+                        <Button onClick={() => navigate('/')} variant="secondary">
+                            Back to Home
+                        </Button>
+                    </div>
+                </div>
+            </DialogContent>
+        );
+    }
 
     return (
         <DialogContent className="sm:max-w-[650px] max-h-[90vh] border-10 bg-[#FAFAFA] border-[#ECFBF6] rounded-[20px] overflow-y-auto p-0">
