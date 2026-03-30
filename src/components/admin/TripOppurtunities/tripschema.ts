@@ -90,7 +90,7 @@ export const tripSchema = z
     endDate: z
       .date()
       .refine((date) => date instanceof Date, "End date is required"),
-    duration: z.string().optional(),
+    duration: z.string().min(1, "Duration is required"),
 
     // Step 2 – Trip Details
     LongDescription: z
@@ -111,8 +111,8 @@ export const tripSchema = z
     CoordinatorName: z.string().optional(), // Keep for backward compatibility
     CoordinatorRole: z.string().optional(),
     CoordinatorBio: z.string().optional(),
-    CoordinatorInstagram: z.string().optional(),
-    CoordinatorLinkedin: z.string().optional(),
+    CoordinatorInstagram: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+    CoordinatorLinkedin: z.string().url("Must be a valid URL").optional().or(z.literal("")),
     CoordinatorPhoto: z.any().optional(),
 
     // Step 5 – Media & Price
