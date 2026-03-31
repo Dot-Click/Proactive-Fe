@@ -77,6 +77,9 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       applicationType: "video",
       depositAmount: "",
       status: "active",
+      rating: "4.9",
+      reviewsCount: 92,
+      reviewLink: "https://www.google.com/maps/place/Proactive+Future/@35.67445,-6.8143,2933475m/data=!3m2!1e3!4b1!4m6!3m5!1s0x65e285d9dffa46ab:0x3dd1b18e867e6183!8m2!3d35.67445!4d-6.8143!16s%2Fg%2F11t6yzt6vh?entry=ttu&g_ep=EgoyMDI2MDMyOS4wIKXMDSoASAFQAw%3D%3D",
     },
   });
 
@@ -282,6 +285,9 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       applicationType: trip.applicationType ?? "video",
       depositAmount: trip.depositAmount ?? "",
       status: trip.status ?? "active",
+      rating: trip.rating ?? "4.9",
+      reviewsCount: trip.reviewsCount ?? 92,
+      reviewLink: trip.reviewLink ?? "https://www.google.com/maps/place/Proactive+Future/@35.67445,-6.8143,2933475m/data=!3m2!1e3!4b1!4m6!3m5!1s0x65e285d9dffa46ab:0x3dd1b18e867e6183!8m2!3d35.67445!4d-6.8143!16s%2Fg%2F11t6yzt6vh?entry=ttu&g_ep=EgoyMDI2MDMyOS4wIKXMDSoASAFQAw%3D%3D",
       coordinators: (Array.isArray(trip.coordinators) && trip.coordinators.length > 0)
         ? trip.coordinators
           .map((c: any) => typeof c === 'string' ? c : (c.id || c._id || c.userId || ""))
@@ -469,6 +475,9 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         applicationType: data.applicationType || "video",
         depositAmount: data.depositAmount || "",
         status: data.status || "active",
+        rating: data.rating || "4.9",
+        reviewsCount: data.reviewsCount || 92,
+        reviewLink: data.reviewLink || "https://www.google.com/maps/place/Proactive+Future/@35.67445,-6.8143,2933475m/data=!3m2!1e3!4b1!4m6!3m5!1s0x65e285d9dffa46ab:0x3dd1b18e867e6183!8m2!3d35.67445!4d-6.8143!16s%2Fg%2F11t6yzt6vh?entry=ttu&g_ep=EgoyMDI2MDMyOS4wIKXMDSoASAFQAw%3D%3D",
         // Days itinerary data
         daysItinerary: daysItinerary,
       };

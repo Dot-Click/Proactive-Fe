@@ -30,7 +30,8 @@ const formSchema = z
     currency: z.string().min(1, {
       message: "Select Currency",
     }),
-
+    googleReviewsMark: z.string().optional(),
+    googleReviewsCount: z.string().optional(),
   })
 
 const General = () => {
@@ -43,6 +44,8 @@ const General = () => {
       logo: "",
       defaultLanguage: "",
       currency: "",
+      googleReviewsMark: "4.9",
+      googleReviewsCount: "92",
     },
   });
   const { mutateAsync, isPending } = UseupdateSetting();
@@ -57,19 +60,23 @@ const General = () => {
         logo: generalSettingData.logo ?? "",
         defaultLanguage: generalSettingData.defaultLanguage ?? "",
         currency: generalSettingData.currency ?? "",
+        googleReviewsMark: generalSettingData.googleReviewsMark?.toString() ?? "4.9",
+        googleReviewsCount: generalSettingData.googleReviewsCount?.toString() ?? "92",
       });
     }
   }, [generalSettingData, form]);
 
   const onSubmit = async (val: z.infer<typeof formSchema>) => {
     try {
-      const { currency, defaultLanguage, logo, timeZone, platformName } = val;
+      const { currency, defaultLanguage, logo, timeZone, platformName, googleReviewsMark, googleReviewsCount } = val;
       await mutateAsync({
         currency,
         defaultLanguage,
         logo,
         timeZone,
         platformName,
+        googleReviewsMark,
+        googleReviewsCount,
       });
       toast.success("Settings updated successfully");
     } catch (error) {
@@ -229,6 +236,44 @@ const General = () => {
                         <SelectItem value="AUD">AUD - Australian Dollar</SelectItem>
                       </SelectContent>
                     </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="googleReviewsMark"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#242E2F] font-semibold">
+                    Google Reviews Mark
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g. 4.9"
+                      {...field}
+                      className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="googleReviewsCount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#242E2F] font-semibold">
+                    Google Reviews Count
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g. 92"
+                      {...field}
+                      className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -1050,6 +1050,70 @@ const BasicInfo = () => {
               )}
             />
 
+            {/* Google Review Rating */}
+            <FormField
+              control={control}
+              name="rating"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#242E2F] font-semibold">
+                    Google Review Rating
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g. 4.9"
+                      {...field}
+                      className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Google Review Count */}
+            <FormField
+              control={control}
+              name="reviewsCount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#242E2F] font-semibold">
+                    Google Review Count
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="e.g. 92"
+                      {...field}
+                      className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Google Review Link */}
+            <FormField
+              control={control}
+              name="reviewLink"
+              render={({ field }) => (
+                <FormItem className="md:col-span-2">
+                  <FormLabel className="text-[#242E2F] font-semibold">
+                    Google Review Link
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Google Maps Review URL"
+                      {...field}
+                      className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
 
 
             {/* Days Itinerary Section - Shown only when "Wild Trips" category is selected */}

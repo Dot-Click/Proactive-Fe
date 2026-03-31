@@ -44,7 +44,7 @@ const TestimonialCard = ({ item, isReview }: { item: ReviewItem | (typeof FALLBA
     const subtext = isReview ? "Google Review" : (item as (typeof FALLBACK_CARDS)[0]).CollegeName;
     const avatarSrc = isReview ? (item as ReviewItem).userImage : undefined;
     const initials = name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
-    const link = isReview ? (item as ReviewItem).link : undefined;
+    const link = isReview ? ((item as ReviewItem).link || "https://www.google.com/maps/place/Proactive+Future/@35.2255919,-17.426007,2949883m/data=!3m2!1e3!4b1!4m6!3m5!1s0x65e285d9dffa46ab:0x3dd1b18e867e6183!8m2!3d35.67445!4d-6.8143!16s%2Fg%2F11t6yzt6vh?entry=ttu&g_ep=EgoyMDI2MDMyOS4wIKXMDSoASAFQAw%3D%3D") : undefined;
 
     const content = (
         <div className="w-full h-full shadow-md flex flex-col gap-6 bg-[#F9F9F9] border border-[#E0D9D9] rounded-[20px] px-10 py-8">

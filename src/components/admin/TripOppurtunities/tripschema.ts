@@ -147,6 +147,9 @@ export const tripSchema = z
     applicationType: z.string().optional().default("video"),
     depositAmount: z.string().optional().default(""),
     status: z.enum(["active", "coming soon", "pending", "completed"]).default("active"),
+    rating: z.string().optional().default("4.9"),
+    reviewsCount: z.coerce.number().optional().default(92),
+    reviewLink: z.string().url("Must be a valid URL").optional().default("https://www.google.com/maps/place/Proactive+Future/@35.67445,-6.8143,2933475m/data=!3m2!1e3!4b1!4m6!3m5!1s0x65e285d9dffa46ab:0x3dd1b18e867e6183!8m2!3d35.67445!4d-6.8143!16s%2Fg%2F11t6yzt6vh?entry=ttu&g_ep=EgoyMDI2MDMyOS4wIKXMDSoASAFQAw%3D%3D"),
   })
   .passthrough(); // Allow extra fields but validate schema fields
 

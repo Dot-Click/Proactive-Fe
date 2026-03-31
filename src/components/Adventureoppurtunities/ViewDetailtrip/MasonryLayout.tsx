@@ -93,7 +93,12 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
             </div>
 
             {/* Rating */}
-            <div className="flex items-center gap-3">
+            <a 
+              href={data?.reviewLink || "https://www.google.com/maps/place/Proactive+Future/@35.67445,-6.8143,2933475m/data=!3m2!1e3!4b1!4m6!3m5!1s0x65e285d9dffa46ab:0x3dd1b18e867e6183!8m2!3d35.67445!4d-6.8143!16s%2Fg%2F11t6yzt6vh?entry=ttu&g_ep=EgoyMDI2MDMyOS4wIKXMDSoASAFQAw%3D%3D"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer group"
+            >
               <div className="flex gap-1">
                 {[...Array(5)].map((_, i) => (
                   <div key={i} className="w-5 h-5 bg-[#0DAC87] rounded-[4px] flex items-center justify-center">
@@ -101,11 +106,11 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
                   </div>
                 ))}
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-[#221E33] text-sm">{stats?.rating || 4.9}</span>
-                <span className="text-[#666373] text-sm">({stats?.totalReviews || 92} reviews)</span>
+              <div className="flex items-center gap-1.5 font-bold text-sm">
+                <span className="text-[#221E33]">{data?.rating || stats?.rating || "4.9"}</span>
+                <span className="text-[#666373] group-hover:text-[#0DAC87] transition-colors">({data?.reviewsCount || stats?.totalReviews || 92} reviews)</span>
               </div>
-            </div>
+            </a>
           </div>
 
           {/* Action Buttons */}

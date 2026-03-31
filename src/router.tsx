@@ -11,7 +11,7 @@ import AddtripPage from "./pages/admin/Addtrip.page";
 import ChatManagementPage from "./pages/admin/ChatManagement.page";
 import PaymentmembershipPage from "./pages/admin/Paymentmembership.page";
 import SettingPage from "./pages/admin/Setting.page";
-
+import EditTripAdminPage from "./pages/admin/EditTrip.page";
 import CoordinatorLayout from "./Layout/coordinator.layout";
 import CoordinatorDashboard from "./pages/coordinator/CoordinatorDashboard";
 import AddCoordinatortripPage from "./pages/coordinator/AddCoordinatortrip.page";
@@ -108,6 +108,7 @@ function App() {
         />
         <Route path="/dashboard/google-reviews" element={<GoogleReviewPage />} />
         <Route path="/dashboard/view-trip/:id" element={<ViewTripPage />} />
+        <Route path="/dashboard/edit-trip/:id" element={<EditTripAdminPage />} />
         <Route path="/dashboard/settings" element={<SettingPage />} />
       </Route>
 

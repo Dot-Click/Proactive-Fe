@@ -1,5 +1,6 @@
 
-import { PackageCheck, PackageX, Info } from "lucide-react";
+import { PackageCheck, PackageX, Info, ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
 import included1 from "../../../assets/included1.avif";
 import included2 from "../../../assets/included2.avif";
 import included3 from "../../../assets/included3.avif";
@@ -82,11 +83,19 @@ const Includeditem = ({ trip }: { trip: any }) => {
     let rawIncluded = data?.included ?? data?.Included ?? [];
     let rawNotIncluded = data?.notIncluded ?? data?.not_included ?? data?.NotIncluded ?? [];
 
-    const IncludedItem = normalizeItems(rawIncluded, INCLUDED_LOOKUP);
-    const NotIncludedItem = normalizeItems(rawNotIncluded, NOT_INCLUDED_LOOKUP);
+    const IncludedItems = normalizeItems(rawIncluded, INCLUDED_LOOKUP);
+    const NotIncludedItems = normalizeItems(rawNotIncluded, NOT_INCLUDED_LOOKUP);
+
+    const [isExpandedIncluded, setIsExpandedIncluded] = useState(false);
+    const [isExpandedNotIncluded, setIsExpandedNotIncluded] = useState(false);
+
+    const ITEMS_LIMIT = 3;
+
+    const displayedIncluded = isExpandedIncluded ? IncludedItems : IncludedItems.slice(0, ITEMS_LIMIT);
+    const displayedNotIncluded = isExpandedNotIncluded ? NotIncludedItems : NotIncludedItems.slice(0, ITEMS_LIMIT);
 
     return (
-        <div id="included-section" className="space-y-20 mt-16 bg-white">
+        <div id="included-section" className="space-y-20 mt-16 bg-white pb-10">
 
             {/* Included Section */}
             <div className="space-y-10">
@@ -95,10 +104,10 @@ const Includeditem = ({ trip }: { trip: any }) => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {IncludedItem.length > 0 ? IncludedItem.map((item, index) => {
+                    {IncludedItems.length > 0 ? displayedIncluded.map((item, index) => {
                         const iconUrl = getImageUrl(item.img);
                         return (
-                            <div key={index} className="flex flex-col items-center text-center p-10 bg-[#FFFFFF] border border-[#ECECF1] rounded-[24px] transition-all duration-300">
+                            <div key={index} className="flex flex-col items-center text-center p-10 bg-[#FFFFFF] border border-[#ECECF1] rounded-[24px] transition-all duration-300 hover:shadow-lg">
                                 <div className="w-16 h-12 mb-8 flex items-center justify-center">
                                     {iconUrl ? (
                                         <img src={iconUrl} alt={item.title} className="max-w-full max-h-full object-contain" />
@@ -120,6 +129,21 @@ const Includeditem = ({ trip }: { trip: any }) => {
                         <p className="text-[#A3A1AC] text-sm italic">Refer to trip description for details.</p>
                     )}
                 </div>
+
+                {IncludedItems.length > ITEMS_LIMIT && (
+                    <div className="flex justify-start mt-6">
+                        <button 
+                            onClick={() => setIsExpandedIncluded(!isExpandedIncluded)}
+                            className="flex items-center gap-2 px-6 py-3 border border-[#ECECF1] rounded-xl text-[#221E33] font-bold text-sm hover:bg-[#F8F9FB] transition-colors"
+                        >
+                            {isExpandedIncluded ? (
+                                <>Show less <ChevronUp size={16} /></>
+                            ) : (
+                                <>Show all {IncludedItems.length} included <ChevronDown size={16} /></>
+                            )}
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Not Included Section */}
@@ -129,10 +153,10 @@ const Includeditem = ({ trip }: { trip: any }) => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {NotIncludedItem.length > 0 ? NotIncludedItem.map((item, index) => {
+                    {NotIncludedItems.length > 0 ? displayedNotIncluded.map((item, index) => {
                         const iconUrl = getImageUrl(item.img);
                         return (
-                            <div key={index} className="flex flex-col items-center text-center p-10 bg-[#FFFFFF] border border-[#ECECF1] rounded-[24px] transition-all duration-300">
+                            <div key={index} className="flex flex-col items-center text-center p-10 bg-[#FFFFFF] border border-[#ECECF1] rounded-[24px] transition-all duration-300 hover:shadow-lg">
                                 <div className="w-16 h-12 mb-8 flex items-center justify-center">
                                     {iconUrl ? (
                                         <img src={iconUrl} alt={item.title} className="max-w-full max-h-full object-contain" />
@@ -156,6 +180,21 @@ const Includeditem = ({ trip }: { trip: any }) => {
                         </div>
                     )}
                 </div>
+
+                {NotIncludedItems.length > ITEMS_LIMIT && (
+                    <div className="flex justify-start mt-6">
+                        <button 
+                            onClick={() => setIsExpandedNotIncluded(!isExpandedNotIncluded)}
+                            className="flex items-center gap-2 px-6 py-3 border border-[#ECECF1] rounded-xl text-[#221E33] font-bold text-sm hover:bg-[#F8F9FB] transition-colors"
+                        >
+                            {isExpandedNotIncluded ? (
+                                <>Show less <ChevronUp size={16} /></>
+                            ) : (
+                                <>Show all {NotIncludedItems.length} not included <ChevronDown size={16} /></>
+                            )}
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Information Note */}

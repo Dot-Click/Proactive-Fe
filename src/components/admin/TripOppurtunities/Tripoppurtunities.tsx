@@ -195,6 +195,12 @@ const Tripoppurtunities = () => {
             >
               View
             </Button>
+            <Button
+              className="cursor-pointer px-7 h-10 rounded-full bg-[#221E33] hover:bg-[#322e47]"
+              onClick={() => navigate(`/dashboard/edit-trip/${row.original.id}`)}
+            >
+              Edit
+            </Button>
             
             <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
               <DialogTrigger asChild>

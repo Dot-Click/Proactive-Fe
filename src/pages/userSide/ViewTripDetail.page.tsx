@@ -97,7 +97,7 @@ const ViewTripDetailPage = () => {
             <VideoSection trip={trip} />
             <Coordinatordetail trip={trip} />
             <HowItWorks />
-            <ReviewsSection />
+            <ReviewsSection trip={trip} />
             <Faqs />
             <ConfirmedParticipants trip={trip} />
             {/* <ParticipantsCards /> */}
