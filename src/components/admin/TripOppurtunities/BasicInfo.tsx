@@ -1387,26 +1387,19 @@ const BasicInfo = () => {
               )}
             />
 
-            {/* Map Coordinates */}
-            <FormField
-              control={control}
-              name="mapCoordinates"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[#242E2F] font-semibold mt-6">
-                    Map Coordinates (Optional)
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Select on map"
-                      {...field}
-                      className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Map Coordinates with Map Picker */}
+            <div className="md:col-span-2 mt-6 pt-4 border-t border-[#EFEFEF]">
+              <FormLabel className="text-[#242E2F] font-semibold">
+                Trip Total Destination Map (Coordinates)
+              </FormLabel>
+              <DayMap
+                dayNumber={0}
+                location={watch("location")}
+                coordinates={watch("mapCoordinates")}
+                onLocationChange={(newLoc) => setValue("location", newLoc)}
+                onCoordinatesChange={(newCoords) => setValue("mapCoordinates", newCoords)}
+              />
+            </div>
           </div>
 
           {/* Dates and Duration Section */}

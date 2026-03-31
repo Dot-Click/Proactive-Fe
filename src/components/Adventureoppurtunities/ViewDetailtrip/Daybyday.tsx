@@ -195,6 +195,10 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                 day: day.day ?? index + 1,
                 description: day.description ?? "",
                 image: day.image ?? day.img ?? null,
+                coordinates: day.coordinates || day.locationCoords || 
+                    (day.latitude && day.longitude ? `${day.latitude},${day.longitude}` : 
+                    (day.lat && day.lng ? `${day.lat},${day.lng}` : 
+                    (day.lat && day.lon ? `${day.lat},${day.lon}` : ""))),
             }));
         }
         if (typeof raw === "object") {
@@ -207,6 +211,10 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                             day: dayNum,
                             description: raw[key]?.description ?? "",
                             image: raw[key]?.img ?? raw[key]?.image ?? null,
+                            coordinates: raw[key]?.coordinates || raw[key]?.locationCoords || 
+                                (raw[key]?.latitude && raw[key]?.longitude ? `${raw[key].latitude},${raw[key].longitude}` : 
+                                (raw[key]?.lat && raw[key]?.lng ? `${raw[key].lat},${raw[key].lng}` : 
+                                (raw[key]?.lat && raw[key]?.lon ? `${raw[key].lat},${raw[key].lon}` : ""))),
                         };
                     }
                 }
@@ -248,20 +256,26 @@ const Daybyday = ({ trip }: DaybydayProps) => {
             for (let i = 0; i < daysItinerary.length; i++) {
                 if (cancelled) break;
 
-                const hint = extractLocationHint(daysItinerary[i].description);
-                if (!hint) {
-                    // No location found in description — leave as null
-                    continue;
+                const savedCoords = daysItinerary[i].coordinates;
+                let coord: [number, number] | null = null;
+
+                // Priority 1: Use saved coordinates if they exist
+                if (savedCoords) {
+                    coord = getCoordinates(savedCoords);
                 }
 
-                // Build ONE smart query (avoid "Lahore, Lahore" if country == city)
-                const isRedundant =
-                    tripCountry && tripCountry.toLowerCase().trim() === hint.toLowerCase().trim();
-                const searchQuery =
-                    tripCountry && !isRedundant ? `${hint}, ${tripCountry}` : hint;
-
-                // Single geocode call (Photon → Nominatim internally)
-                const coord = await geocodeSingle(searchQuery);
+                // Priority 2: Geocode description as fallback
+                if (!coord) {
+                    const hint = extractLocationHint(daysItinerary[i].description);
+                    if (hint) {
+                        const isRedundant =
+                            tripCountry && tripCountry.toLowerCase().trim() === hint.toLowerCase().trim();
+                        const searchQuery =
+                            tripCountry && !isRedundant ? `${hint}, ${tripCountry}` : hint;
+                        
+                        coord = await geocodeSingle(searchQuery);
+                    }
+                }
 
                 if (cancelled) break;
 
@@ -272,8 +286,9 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                     return next;
                 });
 
-                // 1.2s gap — safe for both Photon (no limit) and Nominatim (1/sec)
-                if (i < daysItinerary.length - 1) {
+                // ONLY Delay if we actually did a geocoding call (to avoid hitting rate limits)
+                // If we used saved coords, we move to next day immediately.
+                if (!savedCoords && i < daysItinerary.length - 1) {
                     await delay(1200);
                 }
             }
@@ -325,10 +340,14 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                     >
                         {daysItinerary.map((day: any, index: number) => {
                             const dayNumber = day.day ?? index + 1;
-                            const dayDescription = day.description || "No description available.";
+                            const dayDescription = day.description?.trim() || "";
                             const descriptionLines = dayDescription.split("\n").filter((line: string) => line.trim());
-                            const dayTitle = descriptionLines[0]?.trim() || `Day ${dayNumber}`;
-                            const dayContent = descriptionLines.slice(1).join("\n") || dayDescription;
+                            
+                            // If description has lines, use first as title, rest as content. 
+                            // If empty, use "Day X" as title and "" as content.
+                            const dayTitle = descriptionLines.length > 0 ? descriptionLines[0] : (day.location || `Day ${dayNumber}`);
+                            const dayContent = descriptionLines.length > 1 ? descriptionLines.slice(1).join("\n") : (descriptionLines.length === 1 ? "" : "");
+                            
                             const isActive = activeDayIndex === index;
                             // null = not geocoded yet, [lat,lng] = success
                             const coordState = dayCoords[index];
@@ -386,9 +405,15 @@ const Daybyday = ({ trip }: DaybydayProps) => {
 
                                     <AccordionContent className="pt-2 pb-6">
                                         <div className="pl-[60px] space-y-6">
-                                            <p className="text-[#514D4D] text-base leading-[1.8] whitespace-pre-line font-quicksand">
-                                                {dayContent}
-                                            </p>
+                                            {dayContent || dayDescription ? (
+                                                <p className="text-[#514D4D] text-base leading-[1.8] font-medium whitespace-pre-line font-quicksand">
+                                                    {dayContent || dayDescription}
+                                                </p>
+                                            ) : (
+                                                <p className="text-[#999] text-sm italic font-quicksand">
+                                                    Activity details coming soon...
+                                                </p>
+                                            )}
                                             {day.image && (
                                                 <div className="rounded-2xl overflow-hidden shadow-md border border-[#ECECF1]">
                                                     <img
@@ -445,7 +470,9 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                                 if (!coord) return null;
                                 const dayNumber = day.day ?? index + 1;
                                 const descLines = day.description?.split("\n").filter((l: string) => l.trim()) ?? [];
-                                const popupTitle = descLines[0]?.trim() || `Day ${dayNumber}`;
+                                
+                                // Use location name or day number if description is empty
+                                const popupTitle = descLines[0]?.trim() || day.location || `Day ${dayNumber}`;
                                 const isActive = activeDayIndex === index;
 
                                 return (
@@ -457,13 +484,14 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                                             click: () => setActiveDayIndex(index),
                                         }}
                                     >
-                                        <Popup>
-                                            <div style={{ fontFamily: "'Quicksand', sans-serif" }}>
-                                                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
+                                        <Popup className="custom-marker-popup">
+                                            <div style={{ fontFamily: "'Quicksand', sans-serif", padding: "4px" }}>
+                                                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
                                                     <div style={{
-                                                        width: "22px", height: "22px", borderRadius: "50%",
+                                                        width: "24px", height: "24px", borderRadius: "50%",
                                                         background: "#0DAC87", display: "flex", alignItems: "center",
                                                         justifyContent: "center",
+                                                        boxShadow: "0 2px 4px rgba(13,172,135,0.3)"
                                                     }}>
                                                         <span style={{ color: "white", fontSize: "11px", fontWeight: 800 }}>{dayNumber}</span>
                                                     </div>

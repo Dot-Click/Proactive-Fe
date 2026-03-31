@@ -181,6 +181,8 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
           description: day.description ?? "",
           image: day.image ?? day.img ?? null,
           imagePreview: day.image ?? day.img ?? undefined,
+          location: day.location || "",
+          coordinates: day.coordinates || day.locationCoords || "",
         }));
       }
 
@@ -196,6 +198,8 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
                 description: raw[key]?.description ?? "",
                 image: raw[key]?.img ?? raw[key]?.image ?? null,
                 imagePreview: raw[key]?.img ?? raw[key]?.image ?? undefined,
+                location: raw[key]?.location || "",
+                coordinates: raw[key]?.coordinates || "",
               };
             }
           }
@@ -432,6 +436,8 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         data.daysItinerary?.map((day, index) => ({
           day: index + 1,
           description: day.description || "",
+          location: day.location || "",
+          coordinates: day.coordinates || "",
           // Keep existing image URL if no new file is being uploaded
           image:
             day.image && typeof day.image === "string" ? day.image : undefined,
