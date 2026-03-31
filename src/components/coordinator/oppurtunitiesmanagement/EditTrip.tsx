@@ -46,8 +46,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       endDate: undefined,
       LongDescription: "",
       GroupSize: "",
-      rhythm: "",
-      SportsLevel: "",
+      SportsLevel: "Medio",
       included: [],
       notIncluded: [],
       CoordinatorName: "",
@@ -239,8 +238,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         : undefined,
       LongDescription: trip.longDesc ?? "",
       GroupSize: trip.groupSize != null ? String(trip.groupSize) : "",
-      rhythm: trip.rhythm ?? "",
-      SportsLevel: trip.sportLvl ?? "",
+      SportsLevel: trip.SportsLevel || trip.sportLvl || "Medio",
       included: includedItemsData,
       notIncluded: notIncludedItemsData,
       CoordinatorName: coordinatorId || "", // Use ID for dropdown selection
@@ -331,7 +329,6 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       valid = await methods.trigger([
         "LongDescription",
         "GroupSize",
-        "rhythm",
         "SportsLevel",
       ]);
     }
@@ -458,7 +455,6 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         duration: data.duration,
         longDesc: data.LongDescription,
         groupSize: data.GroupSize,
-        rhythm: data.rhythm,
         sportLvl: data.SportsLevel,
         included: includedItems,
         notIncluded: notIncludedItems,

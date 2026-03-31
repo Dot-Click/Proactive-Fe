@@ -16,8 +16,7 @@ export const updateTripSchema = z.object({
   // Step 2 – Trip Details
   LongDescription: z.string().min(20, "Long description must be at least 20 characters").optional(),
   GroupSize: z.string().min(1, "Group size is required").optional(),
-  rhythm: z.string().min(1, "Rhythm is required").optional(),
-  SportsLevel: z.string().min(1, "Sports level is required").optional(),
+  SportsLevel: z.enum(["Bajo", "Medio", "Alto"]).optional(),
 
   // Step 3 – Included
   included: z.array(z.string()).optional(),

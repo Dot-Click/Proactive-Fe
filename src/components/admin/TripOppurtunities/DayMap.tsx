@@ -64,12 +64,29 @@ export const DayMap = ({
       }, 200);
 
       // Click to add/move marker
-      mapRef.current.on("click", (e: L.LeafletMouseEvent) => {
+      mapRef.current.on("click", async (e: L.LeafletMouseEvent) => {
         const { lat, lng } = e.latlng;
         const coords = `${lat.toFixed(6)},${lng.toFixed(6)}`;
 
         updateMarker(lat, lng, coords);
         onCoordinatesChange?.(coords);
+
+        // Reverse Geocoding: Get location name from coordinates
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+          );
+          const data = await res.json();
+          if (data && data.display_name) {
+            // Usually the display_name is too long, so we take the first few parts
+            const parts = data.display_name.split(",");
+            const shortName = parts.slice(0, 3).join(",").trim();
+            setInputLocation(shortName);
+            onLocationChange?.(shortName);
+          }
+        } catch (err) {
+          console.error("Reverse geocoding failed:", err);
+        }
       });
     }
 

@@ -57,10 +57,6 @@ const Reviewsave = () => {
             <span>{values.GroupSize}</span>
           </div>
           <div className="flex gap-2">
-            <span className="text-[#221E33] font-bold">Rhythm:</span>
-            <span>{values.rhythm}</span>
-          </div>
-          <div className="flex gap-2">
             <span className="text-[#221E33] font-bold">Sport Level:</span>
             <span>{values.SportsLevel}</span>
           </div>

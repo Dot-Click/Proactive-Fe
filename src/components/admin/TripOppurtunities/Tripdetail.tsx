@@ -1,4 +1,5 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import React from "react";
@@ -203,38 +204,28 @@ const TripDetail = () => {
                         />
                         <FormField
                             control={control}
-                            name="rhythm"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-[#242E2F] font-semibold">
-                                        Rhythm
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Rhythm"
-                                            {...field}
-                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={control}
                             name="SportsLevel"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="text-[#242E2F] font-semibold">
                                         Sport Level
                                     </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Sport Level"
-                                            {...field}
-                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                                        />
-                                    </FormControl>
+                                    <Select 
+                                        onValueChange={field.onChange} 
+                                        defaultValue={field.value}
+                                        value={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 text-[#221E33]">
+                                                <SelectValue placeholder="Sletc Level" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Bajo">Bajo</SelectItem>
+                                            <SelectItem value="Medio">Medio</SelectItem>
+                                            <SelectItem value="Alto">Alto</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                     <FormMessage />
                                 </FormItem>
                             )}

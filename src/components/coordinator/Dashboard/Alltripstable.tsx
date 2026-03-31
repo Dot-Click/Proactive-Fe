@@ -437,14 +437,7 @@ const TripDetailsModal = ({
               </div>
             </div>
 
-            {/* Rhythm and Sport Level */}
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm font-semibold text-[#666373]">Rhythm</p>
-                <p className="text-sm text-[#3b3745] font-medium">
-                  {tripDetails.rhythm || "N/A"}
-                </p>
-              </div>
               <div>
                 <p className="text-sm font-semibold text-[#666373]">
                   Sport Level

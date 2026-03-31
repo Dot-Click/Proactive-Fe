@@ -70,12 +70,12 @@ const Tripmood = ({ trip }: { trip?: any }) => {
                             </div>
                             <div className="flex items-center gap-3">
                                 <div className="flex items-end gap-1 h-5">
-                                    <div className="w-1.5 h-2 bg-[#0DAC87] rounded-full" />
-                                    <div className="w-1.5 h-4 bg-[#0DAC87] rounded-full" />
-                                    <div className="w-1.5 h-3 bg-[#D1D5DB] rounded-full" />
+                                    <div className={`w-1.5 h-2 rounded-full ${trip?.sportLvl === 'Bajo' || trip?.sportLvl === 'Medio' || trip?.sportLvl === 'Alto' ? 'bg-[#0DAC87]' : 'bg-[#D1D5DB]'}`} />
+                                    <div className={`w-1.5 h-4 rounded-full ${trip?.sportLvl === 'Medio' || trip?.sportLvl === 'Alto' ? 'bg-[#0DAC87]' : 'bg-[#D1D5DB]'}`} />
+                                    <div className={`w-1.5 h-3 rounded-full ${trip?.sportLvl === 'Alto' ? 'bg-[#0DAC87]' : 'bg-[#D1D5DB]'}`} />
                                 </div>
                                 <span className="text-[#221E33] font-bold text-lg font-quicksand underline decoration-[#0DAC87] decoration-2 underline-offset-4">
-                                    Medio
+                                    {trip?.sportLvl || "Medio"}
                                 </span>
                             </div>
                         </div>

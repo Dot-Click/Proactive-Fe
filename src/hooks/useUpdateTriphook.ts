@@ -15,8 +15,7 @@ export interface UpdateTripPayload {
   duration?: string;
   longDesc?: string;
   groupSize?: string;
-  rhythm?: string;
-  sportLvl?: string;
+  sportLvl?: "Bajo" | "Medio" | "Alto";
   included?: string[]; // jsonb
   notIncluded?: string[]; // jsonb
   bestPriceMsg?: string;

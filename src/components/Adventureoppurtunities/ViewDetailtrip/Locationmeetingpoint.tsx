@@ -1,5 +1,4 @@
 import locationmeeting1 from "../../../assets/locationmeeting1.avif"
-import locationmeeting2 from "../../../assets/locationmeeting2.avif"
 import locationmeeting3 from "../../../assets/locationmeeting3.avif"
 import locationmeeting4 from "../../../assets/locationmeeting4.avif"
 
@@ -24,19 +23,6 @@ const Locationmeetingpoint = ({ trip }: { trip: any }) => {
                     </div>
                 </div>
 
-                {/* Rhythm */}
-                <div className="bg-[#C4FFF0] border border-[#156250] rounded-2xl py-5 px-6 flex items-center gap-4 group hover:shadow-md transition-all">
-                    <div className="bg-[#221E33] p-3 rounded-full shrink-0">
-                        <img src={locationmeeting2} alt="Rhythm" className="w-5 h-5 object-contain" />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-[#156250] text-sm font-medium font-quicksand">Rhythm</span>
-                        <span className="text-[#221E33] font-bold text-base font-quicksand leading-tight">
-                            {data?.rhythm || "Dynamic"}
-                        </span>
-                    </div>
-                </div>
-
                 {/* Sport Level */}
                 <div className="bg-[#C4FFF0] border border-[#156250] rounded-2xl py-5 px-6 flex items-center gap-4 group hover:shadow-md transition-all">
                     <div className="bg-[#221E33] p-3 rounded-full shrink-0">
@@ -45,7 +31,7 @@ const Locationmeetingpoint = ({ trip }: { trip: any }) => {
                     <div className="flex flex-col">
                         <span className="text-[#156250] text-sm font-medium font-quicksand">Sport level</span>
                         <span className="text-[#221E33] font-bold text-base font-quicksand leading-tight">
-                            {data?.sportLvl || "Intermediate"}
+                            {data?.sportLvl || "Medio"}
                         </span>
                     </div>
                 </div>

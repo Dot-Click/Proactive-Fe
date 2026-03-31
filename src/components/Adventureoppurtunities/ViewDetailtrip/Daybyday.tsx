@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import day1 from "../../../assets/day1.avif";
 import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
@@ -166,16 +166,16 @@ const geocodeSingle = async (query: string): Promise<[number, number] | null> =>
 //   "Day 1: Islamabad – Arrival\n..."       → "Islamabad"
 //   "Sierra Nevada, Granada\nMorning..."    → "Sierra Nevada, Granada"
 //   "Barcelona\nCity vibes..."              → "Barcelona"
-const extractLocationHint = (description: string): string => {
-    if (!description) return "";
-    // Take only the first line
-    const firstLine = description.split(/\n/)[0]?.trim() ?? "";
-    // Remove "Day N", "Day N:", "Day N -" prefix
-    const withoutDay = firstLine.replace(/^day\s*\d+\s*[:\-–]?\s*/i, "").trim();
-    // Everything before the FIRST separator (– / - / :) is the location name
-    const location = withoutDay.split(/\s*[–\-:]\s*/)[0].trim();
-    return location || withoutDay;
-};
+// const extractLocationHint = (description: string): string => {
+//     if (!description) return "";
+//     // Take only the first line
+//     const firstLine = description.split(/\n/)[0]?.trim() ?? "";
+//     // Remove "Day N", "Day N:", "Day N -" prefix
+//     const withoutDay = firstLine.replace(/^day\s*\d+\s*[:\-–]?\s*/i, "").trim();
+//     // Everything before the FIRST separator (– / - / :) is the location name
+//     const location = withoutDay.split(/\s*[–\-:]\s*/)[0].trim();
+//     return location || withoutDay;
+// };
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 const Daybyday = ({ trip }: DaybydayProps) => {
@@ -187,15 +187,15 @@ const Daybyday = ({ trip }: DaybydayProps) => {
     const [geocodingDone, setGeocodingDone] = useState(false);
 
     // ── Parse itinerary ──────────────────────────────────────────────────────
-    const parseDaysItinerary = () => {
+    const daysItinerary = useMemo(() => {
         const raw = tripData?.daysItenary || tripData?.daysItinerary;
+        console.log("🗺️ Daybyday: Raw Itinerary Data from Backend:", raw);
         if (!raw) return [];
         if (Array.isArray(raw)) {
             return raw.map((day: any, index: number) => ({
                 day: day.day ?? index + 1,
                 description: day.description ?? "",
                 location: day.location ?? "",
-                coordinates: day.coordinates ?? "",
                 image: day.image ?? day.img ?? null,
                 coordinates: day.coordinates || day.locationCoords || 
                     (day.latitude && day.longitude ? `${day.latitude},${day.longitude}` : 
@@ -213,7 +213,6 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                             day: dayNum,
                             description: raw[key]?.description ?? "",
                             location: raw[key]?.location ?? "",
-                            coordinates: raw[key]?.coordinates ?? "",
                             image: raw[key]?.img ?? raw[key]?.image ?? null,
                             coordinates: raw[key]?.coordinates || raw[key]?.locationCoords || 
                                 (raw[key]?.latitude && raw[key]?.longitude ? `${raw[key].latitude},${raw[key].longitude}` : 
@@ -226,9 +225,7 @@ const Daybyday = ({ trip }: DaybydayProps) => {
             return days.filter(Boolean);
         }
         return [];
-    };
-
-    const daysItinerary = parseDaysItinerary();
+    }, [tripData?.daysItenary, tripData?.daysItinerary]);
 
     // ── Fallback: parse mapCoordinates field ─────────────────────────────────
     const getCoordinates = (coordString: string): [number, number] | null => {
@@ -269,17 +266,32 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                     coord = getCoordinates(savedCoords);
                 }
 
-                // Priority 2: Geocode description as fallback
+                // Priority 2: Geocode "Location" field as fallback
                 if (!coord) {
-                    const hint = extractLocationHint(daysItinerary[i].description);
+                    const hint = daysItinerary[i].location?.trim();
                     if (hint) {
+                        console.log(`🔍 Daybyday: Geocoding Day ${i + 1} hint: "${hint}"`);
                         const isRedundant =
                             tripCountry && tripCountry.toLowerCase().trim() === hint.toLowerCase().trim();
                         const searchQuery =
                             tripCountry && !isRedundant ? `${hint}, ${tripCountry}` : hint;
                         
                         coord = await geocodeSingle(searchQuery);
+                        
+                        // Critical fallback: If hint+country failed, try hint alone
+                        if (!coord && searchQuery !== hint) {
+                            console.log(`🔍 Daybyday: Retrying Day ${i + 1} with basic hint: "${hint}"`);
+                            coord = await geocodeSingle(hint);
+                        }
+                    } else {
+                        console.log(`⚠️ Daybyday: Day ${i + 1} has no location and no coordinates.`);
                     }
+                }
+
+                if (coord) {
+                    console.log(`✅ Daybyday: Day ${i + 1} successfully pinned at:`, coord);
+                } else if (daysItinerary[i].location) {
+                    console.error(`❌ Daybyday: FAILED to pin Day ${i + 1} even after retries for query: "${daysItinerary[i].location}"`);
                 }
 
                 if (cancelled) break;
@@ -305,7 +317,7 @@ const Daybyday = ({ trip }: DaybydayProps) => {
 
         return () => { cancelled = true; };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tripData?.id]);
+    }, [daysItinerary, tripData?.id, tripData?.location?.name, tripData?.locationName]);
 
     if (daysItinerary.length === 0) return null;
 
@@ -348,10 +360,12 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                             const dayDescription = day.description?.trim() || "";
                             const descriptionLines = dayDescription.split("\n").filter((line: string) => line.trim());
                             
-                            // If description has lines, use first as title, rest as content. 
-                            // If empty, use "Day X" as title and "" as content.
-                            const dayTitle = descriptionLines.length > 0 ? descriptionLines[0] : (day.location || `Day ${dayNumber}`);
-                            const dayContent = descriptionLines.length > 1 ? descriptionLines.slice(1).join("\n") : (descriptionLines.length === 1 ? "" : "");
+                            // 🌟 MASTER CHANGE: Prioritize the "Location" field for the Title
+                            const dayTitle = day.location?.trim() || (descriptionLines.length > 0 ? descriptionLines[0] : `Day ${dayNumber}`);
+                            
+                            // If location was used for title, use whole description for content. 
+                            // If first line of description was used for title, use the rest for content.
+                            const dayContent = day.location?.trim() ? dayDescription : (descriptionLines.length > 1 ? descriptionLines.slice(1).join("\n") : "");
                             
                             const isActive = activeDayIndex === index;
                             // null = not geocoded yet, [lat,lng] = success
@@ -476,8 +490,8 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                                 const dayNumber = day.day ?? index + 1;
                                 const descLines = day.description?.split("\n").filter((l: string) => l.trim()) ?? [];
                                 
-                                // Use location name or day number if description is empty
-                                const popupTitle = descLines[0]?.trim() || day.location || `Day ${dayNumber}`;
+                                // 🌟 MASTER CHANGE: Use the "Location" field for popup title
+                                const popupTitle = day.location?.trim() || (descLines.length > 0 ? descLines[0]?.trim() : `Day ${dayNumber}`);
                                 const isActive = activeDayIndex === index;
 
                                 return (

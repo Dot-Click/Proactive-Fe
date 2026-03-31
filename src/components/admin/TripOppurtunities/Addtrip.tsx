@@ -40,8 +40,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       endDate: undefined,
       LongDescription: "",
       GroupSize: "",
-      rhythm: "",
-      SportsLevel: "",
+      SportsLevel: "Medio",
       included: [],
       notIncluded: [],
       coordinators: [], // Correct plural field
@@ -87,7 +86,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
   const validateAndGoToSection = async (targetStep: number) => {
     let valid = false;
     if (step === 1) valid = await methods.trigger(["categoryId", "title", "description", "coverImage", "location", "startDate", "endDate", "duration"]);
-    else if (step === 2) valid = await methods.trigger(["LongDescription", "GroupSize", "rhythm", "SportsLevel"]);
+    else if (step === 2) valid = await methods.trigger(["LongDescription", "GroupSize", "SportsLevel"]);
     else if (step === 3) valid = await methods.trigger(["included", "notIncluded"]);
     else if (step === 4) valid = await methods.trigger(["coordinators"]);
     else if (step === 5) valid = await methods.trigger(["PromotionalVideo", "GalleryImages", "BestPrice", "FinalPrice"]);
@@ -99,7 +98,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
   const next = async () => {
     let valid = false;
     if (step === 1) valid = await methods.trigger(["categoryId", "title", "description", "coverImage", "location", "startDate", "endDate", "duration"]);
-    else if (step === 2) valid = await methods.trigger(["LongDescription", "GroupSize", "rhythm", "SportsLevel"]);
+    else if (step === 2) valid = await methods.trigger(["LongDescription", "GroupSize", "SportsLevel"]);
     else if (step === 3) valid = await methods.trigger(["included", "notIncluded"]);
     else if (step === 4) valid = await methods.trigger(["coordinators"]);
     else if (step === 5) valid = await methods.trigger(["PromotionalVideo", "GalleryImages", "BestPrice", "FinalPrice"]);
@@ -131,7 +130,6 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
 
       const getValidImg = (imgStr: any) => {
         if (!imgStr || typeof imgStr !== "string") return "";
-        // Allow data URLs (custom uploads) and standard relative/asset paths
         return imgStr;
       };
 
@@ -186,7 +184,6 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         duration: data.duration,
         longDesc: data.LongDescription,
         groupSize: data.GroupSize,
-        rhythm: data.rhythm,
         sportLvl: data.SportsLevel,
         included: includedItems,
         notIncluded: notIncludedItems,
