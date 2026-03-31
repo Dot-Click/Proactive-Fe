@@ -8,8 +8,15 @@ import included5 from "../../../assets/included5.avif";
 import { Controller, useFormContext } from "react-hook-form";
 import { FormMessage } from "@/components/ui/form";
 import clsx from "clsx";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { TripFormType } from "./tripschema";
+import { 
+  useGetExtraItems, 
+  useCreateExtraItem, 
+  useUpdateExtraItem, 
+  useDeleteExtraItem,
+} from "@/hooks/extraItemsHook";
+import { toast } from "react-hot-toast";
 
 
 
@@ -177,69 +184,20 @@ const SelectCard = ({
 );
 
 const Included = () => {
-  const [ShowIncludedItems] = useState<boolean>(true);
-  const [ShownotIncludedItems] = useState<boolean>(true);
   const { control } = useFormContext<TripFormType>();
-
-  // Persistent custom items stored in localStorage
-  const [customIncluded, setCustomIncluded] = useState<{ id: string; title: string; description: string; img: string }[]>([]);
-  const [customNotIncluded, setCustomNotIncluded] = useState<{ id: string; title: string; description: string; img: string }[]>([]);
+  const { data: remoteItems, isLoading } = useGetExtraItems();
+  const createMutation = useCreateExtraItem();
+  const updateMutation = useUpdateExtraItem();
+  const deleteMutation = useDeleteExtraItem();
 
   // Add item dialog states
   const [showAddIncludedDialog, setShowAddIncludedDialog] = useState(false);
   const [showAddNotIncludedDialog, setShowAddNotIncludedDialog] = useState(false);
   const [newItemName, setNewItemName] = useState("");
-  // icon file/preview for the custom item being created
-  const [, setNewItemIconFile] = useState<File | null>(null);
   const [newItemIconPreview, setNewItemIconPreview] = useState("");
 
-  // Load custom items from localStorage on mount
-  useEffect(() => {
-    const savedIncluded = localStorage.getItem("customIncludedItems");
-    const savedNotIncluded = localStorage.getItem("customNotIncludedItems");
-
-    if (savedIncluded) {
-      try {
-        const parsed = JSON.parse(savedIncluded);
-        const migrated = Array.isArray(parsed) ? parsed.map((item: any) => ({
-          ...item,
-          description: item.description || item.desc || "",
-          img: item.img || item.icon || "",
-        })) : [];
-        setCustomIncluded(migrated);
-      } catch (e) {
-        console.error("Error loading custom included items:", e);
-      }
-    }
-
-    if (savedNotIncluded) {
-      try {
-        const parsed = JSON.parse(savedNotIncluded);
-        const migrated = Array.isArray(parsed) ? parsed.map((item: any) => ({
-          ...item,
-          description: item.description || item.desc || "",
-          img: item.img || item.icon || "",
-        })) : [];
-        setCustomNotIncluded(migrated);
-      } catch (e) {
-        console.error("Error loading custom not included items:", e);
-      }
-    }
-  }, []);
-
-  // Save custom items to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem("customIncludedItems", JSON.stringify(customIncluded));
-  }, [customIncluded]);
-
-  useEffect(() => {
-    localStorage.setItem("customNotIncludedItems", JSON.stringify(customNotIncluded));
-  }, [customNotIncluded]);
-
   const addCustomItem = (forIncluded: boolean) => {
-    // clear previous dialog state
     setNewItemName("");
-    setNewItemIconFile(null);
     setNewItemIconPreview("");
     if (forIncluded) {
       setShowAddIncludedDialog(true);
@@ -248,41 +206,77 @@ const Included = () => {
     }
   };
 
-  const confirmAddItem = (forIncluded: boolean) => {
+  const confirmAddItem = async (forIncluded: boolean) => {
     if (!newItemName.trim()) return;
 
-    const id = `custom-${Date.now()}`;
-    const newItem = {
-      id,
-      title: newItemName.trim(),
-      description: "",
-      img: newItemIconPreview || "",
-    };
-
-    if (forIncluded) {
-      setCustomIncluded((prev) => [...prev, newItem]);
-      setShowAddIncludedDialog(false);
-    } else {
-      setCustomNotIncluded((prev) => [...prev, newItem]);
-      setShowAddNotIncludedDialog(false);
-    }
-
-    // reset fields
-    setNewItemName("");
-    setNewItemIconFile(null);
-    setNewItemIconPreview("");
-  };
-
-  const removeCustomItem = (id: string, forIncluded: boolean) => {
-    if (forIncluded) {
-      setCustomIncluded((prev) => prev.filter(item => item.id !== id));
-    } else {
-      setCustomNotIncluded((prev) => prev.filter(item => item.id !== id));
+    try {
+      await createMutation.mutateAsync({
+        type: forIncluded ? "included" : "not_included",
+        title: newItemName.trim(),
+        description: "",
+        icon: newItemIconPreview || "",
+      });
+      
+      toast.success("Item added to library");
+      if (forIncluded) setShowAddIncludedDialog(false);
+      else setShowAddNotIncludedDialog(false);
+      
+      setNewItemName("");
+      setNewItemIconPreview("");
+    } catch (error) {
+      toast.error("Failed to add item");
     }
   };
+
+  const removeSharedItem = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this item from the global library? It will remain on existing trips but won't be available for new ones.")) {
+      try {
+        await deleteMutation.mutateAsync(id);
+        toast.success("Item removed from library");
+      } catch (error) {
+        toast.error("Failed to remove item");
+      }
+    }
+  };
+
+  if (isLoading) return <div className="p-10 text-center">Loading library...</div>;
+
+  const dbIncluded = remoteItems?.filter(item => item.type === "included") || [];
+  const dbNotIncluded = remoteItems?.filter(item => item.type === "not_included") || [];
+
+  // Merge defaults with DB items. If a DB item exists with same title, it takes precedence.
+  const mergedIncluded = [...dbIncluded];
+  INCLUDED_ITEMS.forEach(defItem => {
+    if (!dbIncluded.find(dbItem => dbItem.title.toLowerCase() === defItem.title.toLowerCase())) {
+        mergedIncluded.push({
+            id: defItem.id, // Keep the hardcoded ID for now
+            title: defItem.title,
+            description: defItem.description,
+            icon: defItem.img, // Convert img asset to icon field
+            type: "included",
+            createdAt: "",
+            updatedAt: ""
+        });
+    }
+  });
+
+  const mergedNotIncluded = [...dbNotIncluded];
+  NOT_INCLUDED_ITEMS.forEach(defItem => {
+    if (!dbNotIncluded.find(dbItem => dbItem.title.toLowerCase() === defItem.title.toLowerCase())) {
+        mergedNotIncluded.push({
+            id: defItem.id,
+            title: defItem.title,
+            description: defItem.description,
+            icon: defItem.img,
+            type: "not_included",
+            createdAt: "",
+            updatedAt: ""
+        });
+    }
+  });
 
   return (
-    <form className="">
+    <div className="">
       <div className="bg-white px-6 py-6">
         <div className="flex justify-between items-center mt-6 mb-6">
           <span className="text-[#108700] font-medium">What’s Included</span>
@@ -308,7 +302,7 @@ const Included = () => {
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#108700]"
                 onKeyPress={(e) => e.key === 'Enter' && confirmAddItem(true)}
               />
-              <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
                 <div className="relative">
                   <input
                     type="file"
@@ -318,11 +312,9 @@ const Included = () => {
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (!file) {
-                        setNewItemIconFile(null);
                         setNewItemIconPreview("");
                         return;
                       }
-                      setNewItemIconFile(file);
                       const reader = new FileReader();
                       reader.onload = () => {
                         setNewItemIconPreview(reader.result as string);
@@ -358,7 +350,6 @@ const Included = () => {
                   onClick={() => {
                     setShowAddIncludedDialog(false);
                     setNewItemName("");
-                    setNewItemIconFile(null);
                     setNewItemIconPreview("");
                   }}
                   variant="outline"
@@ -369,9 +360,7 @@ const Included = () => {
               </div>
             </div>
           </div>
-        )}
-        {
-          ShowIncludedItems && (
+        )}        {true && (
             <Controller
               name="included"
               control={control}
@@ -396,75 +385,20 @@ const Included = () => {
                         desc="Select this if nothing is included."
                       />
 
-                      {INCLUDED_ITEMS.map((item) => {
+                      {mergedIncluded.map((item) => {
                         const existingIdx = values.findIndex((v: any) => {
                           if (typeof v === "string") return v === item.id || v === item.title;
                           return v.id === item.id || v.title === item.title;
                         });
                         const isSelected = existingIdx !== -1;
                         const existing = isSelected ? values[existingIdx] : null;
-                        const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.img;
-                        const displayDesc = (existing && typeof existing === 'object' && existing.description) || (existing && typeof existing === 'object' && existing.desc) || item.description;
-
-                        return (
-                          <div key={item.id} className={clsx(hasNone && "opacity-40 pointer-events-none")}>
-                            <SelectCard
-                              selected={isSelected}
-                              onClick={() => {
-                                if (isSelected) {
-                                  field.onChange(values.filter((v: any) => {
-                                    if (typeof v === "string") return v !== item.id && v !== item.title;
-                                    return v.id !== item.id && v.title !== item.title;
-                                  }));
-                                } else {
-                                  field.onChange([...values, { id: item.id, title: item.title, description: item.description, icon: item.img }]);
-                                }
-                              }}
-                              onTitleChange={(newTitle) => {
-                                const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.img } : existing), title: newTitle };
-                                field.onChange(newValues);
-                              }}
-                              onDescChange={(newDesc) => {
-                                const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.img } : existing), description: newDesc };
-                                field.onChange(newValues);
-                              }}
-                              icon={displayIcon}
-                              title={isSelected && typeof existing === 'object' && existing.title ? existing.title : item.title}
-                              desc={displayDesc}
-                              onIconChange={(file) => {
-                                const reader = new FileReader();
-                                reader.onload = () => {
-                                  const newValues = values.map((v: any, idx: number) => {
-                                    if (idx === existingIdx) {
-                                      return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
-                                    }
-                                    return v;
-                                  });
-                                  field.onChange(newValues);
-                                };
-                                reader.readAsDataURL(file);
-                              }}
-                            />
-                          </div>
-                        );
-                      })}
-                      {customIncluded.map((item) => {
-                        const existingIdx = values.findIndex((v: any) => {
-                          if (typeof v === "string") return v === item.id || v === item.title;
-                          return v.id === item.id || v.title === item.title;
-                        });
-                        const isSelected = existingIdx !== -1;
-                        const existing = isSelected ? values[existingIdx] : null;
-                        const displayIcon = (existing && existing.icon) || item.img;
-                        const displayDesc = (existing && (existing.description || existing.desc)) || item.description;
+                        const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
+                        const displayDesc = (existing && typeof existing === 'object' && (existing.description || existing.desc)) || item.description || "";
 
                         return (
                           <div key={item.id} className={clsx("relative group", hasNone && "opacity-40 pointer-events-none")}>
                             <SelectCard
                               selected={isSelected}
-                              isCustom={true}
                               onClick={() => {
                                 if (isSelected) {
                                   field.onChange(values.filter((v: any) => {
@@ -472,43 +406,85 @@ const Included = () => {
                                     return v.id !== item.id && v.title !== item.title;
                                   }));
                                 } else {
-                                  field.onChange([...values, { id: item.id, title: item.title, description: item.description, icon: item.img }]);
+                                  field.onChange([...values, { id: item.id, title: item.title, description: item.description, icon: item.icon }]);
                                 }
                               }}
-                              onTitleChange={(newTitle) => {
-                                const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.img } : existing), title: newTitle };
-                                field.onChange(newValues);
+                              onTitleChange={async (newTitle) => {
+                                if (isSelected) {
+                                  const newValues = [...values];
+                                  newValues[existingIdx] = { ...existing, title: newTitle };
+                                  field.onChange(newValues);
+                                }
+                                
+                                // If it's a hardcoded item being modified, create it in DB first
+                                if (!item.createdAt) {
+                                    await createMutation.mutateAsync({ 
+                                        type: "included", 
+                                        title: newTitle, 
+                                        description: item.description || "", 
+                                        icon: item.icon || "" 
+                                    });
+                                } else {
+                                    await updateMutation.mutateAsync({ id: item.id, title: newTitle });
+                                }
                               }}
-                              onDescChange={(newDesc) => {
-                                const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.img } : existing), description: newDesc };
-                                field.onChange(newValues);
+                              onDescChange={async (newDesc) => {
+                                if (isSelected) {
+                                  const newValues = [...values];
+                                  newValues[existingIdx] = { ...existing, description: newDesc };
+                                  field.onChange(newValues);
+                                }
+                                if (!item.createdAt) {
+                                    await createMutation.mutateAsync({ 
+                                        type: "included", 
+                                        title: item.title, 
+                                        description: newDesc, 
+                                        icon: item.icon || "" 
+                                    });
+                                } else {
+                                    await updateMutation.mutateAsync({ id: item.id, description: newDesc });
+                                }
                               }}
-                              icon={displayIcon}
+                              icon={displayIcon || ""}
                               title={isSelected && typeof existing === 'object' && existing.title ? existing.title : item.title}
                               desc={displayDesc}
-                              onIconChange={(file) => {
+                              onIconChange={async (file) => {
                                 const reader = new FileReader();
-                                reader.onload = () => {
-                                  const newValues = values.map((v: any, idx: number) => {
-                                    if (idx === existingIdx) {
-                                      return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
-                                    }
-                                    return v;
-                                  });
-                                  field.onChange(newValues);
+                                reader.onload = async () => {
+                                  const iconData = reader.result as string;
+                                  if (isSelected) {
+                                    const newValues = values.map((v: any, idx: number) => {
+                                      if (idx === existingIdx) {
+                                        return { ...v, icon: iconData };
+                                      }
+                                      return v;
+                                    });
+                                    field.onChange(newValues);
+                                  }
+                                  
+                                  if (!item.createdAt) {
+                                      await createMutation.mutateAsync({ 
+                                          type: "included", 
+                                          title: item.title, 
+                                          description: item.description || "", 
+                                          icon: iconData 
+                                      });
+                                  } else {
+                                      await updateMutation.mutateAsync({ id: item.id, icon: iconData });
+                                  }
                                 };
                                 reader.readAsDataURL(file);
                               }}
                             />
-                            <button
-                              type="button"
-                              onClick={() => removeCustomItem(item.id, true)}
-                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors z-30 shadow-md opacity-0 group-hover:opacity-100"
-                            >
-                              <X size={12} />
-                            </button>
+                            {item.createdAt && (
+                              <button
+                                type="button"
+                                onClick={() => removeSharedItem(item.id)}
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors z-30 shadow-md"
+                              >
+                                <X size={12} />
+                              </button>
+                            )}
                           </div>
                         );
                       })}
@@ -549,7 +525,7 @@ const Included = () => {
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D40004]"
                 onKeyPress={(e) => e.key === 'Enter' && confirmAddItem(false)}
               />
-              <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
                 <div className="relative">
                   <input
                     type="file"
@@ -559,11 +535,9 @@ const Included = () => {
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (!file) {
-                        setNewItemIconFile(null);
                         setNewItemIconPreview("");
                         return;
                       }
-                      setNewItemIconFile(file);
                       const reader = new FileReader();
                       reader.onload = () => {
                         setNewItemIconPreview(reader.result as string);
@@ -599,7 +573,6 @@ const Included = () => {
                   onClick={() => {
                     setShowAddNotIncludedDialog(false);
                     setNewItemName("");
-                    setNewItemIconFile(null);
                     setNewItemIconPreview("");
                   }}
                   variant="outline"
@@ -612,8 +585,7 @@ const Included = () => {
           </div>
         )}
 
-        {
-          ShownotIncludedItems && (
+        {true && (
             <Controller
               name="notIncluded"
               control={control}
@@ -638,75 +610,20 @@ const Included = () => {
                         desc="Select this if no items category is empty."
                       />
 
-                      {NOT_INCLUDED_ITEMS.map((item) => {
+                      {mergedNotIncluded.map((item) => {
                         const existingIdx = values.findIndex((v: any) => {
                           if (typeof v === "string") return v === item.id || v === item.title;
                           return v.id === item.id || v.title === item.title;
                         });
                         const isSelected = existingIdx !== -1;
                         const existing = isSelected ? values[existingIdx] : null;
-                        const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.img;
-                        const displayDesc = (existing && (existing.description || existing.desc)) || item.description;
-
-                        return (
-                          <div key={item.id} className={clsx(hasNone && "opacity-40 pointer-events-none")}>
-                            <SelectCard
-                              selected={isSelected}
-                              onClick={() => {
-                                if (isSelected) {
-                                  field.onChange(values.filter((v: any) => {
-                                    if (typeof v === "string") return v !== item.id && v !== item.title;
-                                    return v.id !== item.id && v.title !== item.title;
-                                  }));
-                                } else {
-                                  field.onChange([...values, { id: item.id, title: item.title, description: item.description, icon: item.img }]);
-                                }
-                              }}
-                              onTitleChange={(newTitle) => {
-                                const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.img } : existing), title: newTitle };
-                                field.onChange(newValues);
-                              }}
-                              onDescChange={(newDesc) => {
-                                const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.img } : existing), description: newDesc };
-                                field.onChange(newValues);
-                              }}
-                              icon={displayIcon}
-                              title={isSelected && typeof existing === 'object' && existing.title ? existing.title : item.title}
-                              desc={displayDesc}
-                              onIconChange={(file) => {
-                                const reader = new FileReader();
-                                reader.onload = () => {
-                                  const newValues = values.map((v: any, idx: number) => {
-                                    if (idx === existingIdx) {
-                                      return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
-                                    }
-                                    return v;
-                                  });
-                                  field.onChange(newValues);
-                                };
-                                reader.readAsDataURL(file);
-                              }}
-                            />
-                          </div>
-                        );
-                      })}
-                      {customNotIncluded.map((item) => {
-                        const existingIdx = values.findIndex((v: any) => {
-                          if (typeof v === "string") return v === item.id || v === item.title;
-                          return v.id === item.id || v.title === item.title;
-                        });
-                        const isSelected = existingIdx !== -1;
-                        const existing = isSelected ? values[existingIdx] : null;
-                        const displayIcon = (existing && existing.icon) || item.img;
-                        const displayDesc = (existing && (existing.description || existing.desc)) || item.description;
+                        const displayIcon = (existing && typeof existing === 'object' && existing.icon) || item.icon;
+                        const displayDesc = (existing && (existing.description || existing.desc)) || item.description || "";
 
                         return (
                           <div key={item.id} className={clsx("relative group", hasNone && "opacity-40 pointer-events-none")}>
                             <SelectCard
                               selected={isSelected}
-                              isCustom={true}
                               onClick={() => {
                                 if (isSelected) {
                                   field.onChange(values.filter((v: any) => {
@@ -714,39 +631,76 @@ const Included = () => {
                                     return v.id !== item.id && v.title !== item.title;
                                   }));
                                 } else {
-                                  field.onChange([...values, { id: item.id, title: item.title, description: item.description, icon: item.img }]);
+                                  field.onChange([...values, { id: item.id, title: item.title, description: item.description, icon: item.icon }]);
                                 }
                               }}
-                              onTitleChange={(newTitle) => {
-                                const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, description: displayDesc, icon: item.img } : existing), title: newTitle };
-                                field.onChange(newValues);
+                              onTitleChange={async (newTitle) => {
+                                if (isSelected) {
+                                  const newValues = [...values];
+                                  newValues[existingIdx] = { ...existing, title: newTitle };
+                                  field.onChange(newValues);
+                                }
+                                if (!item.createdAt) {
+                                    await createMutation.mutateAsync({ 
+                                        type: "not_included", 
+                                        title: newTitle, 
+                                        description: item.description || "", 
+                                        icon: item.icon || "" 
+                                    });
+                                } else {
+                                    await updateMutation.mutateAsync({ id: item.id, title: newTitle });
+                                }
                               }}
-                              onDescChange={(newDesc) => {
-                                const newValues = [...values];
-                                newValues[existingIdx] = { ...(typeof existing === 'string' ? { id: item.id, title: item.title, icon: item.img } : existing), description: newDesc };
-                                field.onChange(newValues);
+                              onDescChange={async (newDesc) => {
+                                if (isSelected) {
+                                  const newValues = [...values];
+                                  newValues[existingIdx] = { ...existing, description: newDesc };
+                                  field.onChange(newValues);
+                                }
+                                if (!item.createdAt) {
+                                    await createMutation.mutateAsync({ 
+                                        type: "not_included", 
+                                        title: item.title, 
+                                        description: newDesc, 
+                                        icon: item.icon || "" 
+                                    });
+                                } else {
+                                    await updateMutation.mutateAsync({ id: item.id, description: newDesc });
+                                }
                               }}
-                              icon={displayIcon}
+                              icon={displayIcon || ""}
                               title={isSelected && typeof existing === 'object' && existing.title ? existing.title : item.title}
                               desc={displayDesc}
-                              onIconChange={(file) => {
+                              onIconChange={async (file) => {
                                 const reader = new FileReader();
-                                reader.onload = () => {
-                                  const newValues = values.map((v: any, idx: number) => {
-                                    if (idx === existingIdx) {
-                                      return { ...(typeof v === "string" ? { id: item.id, title: item.title, description: displayDesc } : v), icon: reader.result, iconFile: file };
-                                    }
-                                    return v;
-                                  });
-                                  field.onChange(newValues);
+                                reader.onload = async () => {
+                                  const iconData = reader.result as string;
+                                  if (isSelected) {
+                                    const newValues = values.map((v: any, idx: number) => {
+                                      if (idx === existingIdx) {
+                                        return { ...v, icon: iconData };
+                                      }
+                                      return v;
+                                    });
+                                    field.onChange(newValues);
+                                  }
+                                  if (!item.createdAt) {
+                                      await createMutation.mutateAsync({ 
+                                          type: "not_included", 
+                                          title: item.title, 
+                                          description: item.description || "", 
+                                          icon: iconData 
+                                      });
+                                  } else {
+                                      await updateMutation.mutateAsync({ id: item.id, icon: iconData });
+                                  }
                                 };
                                 reader.readAsDataURL(file);
                               }}
                             />
                             <button
                               type="button"
-                              onClick={() => removeCustomItem(item.id, false)}
+                              onClick={() => removeSharedItem(item.id)}
                               className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors z-30 shadow-md opacity-0 group-hover:opacity-100"
                             >
                               <X size={12} />
@@ -765,7 +719,7 @@ const Included = () => {
           )}
       </div>
 
-    </form>
+    </div>
   );
 };
 

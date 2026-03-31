@@ -272,6 +272,23 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
           {step === 5 && <Mediaprice />}
           {step === 6 && <Reviewsave />}
 
+          {/* Show validation errors blocking submission */}
+          {Object.keys(methods.formState.errors).length > 0 && (
+            <div className="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-700 font-semibold mb-2">⚠️ Missing or invalid information:</p>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(methods.formState.errors).map(([field, error]: [string, any]) => (
+                  <span key={field} className="bg-white px-3 py-1 text-red-600 text-xs rounded-full border border-red-200">
+                    • {field === 'coordinators' ? 'Please select a coordinator in Step 4' : 
+                       field === 'coverImage' ? 'Cover image is required in Step 1' :
+                       field === 'GalleryImages' ? 'Gallery images are required in Step 5' :
+                       field}: {error?.message || "Invalid"}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="bg-white rounded-bl-[25px] rounded-br-[25px] flex md:flex-row flex-col justify-end mt-auto pt-24 gap-4 px-6 pb-6">
             {step > 1 && (
               <Button type="button" onClick={previous} variant="outline" className="text-[#666373] border-[#666373] font-bold rounded-full px-8 py-5">
