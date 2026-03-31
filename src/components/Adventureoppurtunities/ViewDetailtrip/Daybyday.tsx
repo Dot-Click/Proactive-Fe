@@ -194,6 +194,8 @@ const Daybyday = ({ trip }: DaybydayProps) => {
             return raw.map((day: any, index: number) => ({
                 day: day.day ?? index + 1,
                 description: day.description ?? "",
+                location: day.location ?? "",
+                coordinates: day.coordinates ?? "",
                 image: day.image ?? day.img ?? null,
                 coordinates: day.coordinates || day.locationCoords || 
                     (day.latitude && day.longitude ? `${day.latitude},${day.longitude}` : 
@@ -210,6 +212,8 @@ const Daybyday = ({ trip }: DaybydayProps) => {
                         days[dayNum - 1] = {
                             day: dayNum,
                             description: raw[key]?.description ?? "",
+                            location: raw[key]?.location ?? "",
+                            coordinates: raw[key]?.coordinates ?? "",
                             image: raw[key]?.img ?? raw[key]?.image ?? null,
                             coordinates: raw[key]?.coordinates || raw[key]?.locationCoords || 
                                 (raw[key]?.latitude && raw[key]?.longitude ? `${raw[key].latitude},${raw[key].longitude}` : 
@@ -244,8 +248,9 @@ const Daybyday = ({ trip }: DaybydayProps) => {
     useEffect(() => {
         if (daysItinerary.length === 0) return;
 
-        // Reset to all-null so previous trip's pins don't bleed through
-        setDayCoords(new Array(daysItinerary.length).fill(null));
+        // Reset to initial state or already existing coordinates
+        const initialCoords = daysItinerary.map(day => getCoordinates(day.coordinates));
+        setDayCoords(initialCoords);
         setGeocodingDone(false);
 
         let cancelled = false;
