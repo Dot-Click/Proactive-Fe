@@ -97,8 +97,7 @@ export const tripSchema = z
       .string()
       .min(20, "Long description must be at least 20 characters"),
     GroupSize: z.string().min(1, "Group size is required"),
-    rhythm: z.string().min(1, "Rhythm is required"),
-    SportsLevel: z.enum(["Bajo", "Medio", "Alto"]),
+    SportsLevel: z.enum(["bajo", "medio", "alto"]),
 
     // Step 3 – Included
     included: z.array(z.any()).min(1, "Select at least one included item"),
@@ -134,7 +133,7 @@ export const tripSchema = z
       .default([]),
     commonFund: z.string().optional().default(""),
     commonFundDescription: z.string().optional().default(""),
-    commonFundCount: z.coerce.number().optional().nullable(), // Coerce string to number
+
     thingsToKnow: z
       .array(
         z.object({

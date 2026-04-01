@@ -202,25 +202,7 @@ const TripDetail = () => {
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            control={control}
-                            name="rhythm"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-[#242E2F] font-semibold">
-                                        Rhythm
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Rhythm"
-                                            {...field}
-                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+
                         <FormField
                             control={control}
                             name="SportsLevel"
@@ -240,9 +222,9 @@ const TripDetail = () => {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="Bajo">Bajo</SelectItem>
-                                            <SelectItem value="Medio">Medio</SelectItem>
-                                            <SelectItem value="Alto">Alto</SelectItem>
+                                            <SelectItem value="bajo">Bajo</SelectItem>
+                                            <SelectItem value="medio">Medio</SelectItem>
+                                            <SelectItem value="alto">Alto</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
@@ -376,26 +358,7 @@ const TripDetail = () => {
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={control}
-                        name="commonFundCount"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>
-                                    Participants count for button
-                                </FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="number"
-                                        {...field}
-                                        value={field.value as number | string | undefined}
-                                        placeholder="e.g. 4"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+
                 </div>
             </div>
 

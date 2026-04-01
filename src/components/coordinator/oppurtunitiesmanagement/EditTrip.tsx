@@ -46,8 +46,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       endDate: undefined,
       LongDescription: "",
       GroupSize: "",
-      rhythm: "Medio",
-      SportsLevel: "Medio",
+      SportsLevel: "medio",
       included: [],
       notIncluded: [],
       CoordinatorName: "",
@@ -71,7 +70,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       ],
       commonFund: "",
       commonFundDescription: "",
-      commonFundCount: undefined,
+
       thingsToKnow: [],
       coordinators: [],
       applicationType: "video",
@@ -102,7 +101,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
     if (step === 1) {
       valid = await methods.trigger(["categoryId", "title", "description", "location", "startDate", "endDate", "duration", "status"]);
     } else if (step === 2) {
-      valid = await methods.trigger(["LongDescription", "GroupSize", "rhythm", "SportsLevel"]);
+      valid = await methods.trigger(["LongDescription", "GroupSize", "SportsLevel"]);
     } else if (step === 3) {
       valid = await methods.trigger(["included", "notIncluded"]);
     } else if (step === 4) {
@@ -239,8 +238,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         : undefined,
       LongDescription: trip.longDesc ?? "",
       GroupSize: trip.groupSize != null ? String(trip.groupSize) : "",
-      rhythm: trip.rhythm || "Medio",
-      SportsLevel: trip.SportsLevel || trip.sportLvl || "Medio",
+      SportsLevel: trip.SportsLevel || trip.sportLvl || "medio",
       included: includedItemsData,
       notIncluded: notIncludedItemsData,
       CoordinatorName: coordinatorId || "", // Use ID for dropdown selection
@@ -284,7 +282,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         ],
       commonFund: trip.commonFund ?? "",
       commonFundDescription: trip.commonFundDescription ?? "",
-      commonFundCount: trip.commonFundCount ?? undefined,
+
       thingsToKnow: Array.isArray(trip.thingsToKnow) ? trip.thingsToKnow : [],
       applicationType: trip.applicationType ?? "video",
       depositAmount: trip.depositAmount ?? "",
@@ -304,7 +302,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       mood: values.mood,
       commonFund: values.commonFund,
       commonFundDescription: values.commonFundDescription,
-      commonFundCount: values.commonFundCount,
+
       thingsToKnow: values.thingsToKnow,
     });
 
@@ -323,7 +321,6 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         "startDate",
         "endDate",
         "duration",
-        "rhythm",
         "status",
       ]);
     }
@@ -332,7 +329,6 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       valid = await methods.trigger([
         "LongDescription",
         "GroupSize",
-        "rhythm",
         "SportsLevel",
       ]);
     }
@@ -459,7 +455,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         duration: data.duration,
         longDesc: data.LongDescription,
         groupSize: data.GroupSize,
-        rhythm: data.rhythm,
+
         sportLvl: data.SportsLevel,
         included: includedItems,
         notIncluded: notIncludedItems,
@@ -477,7 +473,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         mood: (data.mood || []).filter(m => m.label && m.value !== undefined),
         commonFund: data.commonFund,
         commonFundDescription: data.commonFundDescription,
-        commonFundCount: data.commonFundCount,
+
         thingsToKnow: (data.thingsToKnow || []).filter(t => t.title && t.description),
         applicationType: data.applicationType || "video",
         depositAmount: data.depositAmount || "",

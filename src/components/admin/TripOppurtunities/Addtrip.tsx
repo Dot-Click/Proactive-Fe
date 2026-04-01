@@ -40,8 +40,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       endDate: undefined,
       LongDescription: "",
       GroupSize: "",
-      rhythm: "Medio",
-      SportsLevel: "Medio",
+      SportsLevel: "medio",
       included: [],
       notIncluded: [],
       coordinators: [], // Correct plural field
@@ -59,7 +58,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       mood: [],
       commonFund: "",
       commonFundDescription: "",
-      commonFundCount: undefined,
+
       thingsToKnow: [],
       applicationType: "video",
       depositAmount: "",
@@ -185,7 +184,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         duration: data.duration,
         longDesc: data.LongDescription,
         groupSize: data.GroupSize,
-        rhythm: data.rhythm,
+
         sportLvl: data.SportsLevel,
         included: includedItems,
         notIncluded: notIncludedItems,
@@ -199,7 +198,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         mood: (data.mood || []).filter(m => m.label && m.value !== undefined),
         commonFund: data.commonFund || "",
         commonFundDescription: data.commonFundDescription || "",
-        commonFundCount: data.commonFundCount || 0,
+
         thingsToKnow: (data.thingsToKnow || []).filter((t: any) => t.title && t.description),
         applicationType: data.applicationType || "video",
         depositAmount: data.depositAmount || "",
