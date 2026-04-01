@@ -46,6 +46,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       endDate: undefined,
       LongDescription: "",
       GroupSize: "",
+      rhythm: "Medio",
       SportsLevel: "Medio",
       included: [],
       notIncluded: [],
@@ -238,6 +239,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         : undefined,
       LongDescription: trip.longDesc ?? "",
       GroupSize: trip.groupSize != null ? String(trip.groupSize) : "",
+      rhythm: trip.rhythm || "Medio",
       SportsLevel: trip.SportsLevel || trip.sportLvl || "Medio",
       included: includedItemsData,
       notIncluded: notIncludedItemsData,
@@ -321,6 +323,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         "startDate",
         "endDate",
         "duration",
+        "rhythm",
         "status",
       ]);
     }
@@ -329,6 +332,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
       valid = await methods.trigger([
         "LongDescription",
         "GroupSize",
+        "rhythm",
         "SportsLevel",
       ]);
     }
@@ -455,6 +459,7 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
         duration: data.duration,
         longDesc: data.LongDescription,
         groupSize: data.GroupSize,
+        rhythm: data.rhythm,
         sportLvl: data.SportsLevel,
         included: includedItems,
         notIncluded: notIncludedItems,

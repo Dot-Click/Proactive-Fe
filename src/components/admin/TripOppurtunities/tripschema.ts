@@ -97,6 +97,7 @@ export const tripSchema = z
       .string()
       .min(20, "Long description must be at least 20 characters"),
     GroupSize: z.string().min(1, "Group size is required"),
+    rhythm: z.string().min(1, "Rhythm is required"),
     SportsLevel: z.enum(["Bajo", "Medio", "Alto"]),
 
     // Step 3 – Included

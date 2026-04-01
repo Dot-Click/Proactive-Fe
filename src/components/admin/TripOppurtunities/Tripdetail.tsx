@@ -204,6 +204,25 @@ const TripDetail = () => {
                         />
                         <FormField
                             control={control}
+                            name="rhythm"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-[#242E2F] font-semibold">
+                                        Rhythm
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Rhythm"
+                                            {...field}
+                                            className="bg-[#FAFAFE] border border-[#EFEFEF] px-4 py-6 placeholder:text-[#221E33]"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={control}
                             name="SportsLevel"
                             render={({ field }) => (
                                 <FormItem>
