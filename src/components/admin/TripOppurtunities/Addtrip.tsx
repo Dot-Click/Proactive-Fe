@@ -40,7 +40,8 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       endDate: undefined,
       LongDescription: "",
       GroupSize: "",
-      SportsLevel: "medio",
+      rhythm: "",
+      SportsLevel: undefined,
       included: [],
       notIncluded: [],
       coordinators: [], // Correct plural field
@@ -58,14 +59,11 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
       mood: [],
       commonFund: "",
       commonFundDescription: "",
-
+      commonFundCount: undefined,
       thingsToKnow: [],
       applicationType: "video",
       depositAmount: "",
       status: "active",
-      rating: "4.9",
-      reviewsCount: 92,
-      reviewLink: "https://www.google.com/maps/place/Proactive+Future/@35.67445,-6.8143,2933475m/data=!3m2!1e3!4b1!4m6!3m5!1s0x65e285d9dffa46ab:0x3dd1b18e867e6183!8m2!3d35.67445!4d-6.8143!16s%2Fg%2F11t6yzt6vh?entry=ttu&g_ep=EgoyMDI2MDMyOS4wIKXMDSoASAFQAw%3D%3D",
     },
   });
 
@@ -130,6 +128,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
 
       const getValidImg = (imgStr: any) => {
         if (!imgStr || typeof imgStr !== "string") return "";
+        // Allow data URLs (custom uploads) and standard relative/asset paths
         return imgStr;
       };
 
@@ -184,7 +183,7 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         duration: data.duration,
         longDesc: data.LongDescription,
         groupSize: data.GroupSize,
-
+        rhythm: data.rhythm,
         sportLvl: data.SportsLevel,
         included: includedItems,
         notIncluded: notIncludedItems,
@@ -198,14 +197,11 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
         mood: (data.mood || []).filter(m => m.label && m.value !== undefined),
         commonFund: data.commonFund || "",
         commonFundDescription: data.commonFundDescription || "",
-
-        thingsToKnow: (data.thingsToKnow || []).filter((t: any) => t.title && t.description),
+        commonFundCount: data.commonFundCount || 0,
+        thingsToKnow: (data.thingsToKnow || []).filter(t => t.title && t.description),
         applicationType: data.applicationType || "video",
         depositAmount: data.depositAmount || "",
         status: data.status || "active",
-        rating: data.rating || "4.9",
-        reviewsCount: data.reviewsCount || 92,
-        reviewLink: data.reviewLink || "https://www.google.com/maps/place/Proactive+Future/@35.67445,-6.8143,2933475m/data=!3m2!1e3!4b1!4m6!3m5!1s0x65e285d9dffa46ab:0x3dd1b18e867e6183!8m2!3d35.67445!4d-6.8143!16s%2Fg%2F11t6yzt6vh?entry=ttu&g_ep=EgoyMDI2MDMyOS4wIKXMDSoASAFQAw%3D%3D",
         daysItinerary: payloadDaysItinerary,
         promotionalVideo: "http://pending-video.com", 
         galleryImages: ["http://pending-gallery.com"],
@@ -269,23 +265,6 @@ const AddTrip = ({ backUrl }: { backUrl: string }) => {
           {step === 4 && <Coordinator />}
           {step === 5 && <Mediaprice />}
           {step === 6 && <Reviewsave />}
-
-          {/* Show validation errors blocking submission */}
-          {Object.keys(methods.formState.errors).length > 0 && (
-            <div className="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-700 font-semibold mb-2">⚠️ Missing or invalid information:</p>
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(methods.formState.errors).map(([field, error]: [string, any]) => (
-                  <span key={field} className="bg-white px-3 py-1 text-red-600 text-xs rounded-full border border-red-200">
-                    • {field === 'coordinators' ? 'Please select a coordinator in Step 4' : 
-                       field === 'coverImage' ? 'Cover image is required in Step 1' :
-                       field === 'GalleryImages' ? 'Gallery images are required in Step 5' :
-                       field}: {error?.message || "Invalid"}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
 
           <div className="bg-white rounded-bl-[25px] rounded-br-[25px] flex md:flex-row flex-col justify-end mt-auto pt-24 gap-4 px-6 pb-6">
             {step > 1 && (

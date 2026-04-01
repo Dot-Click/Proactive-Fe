@@ -1,6 +1,6 @@
 import { FaLocationDot } from "react-icons/fa6";
 import { MdArrowOutward } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { UsegetOpenTrips } from "@/hooks/getOpenTripshook";
 import { UsegetTrips } from "@/hooks/gettriphook";
 import { LoaderIcon, User } from "lucide-react";
@@ -29,7 +29,7 @@ const Showtrips = ({
     activeOnly 
 }: ShowTripsProps) => {
     const { t } = useTranslation()
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     const hasSearch = !!searchQuery && searchQuery.trim().length > 0;
     const useAllTrips = activeTab === "all" || activeTab === "closed";
@@ -156,7 +156,7 @@ const Showtrips = ({
                     {filteredTrips.map((trip: any) => (
                         <div 
                             key={trip.id} 
-                            onClick={() => navigate(`/trip/${trip.id}`)}
+                            onClick={() => window.open(`/trip/${trip.id}`, "_blank", "noopener,noreferrer")}
                             className={`group relative overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 transition-all hover:shadow-2xl hover:-translate-y-1 cursor-pointer 
                                 ${view === "list" ? "rounded-3xl p-4 flex flex-col lg:flex-row items-center gap-6" : "rounded-[40px] aspect-[4/5]"}`}
                         >
@@ -239,3 +239,5 @@ const Showtrips = ({
 
 export default Showtrips;
 // < div className = "bg-[#009C23] w-2 h-2 rounded-full" />
+
+

@@ -201,7 +201,7 @@ export const DayMap = ({
       </div>
       <div
         ref={mapContainer}
-        className="rounded-xl border border-[#EFEFEF] overflow-hidden shadow-sm"
+        className="rounded-xl border border-[#EFEFEF] overflow-hidden shadow-sm z-0"
         style={{ height: "300px", width: "100%" }}
       />
       {coordinates && (

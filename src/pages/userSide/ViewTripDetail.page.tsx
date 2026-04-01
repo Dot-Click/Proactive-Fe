@@ -19,7 +19,6 @@ import BookingCard from "@/components/Adventureoppurtunities/ViewDetailtrip/Book
 import CommonFund from "@/components/Adventureoppurtunities/ViewDetailtrip/CommonFund";
 import ThingsToKnow from "@/components/Adventureoppurtunities/ViewDetailtrip/ThingsToKnow";
 import ConfirmedParticipants from "@/components/Adventureoppurtunities/ViewDetailtrip/ConfirmedParticipants";
-import ReviewsSection from "@/components/Adventureoppurtunities/ViewDetailtrip/ReviewsSection";
 
 /**
  * Public trip detail page - accessible without authentication.
@@ -76,7 +75,7 @@ const ViewTripDetailPage = () => {
   const isWildTrips = normalizedCategory.includes("wild trips");
 
   return (
-    <div className="bg-white font-quicksand">
+    <div className="bg-white font-quicksand px-4 sm:px-8 lg:px-16 xl:px-24">
       {/* 1. Header & Gallery (Full Width Within Container) */}
       <MasonryLayout trip={trip} showApplyButton={false} />
 
@@ -97,7 +96,6 @@ const ViewTripDetailPage = () => {
             <VideoSection trip={trip} />
             <Coordinatordetail trip={trip} />
             <HowItWorks />
-            <ReviewsSection trip={trip} />
             <Faqs />
             <ConfirmedParticipants trip={trip} />
             {/* <ParticipantsCards /> */}

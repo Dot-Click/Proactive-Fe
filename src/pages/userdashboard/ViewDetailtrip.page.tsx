@@ -56,7 +56,7 @@ const ViewDetailTripPage = () => {
   const isWildTrips = normalizedCategory.includes("wild trips");
 
   return (
-    <div>
+    <div className="px-20">
       {/* User dashboard is already protected, so show apply button here */}
       <MasonryLayout trip={trip} />
       <Locationmeetingpoint trip={trip} />

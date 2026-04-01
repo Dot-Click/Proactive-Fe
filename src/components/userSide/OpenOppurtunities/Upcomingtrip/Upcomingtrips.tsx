@@ -298,7 +298,7 @@ import { useEffect, useState, useMemo } from "react";
 import { UsegetTrips } from "@/hooks/gettriphook";
 import { type OpenTrip } from "@/hooks/getOpenTripshook";
 import { X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 
@@ -420,7 +420,7 @@ function getTripsForDate(trips: OpenTrip[], date: Date): OpenTrip[] {
 
 const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
     const { t, i18n } = useTranslation();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [viewDate, setViewDate] = useState(() => {
         const d = new Date();
         return new Date(d.getFullYear(), d.getMonth(), 1);
@@ -759,7 +759,7 @@ const Upcomingtrips = ({ searchQuery, setSearchQuery }: UpcomingtripsProps) => {
                                         <div
                                             key={trip.id}
                                             onClick={() => {
-                                                navigate(`/trip/${trip.id}`);
+                                                window.open(`/trip/${trip.id}`, "_blank", "noopener,noreferrer");
                                                 setShowTripPopup(false);
                                             }}
                                             className="p-4 border border-[#ECECF1] rounded-xl hover:border-[#0DAC87] hover:shadow-md cursor-pointer transition-all bg-white group"

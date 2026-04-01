@@ -128,8 +128,8 @@ const MasonryLayout = ({ trip, backUrl: _backUrl = "/user-dashboard/adventure-op
 
         {/* Gallery Section - Redesigned Grid */}
         {galleryImg.length > 0 && (
-          <div className="relative mb-8 h-[300px] md:h-[500px]">
-            <div className="grid grid-cols-4 grid-rows-2 gap-3 h-full rounded-2xl overflow-hidden">
+          <div className="relative mb-8 h-[280px] sm:h-[320px] md:h-[450px]">
+            <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-4 md:grid-rows-2 gap-3 h-full rounded-2xl overflow-hidden">
               {/* Image 1 - Main Large (2x2) */}
               <div
                 className="col-span-2 row-span-2 cursor-pointer overflow-hidden group"

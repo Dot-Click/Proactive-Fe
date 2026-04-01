@@ -17,7 +17,6 @@ import { UsegetCategory } from "@/hooks/getCategoryhook";
 import { LoaderIcon } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import Faqs from "@/components/Adventureoppurtunities/ViewDetailtrip/Faqs";
-import ReviewsSection from "@/components/Adventureoppurtunities/ViewDetailtrip/ReviewsSection";
 
 
 const ViewTripPage = () => {
@@ -77,7 +76,7 @@ const ViewTripPage = () => {
     : `/coordinator-dashboard/edit-trip/${id}`;
 
   return (
-    <div>
+    <div className="px-4 sm:px-8 lg:px-16 xl:px-24">
       <MasonryLayout
         trip={trip}
         backUrl={dynamicBackUrl}
@@ -104,7 +103,6 @@ const ViewTripPage = () => {
       <Includeditem trip={trip} />
       <VideoSection trip={trip} />
       <ThingsToKnow trip={trip} />
-      <ReviewsSection />
       <Faqs />
       <Coordinatordetail trip={trip} />
     </div>

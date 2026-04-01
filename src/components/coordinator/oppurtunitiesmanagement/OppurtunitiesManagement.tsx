@@ -16,7 +16,10 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogClose,
 } from "@/components/ui/dialog";
+import { UseDeleteTrip } from "@/hooks/UseDeleteTripHook";
+import { toast } from "sonner";
 
 type Trip = {
   id: string;
@@ -145,27 +148,74 @@ const OppurtunitiesManagement = () => {
           <h1>Actions</h1>
         </div>
       ),
-      cell: ({ row }) => (
-        <div className="flex gap-2">
-          <Button
-            onClick={() =>
-              navigate(`/coordinator-dashboard/view-trip/${row.original.id}`)
-            }
-            className="rounded-full text-md px-10 py-5 cursor-pointer"
-          >
-            View
-          </Button>
-          <Button
-            onClick={() =>
-              navigate(`/coordinator-dashboard/edit-trip/${row.original.id}`)
-            }
-            className="rounded-full bg-white hover:bg-[#f0ebeb] text-[#666373] border border-[#666373] text-md px-10 py-5 cursor-pointer"
-          >
-            Edit
-          </Button>
-          <TripDiscountAction tripId={row.original.id} tripName={row.original.name} />
-        </div>
-      ),
+      cell: ({ row }) => {
+        const { mutateAsync: deleteTrip, isPending: isDeleting } = UseDeleteTrip();
+        const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+        const handleDeleteTrip = async (id: string) => {
+          try {
+            await deleteTrip(id);
+            toast.success("Trip deleted successfully");
+            setIsDeleteDialogOpen(false);
+          } catch (error) {
+            toast.error("Failed to delete trip");
+          }
+        };
+
+        return (
+          <div className="flex gap-2">
+            <Button
+              onClick={() =>
+                navigate(`/coordinator-dashboard/view-trip/${row.original.id}`)
+              }
+              className="rounded-full text-md px-10 py-5 cursor-pointer"
+            >
+              View
+            </Button>
+            <Button
+              onClick={() =>
+                navigate(`/coordinator-dashboard/edit-trip/${row.original.id}`)
+              }
+              className="rounded-full bg-white hover:bg-[#f0ebeb] text-[#666373] border border-[#666373] text-md px-10 py-5 cursor-pointer"
+            >
+              Edit
+            </Button>
+            <Button
+              onClick={() => setIsDeleteDialogOpen(true)}
+              className="rounded-full bg-red-600 hover:bg-red-700 text-white px-4 py-5"
+            >
+              Delete
+            </Button>
+
+            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle className="text-xl text-[#221E33]">Delete Trip</DialogTitle>
+                  <DialogDescription className="mt-3 text-[#646464] text-[15px]">
+                    Are you sure you want to delete <span className="font-bold text-[#221E33]">{row.original.name}</span>? This action cannot be undone.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="mt-6 flex justify-end gap-3">
+                  <DialogClose asChild>
+                    <Button variant="outline" className="font-bold rounded-full px-6" disabled={isDeleting}>
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <Button
+                    className="bg-[#9C0000] font-bold text-white hover:bg-[#7a0000] rounded-full px-6"
+                    onClick={() => handleDeleteTrip(row.original.id)}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? "Deleting..." : "Delete"}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <TripDiscountAction tripId={row.original.id} tripName={row.original.name} />
+          </div>
+        );
+      },
     },
   ];
   const [searchQuery, setSearchQuery] = useState("");

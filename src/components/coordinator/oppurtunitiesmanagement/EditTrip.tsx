@@ -520,11 +520,8 @@ const EditTrip = ({ backUrl }: { backUrl: string }) => {
 
       await mutateAsync({ id, formData });
       
-      // If we're on the last step, navigate back to the management page
-      // Otherwise, stay on the current step so user can continue editing
-      if (step === totalStep) {
-        navigate(backUrl || "/coordinator-dashboard/oppurtunities-management");
-      }
+      // Always redirect to opportunity management after successful save in edit mode.
+      navigate(backUrl || "/coordinator-dashboard/oppurtunities-management");
     } catch (error) {
       console.error("Error updating trip:", error);
     }
