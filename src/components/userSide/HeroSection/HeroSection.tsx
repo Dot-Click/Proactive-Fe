@@ -40,7 +40,7 @@ const getHeroData = (
 ): Record<string, HeroContent> => ({
   "/": {
     image: (
-      <div className="bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
+      <div className="bg-linear-to-r from-[#F0F5FD]/18  to-[#F0F5FD]">
         <img
           src={carousel}
           alt="carousel"

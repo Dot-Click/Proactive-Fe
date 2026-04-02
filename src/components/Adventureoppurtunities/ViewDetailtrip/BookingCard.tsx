@@ -5,6 +5,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ApplicationForm from "./ApplicationForm";
 import { UsegetMyApplications } from "@/hooks/UsegetMyApplicationshook";
 import { UsegetPayment } from "@/hooks/getPaymenthook";
+import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
 import TripPaymentModal from "@/components/payment/TripPaymentModal";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -70,6 +71,20 @@ const BookingCard = ({ trip, showApplyButton }: BookingCardProps) => {
                     {(() => {
                         const { data: applications } = UsegetMyApplications();
                         const { data: paymentData } = UsegetPayment();
+                        const { data: currentUser } = UsegetCurrentUser();
+                        const role = currentUser?.data?.user?.role;
+
+                        if (role === 'admin' || role === 'coordinator') {
+                            return (
+                                <Button
+                                    disabled
+                                    className="w-full bg-[#FAFAFE] text-[#666373] border border-[#ECECF1] h-14 rounded-xl text-lg font-bold shadow-sm flex items-center justify-center gap-2 cursor-not-allowed"
+                                >
+                                    <XCircle size={20} />
+                                    Booking Disabled for {role === 'admin' ? 'Admin' : 'Coordinator'}
+                                </Button>
+                            );
+                        }
 
                         const userApp = useMemo(() => {
                             return (applications || []).find((app: any) => String(app.tripId) === String(data?.id));
