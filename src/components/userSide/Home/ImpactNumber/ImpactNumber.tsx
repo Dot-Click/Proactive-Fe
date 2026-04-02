@@ -44,13 +44,14 @@ const IMPACT_BACKGROUND_URL =
 const ImpactNumber = () => {
     const { t } = useTranslation();
     return (
-      <div className="relative mb-5">
+      <div className="relative w-full flex flex-col items-center py-16 sm:py-24 lg:py-32 px-4 overflow-hidden">
+        {/* Background Layers */}
         <img
           src={importantMask}
           alt="importantMask"
-          className="lg:h-120 lg:w-full h-100"
+          className="absolute inset-0 w-full h-full object-cover z-0"
         />
-        <div className="absolute inset-0 lg:top-0">
+        <div className="absolute inset-0 z-0">
           <div className="relative h-full w-full">
             <div
               className="absolute inset-0 h-full w-full bg-cover bg-center opacity-90"
@@ -60,29 +61,33 @@ const ImpactNumber = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-[#0B7262]/75 via-[#0A4D47]/65 to-[#013932]/80 pointer-events-none" />
           </div>
         </div>
-        <div className="absolute inset-0 lg:top-0 top-8">
+        <div className="absolute inset-0 z-0 opacity-80 overflow-hidden">
           <img
             src={importantlayer}
             alt="importantlayer"
-            className="opacity-80"
+            className="w-full h-full object-cover"
           />
         </div>
-        <div className="flex flex-col lg:gap-6 absolute inset-0 lg:top-8 top-2 lg:py-8">
-          <h1 className="text-center lg:text-5xl bg-linear-to-r from-[#F7ECBE] to-[#F7ECBE]/96  text-transparent bg-clip-text font-extrabold">
-            {t("home.impactNumbers")}
-          </h1>
-          <p
-            className="text-[8px] lg:text-lg font-semibold text-[#FFFFFF] text-center"
-            dangerouslySetInnerHTML={{
-              __html: t("home.adventureOpportunitiesSubtitle").replace(
-                /\n/g,
-                '<br className="lg:block hidden" />',
-              ),
-            }}
-          />
-        </div>
-        <div className="flex flex-col gap-6 absolute inset-0 justify-center items-center lg:top-20 top-10">
-          <ImpactCard />
+
+        {/* Content Container */}
+        <div className="relative z-10 flex flex-col items-center w-full max-w-7xl">
+          <div className="flex flex-col lg:gap-6 gap-4 mb-12 sm:mb-20 lg:mb-24">
+            <h1 className="text-center lg:text-5xl md:text-4xl text-3xl bg-linear-to-r from-[#F7ECBE] to-[#F7ECBE]/96 text-transparent bg-clip-text font-extrabold uppercase tracking-tight">
+              {t("home.impactNumbers")}
+            </h1>
+            <p
+              className="text-xs sm:text-base lg:text-lg font-semibold text-[#FFFFFF] text-center max-w-3xl opacity-90 leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html: t("home.adventureOpportunitiesSubtitle").replace(
+                  /\n/g,
+                  '<br className="lg:block hidden" />',
+                ),
+              }}
+            />
+          </div>
+          <div className="w-full">
+            <ImpactCard />
+          </div>
         </div>
       </div>
     );

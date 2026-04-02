@@ -123,16 +123,15 @@ import CountUp from "react-countup";
 
 const ImpactCard = () => {
   const cardStyle =
-    "lg:w-[240px] mx-auto lg:px-8 lg:py-10 px-4 py-6 rounded-[24px] bg-gradient-to-b from-[#058B78] to-[#29C8B1] border border-white/20 shadow-2xl backdrop-blur-md hover:translate-y-[-5px] transition-all duration-300";
-  const iconSize = 64;
-  const iconClassName = "text-white drop-shadow-lg";
+    "w-full max-w-[280px] lg:w-[240px] mx-auto lg:px-8 lg:py-10 px-4 py-8 rounded-[28px] lg:rounded-[32px] bg-gradient-to-b from-[#058B78] to-[#29C8B1] border border-white/20 shadow-xl backdrop-blur-md lg:hover:translate-y-[-8px] transition-all duration-300";
+  const iconClassName = "text-white drop-shadow-lg mb-2 size-12 sm:size-14 lg:size-16";
 
   return (
-    <div className="grid lg:grid-cols-4 grid-cols-2 lg:gap-8 gap-4 lg:mt-30 mt-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 xl:gap-8 w-full max-w-6xl mx-auto px-4">
       {/* 1. CAMPING (Changed from Mountain) */}
       <div className={cardStyle}>
         <div className="flex flex-col items-center gap-6">
-          <LuTentTree size={iconSize} className={iconClassName} />
+          <LuTentTree className={iconClassName} />
           <div className="flex flex-col lg:gap-2 justify-center items-center">
             <h4 className="text-[#FFFFFF] font-bold lg:text-4xl text-2xl">
               <CountUp start={0} end={2500} separator="," suffix="+" />
@@ -147,7 +146,7 @@ const ImpactCard = () => {
       {/* 2. PEOPLE ADVENTURE (Changed from Plane) */}
       <div className={cardStyle}>
         <div className="flex flex-col items-center gap-6">
-          <FaUserFriends size={iconSize} className={iconClassName} />
+          <FaUserFriends className={iconClassName} />
           <div className="flex flex-col lg:gap-2 justify-center items-center">
             <h4 className="text-[#FFFFFF] font-bold lg:text-4xl text-2xl">
               <CountUp start={0} end={150000} separator="," suffix="+" />
@@ -162,7 +161,7 @@ const ImpactCard = () => {
       {/* 3. COUNTRIES */}
       <div className={cardStyle}>
         <div className="flex flex-col items-center gap-6">
-          <FaGlobeAmericas size={iconSize} className={iconClassName} />
+          <FaGlobeAmericas className={iconClassName} />
           <div className="flex flex-col lg:gap-2 justify-center items-center">
             <h4 className="text-[#FFFFFF] font-bold lg:text-4xl text-2xl">
               <CountUp start={0} end={50} suffix="+" />
@@ -177,7 +176,7 @@ const ImpactCard = () => {
       {/* 4. RATING */}
       <div className={cardStyle}>
         <div className="flex flex-col items-center gap-6">
-          <FaStar size={iconSize} className={iconClassName} />
+          <FaStar className={iconClassName} />
           <div className="flex flex-col lg:gap-2 justify-center items-center">
             <h4 className="text-[#FFFFFF] font-bold lg:text-4xl text-2xl">
               4.9 / 5
