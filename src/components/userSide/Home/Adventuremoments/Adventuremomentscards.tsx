@@ -275,11 +275,11 @@ const Adventuremomentscards = () => {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-6 my-10 mt-20 items-center justify-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 items-stretch justify-items-center w-full max-w-7xl mx-auto px-4">
         {cards.map((card) => (
           <div
             key={card.id}
-            className="relative rounded-[14px] overflow-hidden cursor-pointer group transform origin-center transition-all duration-500 hover:scale-110 hover:-translate-y-6 hover:shadow-2xl z-10 hover:z-20"
+            className="relative w-full max-w-[380px] sm:max-w-none aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] rounded-[24px] sm:rounded-[32px] overflow-hidden cursor-pointer group transform origin-center transition-all duration-500 lg:hover:scale-105 lg:hover:-translate-y-4 hover:shadow-2xl z-10 hover:z-20 shadow-lg"
             onClick={() => openVideo(card.videoUrl)}
             onMouseEnter={() => handleMouseEnter(card.id)}
             onMouseLeave={() => handleMouseLeave(card.id)}
@@ -287,7 +287,7 @@ const Adventuremomentscards = () => {
             <img
               src={card.image}
               alt={`momentscard${card.id}`}
-              className={`h-full w-90 object-cover transition-all duration-300 ${hoveredCard === card.id
+              className={`h-full w-full object-cover transition-all duration-300 ${hoveredCard === card.id
                 ? "opacity-0 scale-105"
                 : " group-hover:scale-110"
                 }`}
