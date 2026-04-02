@@ -31,7 +31,7 @@ const FellowExplorer = () => {
 
     return (
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex lg:flex-row flex-col justify-center items-center lg:gap-16 gap-12 lg:py-60 md:py-12 lg:mb-0 mb-20">
+            <div className="flex lg:flex-row flex-col justify-center items-center lg:gap-16 gap-12 py-12 lg:py-60 md:py-12 lg:mb-0 mb-20">
                 <div
                     className="relative overflow-hidden w-full max-w-[280px] lg:max-w-[360px] aspect-[9/16] flex-shrink-0"
                 style={{ borderRadius: "1.5rem 2.5rem 1.5rem 1.5rem" }}

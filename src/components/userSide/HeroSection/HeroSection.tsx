@@ -124,7 +124,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
         {t("hero.openOpportunitiesTitle")}
       </h1>
     ),
@@ -154,7 +154,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
         {t("hero.whatWeDoTitle")}
       </h1>
     ),
@@ -197,7 +197,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
         {t("hero.wildWeekendTitle")}
       </h1>
     ),
@@ -240,7 +240,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px] ">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0 ">
         {t("hero.wildTripTitle")}
       </h1>
     ),
@@ -278,7 +278,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
         {t("hero.erasmusPlusTitle")}
       </h1>
     ),
@@ -317,7 +317,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
         Internal events
       </h1>
     ),
@@ -331,7 +331,7 @@ const getHeroData = (
   "/about": {
     image: (
       <>
-        <div className="relative bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
+        <div className="relative w-full h-full bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
           <img
             src={About}
             alt="About"
@@ -355,7 +355,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
         {t("hero.aboutUsTitle")}
       </h1>
     ),
@@ -370,7 +370,7 @@ const getHeroData = (
         }}
       />
     ),
-    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[50vh] md:h-[20vh]",
     // downloadimg: downloadimg
   },
 
@@ -413,13 +413,13 @@ const getHeroData = (
         {t("hero.becomeMemberSubtitle")}
       </span>
     ),
-    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[60vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
     // downloadimg: downloadimg
     buttons: [
       {
         text: t("hero.joinNowFor"),
         className:
-          "lg:mt-4 md:mt-0 mt-[120px] bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
+          "lg:mt-4 md:mt-0 mt-0 bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
         openModal: true,
       },
     ],
@@ -428,7 +428,7 @@ const getHeroData = (
   "/travel-coordinator": {
     image: (
       <>
-        <div className="relative">
+        <div className="relative h-full w-full">
           <img
             src={TravelCoordinatore}
             alt="TravelCoordinatore"
@@ -452,7 +452,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-[120px] md:mt-0 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-0 md:mt-0 mt-0">
         {t("hero.travelCoordinatorTitle")}
       </h1>
     ),
@@ -461,14 +461,14 @@ const getHeroData = (
         {t("hero.travelCoordinatorSubtitle")}
       </span>
     ),
-    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[40vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[40vh] md:h-[20vh]",
     // downloadimg: downloadimg
   },
 
   "/advantages": {
     image: (
       <>
-        <div className="relative">
+        <div className="relative h-full w-full">
           <img
             src={advantages}
             alt="advantages"
@@ -487,18 +487,18 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className=" bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] md:text-7xl text-nowrap lg:mt-[200px] mt-[200px]">
+      <h1 className=" bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] md:text-7xl text-nowrap lg:mt-0 mt-0">
         {t("hero.advantagesTitle")}
       </h1>
     ),
-    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[66vh] md:h-[28vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[66vh] md:h-[28vh]",
     // downloadimg: downloadimg,
   },
 
   "/contact": {
     image: (
       <>
-        <div className="relative">
+        <div className="relative h-full w-full">
           <img
             src={contact}
             alt="contact"
@@ -522,18 +522,18 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] lg:text-7xl md:text-2xl text-nowrap lg:mt-[120px] md:mt-10 mt-[160px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] lg:text-7xl md:text-2xl text-nowrap lg:mt-0 md:mt-10 mt-0">
         {t("hero.contactTitle")}
       </h1>
     ),
-    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[50vh] md:h-[20vh]",
     // downloadimg: downloadimg
   },
 
   "/faq": {
     image: (
       <>
-        <div className="relative">
+        <div className="relative h-full w-full">
           <img
             src={faq}
             alt="faq"
@@ -548,17 +548,17 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-[120px] md:mt-10 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-0 md:mt-10 mt-0">
         {t("hero.faqTitle")}
       </h1>
     ),
-    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[50vh] md:h-[20vh]",
   },
 
   "/privacy-policy": {
     image: (
       <>
-        <div className="relative">
+        <div className="relative h-full w-full">
           <img
             src={faq}
             alt="Privacy"
@@ -573,17 +573,17 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-[120px] md:mt-10 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-0 md:mt-10 mt-0">
         {t("hero.privacyPolicyTitle")}
       </h1>
     ),
-    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[50vh] md:h-[20vh]",
   },
 
   "/terms": {
     image: (
       <>
-        <div className="relative">
+        <div className="relative h-full w-full">
           <img
             src={faq}
             alt="Terms"
@@ -598,17 +598,17 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-[120px] md:mt-10 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-0 md:mt-10 mt-0">
         {t("hero.termsTitle")}
       </h1>
     ),
-    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[50vh] md:h-[20vh]",
   },
 
   "/cookie-policy": {
     image: (
       <>
-        <div className="relative">
+        <div className="relative h-full w-full">
           <img
             src={faq}
             alt="Cookie Policy"
@@ -623,11 +623,11 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-[120px] md:mt-10 mt-[120px]">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-0 md:mt-10 mt-0">
         {t("hero.cookiePolicyTitle")}
       </h1>
     ),
-    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[50vh] md:h-[20vh]",
   },
 });
 

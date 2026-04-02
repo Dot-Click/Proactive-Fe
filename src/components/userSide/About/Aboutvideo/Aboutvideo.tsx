@@ -54,7 +54,7 @@ const Aboutvideo = () => {
 
   return (
     <>
-      <div className="relative w-full h-[600px] sm:h-[700px] lg:h-[85vh] overflow-hidden">
+      <div className="relative w-full h-auto min-h-[600px] lg:h-[85vh] py-16 lg:py-0 flex flex-col items-center justify-center overflow-hidden">
         <img
           src={WonderPeoplebg}
           alt="WonderPeoplebg"
@@ -62,7 +62,7 @@ const Aboutvideo = () => {
         />
         <div className="absolute inset-0 bg-black/60" />
 
-        <div className="relative z-10 flex flex-col justify-center items-center h-full w-full px-4 pt-10">
+        <div className="relative z-10 flex flex-col justify-center items-center h-full w-full px-4">
           <h1 className="text-center bg-gradient-to-r from-white to-[#E3E3E3] text-transparent bg-clip-text font-bold text-2xl sm:text-3xl lg:text-5xl mb-10 lg:mb-14 leading-tight">
             We are all part of a large and
             <br />
