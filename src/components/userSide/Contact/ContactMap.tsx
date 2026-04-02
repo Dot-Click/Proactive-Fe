@@ -12,6 +12,9 @@ import getintouch from "../../../assets/GetInTouchbg.avif";
 import getintouchlayer from "../../../assets/getintouchlayer.avif";
 import { useContactInfo } from "@/hooks/getContactInfohook";
 import { useTranslation } from "react-i18next";
+import callicon from "../../../assets/footerphone.avif";
+import mailicon from "../../../assets/footeremail.avif";
+import locationicon from "../../../assets/footerlocation.avif";
 
 const customMarkerIcon = new Icon({
   iconUrl: "" + CustomMarkerIcon,
@@ -46,17 +49,17 @@ const ContactMap = () => {
   const email = data?.contactEmail ?? DEFAULT_EMAIL;
 
   return (
-    <div className="mb-10 lg:mt-30 md:mt-10 flex flex-col lg:flex-row justify-center items-stretch max-w-6xl mx-auto rounded-3xl overflow-hidden shadow-lg bg-linear-to-r from-[#E4FAF7]/18 to-[#E4FAF7]">
+    <div className="mt-12 mb-20 md:mb-32 lg:mt-32 md:mt-20 flex flex-col xl:flex-row justify-center items-stretch gap-8 max-w-6xl mx-auto w-[95%] sm:w-full">
       {/* Left Section: Contact Details */}
-      <div className="w-full lg:w-1/2 text-white relative min-h-full">
+      <div className="w-full xl:w-1/2 text-white relative min-h-fit lg:min-h-full flex flex-col rounded-3xl overflow-hidden shadow-lg">
         {/* Background Pattern */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0">
           <img
             src={getintouch}
             alt="getintouch"
             className="w-full h-full object-cover"
           />
-          <div className="absolute top-0 left-0 w-full h-full z-0 opacity-70">
+          <div className="absolute top-0 left-0 w-full h-full opacity-70">
             <img
               src={getintouchlayer}
               alt="getintouchlayer"
@@ -65,70 +68,77 @@ const ContactMap = () => {
           </div>
         </div>
 
-        <div className="relative z-10">
-          <div className="flex flex-col px-10 py-12">
+        <div className="relative z-10 flex flex-col w-full h-full">
+          <div className="flex flex-col px-6 py-8 sm:px-10 sm:py-12 w-full">
             <h2
-              className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-4 tracking-wider"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-4 tracking-wider w-full"
               dangerouslySetInnerHTML={{
                 __html: t("contact.whereIsTeam").replace(
                   /\n/g,
-                  '<br className="lg:flex hidden" />',
+                  '<br className="lg:block hidden" />',
                 ),
               }}
             />
           </div>
 
-          <div className="border-b border-[#FFFFFF]/60 w-full"></div>
+          <div className="border-b border-[#FFFFFF]/60 w-full opacity-40"></div>
 
-          <div className="py-12 px-8 lg:py-20">
-            <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold mb-4 sm:mb-6 tracking-wider">
+          <div className="py-10 px-6 sm:px-10 lg:py-20 lg:px-12 w-full flex-grow">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 sm:mb-6 tracking-tight">
               {t("contact.getInTouch")}
             </h1>
             <p
-              className="text-base sm:text-lg mb-6 sm:mb-8 font-semibold tracking-wider"
+              className="text-sm sm:text-lg mb-6 sm:mb-8 font-medium opacity-90 leading-relaxed max-w-xl"
               dangerouslySetInnerHTML={{
                 __html: t("contact.questionOrIdea").replace(/\n/g, "<br />"),
               }}
             />
 
-            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-5 tracking-wider">
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6">
               {t("contact.contactInfo")}
             </h3>
 
-            <div className="space-y-4">
-              <p className="text-base sm:text-xl flex items-start font-semibold tracking-wider">
-                <i className="mr-3 sm:mr-4 text-xl sm:text-2xl mt-1"></i>
-                <span>
-                  {address.includes(", ") ? (
-                    <>
-                      {address.split(", ")[0]}, <br />{" "}
-                      {address.split(", ").slice(1).join(", ")}
-                    </>
-                  ) : (
-                    address
-                  )}
-                </span>
-              </p>
-              <p className="text-base sm:text-xl flex items-center font-semibold tracking-wider">
-                <i className="mr-3 sm:mr-4 text-xl sm:text-2xl "></i>
-                {phone}
-              </p>
-              <p className="text-base sm:text-xl flex items-center font-semibold tracking-wider">
-                <i className="mr-3 sm:mr-4 text-xl sm:text-2xl "></i>
-                {email}
-              </p>
+            <div className="space-y-4 lg:space-y-6">
+              <div className="flex items-start gap-3 sm:gap-4 group">
+                <div className="p-2 sm:p-3 bg-white/10 rounded-full group-hover:bg-white/20 transition-colors">
+                   <img src={locationicon} alt="location" className="w-5 h-5" />
+                </div>
+                <div className="flex flex-col">
+                   <p className="text-sm sm:text-base lg:text-lg font-semibold leading-snug">
+                    {address}
+                   </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3 sm:gap-4 group">
+                <div className="p-2 sm:p-3 bg-white/10 rounded-full group-hover:bg-white/20 transition-colors">
+                  <img src={callicon} alt="call" className="w-5 h-5" />
+                </div>
+                <a href={`tel:${phone}`} className="text-sm sm:text-base lg:text-lg font-bold hover:underline transition-all">
+                  {phone}
+                </a>
+              </div>
+
+              <div className="flex items-center gap-3 sm:gap-4 group">
+                <div className="p-2 sm:p-3 bg-white/10 rounded-full group-hover:bg-white/20 transition-colors">
+                  <img src={mailicon} alt="mail" className="w-5 h-5" />
+                </div>
+                <a href={`mailto:${email}`} className="text-sm sm:text-base lg:text-lg font-bold hover:underline transition-all break-all">
+                  {email}
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Right Section: Map */}
-      <div className="w-full lg:w-1/2 h-80 sm:h-96 lg:h-auto min-h-[400px]">
+      <div className="w-full xl:w-1/2 h-80 sm:h-96 xl:h-auto min-h-[400px] rounded-3xl overflow-hidden shadow-lg border border-gray-100">
         <MapContainer
           center={position}
           zoom={13}
           scrollWheelZoom={false}
-          className="h-full w-full"
+          className="h-full w-full z-0"
           zoomControl={false}
         >
           <TileLayer
