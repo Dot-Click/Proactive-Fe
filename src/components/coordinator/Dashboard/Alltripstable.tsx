@@ -600,8 +600,8 @@ const Alltripstable = () => {
   });
 
   return (
-    <div className="py-5 bg-white rounded-[25px] shadow-md mt-2 lg:max-w-[950px] lg:mx-auto">
-      <div className="flex flex-col mb-4 px-6">
+    <div className="w-full max-w-full py-5 bg-white rounded-[25px] shadow-md mt-2">
+      <div className="flex flex-col mb-4 px-4 sm:px-6">
         <span className="bg-gradient-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text font-semibold text-lg">
           All Trips
         </span>
@@ -616,15 +616,15 @@ const Alltripstable = () => {
         </div>
       )}
       {isError && <p className="text-red-500">Error loading data.</p>}
-      <div className="rounded-lg overflow-y-auto max-h-[300px] pl-2">
-        <table className="min-w-full border-separate border-spacing-y-2">
+      <div className="rounded-lg overflow-x-auto overflow-y-auto max-h-[300px] pl-2">
+        <table className="w-full min-w-[700px] sm:min-w-full border-separate border-spacing-y-2">
           <thead className="text-left text-md font-bold text-[#221E33]">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header, i) => (
                   <th
                     key={header.id}
-                    className={`py-3 ${i === 0 ? "px-4" : "pl-4"}`}
+                    className={`py-3 ${i === 0 ? "px-4" : "pl-4"} whitespace-nowrap text-xs sm:text-sm`}
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -641,7 +641,7 @@ const Alltripstable = () => {
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className={`px-3 py-6 first:rounded-l-[8px] last:rounded-r-[8px]`}
+                    className={`px-3 py-4 first:rounded-l-[8px] last:rounded-r-[8px] max-w-[180px] sm:max-w-full whitespace-nowrap overflow-hidden text-ellipsis text-xs sm:text-sm`}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
