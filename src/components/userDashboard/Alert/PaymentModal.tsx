@@ -244,6 +244,17 @@ const PaymentModal = () => {
         );
     }
 
+    if (currentUser.role === 'admin' || currentUser.role === 'coordinator') {
+        return (
+            <DialogContent className="sm:max-w-[650px] max-h-[90vh] border-10 bg-[#FAFAFA] border-[#ECFBF6] rounded-[20px] overflow-y-auto p-0">
+                <div className="p-8 text-center">
+                    <p className="mb-4 text-lg font-semibold text-red-600">Access Denied</p>
+                    <p className="mb-6 text-sm text-gray-600">Payment is disabled for the {currentUser.role === 'admin' ? 'Admin' : 'Coordinator'} role.</p>
+                </div>
+            </DialogContent>
+        );
+    }
+
     return (
         <DialogContent className="sm:max-w-[650px] max-h-[90vh] border-10 bg-[#FAFAFA] border-[#ECFBF6] rounded-[20px] overflow-y-auto p-0">
             {stripePromise && (

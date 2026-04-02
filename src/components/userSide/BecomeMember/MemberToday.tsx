@@ -26,14 +26,20 @@ const MemberToday = () => {
                     Get exclusive access to all Wild Weekends, Wild Trips, and events. Membership is valid for <br /> 365 days from the day of payment</p>
                 <div className="flex flex-col sm:flex-row justify-center mt-8 gap-4 sm:gap-6">
                     {user ? (
-                        <Dialog>
-                            <DialogTrigger>
-                                <Button className="font-bold hover:scale-105 transition-all duration-300 bg-[#FFFFFF] hover:bg-[#f7f1f1] cursor-pointer text-[#03664F] rounded-full px-6 py-5">
-                                    Pay €50 & Join Now
-                                </Button>
-                            </DialogTrigger>
-                            <PaymentModal />
-                        </Dialog>
+                        user.role === 'admin' || user.role === 'coordinator' ? (
+                            <Button disabled className="font-bold bg-[#FAFAFE] text-[#666373] cursor-not-allowed rounded-full px-6 py-5 opacity-70 border border-[#ECECF1]">
+                                Payment Disabled for {user.role === 'admin' ? 'Admin' : 'Coordinator'}
+                            </Button>
+                        ) : (
+                            <Dialog>
+                                <DialogTrigger>
+                                    <Button className="font-bold hover:scale-105 transition-all duration-300 bg-[#FFFFFF] hover:bg-[#f7f1f1] cursor-pointer text-[#03664F] rounded-full px-6 py-5">
+                                        Pay €50 & Join Now
+                                    </Button>
+                                </DialogTrigger>
+                                <PaymentModal />
+                            </Dialog>
+                        )
                     ) : (
                         <Button
                             onClick={() => navigate('/login')}

@@ -1,10 +1,13 @@
 import { FaLocationDot } from "react-icons/fa6";
 import { MdArrowOutward } from "react-icons/md";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import type { MouseEvent } from "react";
 import { UsegetOpenTrips } from "@/hooks/getOpenTripshook";
 import { UsegetTrips } from "@/hooks/gettriphook";
 import { LoaderIcon, User } from "lucide-react";
 import { UseSearchTrips } from "@/hooks/searchTripshook";
+import { UsegetCurrentUser } from "@/hooks/getCurrentUserhook";
 import type { TabId } from "../Tabs/Tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTranslation, Trans } from "react-i18next"
@@ -100,8 +103,38 @@ const Showtrips = ({
         return true;
     });
 
+    const navigate = useNavigate();
+    const { data: currentUserData } = UsegetCurrentUser();
+    const isLoggedIn = typeof window !== "undefined" && !!localStorage.getItem("token");
+    const currentUserRole = currentUserData?.data?.user?.role?.toString()?.toLowerCase() || "";
+
     const isLoading = hasSearch ? isSearchLoading : useAllTrips ? isAllTripsLoading : isOpenTripsLoading;
     const isError = hasSearch ? isSearchError : useAllTrips ? isAllTripsError : isOpenTripsError;
+
+    const handleJoinClick = (event: MouseEvent<HTMLButtonElement>, tripId: string, tripStatus: string) => {
+        event.stopPropagation();
+
+        if (tripStatus !== "open") {
+            // If trip is not open, let user view detail page.
+            window.open(`/trip/${tripId}`, "_blank", "noopener,noreferrer");
+            return;
+        }
+
+        if (!isLoggedIn) {
+            toast.error("Please log in to join trips. Redirecting to login...");
+            navigate("/login");
+            return;
+        }
+
+        if (currentUserRole === "admin" || currentUserRole === "coordinator") {
+            toast.error("Only members can join trips. Admins/coordinators cannot join. Go to /member to become a member.");
+            navigate("/member");
+            return;
+        }
+
+        // Logged-in member user path
+        window.open(`/trip/${tripId}`, "_blank", "noopener,noreferrer");
+    };
 
     const formatDate = (dateStr: string) => {
         if (!dateStr) return "";
@@ -219,6 +252,7 @@ const Showtrips = ({
                                     </div>
 
                                     <button 
+                                        onClick={(event) => handleJoinClick(event, trip.id, trip.status)}
                                         className={`px-6 py-2.5 rounded-full font-bold text-xs transition-all flex items-center gap-2
                                             ${trip.status === 'open' 
                                                 ? 'bg-[#D40004] text-white hover:bg-[#b00003] hover:scale-105 shadow-lg shadow-red-900/20' 

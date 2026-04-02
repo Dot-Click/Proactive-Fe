@@ -7,7 +7,7 @@ import Whatwedo from "@/components/userSide/Home/whatwedo/Whatwedo"
 
 const HomePage = () => {
   return (
-    <div className="bg-[#F9FBFE]">
+    <div className="bg-[#F2F6FD]">
       <AdventureOppurtunities />
       <Adventuremoments />
       <Whatwedo />
