@@ -55,7 +55,7 @@ const Footer = () => {
       <div className="relative z-10 max-w-5xl mx-auto lg:py-20 px-4 lg:px-10 py-12 grid grid-cols-1 lg:grid-cols-4 gap-4">
         <div className="flex flex-col gap-8 relative z-10 text-white">
           <img src={FooterLogo} alt="FooterLogo" className="w-40" />
-          <span className="leading-relaxed text-[13px] font-medium text-nowrap" dangerouslySetInnerHTML={{ __html: t('footer.tagline').replace(/\n/g, '<br />') }} />
+          <span className="leading-relaxed text-[13px] font-medium" dangerouslySetInnerHTML={{ __html: t('footer.tagline').replace(/\n/g, '<br />') }} />
           <div className="flex gap-4 text-xl">
             <a
               href={SOCIAL_LINKS.facebook}

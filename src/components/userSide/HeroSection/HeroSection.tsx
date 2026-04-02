@@ -50,7 +50,7 @@ const getHeroData = (
     ),
     title: (
       <div className="flex flex-wrap justify-center items-center lg:mt-2 md:mt-[240px]  sm:mt-[50px] mt-[290px]">
-        <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap lg:mt-12 ">
+        <span className="text-white font-bold text-[14px] md:text-4xl  lg:mt-12 ">
           {t("hero.yourNext")}
         </span>
         <div className="flex items-center justify-center">
@@ -67,7 +67,7 @@ const getHeroData = (
             TURE
           </span>
         </div>
-        <span className="text-white font-bold text-[14px] md:text-4xl text-nowrap lg:mt-12">
+        <span className="text-white font-bold text-[14px] md:text-4xl  lg:mt-12">
           {t("hero.awaits")}
         </span>
       </div>
@@ -124,7 +124,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl  lg:mt-12 md:mt-10 mt-0">
         {t("hero.openOpportunitiesTitle")}
       </h1>
     ),
@@ -154,7 +154,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl  lg:mt-12 md:mt-10 mt-0">
         {t("hero.whatWeDoTitle")}
       </h1>
     ),
@@ -197,7 +197,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl  lg:mt-12 md:mt-10 mt-0">
         {t("hero.wildWeekendTitle")}
       </h1>
     ),
@@ -240,7 +240,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0 ">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl  lg:mt-12 md:mt-10 mt-0 ">
         {t("hero.wildTripTitle")}
       </h1>
     ),
@@ -278,7 +278,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl  lg:mt-12 md:mt-10 mt-0">
         {t("hero.erasmusPlusTitle")}
       </h1>
     ),
@@ -317,7 +317,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl  lg:mt-12 md:mt-10 mt-0">
         Internal events
       </h1>
     ),
@@ -355,7 +355,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl  lg:mt-12 md:mt-10 mt-0">
         {t("hero.aboutUsTitle")}
       </h1>
     ),
@@ -404,7 +404,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-10">
+      <h1 className="md:flex hidden bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl  lg:mt-12 md:mt-10 mt-10">
         {t("hero.becomeMemberTitle")}
       </h1>
     ),
@@ -452,7 +452,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-0 md:mt-0 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl  lg:mt-0 md:mt-0 mt-0">
         {t("hero.travelCoordinatorTitle")}
       </h1>
     ),
@@ -487,7 +487,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className=" bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] md:text-7xl text-nowrap lg:mt-0 mt-0">
+      <h1 className=" bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] md:text-7xl  lg:mt-0 mt-0">
         {t("hero.advantagesTitle")}
       </h1>
     ),
@@ -522,7 +522,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] lg:text-7xl md:text-2xl text-nowrap lg:mt-0 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] lg:text-7xl md:text-2xl  lg:mt-0 md:mt-10 mt-0">
         {t("hero.contactTitle")}
       </h1>
     ),
@@ -548,7 +548,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-0 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl  lg:mt-0 md:mt-10 mt-0">
         {t("hero.faqTitle")}
       </h1>
     ),
@@ -573,7 +573,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-0 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl  lg:mt-0 md:mt-10 mt-0">
         {t("hero.privacyPolicyTitle")}
       </h1>
     ),
@@ -598,7 +598,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-0 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl  lg:mt-0 md:mt-10 mt-0">
         {t("hero.termsTitle")}
       </h1>
     ),
@@ -623,7 +623,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-0 md:mt-10 mt-0">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl  lg:mt-0 md:mt-10 mt-0">
         {t("hero.cookiePolicyTitle")}
       </h1>
     ),
@@ -647,8 +647,8 @@ const HeroSection = () => {
   if (!hero) return null;
 
   return (
-    <div key={path} className={`relative w-full ${hero.imageClass}`}>
-      <div className="w-full object-cover absolute inset-0 z-0">
+    <div key={path} className={`relative w-full overflow-hidden ${hero.imageClass}`}>
+      <div className="w-full h-full absolute inset-0 z-0">
         {hero.image}
       </div>
       {/* Text */}
@@ -686,7 +686,7 @@ const HeroSection = () => {
         )}
       </div>
       {/*just a div to scroll down*/}
-      <div className="absolute bottom-[-38px]  opacity-0 left-[85%] right-[500px] w-full h-20   cursor-pointer" onClick={scrollDown}> </div>
+      <div className="absolute bottom-0 left-0 w-full h-20 opacity-0 cursor-pointer" onClick={scrollDown}> </div>
     </div>
   );
 };

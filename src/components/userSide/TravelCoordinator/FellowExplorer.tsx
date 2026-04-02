@@ -30,7 +30,7 @@ const FellowExplorer = () => {
     }
 
     return (
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
             <div className="flex lg:flex-row flex-col justify-center items-center lg:gap-16 gap-12 py-12 lg:py-60 md:py-12 lg:mb-0 mb-20">
                 <div
                     className="relative overflow-hidden w-full max-w-[280px] lg:max-w-[360px] aspect-[9/16] flex-shrink-0"
@@ -71,7 +71,7 @@ const FellowExplorer = () => {
                 <div className="flex flex-col gap-8 lg:max-w-xl w-full">
                 <div className="relative">
                     <h1 className="text-center lg:text-start lg:mt-10 bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text 
-                                  font-bold lg:text-4xl relative z-10" dangerouslySetInnerHTML={{ __html: t('travelCoordinator.fellowExplorer.title').replace(/\n/g, '<br />') }} />
+                                   font-bold lg:text-4xl relative z-10" dangerouslySetInnerHTML={{ __html: t('travelCoordinator.fellowExplorer.title').replace(/\n/g, '<br />') }} />
                     <img
                         src={box2}
                         alt="box2"
@@ -107,9 +107,6 @@ const FellowExplorer = () => {
                             <h1 className="text-center lg:text-start">{t('travelCoordinator.fellowExplorer.passionateTravelers')}</h1>
                             <p className="text-center lg:text-start" dangerouslySetInnerHTML={{ __html: t('travelCoordinator.fellowExplorer.passionateTravelersDesc').replace(/\n/g, '<br className="md:flex hidden" />') }} />
                         </div>
-                    </div>
-                    <div
-                        className="lg:flex hidden absolute left-280 -translate-y-1/2 -translate-x-1/3 w-60 h-80 bg-[radial-gradient(circle_at_50%_50%,#76F0D4,rgba(250,250,250,0.05))] rounded-full blur-3xl opacity-30">
                     </div>
                 </div>
 
