@@ -40,7 +40,7 @@ const getHeroData = (
 ): Record<string, HeroContent> => ({
   "/": {
     image: (
-      <div className="bg-linear-to-r from-[#F0F5FD]/18  to-[#F0F5FD]">
+      <div className="relative w-full h-full bg-linear-to-r from-[#F0F5FD]/18 to-[#F0F5FD]">
         <img
           src={carousel}
           alt="carousel"
@@ -49,32 +49,32 @@ const getHeroData = (
       </div>
     ),
     title: (
-      <div className="flex flex-wrap justify-center items-center lg:mt-2 md:mt-[240px]  sm:mt-[50px] mt-[290px]">
-        <span className="text-white font-bold text-[14px] md:text-4xl  lg:mt-12 ">
+      <div className="flex flex-col md:flex-row flex-wrap justify-center items-center gap-2 md:gap-4 lg:mt-12 md:mt-10 mt-5 px-4">
+        <span className="text-white font-bold text-2xl md:text-4xl lg:text-5xl">
           {t("hero.yourNext")}
         </span>
         <div className="flex items-center justify-center">
-          <span className="text-[14px] lg:text-8xl md:text-4xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
+          <span className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
             {t("hero.adventure").split(" ")[0]}
           </span>
-          <span className="text-[14px] lg:text-8xl md:text-4xl font-extrabold text-stroke md:mb-8">
+          <span className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold text-stroke md:mb-8 mb-2">
             E
           </span>
-          <span className="text-[14px] lg:text-8xl md:text-4xl font-extrabold text-stroke md:mt-4">
+          <span className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold text-stroke md:mt-4 mt-1">
             N
           </span>
-          <span className="text-[14px] lg:text-8xl md:text-4xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
+          <span className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text">
             TURE
           </span>
         </div>
-        <span className="text-white font-bold text-[14px] md:text-4xl  lg:mt-12">
+        <span className="text-white font-bold text-2xl md:text-4xl lg:text-5xl">
           {t("hero.awaits")}
         </span>
       </div>
     ),
     subtitle: (
       <span
-        className="text-[12px] md:text-lg"
+        className="text-sm md:text-lg lg:text-xl px-4 inline-block mt-4"
         dangerouslySetInnerHTML={{
           __html: t("hero.subtitle").replace(
             /\n/g,
@@ -83,7 +83,7 @@ const getHeroData = (
         }}
       />
     ),
-    imageClass: "h-[70vh] sm:h-[70vh] lg:h-[100vh] md:h-[30vh]",
+    imageClass: "h-[85vh] sm:h-[80vh] lg:h-[100vh] md:h-[40vh]",
     buttons: [
       {
         text: t("hero.joinAdventure"),
