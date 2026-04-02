@@ -4,10 +4,10 @@ import Carousel from "./Carousel"
 const OurCollaboration = () => {
     return (
         <div className="bg-[#F0F5FD]">
-            <div className="flex flex-col justify-center items-center h-100 gap-12 py-8 px-2">
+            <div className="flex flex-col justify-center items-center h-auto min-h-[400px] gap-12 py-16 px-4">
                 <div className="relative">
                     <h1 className="bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text 
-                  font-bold lg:text-4xl relative z-10">
+                  font-bold text-3xl lg:text-4xl relative z-10 text-center uppercase tracking-wider">
                         Our collaborations
                     </h1>
                     <img
