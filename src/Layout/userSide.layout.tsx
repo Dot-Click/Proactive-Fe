@@ -13,7 +13,7 @@ const UserSidelayout = () => {
     }, [pathname])
 
     return (
-        <div className="flex flex-col min-h-screen w-full bg-[#FFFFFF]">
+        <div className="flex flex-col min-h-screen w-full bg-[#F2F6FD]">
             <ScrollToTop />
             <div className="relative shrink-0">
                 <UserSideNavbar />

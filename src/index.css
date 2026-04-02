@@ -118,7 +118,10 @@
 
   body {
     @apply bg-background text-foreground;
+    background-color: red
   }
+
+  ;
 }
 
 .text-stroke {
@@ -136,9 +139,13 @@ body {
 }
 
 .hide-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
 .hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
+  /* Chrome, Safari and Opera */
 }

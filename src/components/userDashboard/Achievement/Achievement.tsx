@@ -3,9 +3,9 @@ import ShadowMountain from "../../../assets/ShadowMountain.avif"
 import Nature from "../../../assets/AchievementNatural.avif"
 import { Progress } from "@/components/ui/progress"
 import { UsegetallAchievementsForUser } from "@/hooks/getallAchievementhook"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog"
 import { useState } from "react"
-// import { X } from "lucide-react"
+import { XIcon } from "lucide-react"
 
 const Achievement = () =>
 {
@@ -91,9 +91,14 @@ const Achievement = () =>
     
     const AllAchievementsDialog = () => (
         <Dialog open={allOpen} onOpenChange={(open) => setAllOpen(open)}>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-2xl" showCloseButton={false}>
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold">All Achievements</DialogTitle>
+                    <DialogTitle className="flex justify-between items-center text-2xl font-bold">
+                        All Achievements
+                        <DialogClose asChild>
+                            <XIcon color="#000000" className="cursor-pointer hover:bg-gray-100 rounded-full w-8 h-8 p-1" />
+                        </DialogClose>
+                    </DialogTitle>
                 </DialogHeader>
                 <DialogDescription>
                     <div className="grid gap-4">
@@ -195,17 +200,22 @@ const Achievement = () =>
                                             </div>
                                         </div>
                                     </DialogTrigger>
-                                    <DialogContent className="max-w-md">
+                                    <DialogContent className="max-w-md" showCloseButton={false}>
                                         <DialogHeader>
-                                            <div className="flex items-center gap-4 mb-4">
-                                                <img 
-                                                    src={badge.image} 
-                                                    alt={badge.imageAlt} 
-                                                    className={badge.imageClass} 
-                                                />
-                                                <DialogTitle className="text-2xl font-bold text-[#221E33]">
-                                                    {badge.name}
-                                                </DialogTitle>
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className="flex items-center gap-4">
+                                                    <img 
+                                                        src={badge.image} 
+                                                        alt={badge.imageAlt} 
+                                                        className={badge.imageClass} 
+                                                    />
+                                                    <DialogTitle className="text-2xl font-bold text-[#221E33]">
+                                                        {badge.name}
+                                                    </DialogTitle>
+                                                </div>
+                                                <DialogClose asChild>
+                                                    <XIcon color="#000000" className="cursor-pointer hover:bg-gray-100 rounded-full w-8 h-8 p-1" />
+                                                </DialogClose>
                                             </div>
                                             <div className="mb-2">
                                                 <div className="flex items-center gap-2 mb-2">

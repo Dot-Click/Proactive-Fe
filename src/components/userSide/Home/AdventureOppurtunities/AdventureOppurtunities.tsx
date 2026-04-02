@@ -5,34 +5,34 @@ import box1 from "../../../../assets/box.avif"
 import { useTranslation } from "react-i18next"
 
 const AdventureOppurtunities = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
-      <div className="bg-linear-to-r    md:mt-[290px]  lg:mt-28 xl:mt-15 sm:mt-[80px]  mt-[250px] from-[#F0F5FD]/18 to-[#F0F5FD]">
-        <div className="relative flex flex-col lg:gap-8 gap-4 py-20 px-4">
-          <h1 className="z-10 text-center lg:text-4xl text-2xl font-bold bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">
-            {t("home.adventureOpportunities")}
-          </h1>
-          <img
-            src={box1}
-            alt="box1"
-            className="w-26 h-28 absolute bottom-8 right-108 opacity-50 lg:flex hiddenz-5"
-          />
-          <p
-            className="text-center text-sm text-[#221E33]"
-            dangerouslySetInnerHTML={{
-              __html: t("home.adventureOpportunitiesSubtitle").replace(
-                /\n/g,
-                '<br className="lg:block hidden" />',
-              ),
-            }}
-          />
-        </div>
-        <div className="w-full max-w-[100vw] py-18">
-          <Adventureoppurtunitiescard />
-        </div>
+  return (
+    <div className="bg-linear-to-r    md:mt-[290px]  lg:mt-28 xl:mt-15 sm:mt-[80px]  mt-[250px] from-[#F0F5FD]/18 to-[#F0F5FD]">
+      <div className="relative flex flex-col lg:gap-8 gap-4 py-20 px-4">
+        <h1 className="z-10 text-center lg:text-4xl text-2xl font-bold bg-linear-to-r from-[#221E33] to-[#565070] text-transparent bg-clip-text">
+          {t("home.adventureOpportunities")}
+        </h1>
+        <img
+          src={box1}
+          alt="box1"
+          className="w-26 h-28 absolute bottom-8 right-108 opacity-50 lg:flex hiddenz-5"
+        />
+        <p
+          className="text-center text-sm text-[#221E33]"
+          dangerouslySetInnerHTML={{
+            __html: t("home.adventureOpportunitiesSubtitle").replace(
+              /\n/g,
+              '<br className="lg:block hidden" />',
+            ),
+          }}
+        />
       </div>
-    );
+      <div className="w-full max-w-[100vw] py-18">
+        <Adventureoppurtunitiescard />
+      </div>
+    </div>
+  );
 }
 
 export default AdventureOppurtunities
