@@ -83,7 +83,7 @@ const getHeroData = (
         }}
       />
     ),
-    imageClass: "sm:h-[70vh] lg:h-[100vh] md:h-[30vh]",
+    imageClass: "h-[70vh] sm:h-[70vh] lg:h-[100vh] md:h-[30vh]",
     buttons: [
       {
         text: t("hero.joinAdventure"),
@@ -124,7 +124,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-bold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
         {t("hero.openOpportunitiesTitle")}
       </h1>
     ),
@@ -133,7 +133,7 @@ const getHeroData = (
         {t("hero.openOpportunitiesSubtitle")}
       </span>
     ),
-    imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
   },
 
   "/what-we-do": {
@@ -154,7 +154,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
         {t("hero.whatWeDoTitle")}
       </h1>
     ),
@@ -163,7 +163,7 @@ const getHeroData = (
         {t("hero.whatWeDoSubtitle")}
       </span>
     ),
-    imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
   },
 
   "/wild-weekend": {
@@ -197,7 +197,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
         {t("hero.wildWeekendTitle")}
       </h1>
     ),
@@ -206,7 +206,7 @@ const getHeroData = (
         {t("hero.wildWeekendSubtitle")}
       </span>
     ),
-    imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
   },
 
   "/wild-trip": {
@@ -240,12 +240,12 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30 ">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px] ">
         {t("hero.wildTripTitle")}
       </h1>
     ),
     subtitle: <span>{t("hero.wildTripSubtitle")}</span>,
-    imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
   },
 
   "/erasmus-plus": {
@@ -278,12 +278,12 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-6xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
         {t("hero.erasmusPlusTitle")}
       </h1>
     ),
     subtitle: <span>{t("hero.erasmusPlusSubtitle")}</span>,
-    imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
     // downloadimg: downloadimg
   },
 
@@ -317,14 +317,14 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
         Internal events
       </h1>
     ),
     subtitle: (
       <span>Building connections, sharing moments, growing together.</span>
     ),
-    imageClass: "sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
+    imageClass: "h-[60vh] sm:h-[60vh] lg:h-[60vh] md:h-[20vh]",
     // downloadimg: downloadimg
   },
 
@@ -355,7 +355,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-12 md:mt-10 mt-[120px]">
         {t("hero.aboutUsTitle")}
       </h1>
     ),
@@ -370,7 +370,7 @@ const getHeroData = (
         }}
       />
     ),
-    imageClass: "sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
     // downloadimg: downloadimg
   },
 
@@ -413,13 +413,13 @@ const getHeroData = (
         {t("hero.becomeMemberSubtitle")}
       </span>
     ),
-    imageClass: "sm:h-[38vh] lg:h-[60vh] md:h-[20vh]",
+    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[60vh] md:h-[20vh]",
     // downloadimg: downloadimg
     buttons: [
       {
         text: t("hero.joinNowFor"),
         className:
-          "lg:mt-4 md:mt-0 mt-30 bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
+          "lg:mt-4 md:mt-0 mt-[120px] bg-[#0DAC87] hover:bg-[#0f9e7d] cursor-pointer rounded-full px-2 py-1 md:py-3 md:px-5 font-medium text-sm md:text-base",
         openModal: true,
       },
     ],
@@ -452,7 +452,7 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-30 md:mt-0 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl text-nowrap lg:mt-[120px] md:mt-0 mt-[120px]">
         {t("hero.travelCoordinatorTitle")}
       </h1>
     ),
@@ -461,7 +461,7 @@ const getHeroData = (
         {t("hero.travelCoordinatorSubtitle")}
       </span>
     ),
-    imageClass: "sm:h-[38vh] lg:h-[40vh] md:h-[20vh]",
+    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[40vh] md:h-[20vh]",
     // downloadimg: downloadimg
   },
 
@@ -487,11 +487,11 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className=" bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] md:text-7xl text-nowrap lg:mt-50 mt-50">
+      <h1 className=" bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] md:text-7xl text-nowrap lg:mt-[200px] mt-[200px]">
         {t("hero.advantagesTitle")}
       </h1>
     ),
-    imageClass: "sm:h-[38vh] lg:h-[66vh] md:h-[28vh]",
+    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[66vh] md:h-[28vh]",
     // downloadimg: downloadimg,
   },
 
@@ -522,11 +522,11 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-40">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[16px] lg:text-7xl md:text-2xl text-nowrap lg:mt-[120px] md:mt-10 mt-[160px]">
         {t("hero.contactTitle")}
       </h1>
     ),
-    imageClass: "sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
     // downloadimg: downloadimg
   },
 
@@ -548,11 +548,11 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-[120px] md:mt-10 mt-[120px]">
         {t("hero.faqTitle")}
       </h1>
     ),
-    imageClass: "sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
   },
 
   "/privacy-policy": {
@@ -573,11 +573,11 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-[120px] md:mt-10 mt-[120px]">
         {t("hero.privacyPolicyTitle")}
       </h1>
     ),
-    imageClass: "sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
   },
 
   "/terms": {
@@ -598,11 +598,11 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-[120px] md:mt-10 mt-[120px]">
         {t("hero.termsTitle")}
       </h1>
     ),
-    imageClass: "sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
   },
 
   "/cookie-policy": {
@@ -623,11 +623,11 @@ const getHeroData = (
       </>
     ),
     title: (
-      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-30 md:mt-10 mt-30">
+      <h1 className="bg-linear-to-b from-[#F7ECBE] from-60% to-[#F7ECBE]/18 text-transparent bg-clip-text font-extrabold text-[14px] lg:text-7xl md:text-2xl text-nowrap lg:mt-[120px] md:mt-10 mt-[120px]">
         {t("hero.cookiePolicyTitle")}
       </h1>
     ),
-    imageClass: "sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
+    imageClass: "h-[38vh] sm:h-[38vh] lg:h-[50vh] md:h-[20vh]",
   },
 });
 
