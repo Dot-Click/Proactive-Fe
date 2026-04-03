@@ -10,7 +10,7 @@ import UserManagement from "@/assets/sidebaricon/user-management.avif";
 import Coordinator from "@/assets/sidebaricon/coordinator-management.avif";
 import Star from "@/assets/sidebaricon/star.avif";
 import Trip from "@/assets/sidebaricon/trip-oppurtunities.avif";
-import Chat from "@/assets/sidebaricon/chat-management.avif";
+// import Chat from "@/assets/sidebaricon/chat-management.avif";
 import Payment from "@/assets/sidebaricon/payment-membership.avif";
 import Settings from "@/assets/sidebaricon/settings.avif";
 
@@ -20,7 +20,7 @@ const AdminItems = [
   { label: "sidebar.coordinatorManagement", href: "/dashboard/coordinator-management", Icon: Coordinator },
   { label: "sidebar.tripOpportunities", href: "/dashboard/trip-management", Icon: Trip },
   { label: "sidebar.googleReviews", href: "/dashboard/google-reviews", Icon: Star },
-  { label: "sidebar.chatManagement", href: "/dashboard/chat-management", Icon: Chat },
+  // { label: "sidebar.chatManagement", href: "/dashboard/chat-management", Icon: Chat },
   { label: "sidebar.paymentMembership", href: "/dashboard/payment-membership", Icon: Payment },
   { label: "sidebar.settings", href: "/dashboard/settings", Icon: Settings },
 ]

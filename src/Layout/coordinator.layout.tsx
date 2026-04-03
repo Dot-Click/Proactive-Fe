@@ -9,7 +9,7 @@ import Dashboard from "@/assets/sidebaricon/dashboard.svg";
 import oppurtunityManagement from "@/assets/sidebaricon/oppurtunity.avif";
 import Applicants from "@/assets/sidebaricon/ApplicantReview.avif";
 import Achievement from "@/assets/sidebaricon/Achievement.avif";
-import CoordinatorChat from "@/assets/sidebaricon/coordinatormsg.avif";
+// import CoordinatorChat from "@/assets/sidebaricon/coordinatormsg.avif";
 import CoordinatorSettings from "@/assets/sidebaricon/settings.avif";
 
 const CoordinaItems = [
@@ -17,7 +17,7 @@ const CoordinaItems = [
   { label: "sidebar.opportunityManagement", href: "/coordinator-dashboard/oppurtunities-management", Icon: oppurtunityManagement },
   { label: "sidebar.applicantsReview", href: "/coordinator-dashboard/applicants-review", Icon: Applicants },
   { label: "sidebar.achievementControl", href: "/coordinator-dashboard/achievements-control", Icon: Achievement },
-  { label: "sidebar.chatsWithUsers", href: "/coordinator-dashboard/chat-users", Icon: CoordinatorChat },
+  // { label: "sidebar.chatsWithUsers", href: "/coordinator-dashboard/chat-users", Icon: CoordinatorChat },
   { label: "sidebar.settings", href: "/coordinator-dashboard/settings", Icon: CoordinatorSettings },
 ]
 
